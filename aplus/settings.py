@@ -46,7 +46,7 @@ INSTALLED_APPS = (
 #    'aplus.email',
 #    'aplus.reports',
 #    'aplus.dashboard',
-#    'aplus.school_components',
+    'school_components',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -17,8 +17,10 @@ urlpatterns = patterns('',
     url(r'^classes_schedule/','aplus.views.classes_schedule_page',name='classes_schedule_page'),
 
     url(r'^teachers/','accounts.views.teacherstable_page',name='teacherstable_page'),
-
     url(r'^createteacher/','accounts.views.create_teacher_page',name='create_teacher_page'),
+
+    # send to the school_components urls.py
+    url(r'^school/', include('school_components.urls'), name='school'),
 )
 
 urlpatterns += patterns('',

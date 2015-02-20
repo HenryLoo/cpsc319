@@ -1,0 +1,35 @@
+{% load staticfiles %}
+
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+<link href="{% static 'js/bootstrap.min.js' %}" rel="stylesheet" media="screen">
+
+
+<div class="col-md-4" id="parent-list">
+	<!-- Default panel contents -->
+	<h1> Parents </h1>
+	<button class="btn btn-default pull-right" type="submit">New Parent</button>
+	
+		{% if parent_list %}
+		<table class="table table-collapse">
+			{% for parent in parent_list %}
+		  		<tr> <td>
+		  		<a href="{% url 'school:parentdetail' parent.id %}" class="list-group-item">
+		  			{{ parent.first_name }} {{ parent.last_name }}
+		  		</a>
+		  		</td> </tr>
+		  	{% endfor %}
+		</table>
+
+		{% else %}
+			<div class="alert alert-info" role="alert">No parents have been added.</div>
+		{% endif %}
+
+</div>
+
+<div class="panel panel-default col-md-8">
+  <div class="panel-body">
+    {% block parent_content %}
+		This is the content.
+	{% endblock parent_content %}
+  </div>
+</div>

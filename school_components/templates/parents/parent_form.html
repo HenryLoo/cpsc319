@@ -1,0 +1,17 @@
+{% extends "parents/base_parent.html" %}
+
+
+{% block parent_content %}
+
+	{% if errors %}
+		<div class="panel panel-danger">
+			{{ errors }}
+		</div>
+	{% endif %}
+
+	<form role="form" action="{%url 'school:parentcreate' %}" method="post">
+		{% csrf_token %}
+	    {{ parent_form.as_p }}
+	    <input type="submit" value="Submit" />
+	</form> 
+{% endblock parent_content %}

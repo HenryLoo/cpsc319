@@ -8,5 +8,9 @@ class Parent(models.Model):
 	email = models.EmailField()
 	amount_paid = models.DecimalField(max_digits=10, decimal_places=2)
 
+
+	def __unicode__(self):
+		return self.first_name + ' ' + self.last_name
+
 	class Meta:
 		app_label = 'school_components'

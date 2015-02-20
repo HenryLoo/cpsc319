@@ -1,0 +1,19 @@
+{% extends "students/base_student.html" %}
+
+
+{% block student_content %}
+
+	{% if errors %}
+		<div class="panel panel-danger">
+			{{ errors }}
+		</div>
+	{% endif %}
+
+	<form role="form" action="{%url 'school:studentcreate' %}" method="post">
+		{% csrf_token %}
+	    {{ student_form.as_p }}
+	    <input type="submit" value="Submit" />
+	</form> 
+
+	<a href="{% url 'school:parentcreate' %}"> Create new parent</a>
+{% endblock student_content %}

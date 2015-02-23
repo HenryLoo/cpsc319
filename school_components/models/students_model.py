@@ -1,5 +1,24 @@
 from django.db import models
+from datetime import datetime, date
 from school_components.models.parents_model import Parent
+
+# used to create students from CSV
+# what to do if parent is not in the system already?
+# TODO: parent
+class StudentManager(models.Manager):
+	def create_student(self, first_name, last_name, gender, birthdate, home_phone,
+		address, email, allergies, emergency_contact_name, emergency_contact_phone):
+
+		bd = datetime.strptime(birthdate, "%Y-%m-%d").date()
+		p = Parent.objects.get(pk=1)
+
+
+		student = self.create(first_name=first_name, last_name=last_name, gender=gender, 
+			birthdate=bd, home_phone=home_phone, address=address, email=email, 
+			allergies=allergies, emergency_contact_name=emergency_contact_name, 
+			emergency_contact_phone=emergency_contact_phone, parent=p)
+
+		return student
 
 class Student(models.Model):
 	first_name = models.CharField(max_length=50)
@@ -17,6 +36,9 @@ class Student(models.Model):
 	parent = models.ForeignKey('Parent', null=True)
 	# school = models.ForeignKey('School')
 
+	objects = StudentManager()
+
 	class Meta:
 		app_label = 'school_components'
+
 

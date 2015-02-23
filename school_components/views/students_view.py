@@ -1,8 +1,10 @@
 from django.views import generic
 from school_components.models.students_model import Student
 from school_components.models.parents_model import Parent
-from school_components.forms.students_form import StudentForm, StudentCSVForm
+from school_components.forms.students_form import StudentForm, StudentCSVForm, StudentFormSet
+from school_components.utils import SchoolUtils
 from django.shortcuts import render_to_response, redirect
+from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -58,20 +60,18 @@ def student_form(request):
 		context_dictionary,
 		RequestContext(request))
 
+#  would be nice if to ask for confirmation first...
 def student_upload(request):
 	context_dictionary = {'form': StudentCSVForm()}
 
 	if request.method == 'POST':
 		form = StudentCSVForm(request.POST, request.FILES)
-		student_csv = parse_csv(request.FILES['file'])
-		context_dictionary['message'] = student_csv
+		student_list = SchoolUtils.parse_csv(request.FILES['file'])
+		context_dictionary['message'] = 'These students were created.'
+		context_dictionary['student_list'] = student_list
 
 	return render_to_response('students/student_upload.html',
 		context_dictionary, RequestContext(request))
 
 
-def parse_csv(file):
-	result = []
-	for line in file:
-		result.append(line)
-	return result
+

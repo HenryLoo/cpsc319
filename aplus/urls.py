@@ -19,6 +19,9 @@ urlpatterns = patterns('',
     url(r'^teachers/','accounts.views.teacherstable_page',name='teacherstable_page'),
 
     url(r'^createteacher/','accounts.views.create_teacher_page',name='create_teacher_page'),
+
+    #url for email
+    url(r'^messages/','messages.views.send_email',name='send_email'),
 )
 
 urlpatterns += patterns('',

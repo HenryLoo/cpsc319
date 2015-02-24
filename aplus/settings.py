@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-#    'aplus.messages',
+    'messages',
 #    'aplus.reports',
 #    'aplus.dashboard',
 #    'aplus.school_components',

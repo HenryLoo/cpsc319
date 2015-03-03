@@ -21,6 +21,8 @@ urlpatterns = patterns('',
     url(r'^createteacher/','accounts.views.create_teacher_page',name='create_teacher_page'),
 
     #url for email
+    #url(r'^messages/','messages.views.send_email',name='send_email'),
+
     url(r'^messages/','messages.views.send_email',name='send_email'),
 )
 

@@ -43,16 +43,24 @@
 
 {% block body %}
 
- {{message}}
-{% if email_form %}
-<form method="POST" action ="." enctype="multipart/form-data">
-<br></br>
-{{email_form.as_p}}
+{% block messages %}
+        {% if messages %}
+        <div id="messages-containter">
+        {% for message in messages %}
+            <div class="alert">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>{{ message.tags }}</strong> {{ message }}
+            </div>
+        {% endfor %}
+        </div>
+        {% endif %}
+        {% endblock messages %}
 
-<label>&nbsp;</label><label>&nbsp;</label><label>&nbsp;</label>
-<input type ="submit"  name = "send" value = "Send"/>
-</form>
-{% endif %}
-
-
+        {% block send_email_form %}
+        <form action="/" method="post">{% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Send" />
+        </form>
+        {% endblock send_email_form %}
+        
 {%endblock%}

@@ -1,56 +1,91 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from accounts.models import *
+from accounts.forms import *
+from django.contrib.auth.forms import UserCreationForm
 
-from accounts.models import Teachers
-from accounts.forms import TeachersForm
+def create_teacher(request):
 
-from django.db.models import Q
-
-
-def teacherstable_page(request):
-    return_dict = {}
-        
-    activeteachers = Teachers.objects.filter(status='active')
-        
-    return_dict['active_teachers'] = activeteachers
-    return_dict['active_teachers_list'] = False
-        
-    if activeteachers.count() > 0:
-        return_dict['active_teachers_list'] = True
-        
-    return render_to_response("accounts/teacherstable_page.html",return_dict,RequestContext(request))
-
-
-def create_teacher_page(request):
-
-    return_dict = {}
-
+    teacher_created = False
     if request.method == 'POST':
-                            
-        teachers_page = Teachers()
-        teachers_form = TeachersForm(request.POST, instance=teachers_page)
-                                
-        if teachers_form.is_valid():
-            teachers_page = teachers_form.save(commit=False)
-                
-            teachers.email = teachers_page.email
-            teachers.name = teachers.name
-            teachers.phone = teachers_page.phone
-            teachers.skill_level = teachers_page.skill_level
-            teachers.description = teachers_page.description
-            teachers.status = 'active'
-                
-            teachers.save()
-                
-            return HttpResponseRedirect(reverse('teacherstable_page'))
-      
+
+        user_form = MyUserCreationForm(request.POST)
+        teacher_form = TeacherForm(request.POST)
+        availability_form = AvailabilityForm(request.POST)
+        
+        if user_form.is_valid() and teacher_form.is_valid() and availability_form.is_valid():
+            
+            user = user_form.save()
+            role = Role(role='TEACHER')
+            teacher = teacher_form.save(commit=False)
+            availability = availability_form.save()
+            teacher.teaching_availability = availability
+            teacher.user_info = user
+            role.user_info = user
+
+            teacher.save()
+            role.save()
+
+            teacher_created = True
+
         else:
-            teachers_form = TeachersForm
-                        
-        return_dict['teachersform'] = teachers_form
-                        
-    return render_to_response("accounts/create_teacher_page.html",return_dict,RequestContext(request))
+            #if invalid data was submitted, load the same forms, which hopefully will show error messages
+            return render(request, 'accounts/create_teacher.html', {
+                'user_form': user_form,
+                'teacher_form': teacher_form,
+                'availability_form': availability_form,
+                'teacher_created': teacher_created
+            })      
+
+
+    #if no data is submitted, or teacher is created successfully, load blank forms
+    user_form = MyUserCreationForm()
+    teacher_form = TeacherForm()
+    availability_form = AvailabilityForm()
+
+    return render(request, 'accounts/create_teacher.html', {
+        'user_form': user_form,
+        'teacher_form': teacher_form,
+        'availability_form': availability_form,
+        'teacher_created': teacher_created
+    })
+
+def create_admin(request):
+
+    admin_created = False
+    
+    if request.method == 'POST':
+
+        user_form = MyUserCreationForm(request.POST)
+        admin_form = AdminForm(request.POST)
+
+        if user_form.is_valid() and admin_form.is_valid():
+
+            user = user_form.save()
+            role = Role(role=admin_form.cleaned_data['admin_type'])
+            admin = admin_form.save(commit=False)
+            role.user_info = user
+            admin.user_info = user
+            role.save()
+            admin.save()
+            
+            admin_created = True
+
+        else:
+
+            return render(request, 'create_admin.html', {
+                'user_form': user_form,
+                'admin_form': admin_form,
+                'admin_created': admin_created
+            })
+
+    user_form = MyUserCreationForm()
+    admin_form = AdminForm()
+
+    return render(request, 'create_admin.html', {
+        'user_form': user_form,
+        'admin_form': admin_form,
+        'admin_created': admin_created
+    })
+        
+        
+        

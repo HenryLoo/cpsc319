@@ -43,10 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-#    'aplus.email',
-#    'aplus.reports',
-#    'aplus.dashboard',
-#    'aplus.school_components',
+    'school_components',
 )
 
 MIDDLEWARE_CLASSES = (

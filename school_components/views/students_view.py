@@ -1,5 +1,5 @@
 from django.views import generic
-from school_components.models.students_model import Student
+from school_components.models.students_model import Student, StudentCSVWriter
 from school_components.models.parents_model import Parent
 from school_components.forms.students_form import StudentForm, StudentCSVForm, StudentFormSet
 from school_components.utils import SchoolUtils
@@ -7,8 +7,9 @@ from django.shortcuts import render_to_response, redirect
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+import csv
 
 
 def student_list(request):
@@ -72,6 +73,26 @@ def student_upload(request):
 
 	return render_to_response('students/student_upload.html',
 		context_dictionary, RequestContext(request))
+
+def student_export(request):
+	context_dictionary = {}
+
+	if request.method == 'POST':
+		response = HttpResponse(content_type='text/csv')
+		response['Content-Disposition'] = 'attachment; filename="students.csv"'
+
+		students = Student.objects.all()
+		writer = csv.writer(response)
+		for student in students:
+			writer.writerow([student.first_name, student.last_name, 
+				student.gender, student.birthdate, student.home_phone])
+
+		return response
+	else:
+		return render_to_response('students/student_export.html',
+			context_dictionary,
+			RequestContext(request))
+
 
 
 

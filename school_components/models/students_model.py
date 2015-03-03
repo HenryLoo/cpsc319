@@ -41,4 +41,8 @@ class Student(models.Model):
 	class Meta:
 		app_label = 'school_components'
 
+class StudentCSVWriter(object):
+	def write(self, value):
+		return value
+
 

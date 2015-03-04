@@ -1,12 +1,7 @@
 from django import forms
 
-class EmailForm(forms.Form):
-	subject = forms.CharField(max_length=100)
-	message = forms.CharField(widget=forms.Textarea)
-	sender = forms.EmailField()
-	to = forms.EmailField()
-	categories = forms.CharField(help_text="CSV", required=False, widget=forms.Textarea)
-	html = forms.BooleanField(initial=False, required=False)
-	enable_gravatar = forms.BooleanField(initial=False, required=False)
-	enable_click_tracking = forms.BooleanField(initial=False, required=False)
-	add_unsubscribe_link = forms.BooleanField(initial=False, required=False)
+class EMailForm(forms.Form):
+    to_mail = forms.EmailField(error_messages={'required': "'To' field is required"})
+    subject_mail = forms.CharField(max_length=100, error_messages={'required': "'Subject' field is required"})
+    content_mail = forms.CharField(widget=forms.Textarea(attrs={'cols': 54, 'rows': 10}), 
+      error_messages={'required': "'Content' field is required"})

@@ -1,9 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
 
 from dashboard.models import Attendance
 from dashboard.models import Grade
@@ -91,3 +86,4 @@ def custom_statistic_page(request):
     return_dict['customStat'] = [[[hAxis, hAxisValues], [vAxis, vAxisValues]], title, chartType, visibility]
         
     return render_to_response("dashboard/custom_statistic_page.html",return_dict,RequestContext(request))
+

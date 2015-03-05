@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     #accounts
     url(r'^createteacher/','accounts.views.create_teacher',name='create_teacher'),
     url(r'^login/', 'django.contrib.auth.views.login',name='login'),
+
+                       
     url(r'^teachers/','accounts.views.teacherstable_page',name='teacherstable_page'),
                    
     #messages

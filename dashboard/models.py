@@ -57,3 +57,4 @@ class Grade(models.Model):
     classID = models.IntegerField(blank = True, null = True)
     assignmentID = models.IntegerField(blank = True, null = True)
     grade = models.IntegerField(blank = True, null = True)
+

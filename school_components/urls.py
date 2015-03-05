@@ -18,6 +18,9 @@ urlpatterns = patterns('',
 	url(r'^students/upload/$', 
 		'school_components.views.students_view.student_upload', 
 		name='studentupload'),
+	url(r'^students/export/$', 
+		'school_components.views.students_view.student_export', 
+		name='studentexport'),
 
 	# parents
 	url(r'^parents/$', 

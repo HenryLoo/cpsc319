@@ -3364,6 +3364,7 @@ input[type="button"].btn-block {
   opacity: 1;
 }
 .collapse {
+  background-color: #f8f8f8;
   display: none;
   visibility: hidden;
 }
@@ -3855,6 +3856,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   margin-left: -1px;
 }
 .nav {
+  background-color: #f8f8f8;
   padding-left: 0;
   margin-bottom: 0;
   list-style: none;
@@ -4065,6 +4067,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-collapse {
+  background-color: #f8f8f8;
   padding-right: 15px;
   padding-left: 15px;
   overflow-x: visible;
@@ -4207,6 +4210,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-nav {
+  background-color: #f8f8f8;
   margin: 7.5px -15px;
 }
 .navbar-nav > li > a {

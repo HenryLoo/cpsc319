@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{%block title%}Aplus - Template Demo{%endblock%}</title>
+    <title>{%block title%}Aplus - Template{%endblock%}</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{% static '/static/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -50,7 +50,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'statistics_page' %}">A<SUP>Plus</SUP> <i class="fa fa-graduation-cap"></i> </a>
+                <a class="navbar-brand" href="{% url 'statistics_page' %}"> <i class="fa fa-graduation-cap"></i> A<SUP>Plus</SUP> </a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -102,23 +102,28 @@
                 </li>
                
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> SystemAdminName <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> SystemAdminName</a>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> Year <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+                            <a href="#"> 2015-Winter</a>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+                            <a href="#"> 2014-Summer</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#"> 2014-Winter</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">+ Create New Period</a>
                         </li>
                     </ul>
-                </li>
-
-                <li>
-                    <a href="#"><i class="fa fa-info-circle"></i> Help</a>
                 </li>
 
                 <li>

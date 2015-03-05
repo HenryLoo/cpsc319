@@ -32,7 +32,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = (
@@ -46,6 +45,13 @@ INSTALLED_APPS = (
     'accounts',
     'messages',
     'school_components',
+    'dashboard',
+    'googlecharts',
+#    'aplus.email',
+#    'aplus.reports',
+#    'aplus.dashboard',
+#    'aplus.school_components',
+
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,0 +1,56 @@
+{% extends "students/base_student.html" %}
+
+{% block student_content %}
+<h1> Student Info </h1>
+
+<table class="table table-hover">
+	<tr> 
+		<td> ID: </td>
+		<td> {{ student.id }} </td>
+	</tr>
+	<tr> 
+		<td> Name: </td>
+		<td> 
+			{{ student.first_name}} 
+			{{ student.last_name }}
+		</td>
+	</tr>
+	<tr> 
+		<td> Gender: </td>
+		<td> {{ student.gender }} </td>
+	</tr>
+	<tr> 
+		<td> Birthdate: </td>
+		<td> {{ student.birthdate }} </td>
+	</tr>
+	<tr> 
+		<td> Home Phone: </td>
+		<td> {{ student.home_phone }} </td>
+	</tr>
+	<tr> 
+		<td> Address: </td>
+		<td> {{ student.address }} </td>
+	</tr>
+	<tr> 
+		<td> Email: </td>
+		<td> {{ student.email }} </td>
+	</tr>
+	<tr> 
+		<td> Allergies: </td>
+		<td> {{ student.allergies }} </td>
+	</tr>
+	<tr> 
+		<td> Emergency Contact: </td>
+		<td> 
+			{{ student.emergency_contact_name }} 
+			{{ student.emergency_contact_phone }} 
+		</td>
+	</tr>
+	<tr>
+		<td> Parent </td>
+		<td> <a href="{% url 'school:parentdetail' student.parent.id %}">
+		{{ student.parent.first_name }} {{ student.parent.last_name }}</a>
+		</td>
+	</tr>
+</table>
+{% endblock student_content %}

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
+=======
+led / optimized / DLL files
+>>>>>>> flora
 __pycache__/
 *.py[cod]
 
@@ -37,7 +41,10 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .coverage
+<<<<<<< HEAD
 .coverage.*
+=======
+>>>>>>> flora
 .cache
 nosetests.xml
 coverage.xml
@@ -53,4 +60,8 @@ coverage.xml
 docs/_build/
 
 # PyBuilder
+<<<<<<< HEAD
 target/
+=======
+target/
+>>>>>>> flora

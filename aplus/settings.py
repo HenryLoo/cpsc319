@@ -17,7 +17,7 @@ PROJECT_PATH = SETTINGS_DIR #project root
 PROJECT_PATH = os.path.abspath(PROJECT_PATH)
 TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates') #templates
 STATIC_PATH = os.path.join(PROJECT_PATH, 'static') #static file
-
+UPLOAD_PATH = '/tmp'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -44,6 +44,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+<<<<<<< HEAD
+=======
+#    'aplus.email',
+#    'aplus.reports',
+#    'aplus.dashboard',
+>>>>>>> flora
     'school_components',
 )
 

@@ -1,0 +1,39 @@
+{% load static %}
+    <link href="{% static '/static/css/bootstrap.min.css' %}" rel="stylesheet">
+
+
+	<form role="form" action="{%url 'school:studentupload' %}" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+	    {{ form }}
+	    <input type="submit" value="Submit" />
+	</form> 
+
+{% if message %}
+	{{ message }}
+	<button> <a href="{%url 'school:studentupload'  %}"> Yes </a></button>
+	<button> No </button>
+{% endif %}
+
+<p>
+
+{% if student_list %}
+	<table class="table">
+		<tr>
+		{% with student_list|first as first_student %}
+			{% for key, value in first_student.items %}
+				<td> {{ key }}</td>
+			{% endfor %}
+		{% endwith %}
+		</tr>
+		<tr>
+			{% for student in student_list %}
+			<tr>
+				{% for key, value in student.items %}
+					<td> {{ value }}</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</tr>
+	</table>
+{% endif %}
+

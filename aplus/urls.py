@@ -16,9 +16,11 @@ urlpatterns = patterns('',
     url(r'^notifications/','aplus.views.notifications_page',name='notifications_page'),    
     url(r'^classes_schedule/','aplus.views.classes_schedule_page',name='classes_schedule_page'),
 
-    url(r'^teachers/','accounts.views.teacherstable_page',name='teacherstable_page'),
+#    url(r'^teachers/','accounts.views.teacherstable_page',name='teacherstable_page'),
 
-    url(r'^createteacher/','accounts.views.create_teacher_page',name='create_teacher_page'),
+    url(r'^createteacher/','accounts.views.create_teacher',name='create_teacher'),
+    url(r'^login/', 'django.contrib.auth.views.login',name='login')
+
 )
 
 urlpatterns += patterns('',

@@ -47,7 +47,7 @@ INSTALLED_APPS = (
     'messages',
     'school_components',
     'dashboard',
-    'googlecharts',
+#    'googlecharts',
 #    'reports',
 )
 

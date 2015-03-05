@@ -35,14 +35,14 @@ class MyUserCreationForm(UserCreationForm):
 class TeacherForm(ModelForm):
 
     class Meta():
-        model = TeacherInfo
+        model = TeacherUser
         fields = ['phone', 'branch_location', 'skill_level']
 
 class AdminForm(ModelForm):
 
     admin_type = forms.ChoiceField(choices=( ('SYSTEM_ADMIN', "System Admin"), ('SCHOOL_ADMIN', "School Admin") ))
     class Meta():
-        model = AdminInfo
+        model = AdminUser
         fields = ['phone', 'branch_location']
 
 

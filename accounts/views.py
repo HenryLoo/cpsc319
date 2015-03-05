@@ -15,7 +15,7 @@ def create_teacher(request):
         if user_form.is_valid() and teacher_form.is_valid() and availability_form.is_valid():
             
             user = user_form.save()
-            role = Role(role='TEACHER')
+            role = User(role='TEACHER')
             teacher = teacher_form.save(commit=False)
             availability = availability_form.save()
             teacher.teaching_availability = availability
@@ -61,7 +61,7 @@ def create_admin(request):
         if user_form.is_valid() and admin_form.is_valid():
 
             user = user_form.save()
-            role = Role(role=admin_form.cleaned_data['admin_type'])
+            role = User(role=admin_form.cleaned_data['admin_type'])
             admin = admin_form.save(commit=False)
             role.user_info = user
             admin.user_info = user
@@ -87,5 +87,17 @@ def create_admin(request):
         'admin_created': admin_created
     })
         
+#old views
+def teacherstable_page(request):
+    return_dict = {}
         
+    activeteachers = Teachers.objects.filter(status='active')
+        
+    return_dict['active_teachers'] = activeteachers
+    return_dict['active_teachers_list'] = False
+        
+    if activeteachers.count() > 0:
+        return_dict['active_teachers_list'] = True
+        
+    return render("accounts/teacherstable_page.html",return_dict)  
         

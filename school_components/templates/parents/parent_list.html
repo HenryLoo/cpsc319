@@ -1,0 +1,111 @@
+{% extends "parents/base_parent.html" %}
+
+{% block current_tab %}
+	"View"
+{% endblock %}
+
+{% block hacky_script %}
+$('#edit-parent-btn').click(function() {
+	var fields = $('td:nth-child(2)')
+	$.each(fields, function(i,elm) { 
+		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
+	})
+});
+{% endblock hacky_script %}
+
+{% block parent_content %}
+<div class="col-md-3 parent-list">
+	<h2>Parents</h2>
+
+	<div class="filters-holder">
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
+		aria-expanded="false" aria-controls="collapseExample">
+	  	Filters
+		</a>
+		<div class="collapse" id="filters">
+		  <div>
+		    <input type="checkbox"> <label>Name</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Payment Status</label> <input>
+		  </div>
+		</div>
+	</div>
+
+	{% if parent_list %}
+	<ul class="list-unstyled parent-list">
+		{% for parent in parent_list %}
+	  		<li>
+	  		<a href="{% url 'school:parentlist' parent.id %}">
+	  			 {{ parent.first_name }} {{ parent.last_name }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No parents have been added.</div>
+	{% endif %}
+
+</div>
+
+<div class="col-md-9 parent-info">
+	{% if parent %}
+	<span>
+		<h3> Parent Info </h3>
+		<a href="#" id="edit-parent-btn" class="pull-right"> Edit </a>
+	</span>
+	<table class="table table-hover">
+		<tr> 
+			<td> Name: </td>
+			<td> 
+				{{ parent.first_name}} 
+				{{ parent.last_name }}
+			</td>
+		</tr>
+		<tr> 
+			<td> Home Phone: </td>
+			<td> {{ parent.home_phone }} </td>
+		</tr>
+		<tr> 
+			<td> Cell Phone: </td>
+			<td> {{ parent.cell_phone }} </td>
+		</tr>
+		<tr> 
+			<td> Email: </td>
+			<td> {{ parent.email }} </td>
+		</tr>
+		<tr> 
+			<td> Amount paid: </td>
+			<td> 
+				{{ parent.amount_paid }} 
+				{% if parent.amount_paid == 0 %}
+					<span class="label label-danger">Not paid</span>
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<td> Children </td>
+			<td>
+			{% if children_list %}
+			<ul>
+			{% for child in children_list %}
+				<li> 
+				<a href="{% url 'school:studentlist' child.id %}">
+				{{ child.first_name }} {{ child.last_name }}
+				</li>
+			{% endfor %}
+			</ul>
+			{% else %}
+				No children are registered.
+			{% endif %}
+			</td>
+		</tr>
+	</table>
+
+	{% else %}
+		<div class="content alert alert-info" role="alert">
+			Select a parent to view details.
+		</div>
+	{% endif %}
+</div>
+{% endblock parent_content %}

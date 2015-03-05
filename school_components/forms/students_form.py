@@ -19,6 +19,9 @@ class StudentForm(forms.ModelForm):
 	class Meta:
 		model = Student
 		fields = '__all__'
+		widgets = {
+            'birthdate': forms.DateInput(attrs={'class':'datepicker'}),
+        }
 
 class StudentCSVForm(forms.Form):
 	file = forms.FileField()

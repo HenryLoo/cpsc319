@@ -44,12 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
-<<<<<<< HEAD
-=======
-#    'aplus.email',
-#    'aplus.reports',
-#    'aplus.dashboard',
->>>>>>> flora
+    'messages',
     'school_components',
 )
 
@@ -111,4 +106,10 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sashaseifollahi'
+EMAIL_HOST_PASSWORD = 'cpsc31911'
 

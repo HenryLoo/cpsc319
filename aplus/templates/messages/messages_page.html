@@ -1,0 +1,58 @@
+{% extends 'basetemplate.html' %}
+
+{% block menu %}
+                <ul class="nav navbar-nav side-nav">
+                    <li >
+                        <a href="{% url 'statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-child"></i>  Students</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-user"></i>  Admin</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-users"></i>  Teachers</a>
+                    </li> 
+                    <li>
+                        <a href="#"><i class="fa fa-users"></i>  Parents</a>
+                    </li>  
+                    <li>
+                        <a href="#"><i class="fa fa-table"></i>  Classes</a>
+                    </li>              
+                    <li>
+                        <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-calendar"></i>  Periods</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-university"></i>  Schools</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-book"></i>  Courses</a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'send_email' %}"><i class="fa fa-users"></i>  Email</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-fw fa-wrench"></i> Settings</a>
+                    </li>
+                </ul>
+{% endblock %} 
+
+{% block body %}
+
+ {{message}}
+{% if email_form %}
+<form method="POST" action ="." enctype="multipart/form-data">
+<br></br>
+{{email_form.as_p}}
+
+<label>&nbsp;</label><label>&nbsp;</label><label>&nbsp;</label>
+<input type ="submit"  name = "send" value = "Send"/>
+</form>
+{% endif %}
+
+
+{%endblock%}

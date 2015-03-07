@@ -42,30 +42,43 @@
 {% endblock %} 
 
 {% block body %}
-{% block messages %}
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}">
-              <ul class="messages">
-                <li>{{ message }}</li>
-              </ul>
-            </div>
-          {% endfor %}
-        {% endif %}
-
-        {% if form.errors %}
-          <div class="alert alert-error">
-            {% for key, error in form.errors.items %}
-              {{ error }}
-            {% endfor %}
+<ul class="nav nav-tabs nav-justified">
+  <li role="presentation" class="active"><a href="{% url 'send_email' %}">Send Email</a></li>
+  <li role="presentation"><a href="{% url 'sent_mail' %}">Sent Mail</a></li>
+ </li>
+</ul>
+      <div class="modal-header">
+        <h4 class="modal-title">Compose Message</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2" for="inputTo">To</label>
+            <div class="col-sm-10"><input class="form-control" id="inputTo" placeholder="List of recipients" type="email"></div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Group <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Everyone</a></li>
+                    <li><a href="#">Admins</a></li>
+                    <li><a href="#">Teachers</a></li>
+                    <li><a href="#">Students</a></li>
+                </ul>
+        </div>
+        </div>
+          <div class="form-group">
+            <label class="col-sm-2" for="inputSubject">Subject</label>
+            <div class="col-sm-10"><input class="form-control" id="inputSubject" placeholder="Subject" type="text"></div>
           </div>
-        {% endif %}
-         <form action="/" method="post">{% csrf_token %}
-          <div class="form-input"><label>To:</label> {{ form.to_mail }}</div>
-          <div class="form-input"><label>Subject: </label>{{ form.subject_mail }}</div>
-          <div class="form-input"><label>Content: </label>{{ form.content_mail }}</div>
-          <div><input type="submit" value="Send" class="buttton" /></div>
+          <div class="form-group">
+            <label class="col-sm-12" for="inputBody">Message</label>
+            <div class="col-sm-12"><textarea class="form-control" id="inputBody" rows="8"></textarea></div>
+          </div>
         </form>
-        
-{% endblock %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button> 
+        <button type="button" class="btn btn-primary ">Send <i class="fa fa-arrow-circle-right fa-lg"></i></button>
+      </div>
 {% endblock %}

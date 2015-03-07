@@ -35,3 +35,7 @@ def send_email(request):
     return render(request, 'messages/messages_page.html', {
         'form': form,
     })
+
+def sent_mail(request):
+    return render(request, 'messages/sent_mail.html')
+    

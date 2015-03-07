@@ -45,18 +45,20 @@
 <div class="row">
 <div class="page-header">
   <h1>Classes<div class="pull-right"><button type="button" class="btn btn-primary btn-md"><span class="glyphicon glyphicon-plus">
-                </span>Add New Class</button></div></h1>
+                </span>
+                Add New Class</button></div></h1>
 </div>
 </div>
 <div class="col-md-2">
 <div class="list-group">
   <a href="#" class="list-group-item active">
-    ARTS 101
+    MUSIC 202 A
   </a>
-  <a href="#" class="list-group-item">MUSIC 203</a>
-  <a href="#" class="list-group-item">MUSIC 105</a>
-  <a href="#" class="list-group-item">ARTS 250</a>
-  <a href="#" class="list-group-item">RELIGION 101</a>
+  <a href="#" class="list-group-item">MUSIC 202 B</a>
+  <a href="#" class="list-group-item">MUSIC 202 C</a>
+  <a href="#" class="list-group-item">MUSIC 202 D</a>
+  <a href="#" class="list-group-item">MUSIC 202 E</a>
+  <a href="#" class="list-group-item">MUSIC 202 F</a>
 </div>
 </div>
         <div class="col-md-8">
@@ -66,30 +68,26 @@
                 <li><a href="#">Class Info</a></li>
                 <li><a href="#">Students</a></li>
                 <li><a href="#">Teachers</a></li>
-                <li><a href="#">Attendance</a></li>
-                <li><a href="#Grading" data-toggle="tab">Grading</a></li>
+                <li><a href="{% url 'class_attendance' %}">Attendance</a></li>
+                <li class="active"><a href="#Grading" data-toggle="tab">Grading</a></li>
                 <li><a href="#">Assignments</a></li>
             </ul>
             <!-- Tab panes -->
 <div class="tab-pane fade in" id="Grading">
 <br>
         <div class='col-md-4'>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-        <script type="text/javascript">
-            $(function () {
-                $('#datetimepicker1').datetimepicker();
-            });
-        </script>
-        </div>
+        <div class="list-group">
+  <a href="#" class="list-group-item">Assignment 1</a>
+  <a href="#" class="list-group-item">Assignment 2</a>
+  <a href="#" class="list-group-item active">Assignment 3</a>
+  <a href="#" class="list-group-item">Assignment 4</a>
+  <a href="#" class="list-group-item">Assignment 5</a>
+</div>
         </div>
     </div>
-    <div class="col-md-12">
-        <h4>Class Attendance</h4>
+    <div class="col-md-8">
+        <h4>Assignment Grades <span class="glyphicon glyphicon-plus pull-right">
+                </span></h4>
         <div class="table-responsive">
 
                 
@@ -99,7 +97,7 @@
                    
                    <th><input type="checkbox" id="checkall" /></th>
                    <th>Name</th>
-                     <th>Attendance</th>
+                     <th>Grade</th>
                      <th>Comments</th>
                       <th>Edit</th>
                        <th>Delete</th>
@@ -109,7 +107,7 @@
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
     <td>Jack</td>
-    <td>Present</td>
+    <td>19/20</td>
     <td></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
@@ -117,7 +115,7 @@
         <tr>
     <td><input type="checkbox" class="checkthis" /></td>
     <td>Sarah</td>
-    <td>Absent</td>
+    <td>19/20</td>
     <td></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
@@ -125,15 +123,15 @@
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
     <td>Rosie</td>
-    <td>Present</td>
-    <td></td>
+    <td>8/20</td>
+    <td>3 Days Late</td>
     <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
     <td>Mike</td>
-    <td>Absent</td>
+    <td>19/20</td>
     <td></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
@@ -141,7 +139,7 @@
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
     <td>Jerry</td>
-    <td>Present</td>
+    <td>17/20</td>
     <td></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
@@ -149,15 +147,15 @@
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
     <td>Sally</td>
-    <td>Tardy</td>
-    <td>Arrived at 8:15 AM</td>
+    <td>10/20</td>
+    <td></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
     <td>Inderpreet</td>
-    <td>Present</td>
+    <td>19/20</td>
     <td></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
     <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
@@ -167,7 +165,7 @@
 </table>
 
 <div class="clearfix"></div>
-<ul class="pagination pull-right">
+<ul class="pagination pagination-sm pull-right">
   <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
   <li class="active"><a href="#">1</a></li>
   <li><a href="#">2</a></li>
@@ -181,26 +179,24 @@
             
         </div>
     </div>
-</div>
-
 
 <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
       <div class="modal-dialog">
     <div class="modal-content">
           <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Edit Your Detail</h4>
+        <h4 class="modal-title custom_align" id="Heading">Edit Grade Details</h4>
       </div>
           <div class="modal-body">
           <div class="form-group">
-        <input class="form-control " type="text" placeholder="Mohsin">
+        <input class="form-control " type="text" placeholder="Name">
         </div>
         <div class="form-group">
         
-        <input class="form-control " type="text" placeholder="Irshad">
+        <input class="form-control " type="text" placeholder="Grade">
         </div>
         <div class="form-group">
-        <textarea rows="2" class="form-control" placeholder="CB 106/107 Street # 11 Wah Cantt Islamabad Pakistan"></textarea>
+        <textarea rows="2" class="form-control" placeholder="Comments"></textarea>
     
         
         </div>

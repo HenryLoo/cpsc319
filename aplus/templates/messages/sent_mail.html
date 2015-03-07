@@ -18,7 +18,7 @@
                         <a href="#"><i class="fa fa-users"></i>  Parents</a>
                     </li>  
                     <li>
-                        <a href="#"><i class="fa fa-table"></i>  Classes</a>
+                        <a href="{% url 'class_attendance' %}"><i class="fa fa-table"></i>  Classes</a>
                     </li>              
                     <li>
                         <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
@@ -47,10 +47,11 @@
   <li role="presentation" class="active"><a href="{% url 'sent_mail' %}">Sent Mail</a></li>
  </li>
 </ul>
-<div class="modal-header">
-        <h4 class="modal-title">Sent Mail</h4>
-      </div>
-<div class="modal-body">
+<div class="row">
+<div class="page-header">
+  <h1>Sent Mail</h1>
+</div>
+</div>
     <div class="row">
             <!-- Split button -->
             <button type="button" class="btn btn-default" data-toggle="tooltip" title="Refresh">
@@ -70,9 +71,10 @@
                 <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-user">
-                </span>All Mail</a></li>
-                <li><a href="#Everyone" data-toggle="tab"><span class="glyphicon glyphicon-user">
-                </span>Everyone</a></li>
+                </span>
+                    All Mail</a></li>
+                <li><a href="#Everyone" data-toggle="tab"><span class="glyphicon glyphicon-user"></span>
+                    Everyone</a></li>
                 <li><a href="#Admins" data-toggle="tab"><span class="glyphicon glyphicon-user"></span>
                     Admins</a></li>
                 <li><a href="#Teachers" data-toggle="tab"><span class="glyphicon glyphicon-user"></span>
@@ -92,7 +94,7 @@
                                 </div>
                             <span class="name label label-info" style="min-width: 120px;
                                 display: inline-block;">Tina Turner</span> <span class="">Teacher Evaluations</span>
-                            <span class="text-muted" style="font-size: 11px;">- 12:10 AM</span> <span class="badge">01/03/2014</span> <span class="pull-right"><span class="glyphicon glyphicon-paperclip">
+                            <span class="text-muted" style="font-size: 11px;">- 12:10 AM</span> <span class="badge">01/03/2014</span> <span class="pull-right"> <span class="glyphicon glyphicon-paperclip">
                             </span></span></a><a href="#" class="list-group-item">
                                 <div class="checkbox">
                                     <label>
@@ -144,14 +146,13 @@
                 </div>
         </div>
     </div>
-<div class="modal-footer">
+    <hr>
 <nav>
   <ul class="pager">
     <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
     <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>
-</div>
 
 
 {% endblock %}

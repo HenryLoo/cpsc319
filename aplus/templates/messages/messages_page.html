@@ -18,7 +18,7 @@
                         <a href="#"><i class="fa fa-users"></i>  Parents</a>
                     </li>  
                     <li>
-                        <a href="#"><i class="fa fa-table"></i>  Classes</a>
+                        <a href="{% url 'class_attendance' %}"><i class="fa fa-table"></i>  Classes</a>
                     </li>              
                     <li>
                         <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
@@ -47,10 +47,11 @@
   <li role="presentation"><a href="{% url 'sent_mail' %}">Sent Mail</a></li>
  </li>
 </ul>
-      <div class="modal-header">
-        <h4 class="modal-title">Compose Message</h4>
-      </div>
-      <div class="modal-body">
+<div class="row">
+<div class="page-header">
+  <h1>Send a Message</h1>
+</div>
+</div>
         <form role="form" class="form-horizontal">
           <div class="form-group">
             <label class="col-sm-2" for="inputTo">To</label>
@@ -76,9 +77,10 @@
             <div class="col-sm-12"><textarea class="form-control" id="inputBody" rows="8"></textarea></div>
           </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button> 
-        <button type="button" class="btn btn-primary ">Send <i class="fa fa-arrow-circle-right fa-lg"></i></button>
-      </div>
+        <hr>
+
+    
+        <a href="{% url 'statistics_page' %}" role="button" class="btn btn-default pull left">Cancel</a> 
+        <button type="button" class="btn btn-primary pull-right">Send <i class="fa fa-arrow-circle-right fa-lg"></i></button>
+
 {% endblock %}

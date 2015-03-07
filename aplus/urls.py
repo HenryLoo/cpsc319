@@ -20,11 +20,11 @@ urlpatterns = patterns('',
 
     url(r'^createteacher/','accounts.views.create_teacher_page',name='create_teacher_page'),
 
-    #url for email
-    #url(r'^messages/','messages.views.send_email',name='send_email'),
 
     url(r'^messages/','messages.views.send_email',name='send_email'),
-    url(r'^sent_messages/','messages.views.sent_mail',name='sent_mail')
+    url(r'^sent_messages/','messages.views.sent_mail',name='sent_mail'),
+    url(r'^class_grading/','school_components.views.classes_view.class_grading',name='class_grading'),
+    url(r'^class_attendance/','school_components.views.classes_view.class_attendance',name='class_attendance'),
 )
 
 urlpatterns += patterns('',

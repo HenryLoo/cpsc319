@@ -13,7 +13,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^statistics/','aplus.views.statistics_page',name='statistics_page'),
-    url(r'^notifications/','aplus.views.notifications_page',name='notifications_page'),    
+    url(r'^notifications/','aplus.views.notifications_page',name='notifications_page'),
+    url(r'^notifications_settings/','aplus.views.notifications_settings_page',name='notifications_settings_page'),    
     url(r'^classes_schedule/','aplus.views.classes_schedule_page',name='classes_schedule_page'),
 
     url(r'^attendance/','dashboard.views.attendance_page',name='attendance_page'),

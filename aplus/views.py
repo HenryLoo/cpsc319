@@ -22,6 +22,12 @@ def notifications_page(request):
 
 	return render_to_response("dashboard/notifications_page.html",context_dictionary,RequestContext(request))
 
+def notifications_settings_page(request):
+
+	context_dictionary = {}
+
+	return render_to_response("dashboard/notifications_settings_page.html",context_dictionary,RequestContext(request))
+
 def classes_schedule_page(request):
 
 	context_dictionary = {}

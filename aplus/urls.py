@@ -24,6 +24,8 @@ urlpatterns = patterns('',
 
     url(r'^create_new_report_page/','reports.views.create_new_report_page',name='create_new_report_page'),
 
+                  
+   
 )
 
 urlpatterns += patterns('',

@@ -28,4 +28,10 @@ def view_reports(request):
 
 	return render_to_response("reports/view_reports.html",context_dictionary,RequestContext(request))
 
+def assignment(request):
+
+	context_dictionary = {}
+
+	return render_to_response("school_components/assignment.html",context_dictionary,RequestContext(request))
+
 

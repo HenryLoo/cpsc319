@@ -10,3 +10,10 @@ def view_reports(request):
 
 def create_new_report_page(request):
     return render(request, "reports/create_new_report_page.html")
+
+def student_pdf(c):
+    c.drawString(100, 100, "Hello World")
+    c = canvas.Canvas("student.pdf")
+    student_pdf(c)
+    c.showPage()
+    c.save()

@@ -178,42 +178,42 @@
             <div class="container-fluid">
 
             {% block body %}
-            
 
-            
-            <ul class="nav nav-tabs nav-justified">
-                <li role="presentation" class="active"><a href="{% url 'view_reports' %}">View Reports</a></li>
-                <li role="presentation"><a href="{% url 'create_new_report_page' %}">Create A New Report</a></li>
-            </ul>
-            
-            <p>
-                <div class="col-xs-6 col-md-3">
-                    <div class="jumbotron">
-                        <a href="reportlocation" class="container">
-                            <center>
-                                <button type="button" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>         
-                                </button>
-                            </center> <Center>Print Report1.pdf</center>
-                        </a>
-                    </div>
-                </div>
-            
-            <div class ="row">
-                <div class="col-xs-6 col-md-3">
-                    <div class="jumbotron">
-                        <a href="reportlocation" class="container">
-                            <center>
-                                <button type="button" class="btn btn-default">
-                                    <span class="glyphicon glyphicon-export" aria-hidden="true"></span>         
-                                </button>
-                            </center><Center>Export Report2.csv</center>
-                        </a>
-                    </div>
-                </div>
-            </div>
-          
+             <div class="col-lg-4">
+                        <div class="panel panel-default" style="max-height: 200px; min-height: 200px;">
 
+                            <div class="panel-body">
+                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 50px; margin-left: 110px"></i>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 60px; margin-left: 80px">Print Studnet</i>
+                            </div>
+                        </div>
+             </div>
+            
+            <div class="col-lg-4">
+                        <div class="panel panel-default" style="max-height: 200px; min-height: 200px;">
+
+                            <div class="panel-body">
+                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 50px; margin-left: 110px"></i>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 60px; margin-left: 60px">Print Attendance</i>
+                            </div>
+                        </div>
+             </div>
+             
+             <div class="col-lg-4">
+                        <div class="panel panel-default" style="max-height: 200px; min-height: 200px;">
+
+                            <div class="panel-body">
+                                <i class="glyphicon glyphicon-export" style="font-size: 75px; margin-top: 50px; margin-left: 110px"></i>
+                                <i class="button" onclick="openWin()" style="font-size: 25px ; margin-top: 60px; margin-left: 70px">Export Report
+                                    <script>
+                                        function openWin() {
+                                                                window.open("http://localhost:8080/create_new_report_page/", "_blank", "width=500, height=500");
+                                                              }
+                                    </script>
+                                </i>
+                            </div>
+                        </div>
+             </div>
             
             {% endblock %}
 

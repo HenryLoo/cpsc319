@@ -1,0 +1,53 @@
+{% extends "teachers/base_teacher.html" %}
+
+{% block teacher_content %}
+<h1> Teacher Info </h1>
+
+<table class="table table-hover teacher-detail">
+		<tr> 
+			<td> ID: </td>
+			<td> {{ teacher.id }} </td>
+		</tr>
+		<tr> 
+			<td> Name: </td>
+			<td> 
+				{{ teacher.user_info.first_name}} 
+				{{ teacher.user_info.last_name }}
+			</td>
+		</tr>
+		<tr> 
+			<td> Username: </td>
+			<td> {{ teacher.user_info.username }} </td>
+		</tr>
+		<tr> 
+			<td> Email: </td>
+			<td> {{ teacher.user_info.email }} </td>
+		</tr>
+		<tr> 
+			<td> Phone number: </td>
+			<td> {{ teacher.phone }} </td>
+		</tr>
+		<tr> 
+			<td> School branch: </td>
+			<td> {{ teacher.branch_location }} </td>
+		</tr>
+		<tr> 
+			<td> Skill level: </td>
+			<td> {%if teacher.skill_level %} {{ teacher.skill_level }} 
+				 {%else%} Not specified {%endif%} </td>
+		</tr>
+		<tr> 
+			<td> Days available: </td>
+			<td> 
+			        {% if teacher.teaching_availability.monday %} Monday {% endif %}
+				
+					{% if teacher.teaching_availability.tuesday %} Tuesday {% endif %}		
+			
+					{% if teacher.teaching_availability.wednesday%} Wednesday {% endif %}
+				
+					{% if teacher.teaching_availability.thursday%} Thursday {% endif %}
+			
+					{% if teacher.teaching_availability.friday%} Friday {% endif %}					</td>
+		</tr>
+</table>
+{% endblock teacher_content %}

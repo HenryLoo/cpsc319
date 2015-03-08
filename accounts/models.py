@@ -9,7 +9,7 @@ class TeachingAvailability(models.Model):
     friday = models.BooleanField()
 
     def __unicode__(self):
-        return self.teacher_info.user_info.first_name + self.teacher_info.user_info.last_name + "availability"
+        return self.teacher_info.user_info.first_name + " " + self.teacher_info.user_info.last_name + "availability"
     
 class TeacherInfo(models.Model):
     #register questions for survey
@@ -21,7 +21,7 @@ class TeacherInfo(models.Model):
     #classes has a many-to-many relation with this
 
     def __unicode__(self):
-        return self.user_info.first_name + self.user_info.last_name
+        return self.user_info.first_name + " " + self.user_info.last_name
 
 class AdminInfo(models.Model):
     user_info = models.OneToOneField(User, related_name="admin_info")
@@ -42,4 +42,4 @@ class Role(models.Model):
     ))
 
     def __unicode__(self):
-        return self.user_info.first_name + self.user_info.last_name + "role"
+        return self.user_info.first_name + " " + self.user_info.last_name + "role"

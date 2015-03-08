@@ -24,6 +24,11 @@
     <!-- Custom Fonts -->
     <link href="{% static '/static/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
 
+    <!-- JQuery UI CSS -->
+    <link href="{% static '/static/css/jquery-ui.min.css' %}" rel="stylesheet">
+    <link href="{% static '/static/css/jquery-ui.structure.min.css' %}" rel="stylesheet">
+    <link href="{% static '/static/css/jquery-ui.theme.min.css' %}" rel="stylesheet">
+
     {%block head%}
     {%endblock%}
 
@@ -88,7 +93,7 @@
                                         <h5 class="media-heading"><strong>Student Name <span class="label label-danger">Not Contacted</span> </strong>
                                         </h5>
                                         <p class="small text-muted"><i class="fa fa-clock-o"></i> 2 days ago</p>
-                                        <p>Do not delivered assignment [assignment description] for [class name].</p>
+                                        <p>Do not delivered assigment [assignment description] for [class name].</p>
                   
                                     </div>
                                 </div>
@@ -155,6 +160,9 @@
 
     <!-- jQuery -->
     <script src="{% static '/static/js/jquery.js'%}"></script>
+
+    <!-- jQuery UI -->
+    <script src="{% static '/static/js/jquery-ui.min.js'%}"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static '/static/js/bootstrap.min.js'%}"></script>

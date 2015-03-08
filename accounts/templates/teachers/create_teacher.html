@@ -1,0 +1,35 @@
+{% extends "teachers/base_teacher.html" %}
+
+{% block current_tab %}
+	"Add Teacher"
+{% endblock %}
+
+
+{% block teacher_content %}
+
+	<h2> Create Teacher</h2>
+
+	{% if errors %}
+		<div class="panel panel-danger">
+			{{ errors }}
+		</div>
+	{% endif %}
+
+	{% if user_ret %}
+		<div> Teacher {{user_ret.first_name}} {{user_ret.last_name}} created successfully! </div>
+	{% endif %}
+	
+	<form role="form" action="{%url 'account:create_teacher' %}" method="post">
+		{% csrf_token %}
+		<table class="table table-hover teacher-form">
+	    	{{ user_form.as_table }}
+			{{ teacher_form.as_table }}
+		</table>
+		<div> <h4> Availability </h4> </div>
+		<table class=" table-hover teacher-form">
+			{{ availability_form.as_table }}
+	    </table>
+	    <input type="submit" value="Submit" />
+	</form> 
+
+{% endblock teacher_content %}

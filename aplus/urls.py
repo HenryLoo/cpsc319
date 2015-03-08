@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'aplus.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-	url(r'^$','aplus.views.statistics_page',name='statistics_page'),
+    url(r'^$','aplus.views.statistics_page',name='statistics_page'),
 
     url(r'^admin/', include(admin.site.urls)),
 
@@ -18,8 +18,10 @@ urlpatterns = patterns('',
 
 #    url(r'^teachers/','accounts.views.teacherstable_page',name='teacherstable_page'),
 
-    url(r'^createteacher/','accounts.views.create_teacher',name='create_teacher'),
-    url(r'^login/', 'django.contrib.auth.views.login',name='login')
+ #   url(r'^createteacher/','accounts.views.create_teacher_view',name='create_teacher'),
+  #  url(r'^login/', 'accounts.views.login_view',name='login')
+    url(r'^account/', include('accounts.urls', 
+        namespace='account', app_name='accounts')),
 
 )
 

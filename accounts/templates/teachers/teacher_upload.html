@@ -1,0 +1,147 @@
+{% extends "teachers/base_teacher.html" %}
+
+{% block current_tab %}
+	"Upload"
+{% endblock %}
+
+
+{% block teacher_content %}
+	<p class="content">
+	To add multiple teachers to the system, upload a CSV with the following fields. 
+	<br>
+	<strong>First Name, Last Name, Branch Location, Skill Level, Teaching Availability, Phone Number, Username, 
+	Password, Email</strong>
+	<br>
+	<br>
+	<a href="#">Click here</a> to download an example of a valid CSV.
+	</p>
+
+	<form role="form" action="{%url 'account:upload_teachers' %}" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="form-group">
+		    <input type="file" id="exampleInputFile">
+		    <br>
+		    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#teacher-list-csv">
+		  	Submit
+			</button>
+	  	</div>
+	    <!-- <input type="submit" class="btn btn-default" value="Submit" /> -->
+	</form> 
+
+
+
+
+	<div class="modal fade" id="teacher-list-csv" tabindex="-1" role="dialog" 
+	aria-labelledby="modal" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	        <span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Upload Teachers</h4>
+	      </div>
+	      <div class="modal-body">
+	      Would you like to add these teachers?
+	      <br>
+	      <br>
+
+	      <table class="table table-bordered table-hover">
+	      	<tr>
+	      		<th>First Name</th>
+	      		<th>Last Name</th>
+	      		<th>Branch Location</th>
+	      		<th>Skill level</th>
+	      		<th>Teaching Availability</th>
+	      		<th>Phone Number</th>
+				<th>Username</th>
+				<th>Password</th>
+				<th>Email</th>
+	      	</tr>
+			<tr>
+				<td>George</td>
+				<td>Henrison</td>	
+				<td>Surrey</td>	
+				<td>7</td>
+				<td>Wednesday, Friday</td>
+				<td>605-555-2344</td>
+				<td>george</td>
+				<td>hellogoodbye</td>
+				<td>george@gmail.com</td>
+			</tr>
+			<tr> 
+				<td>Richard</td>
+				<td>Storky</td>	
+				<td>Surrey</td>	
+				<td>6</td>
+				<td>Tuesday, Wednesday, Thursday</td>
+				<td>605-555-2291</td>
+				<td>ring</td>
+				<td>hellogoodbye</td>
+				<td>asd@gmail.com</td>
+			</tr>
+			<tr> 
+				<td>Paul</td>
+				<td>McCarthy</td>	
+				<td>Surrey</td>	
+				<td>9</td>
+				<td>Monday, Tuesday</td>
+				<td>605-555-2184</td>
+				<td>paul</td>
+				<td>hellogoodbye</td>
+				<td>paul@gmail.com</td>
+			</tr>
+			<tr> 
+				<td>Jon</td>
+				<td>Lemon</td>	
+				<td>Surrey</td>	
+				<td>4</td>
+				<td>Monday, Tuesday</td>
+				<td>605-555-3111</td>
+				<td>jonathan</td>
+				<td>hellogoodbye</td>
+				<td>nathan@gmail.com</td>
+			</tr>
+		  </table>
+
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+<!-- {% if message %}
+	{{ message }}
+	<button> <a href="{%url 'school:studentupload'  %}"> Yes </a></button>
+	<button> No </button>
+{% endif %}
+
+<p>
+
+{% if student_list %}
+	<table class="table">
+		<tr>
+		{% with student_list|first as first_student %}
+			{% for key, value in first_student.items %}
+				<td> {{ key }}</td>
+			{% endfor %}
+		{% endwith %}
+		</tr>
+		<tr>
+			{% for student in student_list %}
+			<tr>
+				{% for key, value in student.items %}
+					<td> {{ value }}</td>
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</tr>
+	</table>
+{% endif %}
+ -->
+
+{% endblock teacher_content %}
+

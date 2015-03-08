@@ -1,0 +1,105 @@
+{% extends "admins/base_admin.html" %}
+
+{% block current_tab %}
+	"View"
+{% endblock %}
+
+{% block hacky_script %}
+$('#edit-admin-btn').click(function() {
+	var fields = $('td:nth-child(2)')
+	$.each(fields, function(i,elm) { 
+		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
+	})
+});
+{% endblock hacky_script %}
+
+{% block admin_content %}
+
+<div class="col-md-3 admin-list">
+	<h2>Admins</h2>
+
+	<div class="filters-holder">
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
+		aria-expanded="false" aria-controls="collapseExample">
+	  	Filters
+		</a>
+		<div class="collapse" id="filters">
+		  <div>
+		    <input type="checkbox"> <label>Name</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Role</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Branch</label> <input>
+		    <br>
+		  </div>
+		</div>
+	</div>
+
+	{% if admin_list %}
+	<ul class="list-unstyled admin-list">
+		{% for admin in admin_list %}
+	  		<li>
+	  		<a href="{% url 'account:view_admins' admin.id %}">
+	  			 {{ admin.user_info.first_name }} {{ admin.user_info.last_name }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No admins have been added.</div>
+	{% endif %}
+
+</div>
+
+<div class="col-md-9 admin-info">
+	{% if admin %}
+	<span>
+		<h3> Admin Info </h3>
+		<a href="#" id="edit-admin-btn" class="pull-right"> Edit </a>
+	</span>
+	<table class="table table-hover">
+		<tr> 
+			<td> ID: </td>
+			<td> {{ admin.id }} </td>
+		</tr>
+		<tr> 
+			<td> Name: </td>
+			<td> 
+				{{ admin.user_info.first_name}} 
+				{{ admin.user_info.last_name }}
+			</td>
+		</tr>
+		<tr> 
+			<td> Type: </td>
+			<td> 
+				{{ admin.user_info.role.role}} 
+			</td>
+		</tr>
+		<tr> 
+			<td> Username: </td>
+			<td> {{ admin.user_info.username }} </td>
+		</tr>
+		<tr> 
+			<td> Email: </td>
+			<td> {{ admin.user_info.email }} </td>
+		</tr>
+		<tr> 
+			<td> Phone number: </td>
+			<td> {{ admin.phone }} </td>
+		</tr>
+		<tr> 
+			<td> School branch: </td>
+			<td> {{ admin.branch_location }} </td>
+		</tr>
+
+	</table>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">
+			Select an admin to view details.
+		</div>
+	{% endif %}
+</div>
+
+{% endblock admin_content %}

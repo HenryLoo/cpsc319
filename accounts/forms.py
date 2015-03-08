@@ -52,13 +52,12 @@ class AvailabilityForm(ModelForm):
         model = TeachingAvailability
         fields = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
         
-    def __init__(self, *args, **kwargs):
-        super(AvailabilityForm, self).__init__(self, *args, **kwargs)
-        self.fields['monday'].initial  = True
-        self.fields['tuesday'].initial  = True
-        self.fields['wednesday'].initial  = True
-        self.fields['thursday'].initial  = True
-        self.fields['friday'].initial  = True
-            
+   
+
+class LoginForm(forms.Form):
+
+    username = CharField(max_length=100, required=True)
+    password = CharField(max_length=100, required=True)
+
     
 

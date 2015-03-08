@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, StreamingHttpResponse
-import csv
+from django.core.urlresolvers import reverse
 
 
 def parent_list(request, parent_id=None):
@@ -40,8 +40,9 @@ def parent_create(request):
 							 'parent_form': ParentForm()}
 	if request.method == 'POST':
 		if p.is_valid():
-			p.save()
-			return HttpResponseRedirect('parent_list')
+			new = p.save()
+			return HttpResponseRedirect(
+				reverse('school:parentlist', args=(new.id,)))
 		else:
 			context_dictionary['errors'] = p.errors 
 

@@ -35,4 +35,20 @@ urlpatterns = patterns('',
 	url(r'^parents/form/$', 
 		'school_components.views.parents_view.parent_form', 
 		name='parentform'),
+
+	# courses
+	url(r'^courses/$', 
+		'school_components.views.courses_view.course_list', 
+		name='courselist'),
+	url(r'^courses/(?P<course_id>\d+)/$', 
+		'school_components.views.courses_view.course_list', 
+		name='courselist'),
+	url(r'^courses/create/$', 
+		'school_components.views.courses_view.course_create', 
+		name='coursecreate'),
+
+	# departments
+	url(r'^departments/create/$', 
+		'school_components.views.courses_view.dept_create', 
+		name='deptcreate'),
 )

@@ -33,7 +33,7 @@ def student_create(request):
 		if s.is_valid():
 			new = s.save()
 			return HttpResponseRedirect(
-				reverse('school:studentdetail', args=(new.id,)))
+				reverse('school:studentlist', args=(new.id,)))
 		else:
 			context_dictionary['errors'] = s.errors 
 

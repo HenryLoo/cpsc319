@@ -14,3 +14,5 @@ class Parent(models.Model):
 
 	class Meta:
 		app_label = 'school_components'
+
+

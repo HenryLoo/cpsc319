@@ -1,0 +1,40 @@
+/* list */
+ul.school-list {
+	overflow: auto;
+	height: 100vh;
+	width: 100%;
+}
+
+.school-list li {
+	padding: 2px;
+	font-size: 16px;
+}
+
+/* student content */
+.school-content {
+	height: 100vh;
+}
+
+/* student form */
+.school-form th, 
+.school-info tr>td:first-child {
+	width: 30%;
+}
+
+.school-info .alert {
+	margin-top: 10px;
+}
+
+.school-form input, 
+.school-form textarea {
+	width: 60%;
+}
+
+.content {
+	margin: 10px 20px;
+}
+
+.filters-holder {
+	display: block;
+}
+

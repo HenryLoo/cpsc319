@@ -1,0 +1,117 @@
+{% extends "classes/base_class.html" %}
+
+{% block hacky_script %}
+$('#edit-class-btn').click(function() {
+	var fields = $('td:nth-child(2)')
+	$.each(fields, function(i,elm) { 
+		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
+	})
+});
+{% endblock hacky_script %}
+
+{% block current_tab %}
+	"Select"                
+{% endblock %}
+
+{% block class_content %}
+<div class="col-md-3 school-list">
+	<h2>Classes</h2>
+
+	<div class="filters-holder">
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
+		aria-expanded="false" aria-controls="collapseExample">
+	  	Filters
+		</a>
+		<div class="collapse" id="filters">
+		  <div>
+		    <input type="checkbox"> <label>Year</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Name</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Course</label> <input>
+		  </div>
+		</div>
+	</div>
+
+	{% if class_list %}
+	<ul class="list-unstyled school-list">
+		{% for class in class_list %}
+	  		<li>
+	  		<a href="{% url 'school:classlist' class.id %}">
+	  			 {{ class.course }} {{ class.section }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No classes have been added.</div>
+	{% endif %}
+
+</div>
+
+<div class="col-md-9 school-info">
+	{% if class %}
+	<span>
+		<h3> Class Info </h3>
+		<a href="#" id="edit-class-btn" class="pull-right"> Edit </a>
+	</span>
+	<table class="table table-hover">
+		<tr> 
+			<td> Course: </td>
+			<td> 
+				<a href="{% url 'school:courselist' class.course.id %}"> 
+					{{ class.course }} 
+				</a>
+			</td>
+		</tr>
+		<tr> 
+			<td> Section: </td>
+			<td> {{ class.section }} </td>
+		</tr>
+		<tr> 
+			<td> Start Time: </td>
+			<td> {{ class.start_time }} </td>
+		</tr>
+		<tr> 
+			<td> Duration: </td>
+			<td> {{ class.duration }} </td>
+		</tr>
+		<tr> 
+			<td> Room: </td>
+			<td> {{ class.room }} </td>
+		</tr>
+		<tr>
+			<td> Enrolled: </td>
+			<td> {{ reg_list|length }} </td>
+		</tr>
+		<tr> 
+			<td> Description: </td>
+			<td> {{ class.description }} </td>
+		</tr>
+	</table>
+
+	<!-- Button trigger modal -->
+	<a href="{% url 'school:classregistration' %}"> Edit Class Registration </a>
+
+
+
+	{% if reg_list %}
+		<h5>Registered Students:</h5>
+		<table class="table table-hover col-md-9">
+		{% for reg in reg_list %}
+		<tr>
+			<td> {{ reg.student.first_name }} {{ reg.student.last_name }} </td>
+		</tr>
+		{% endfor %}
+		</table>
+	{% endif %}
+
+	{% else %}
+		<div class="content alert alert-info" role="alert">
+			Select a class to view details.
+		</div>
+	{% endif %}
+</div>
+
+{% endblock class_content %}

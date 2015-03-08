@@ -26,7 +26,8 @@ ul.school-list {
 }
 
 .school-form input, 
-.school-form textarea {
+.school-form textarea, 
+.school-form select[multiple] {
 	width: 60%;
 }
 
@@ -38,3 +39,26 @@ ul.school-list {
 	display: block;
 }
 
+
+#registration-table td {
+	width: 250px;
+}
+
+/* special course registration form */
+#student-reg-form {
+	margin-top: 20px;
+}
+
+.form-half-size {
+	width: 49%;
+	display: inline-block;
+}
+
+#multiple-students-modal select[multiple] {
+	height:	200px;
+}
+
+.disabled-link {
+	pointer-events: none; 
+	opacity: 0.4;
+}

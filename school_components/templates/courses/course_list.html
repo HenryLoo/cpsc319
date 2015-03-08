@@ -2,7 +2,6 @@
 
 {% block hacky_script %}
 $('#edit-course-btn').click(function() {
-	console.log('click');
 	var fields = $('td:nth-child(2)')
 	$.each(fields, function(i,elm) { 
 		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
@@ -93,6 +92,8 @@ $('#edit-course-btn').click(function() {
 			<td> {{ course.description }} </td>
 		</tr>
 	</table>
+
+	<a href="{% url 'school:courseregistration' course.id %}"> Edit Course Registration </a>
 
 	{% else %}
 		<div class="content alert alert-info" role="alert">

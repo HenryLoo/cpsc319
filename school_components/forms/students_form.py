@@ -1,5 +1,4 @@
 from django import forms
-from school_components.models.parents_model import Parent
 from school_components.models.students_model import Student
 
 class StudentForm(forms.ModelForm):

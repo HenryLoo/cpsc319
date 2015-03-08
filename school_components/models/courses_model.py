@@ -36,3 +36,14 @@ class Department(models.Model):
 	class Meta:
 		app_label = 'school_components'
 
+
+class CourseRegistration(models.Model):
+	course = models.ForeignKey('Course')
+	student = models.ForeignKey('Student')
+	# school = models.ForeignKey('School')
+	# period = models.ForeignKey('Period')
+	date = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		app_label = 'school_components'
+

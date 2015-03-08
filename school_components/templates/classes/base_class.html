@@ -2,6 +2,18 @@
 
 {% block javascript_block %}
 <script>
+    // disable all tabs but the first one 
+    // if a class is not selected
+    // TODO: think about this some more...
+    {% if not class %}
+     $("ul.nav-tabs>li").each(function(i,k) { 
+        if (i > 1) { 
+            $(k).addClass("disabled disabled-link"); 
+        } 
+    });
+    {% endif %}
+
+    // sets current tab to active
     $("ul.nav-tabs>li").each(function(k, v) { 
         var tab = $(v);
         if (tab.text().includes(
@@ -16,6 +28,7 @@
 
     {% block hacky_script %}
     {% endblock hacky_script %}
+
 </script>
 {% endblock %}
 
@@ -44,7 +57,7 @@
     <li>
         <a href="#"><i class="fa fa-users"></i>  Parents</a>
     </li>  
-    <li>
+    <li class="active">
         <a href="#"><i class="fa fa-table"></i>  Classes</a>
     </li>              
     <li>
@@ -56,7 +69,7 @@
     <li>
         <a href="#"><i class="fa fa-university"></i>  Schools</a>
     </li>
-    <li class="active">
+    <li>
         <a href="#"><i class="fa fa-book"></i>  Courses</a>
     </li>
     <li>
@@ -69,23 +82,15 @@
 {% endblock %} 
 
 {% block body %}
-
 <ul class="nav nav-tabs nav-justified">
-    <li role="presentation" class="active">
-        <a href="{% url 'school:courseregistration' %}">Special Course Registration</a>
-    </li>
-    <li role="presentation" class="active">
-        <a href="{% url 'school:courselist' %}">View Courses</a>
-    </li>
-    <li role="presentation">
-        <a href="{% url 'school:coursecreate' %}">Add Course</a>
-    </li>
-    <li role="presentation">
-        <a href="{% url 'school:deptcreate' %}">Add Department</a>
-    </li>
+    <li role="presentation"><a href="{%url 'school:classlist' %}">Select Class</a></li>
+    <li role="presentation"><a href="{%url 'school:classcreate' %}">Create Class</a></li>
+    <li role="presentation"><a href="{%url 'school:classregistration' %}">Class Registration</a></li>
+    <li role="presentation"><a href="#">Assignments</a></li>
+    <li role="presentation"><a href="#">Attendance</a></li>
 </ul>
 
-{% block course_content %}
-{% endblock course_content %}
+{% block class_content %}
+{% endblock class_content %}
 
 {% endblock %}

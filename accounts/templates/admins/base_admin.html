@@ -1,0 +1,89 @@
+{% extends "basetemplate.html" %}
+
+{% block javascript_block %}
+<script>
+    // date picker for the form 
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1980:" + new Date().getFullYear(),
+    });
+
+    // sets current tab to active
+    $("ul.nav-tabs>li").each(function(k, v) { 
+        var tab = $(v);
+        if (tab.text().includes(
+                {% block current_tab %}
+                {% endblock %}
+            )) {
+            tab.addClass("active");
+        } else {
+            tab.removeClass("active");
+        }   
+    }); 
+
+    {% block hacky_script %}
+    {% endblock hacky_script %}
+
+</script>
+{% endblock %}
+
+{%block head%}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'admins/style.css' %}" />
+{% endblock %}
+
+
+{% block menu %}
+<ul class="nav navbar-nav side-nav">
+    <li>
+        <a href="#">
+        	<i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
+    </li>
+    <li>
+        <a href="#">
+        	<i class="fa fa-child"></i>  Students</a>
+    </li>
+    <li class="active">
+        <a href="{% url 'account:create_admin' %}"><i class="fa fa-user"></i>  Admin</a>
+    </li>
+    <li>
+        <a href="{% url 'account:create_teacher' %}"><i class="fa fa-users"></i>  Teachers</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-users"></i>  Parents</a>
+    </li>  
+    <li>
+        <a href="#"><i class="fa fa-table"></i>  Classes</a>
+    </li>              
+    <li>
+        <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-calendar"></i>  Periods</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-university"></i>  Schools</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-book"></i>  Courses</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-envelope"></i>  Email</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-fw fa-wrench"></i> Settings</a>
+    </li>
+</ul>
+{% endblock %} 
+
+{% block body %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><a href="{% url 'account:view_admins' %}">View Admins</a></li>
+    <li role="presentation"><a href="{% url 'account:create_admin' %}">Add Admin</a></li>
+</ul>
+
+{% block admin_content %}
+{% endblock admin_content %}
+
+{% endblock %}

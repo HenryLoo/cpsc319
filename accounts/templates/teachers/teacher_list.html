@@ -1,0 +1,127 @@
+{% extends "teachers/base_teacher.html" %}
+
+{% block current_tab %}
+	"View"
+{% endblock %}
+
+{% block hacky_script %}
+$('#edit-teacher-btn').click(function() {
+	var fields = $('td:nth-child(2)')
+	$.each(fields, function(i,elm) { 
+		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
+	})
+});
+{% endblock hacky_script %}
+
+{% block teacher_content %}
+
+<div class="col-md-3 teacher-list">
+	<h2>Teachers</h2>
+
+	<div class="filters-holder">
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
+		aria-expanded="false" aria-controls="collapseExample">
+	  	Filters
+		</a>
+		<div class="collapse" id="filters">
+		  <div>
+		    <input type="checkbox"> <label>Name</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Class</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Year</label> <input>
+		    <br>
+		  </div>
+		</div>
+	</div>
+
+	{% if teacher_list %}
+	<ul class="list-unstyled teacher-list">
+		{% for teacher in teacher_list %}
+	  		<li>
+	  		<a href="{% url 'account:view_teachers' teacher.id %}">
+	  			 {{ teacher.user_info.first_name }} {{ teacher.user_info.last_name }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No teachers have been added.</div>
+	{% endif %}
+
+</div>
+
+<div class="col-md-9 teacher-info">
+	{% if teacher %}
+	<span>
+		<h3> Teacher Info </h3>
+		<a href="#" id="edit-teacher-btn" class="pull-right"> Edit </a>
+	</span>
+	<table class="table table-hover">
+		<tr> 
+			<td> ID: </td>
+			<td> {{ teacher.id }} </td>
+		</tr>
+		<tr> 
+			<td> Name: </td>
+			<td> 
+				{{ teacher.user_info.first_name}} 
+				{{ teacher.user_info.last_name }}
+			</td>
+		</tr>
+		<tr> 
+			<td> Username: </td>
+			<td> {{ teacher.user_info.username }} </td>
+		</tr>
+		<tr> 
+			<td> Email: </td>
+			<td> {{ teacher.user_info.email }} </td>
+		</tr>
+		<tr> 
+			<td> Phone number: </td>
+			<td> {{ teacher.phone }} </td>
+		</tr>
+		<tr> 
+			<td> School branch: </td>
+			<td> {{ teacher.branch_location }} </td>
+		</tr>
+		<tr> 
+			<td> Skill level: </td>
+			<td> {%if teacher.skill_level %} {{ teacher.skill_level }} 
+				 {%else%} Not specified {%endif%} </td>
+		</tr>
+		<tr> 
+			<td> Days available: </td>
+			<td> 
+			        {% if teacher.teaching_availability.monday %} Monday {% endif %}
+				
+					{% if teacher.teaching_availability.tuesday %} Tuesday {% endif %}		
+			
+					{% if teacher.teaching_availability.wednesday%} Wednesday {% endif %}
+				
+					{% if teacher.teaching_availability.thursday%} Thursday {% endif %}
+			
+					{% if teacher.teaching_availability.friday%} Friday {% endif %}					</td>
+		</tr>
+	</table>
+
+	<h4>2015</h4>
+	<ul>
+		<li><a href="#">Music Level 1</a></li>
+		<li><a href="#">History Level 2</a></li>
+	</ul>
+
+	<h4>2013</h4>
+	<ul>
+		<li><a href="#">History Level 1</a></li>
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">
+			Select a teacher to view details.
+		</div>
+	{% endif %}
+</div>
+
+{% endblock teacher_content %}

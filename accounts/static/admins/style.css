@@ -1,0 +1,39 @@
+/* student list */
+ul.parent-list {
+	overflow: auto;
+	height: 100vh;
+	width: 100%;
+}
+
+.parent-list li {
+	padding: 2px;
+	font-size: 16px;
+}
+
+/* student content */
+.parent-content {
+	height: 100vh;
+}
+
+/* student form */
+.parent-form th, 
+.parent-info tr>td:first-child {
+	width: 30%;
+}
+
+.student-info .alert {
+	margin-top: 10px;
+}
+
+.student-form input {
+	width: 60%;
+}
+
+.content {
+	margin: 10px 20px;
+}
+
+.filters-holder {
+	display: block;
+}
+

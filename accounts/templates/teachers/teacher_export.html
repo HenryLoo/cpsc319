@@ -1,0 +1,122 @@
+{% extends "teachers/base_teacher.html" %}
+
+{% block current_tab %}
+	"Export"
+{% endblock %}
+
+{% block teacher_content %}
+
+<div class="content">
+<form role="form" action="{%url 'account:export_teachers' %}" method="post">
+Export the following teachers as CSV.
+	{% csrf_token %}
+    <input class="btn btn-default" type="submit" value="Download CSV" />
+</form> 
+</div>
+
+
+
+<table class="table table-bordered table-hover">
+	<tr>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Branch location</th>
+		<th>Skill level</th>
+		<th>Teaching availability</th>
+		<th>Phone Number</th>
+		<th>Username</th>
+		<th>Email</th>
+	</tr>
+	<tr> 
+		<td>Richard</td>
+		<td>Harris</td>	
+		<td>Surrey</td>	
+		<td>7</td>
+		<td>Tuesday, Wednesday, Thursday</td>
+		<td>605-555-2344</td>
+		<td>richardh</td>
+		<td>richardh@gmail.com</td>
+	</tr>
+	<tr> 
+		<td>Marie</td>
+		<td>Sims</td>	
+		<td>Surrey</td>	
+		<td>9</td>
+		<td>Tuesday, Wednesday, Thursday</td>
+		<td>605-555-2291</td>
+		<td>maries</td>
+		<td>marie@gmail.com</td>
+	</tr>
+	<tr> 
+		<td>Jeffrey</td>
+		<td>Watson</td>	
+		<td>Surrey</td>	
+		<td>3</td>
+		<td>Wednesday, Friday</td>
+		<td>605-555-8832</td>
+		<td>jeffreywatson</td>
+		<td>geoff@gmail.com</td>
+	</tr>
+	<tr> 
+		<td>Michelle</td>
+		<td>Hughes</td>	
+		<td>Surrey</td>	
+		<td>5</td>
+		<td>Tuesday, Wednesday, Thursday</td>
+		<td>605-555-2184</td>
+		<td>michelle</td>
+		<td>mbelle@gmail.com</td>
+	</tr>
+	<tr> 
+		<td>Bonnie</td>
+		<td>Moore</td>	
+		<td>Surrey</td>	
+		<td>8</td>
+		<td>Wednesday, Friday</td>
+		<td>605-555-3111</td>
+		<td>bonnie</td>
+		<td>moorebonnie@gmail.com</td>
+	</tr>
+	<tr>
+		<td>George</td>
+		<td>Henrison</td>	
+		<td>Surrey</td>	
+		<td>7</td>
+		<td>Wednesday, Friday</td>
+		<td>605-555-2344</td>
+		<td>george</td>
+		<td>george@gmail.com</td>
+	</tr>
+	<tr> 
+		<td>Richard</td>
+		<td>Storky</td>	
+		<td>Surrey</td>	
+		<td>6</td>
+		<td>Tuesday, Wednesday, Thursday</td>
+		<td>605-555-2291</td>
+		<td>ring</td>
+		<td>asd@gmail.com</td>
+	</tr>
+	<tr> 
+		<td>Paul</td>
+		<td>McCarthy</td>	
+		<td>Surrey</td>	
+		<td>9</td>
+		<td>Monday, Tuesday</td>
+		<td>605-555-2184</td>
+		<td>paul</td>
+		<td>paul@gmail.com</td>
+	</tr>
+	<tr> 
+		<td>Jon</td>
+		<td>Lemon</td>	
+		<td>Surrey</td>	
+		<td>4</td>
+		<td>Monday, Tuesday</td>
+		<td>605-555-3111</td>
+		<td>jonathan</td>
+		<td>nathan@gmail.com</td>
+	</tr>
+</table>
+
+{% endblock teacher_content %}

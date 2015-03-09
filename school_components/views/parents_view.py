@@ -6,44 +6,49 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, StreamingHttpResponse
-import csv
+from django.core.urlresolvers import reverse
 
 
-def parent_list(request):
+def parent_list(request, parent_id=None):
 	parent_list = Parent.objects.all()
 	context_dictionary = {'parent_list': parent_list}
 
-	return render_to_response("parents/base_parent.html",
+	if parent_id:
+		context_dictionary['parent'] = Parent.objects.get(pk=parent_id)
+		context_dictionary['children_list'] = Student.objects.filter(parent=parent_id)
+
+	return render_to_response("parents/parent_list.html",
 		context_dictionary,
 		RequestContext(request))
 
-def parent_detail(request, parent_id):
-	parent_list = Parent.objects.all()
-	parent = Parent.objects.get(pk=parent_id)
-	children = Student.objects.filter(parent=parent_id)
+# def parent_detail(request, parent_id):
+# 	parent_list = Parent.objects.all()
+# 	parent = Parent.objects.get(pk=parent_id)
+# 	children = Student.objects.filter(parent=parent_id)
 
-	context_dictionary = {'parent_list': parent_list, 
-						'parent': parent,
-						'children_list': children }
-	return render_to_response('parents/parent_detail.html',
-		context_dictionary,
-		RequestContext(request))
+# 	context_dictionary = {'parent_list': parent_list, 
+# 						'parent': parent,
+# 						'children_list': children }
+# 	return render_to_response('parents/parent_detail.html',
+# 		context_dictionary,
+# 		RequestContext(request))
 
 def parent_create(request):
+	parent_list = Parent.objects.all()
 	p = ParentForm(request.POST)
+	context_dictionary = {'parent_list': parent_list,
+							 'parent_form': ParentForm()}
+	if request.method == 'POST':
+		if p.is_valid():
+			new = p.save()
+			return HttpResponseRedirect(
+				reverse('school:parentlist', args=(new.id,)))
+		else:
+			context_dictionary['errors'] = p.errors 
 
-	if p.is_valid():
-		p.save()
-		return HttpResponseRedirect('parent_list')
-	else:
-		parent_list = Parent.objects.all()
-		context_dictionary = {'parent_list': parent_list,
-							 'parent_form': ParentForm(),
-							 'errors': p.errors }
-
-		return render_to_response('parents/parent_form.html',
-			context_dictionary,
-			RequestContext(request))
+	return render_to_response('parents/parent_form.html',
+		context_dictionary,
+		RequestContext(request))
 
 
 def parent_form(request):

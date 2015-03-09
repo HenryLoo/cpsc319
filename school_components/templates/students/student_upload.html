@@ -1,14 +1,112 @@
-{% load static %}
-    <link href="{% static '/static/css/bootstrap.min.css' %}" rel="stylesheet">
+{% extends "students/base_student.html" %}
 
+{% block current_tab %}
+	"Upload"
+{% endblock %}
+
+
+{% block student_content %}
+	<p class="content">
+	To add multiple students to the system, upload a CSV with the following fields. 
+	<br>
+	<strong>First Name, Last Name, Birthdate, Home Address, Phone Number, Parent First Name, 
+	Parent Last Name, Allergies, Emergency Contact Name, Emergency Contact Phone Number</strong>
+	<br>
+	<br>
+	<a href="#">Click here</a> to download an example of a valid CSV.
+	</p>
 
 	<form role="form" action="{%url 'school:studentupload' %}" method="post" enctype="multipart/form-data">
 		{% csrf_token %}
-	    {{ form }}
-	    <input type="submit" value="Submit" />
+		<div class="form-group">
+		    <input type="file" id="exampleInputFile">
+		    <br>
+		    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#student-list-csv">
+		  	Submit
+			</button>
+	  	</div>
+	    <!-- <input type="submit" class="btn btn-default" value="Submit" /> -->
 	</form> 
 
-{% if message %}
+
+
+
+	<div class="modal fade" id="student-list-csv" tabindex="-1" role="dialog" 
+	aria-labelledby="modal" aria-hidden="true">
+	  <div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	        <span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Upload Students</h4>
+	      </div>
+	      <div class="modal-body">
+	      Would you like to add these students?
+	      <br>
+	      <br>
+
+	      <table class="table table-bordered table-hover">
+	      	<tr>
+	      		<th>First Name</th>
+	      		<th>Last Name</th>
+	      		<th>Birthdate</th>
+	      		<th>Address</th>
+	      		<th>Phone Number</th>
+	      		<th>Parent</th>
+	      	</tr>
+	      	<tr> 
+	      		<td>Richard</td>
+	      		<td>Harris</td>	
+	      		<td>March 4, 2015</td>	
+	      		<td>7 Northport Pass</td>
+	      		<td>605-555-2344</td>
+	      		<td>Elise Harris</td>
+	      	</tr>
+	      	<tr> 
+	      		<td>Marie</td>
+	      		<td>Sims</td>	
+	      		<td>December 4, 2015</td>	
+	      		<td>936 Bashford Parkway</td>
+	      		<td>605-555-2291</td>
+	      		<td>Gregory Day</td>
+	      	</tr>
+	      	<tr> 
+	      		<td>Jeffrey</td>
+	      		<td>Watson</td>	
+	      		<td>April 19, 2015</td>	
+	      		<td>7436 Eliot Road</td>
+	      		<td>605-555-8832</td>
+	      		<td>Elise Harris</td>
+	      	</tr>
+	      	<tr> 
+	      		<td>Michelle</td>
+	      		<td>Hughes</td>	
+	      		<td>June 22, 2015</td>	
+	      		<td>05 Mifflin Center</td>
+	      		<td>605-555-2184</td>
+	      		<td>Paul Hughes</td>
+	      	</tr>
+	      	<tr> 
+	      		<td>Bonnie</td>
+	      		<td>Moore</td>	
+	      		<td>October 1, 2015</td>	
+	      		<td>864 Karstens Crossing</td>
+	      		<td>605-555-3111</td>
+	      		<td>Donald Moore</td>
+	      	</tr>
+		  </table>
+
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+
+<!-- {% if message %}
 	{{ message }}
 	<button> <a href="{%url 'school:studentupload'  %}"> Yes </a></button>
 	<button> No </button>
@@ -36,4 +134,7 @@
 		</tr>
 	</table>
 {% endif %}
+ -->
+
+{% endblock student_content %}
 

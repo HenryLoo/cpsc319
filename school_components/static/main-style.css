@@ -1,0 +1,64 @@
+/* list */
+ul.school-list {
+	overflow: auto;
+	height: 100vh;
+	width: 100%;
+}
+
+.school-list li {
+	padding: 2px;
+	font-size: 16px;
+}
+
+/* student content */
+.school-content {
+	height: 100vh;
+}
+
+/* student form */
+.school-form th, 
+.school-info tr>td:first-child {
+	width: 30%;
+}
+
+.school-info .alert {
+	margin-top: 10px;
+}
+
+.school-form input, 
+.school-form textarea, 
+.school-form select[multiple] {
+	width: 60%;
+}
+
+.content {
+	margin: 10px 20px;
+}
+
+.filters-holder {
+	display: block;
+}
+
+
+#registration-table td {
+	width: 250px;
+}
+
+/* special course registration form */
+#student-reg-form {
+	margin-top: 20px;
+}
+
+.form-half-size {
+	width: 49%;
+	display: inline-block;
+}
+
+#multiple-students-modal select[multiple] {
+	height:	200px;
+}
+
+.disabled-link {
+	pointer-events: none; 
+	opacity: 0.4;
+}

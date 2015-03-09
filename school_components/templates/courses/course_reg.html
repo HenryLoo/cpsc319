@@ -1,0 +1,166 @@
+{% extends "courses/base_course.html" %}
+
+{% block current_tab %}
+	"View"
+{% endblock %}
+
+{% block hacky_script %}
+
+<!-- fake fake fake -->
+$('#search-student-div button').click(function() {
+	$('#registration-table tr:last').after(
+		'<tr class="success"><td>' + $("#search-student-div input").val().trim() + 
+		'</td><td> Disney World, Florida <td> (604) 555-1234 ' + 
+		'<span class="glyphicon glyphicon-remove pull-right remove-student-temp"></span>' + 
+		'</td></tr>'
+	);
+	$('#search-student-div input').val("") 
+
+	<!-- bind handlers to the new objects -->
+	$('.remove-student-temp').click(function(e) {
+		$(e.target).parent().remove();
+	});
+})
+
+<!-- multiple modal -->
+$('#remove-btn').click(function() {
+	var selected = $('#enrolled-select > option:selected')
+	$('#unenrolled-select').append(selected)
+})
+
+$('#enroll-btn').click(function() {
+	var selected = $('#unenrolled-select > option:selected')
+	$('#enrolled-select').append(selected)
+})
+
+
+{% endblock hacky_script %}
+
+{% block course_content %}
+
+	<h3> Register Students in  {{ course.name }} </h3>
+
+	{% if errors %}
+		<div class="panel panel-danger">
+			{{ errors }}
+		</div>
+	{% endif %}
+
+	<div class="col-md-offset-2 col-md-8" id="search-student-div">
+	    <div class="input-group">
+	      <span class="input-group-btn">
+	        <button class="btn btn-default" type="button">Go!</button>
+	      </span>
+	      <input type="text" class="form-control" placeholder="Search for student...">
+	    </div>
+	</div>
+
+	<div class="col-md-12">
+		<h4>Registered Students:</h4>
+		<h5>Number of students: {{ reg_list|length }}</h5>
+
+		<table class="table table-hover table-bordered" id="registration-table">
+		{% for reg in reg_list %}
+		<tr>
+			<td> <input type="checkbox" class="student-box" style="display:none"/>  
+			{{ reg.student.first_name }} {{ reg.student.last_name }} 
+			</td>
+			<td>
+				{{ reg.student.address }}
+			</td>
+			<td>
+				{{ reg.student.home_phone}}
+			<span class="glyphicon glyphicon-remove pull-right remove-student" data-toggle="modal" data-target="#myModal">
+			</span> 
+			</td>
+		</tr>
+		{% endfor %}
+		</table>
+
+		<div>
+			<button class="btn btn-default pull-right" type="button" data-toggle="modal" 
+			data-target="#multiple-students-modal">
+			Edit Multiple Students</button>
+		</div>
+
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-sm">
+		    <div class="modal-content">
+		      <div class="modal-body">
+		       	Remove John Doe from class?
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+		        <button type="button" class="btn btn-primary btn-sm">Remove</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+
+<!-- Multiple students Modal -->
+<div class="modal fade" id="multiple-students-modal" tabindex="-1" role="dialog" 
+aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit Multiple Students</h4>
+      </div>
+      <div class="modal-body">
+
+      	<select class="form-control form-inline form-group">
+		  <option>{{ course.name }} Section 1</option>
+		  <option>{{ course.name }} Section 2</option>
+		</select>
+      
+      	<div class="form-half-size">
+      		<div class="form-group">
+		  		<label>Waiting List</label>
+		  		<select multiple class="form-control" id="unenrolled-select">
+				  <option>Huey Morrison</option>
+				  <option>George Wallace</option>
+				  <option>Bonnie Cortez</option>
+				  <option>Michelle Soo</option>
+				  <option>Ali Imran</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<button type="button" class="btn btn-default btn-sm" id="enroll-btn">Add
+				<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+				</button>
+			</div>
+      	</div> 
+
+      	<div class="form-half-size">
+	  		<label>Enrolled Students</label>
+	  		<div class="form-group">
+		  		<select multiple class="form-control" id="enrolled-select">
+				  <option>Peter Parker</option>
+				  <option>Lois Lowry</option>
+				  <option>Margaret Atwood</option>
+				  <option>Mickey Mantle</option>
+				  <option>Geena Davis</option>
+				  <option>Tom Hanks</option>
+				  <option>Betty White</option>
+				  <option>Sarah Joneson</option>
+				</select>
+			</div>
+
+			<div class="form-group">
+      			<button type="button" class="btn btn-default btn-sm" id="remove-btn">
+      				<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Remove
+      			</button>
+      		</div>
+      	</div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock course_content %}

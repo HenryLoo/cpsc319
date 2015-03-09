@@ -1,4 +1,150 @@
+{% extends "students/base_student.html" %}
+
+{% block current_tab %}
+	"Export"
+{% endblock %}
+
+{% block student_content %}
+
+<div class="content">
 <form role="form" action="{%url 'school:studentexport' %}" method="post">
+Export the following students as CSV.
 	{% csrf_token %}
-    <input type="submit" value="Download" />
+    <input class="btn btn-default" type="submit" value="Download CSV" />
 </form> 
+</div>
+
+
+
+<table class="table table-bordered table-hover">
+	<tr>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Birthdate</th>
+		<th>Address</th>
+		<th>Phone Number</th>
+		<th>Parent</th>
+	</tr>
+	<tr> 
+		<td>Richard</td>
+		<td>Harris</td>	
+		<td>March 4, 2015</td>	
+		<td>7 Northport Pass</td>
+		<td>605-555-2344</td>
+		<td>Elise Harris</td>
+	</tr>
+	<tr> 
+		<td>Marie</td>
+		<td>Sims</td>	
+		<td>December 4, 2015</td>	
+		<td>936 Bashford Parkway</td>
+		<td>605-555-2291</td>
+		<td>Gregory Day</td>
+	</tr>
+	<tr> 
+		<td>Jeffrey</td>
+		<td>Watson</td>	
+		<td>April 19, 2015</td>	
+		<td>7436 Eliot Road</td>
+		<td>605-555-8832</td>
+		<td>Elise Harris</td>
+	</tr>
+	<tr> 
+		<td>Michelle</td>
+		<td>Hughes</td>	
+		<td>June 22, 2015</td>	
+		<td>05 Mifflin Center</td>
+		<td>605-555-2184</td>
+		<td>Paul Hughes</td>
+	</tr>
+	<tr> 
+		<td>Bonnie</td>
+		<td>Moore</td>	
+		<td>October 1, 2015</td>	
+		<td>864 Karstens Crossing</td>
+		<td>605-555-3111</td>
+		<td>Donald Moore</td>
+	</tr>
+		<tr> 
+		<td>Richard</td>
+		<td>Harris</td>	
+		<td>March 4, 2015</td>	
+		<td>7 Northport Pass</td>
+		<td>605-555-2344</td>
+		<td>Elise Harris</td>
+	</tr>
+	<tr> 
+		<td>Marie</td>
+		<td>Sims</td>	
+		<td>December 4, 2015</td>	
+		<td>936 Bashford Parkway</td>
+		<td>605-555-2291</td>
+		<td>Gregory Day</td>
+	</tr>
+	<tr> 
+		<td>Jeffrey</td>
+		<td>Watson</td>	
+		<td>April 19, 2015</td>	
+		<td>7436 Eliot Road</td>
+		<td>605-555-8832</td>
+		<td>Elise Harris</td>
+	</tr>
+	<tr> 
+		<td>Michelle</td>
+		<td>Hughes</td>	
+		<td>June 22, 2015</td>	
+		<td>05 Mifflin Center</td>
+		<td>605-555-2184</td>
+		<td>Paul Hughes</td>
+	</tr>
+	<tr> 
+		<td>Bonnie</td>
+		<td>Moore</td>	
+		<td>October 1, 2015</td>	
+		<td>864 Karstens Crossing</td>
+		<td>605-555-3111</td>
+		<td>Donald Moore</td>
+	</tr>
+		<tr> 
+		<td>Richard</td>
+		<td>Harris</td>	
+		<td>March 4, 2015</td>	
+		<td>7 Northport Pass</td>
+		<td>605-555-2344</td>
+		<td>Elise Harris</td>
+	</tr>
+	<tr> 
+		<td>Marie</td>
+		<td>Sims</td>	
+		<td>December 4, 2015</td>	
+		<td>936 Bashford Parkway</td>
+		<td>605-555-2291</td>
+		<td>Gregory Day</td>
+	</tr>
+	<tr> 
+		<td>Jeffrey</td>
+		<td>Watson</td>	
+		<td>April 19, 2015</td>	
+		<td>7436 Eliot Road</td>
+		<td>605-555-8832</td>
+		<td>Elise Harris</td>
+	</tr>
+	<tr> 
+		<td>Michelle</td>
+		<td>Hughes</td>	
+		<td>June 22, 2015</td>	
+		<td>05 Mifflin Center</td>
+		<td>605-555-2184</td>
+		<td>Paul Hughes</td>
+	</tr>
+	<tr> 
+		<td>Bonnie</td>
+		<td>Moore</td>	
+		<td>October 1, 2015</td>	
+		<td>864 Karstens Crossing</td>
+		<td>605-555-3111</td>
+		<td>Donald Moore</td>
+	</tr>
+</table>
+
+{% endblock student_content %}

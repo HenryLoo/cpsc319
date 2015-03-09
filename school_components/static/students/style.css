@@ -1,0 +1,49 @@
+/* student list */
+/*#student-list-header * {
+	display: inline-block;
+	margin: 5px auto 20px auto;
+}
+
+#student-list-header a {
+	float: right;
+}*/
+
+/* student list */
+ul.student-list {
+	overflow: auto;
+	height: 100vh;
+	width: 100%;
+}
+
+.student-list li {
+	padding: 2px;
+	font-size: 16px;
+}
+
+/* student content */
+.student-content {
+	height: 100vh;
+}
+
+/* student form */
+.student-form th, 
+.student-info tr>td:first-child {
+	width: 30%;
+}
+
+.student-info .alert {
+	margin-top: 10px;
+}
+
+.student-form input {
+	width: 60%;
+}
+
+.content {
+	margin: 10px 20px;
+}
+
+.filters-holder {
+	display: block;
+}
+

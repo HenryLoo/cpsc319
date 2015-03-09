@@ -1,34 +1,91 @@
+{% extends "basetemplate.html" %}
+
+{% block javascript_block %}
+<script>
+    // date picker for the form 
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1980:" + new Date().getFullYear(),
+    });
+
+    // sets current tab to active
+    $("ul.nav-tabs>li").each(function(k, v) { 
+        var tab = $(v);
+        if (tab.text().includes(
+                {% block current_tab %}
+                {% endblock %}
+            )) {
+            tab.addClass("active");
+        } else {
+            tab.removeClass("active");
+        }   
+    }); 
+
+    {% block hacky_script %}
+    {% endblock hacky_script %}
+
+</script>
+{% endblock %}
+
+{%block head%}
 {% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'students/style.css' %}" />
+{% endblock %}
 
-<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
-<link href="{% static 'js/bootstrap.min.js' %}" rel="stylesheet" media="screen">
 
-<div class="col-md-4">
-	<!-- Default panel contents -->
-	<h1> Students </h1>
-	<a href="{% url 'school:studentform' %}" class="btn btn-info" > New Student </a>
+{% block menu %}
+<ul class="nav navbar-nav side-nav">
+    <li>
+        <a href="{% url 'statistics_page' %}">
+        	<i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
+    </li>
+    <li class="active">
+        <a href="{% url 'school:studentlist' %}">
+        	<i class="fa fa-child"></i>  Students</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-user"></i>  Admin</a>
+    </li>
+    <li>
+        <a href="{% url 'teacherstable_page' %}"><i class="fa fa-users"></i>  Teachers</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-users"></i>  Parents</a>
+    </li>  
+    <li>
+        <a href="#"><i class="fa fa-table"></i>  Classes</a>
+    </li>              
+    <li>
+        <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-calendar"></i>  Periods</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-university"></i>  Schools</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-book"></i>  Courses</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-envelope"></i>  Email</a>
+    </li>
+    <li>
+        <a href="#"><i class="fa fa-fw fa-wrench"></i> Settings</a>
+    </li>
+</ul>
+{% endblock %} 
 
-		{% if student_list %}
-		<table class="table table-collapse">
-			{% for student in student_list %}
-		  		<tr> <td>
-		  		<a href="{% url 'school:studentdetail' student.id %}" class="list-group-item">
-		  			{{ student.first_name }} {{ student.last_name }}
-		  		</a>
-		  		</td> </tr>
-		  	{% endfor %}
-		</table>
+{% block body %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+    <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
+    <li role="presentation"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
+    <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
+</ul>
 
-		{% else %}
-			<div class="alert alert-info" role="alert">No students have been added.</div>
-		{% endif %}
+{% block student_content %}
+{% endblock student_content %}
 
-</div>
-
-<div class="panel panel-default col-md-8">
-  <div class="panel-body">
-    {% block student_content %}
-		This is the content.
-	{% endblock student_content %}
-  </div>
-</div>
+{% endblock %}

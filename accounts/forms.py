@@ -36,14 +36,14 @@ class TeacherForm(ModelForm):
 
     class Meta():
         model = TeacherUser
-        fields = ['phone', 'branch_location', 'skill_level']
+        fields = ['phone', 'school', 'skill_level']
 
 class AdminForm(ModelForm):
 
     admin_type = forms.ChoiceField(choices=( ('SYSTEM_ADMIN', "System Admin"), ('SCHOOL_ADMIN', "School Admin") ))
     class Meta():
-        model = AdminUser
-        fields = ['phone', 'branch_location']
+        model = SchoolAdminUser
+        fields = ['phone', 'school']
 
 
 class AvailabilityForm(ModelForm):

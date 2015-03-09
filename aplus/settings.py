@@ -49,7 +49,7 @@ INSTALLED_APPS = (
     'school_components',
     'dashboard',
 #    'googlecharts',
-#    'reports',
+    'reports',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,5 +1,6 @@
 from django.shortcuts import render
-
+from django.shortcuts import render_to_response
+from django.shortcuts import RequestContext
 from dashboard.models import Attendance
 from dashboard.models import Grade
 

@@ -34,10 +34,17 @@ urlpatterns = patterns('',
     url(r'^class_attendance/','school_components.views.classes_view.class_attendance',name='class_attendance'),
                        
     #reports
-
+    url(r'^view_reports/','reports.views.view_reports',name='view_reports'),
+    url(r'^create_new_report_page/','reports.views.create_new_report_page',name='create_new_report_page'),
+                       
     # send to the school_components urls.py
     url(r'^school/', include('school_components.urls', namespace='school', app_name='school')),
 
+
+
+
+                  
+   
 )
 
 urlpatterns += patterns('',

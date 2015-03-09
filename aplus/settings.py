@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'googlecharts',
     'reports',
     'sendgrid',
+
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,16 +1,9 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 # Byte-compiled / optimized / DLL files
-=======
+
 led / optimized / DLL files
->>>>>>> flora
 __pycache__/
 *.py[cod]
-=======
-led / optimized / DLL files
-__pycache__/
-#*.py[cod]
->>>>>>> sasha
 
 # C extensions
 *.so
@@ -47,13 +40,8 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .coverage
-<<<<<<< HEAD
-<<<<<<< HEAD
 .coverage.*
-=======
->>>>>>> flora
-=======
->>>>>>> sasha
+
 .cache
 nosetests.xml
 coverage.xml
@@ -69,16 +57,11 @@ coverage.xml
 docs/_build/
 
 # PyBuilder
-<<<<<<< HEAD
-<<<<<<< HEAD
-target/
-=======
-target/
->>>>>>> flora
-=======
+
 target/
 *.DS_Store
 *.DS_Store?
 *.pyc
 
->>>>>>> sasha
+target/
+

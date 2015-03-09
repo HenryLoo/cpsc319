@@ -75,3 +75,4 @@ def course_registration(request, course_id=None):
 	return render_to_response("courses/course_registration.html",
 		context_dictionary,
 		RequestContext(request))
+

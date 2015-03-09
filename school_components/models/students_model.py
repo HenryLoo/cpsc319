@@ -34,7 +34,8 @@ class Student(models.Model):
 	emergency_contact_name = models.CharField(max_length=75)
 	emergency_contact_phone = models.CharField(max_length=20)
 	parent = models.ForeignKey('Parent', null=True)
-	# school = models.ForeignKey('School')
+	school = models.ForeignKey('School')
+	period = models.ForeignKey('Period', blank=True, null=True)
 
 	objects = StudentManager()
 

@@ -21,11 +21,8 @@ urlpatterns = patterns('',
     url(r'^grades/','dashboard.views.grades_page',name='grades_page'),
                        
     #accounts
-    #url(r'^createteacher/','accounts.views.create_teacher',name='create_teacher'),
-    url(r'^login/', 'django.contrib.auth.views.login',name='login'),
-    url(r'^createteacher/','accounts.views.create_teacher_page',name='create_teacher_page'),
     url(r'^account/', include('accounts.urls', namespace='account', app_name='accounts')),
-    url(r'^teachers/','accounts.views.teacherstable_page',name='teacherstable_page'),
+
                    
     #messages
     url(r'^messages/','messages.views.send_email',name='send_email'),

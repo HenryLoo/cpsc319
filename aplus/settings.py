@@ -50,7 +50,7 @@ INSTALLED_APPS = (
     'dashboard',
     'googlecharts',
     'reports',
-    'sendgrid',
+    #'sendgrid',
 
 )
 

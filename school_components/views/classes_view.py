@@ -47,3 +47,9 @@ def class_registration(request):
 		context_dictionary,
 		RequestContext(request))
 
+def class_attendance(request):
+	return render(request, 'school_components/class_attendance.html')
+
+def class_grading(request):
+	return render(request, 'school_components/class_grading.html')
+

@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 class SentMessage(models.Model):
-    sender = models.CharField(max_length = 100) #email
+    sender = models.ForeignKey('accounts.UserProfile')
     recipient = models.CharField(max_length = 12, choices =
                             (
                              ('ALL', 'All'),

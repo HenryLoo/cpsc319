@@ -25,25 +25,27 @@ class MyUserCreationForm(UserCreationForm):
     
     def save(self, commit=True):
         user = super(MyUserCreationForm, self).save(commit=False)
+        user.username = self.cleaned_data["email"]
         user.email = self.cleaned_data["email"]
+        #password = generate random password, check if unique
+        #user.password = password
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
         if commit:
             user.save()
         return user
 
+class UserProfileForm(ModelForm):
+    
+    class Meta():
+        model = UserProfile
+        fields = ['school', 'period', 'phone', 'role']
+
 class TeacherForm(ModelForm):
 
     class Meta():
         model = TeacherUser
-        fields = ['phone', 'school', 'skill_level']
-
-class AdminForm(ModelForm):
-
-    admin_type = forms.ChoiceField(choices=( ('SYSTEM_ADMIN', "System Admin"), ('SCHOOL_ADMIN', "School Admin") ))
-    class Meta():
-        model = SchoolAdminUser
-        fields = ['phone', 'school']
+        fields = ['skill_level']
 
 
 class AvailabilityForm(ModelForm):

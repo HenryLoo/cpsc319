@@ -2,20 +2,24 @@ from django.db import models
 from datetime import datetime
 
 class NotificationType(models.Model):
-    type = models.CharField(max_length = 12)
+    notification_type = models.CharField(max_length = 12)
     condition = models.IntegerField(blank = False, null = False)
     content = models.CharField(max_length = 100)
 
 class Notification(models.Model):
-    type = models.ForeignKey(NotificationType)
-    #change for user foreign key
-    user = models.CharField(max_length = 12)
+    notification_type = models.ForeignKey(NotificationType)
+    #change for student foreign key
+    student = models.ForeignKey('school_components.Student')
+    school = models.ForeignKey('school_components.School')
+    period = models.ForeignKey('school_components.Period')
     date = models.DateTimeField(default=datetime.now())
     status = models.BooleanField()
 
 class Chart(models.Model):
     title = models.CharField(max_length = 12)
-    type = models.CharField(max_length = 12, choices =
+    school = models.ForeignKey('school_components.School')
+    period = models.ForeignKey('school_components.Period')
+    chart_type = models.CharField(max_length = 12, choices =
                                    (
                                     ('BARS', 'bars chart'),
                                     ('PIE', 'pie chart'),

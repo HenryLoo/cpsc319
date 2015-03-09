@@ -48,8 +48,9 @@ INSTALLED_APPS = (
     'messages',
     'school_components',
     'dashboard',
-#    'googlecharts',
+    'googlecharts',
     'reports',
+    'sendgrid',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -110,10 +111,10 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'sashaseifollahi'
-EMAIL_HOST_PASSWORD = 'cpsc31911'
+SENDGRID_EMAIL_BACKEND = "sendgrid.backends.SendGridEmailBackend"
+EMAIL_BACKEND = SENDGRID_EMAIL_BACKEND
+SENDGRID_EMAIL_HOST = "smtp.sendgrid.net"
+SENDGRID_EMAIL_PORT = 587
+SENDGRID_EMAIL_USERNAME = "sashaseifollahi"
+SENDGRID_EMAIL_PASSWORD = "cpsc31911"
 

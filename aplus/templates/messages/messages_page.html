@@ -18,7 +18,7 @@
                         <a href="#"><i class="fa fa-users"></i>  Parents</a>
                     </li>  
                     <li>
-                        <a href="#"><i class="fa fa-table"></i>  Classes</a>
+                        <a href="{% url 'class_attendance' %}"><i class="fa fa-table"></i>  Classes</a>
                     </li>              
                     <li>
                         <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
@@ -42,17 +42,45 @@
 {% endblock %} 
 
 {% block body %}
+<ul class="nav nav-tabs nav-justified">
+  <li role="presentation" class="active"><a href="{% url 'send_email' %}">Send Email</a></li>
+  <li role="presentation"><a href="{% url 'sent_mail' %}">Sent Mail</a></li>
+ </li>
+</ul>
+<div class="row">
+<div class="page-header">
+  <h1>Send a Message</h1>
+</div>
+</div>
+        <form role="form" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2" for="inputTo">To</label>
+            <div class="col-sm-10"><input class="form-control" id="inputTo" placeholder="List of recipients" type="email"></div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Group <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Everyone</a></li>
+                    <li><a href="#">Admins</a></li>
+                    <li><a href="#">Teachers</a></li>
+                    <li><a href="#">Students</a></li>
+                </ul>
+        </div>
+        </div>
+          <div class="form-group">
+            <label class="col-sm-2" for="inputSubject">Subject</label>
+            <div class="col-sm-10"><input class="form-control" id="inputSubject" placeholder="Subject" type="text"></div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-12" for="inputBody">Message</label>
+            <div class="col-sm-12"><textarea class="form-control" id="inputBody" rows="8"></textarea></div>
+          </div>
+        </form>
+        <hr>
 
- {{message}}
-{% if email_form %}
-<form method="POST" action ="." enctype="multipart/form-data">
-<br></br>
-{{email_form.as_p}}
+    
+        <a href="{% url 'statistics_page' %}" role="button" class="btn btn-default pull left">Cancel</a> 
+        <button type="button" class="btn btn-primary pull-right">Send <i class="fa fa-arrow-circle-right fa-lg"></i></button>
 
-<label>&nbsp;</label><label>&nbsp;</label><label>&nbsp;</label>
-<input type ="submit"  name = "send" value = "Send"/>
-</form>
-{% endif %}
-
-
-{%endblock%}
+{% endblock %}

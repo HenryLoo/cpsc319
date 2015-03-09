@@ -1,0 +1,158 @@
+{% extends 'basetemplate.html' %}
+
+{% block menu %}
+                <ul class="nav navbar-nav side-nav">
+                    <li >
+                        <a href="{% url 'statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-child"></i>  Students</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-user"></i>  Admin</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-users"></i>  Teachers</a>
+                    </li> 
+                    <li>
+                        <a href="#"><i class="fa fa-users"></i>  Parents</a>
+                    </li>  
+                    <li>
+                        <a href="{% url 'class_attendance' %}"><i class="fa fa-table"></i>  Classes</a>
+                    </li>              
+                    <li>
+                        <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-calendar"></i>  Periods</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-university"></i>  Schools</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-book"></i>  Courses</a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'send_email' %}"><i class="fa fa-users"></i>  Email</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-fw fa-wrench"></i> Settings</a>
+                    </li>
+                </ul>
+{% endblock %} 
+
+{% block body %}
+<ul class="nav nav-tabs nav-justified">
+  <li role="presentation"><a href="{% url 'send_email' %}">Send Email</a></li>
+  <li role="presentation" class="active"><a href="{% url 'sent_mail' %}">Sent Mail</a></li>
+ </li>
+</ul>
+<div class="row">
+<div class="page-header">
+  <h1>Sent Mail</h1>
+</div>
+</div>
+    <div class="row">
+            <!-- Split button -->
+            <button type="button" class="btn btn-default" data-toggle="tooltip" title="Refresh">
+                &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
+            <!-- Single button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    More <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Mark all as read</a></li>
+                </ul>
+        </div>
+    </div> 
+    <hr>
+    <div class="row">
+                <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-user">
+                </span>
+                    All Mail</a></li>
+                <li><a href="#Everyone" data-toggle="tab"><span class="glyphicon glyphicon-user"></span>
+                    Everyone</a></li>
+                <li><a href="#Admins" data-toggle="tab"><span class="glyphicon glyphicon-user"></span>
+                    Admins</a></li>
+                <li><a href="#Teachers" data-toggle="tab"><span class="glyphicon glyphicon-user"></span>
+                    Teachers</a></li>
+                <li><a href="#Students" data-toggle="tab"><span class="glyphicon glyphicon-user"></span>
+                    Students</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="home">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox">
+                                </label>
+                                </div>
+                            <span class="name label label-info" style="min-width: 120px;
+                                display: inline-block;">Tina Turner</span> <span class="">Teacher Evaluations</span>
+                            <span class="text-muted" style="font-size: 11px;">- 12:10 AM</span> <span class="badge">01/03/2014</span> <span class="pull-right"> <span class="glyphicon glyphicon-paperclip">
+                            </span></span></a><a href="#" class="list-group-item">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox">
+                                    </label>
+                                </div>
+                                <span class="name  label label-success" style="min-width: 120px;
+                                    display: inline-block;">Rodger Dodgers</span> <span class="">Thanks for the Donation</span>
+                                <span class="text-muted" style="font-size: 11px;">- 11:20 AM</span> <span class="badge">01/02/2014</span> <span class="pull-right"></span></a><a href="#" class="list-group-item read">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox">
+                                            </label>
+                                        </div>
+                                        <span class="name  label label-warning" style="min-width: 120px;
+                                            display: inline-block;">Jittery Jerry</span> <span class="">Welcome</span>
+                                        <span class="text-muted" style="font-size: 11px;">- 08:45 AM</span> <span class="badge">01/02/2014</span> <span class="pull-right">
+                                </span>  
+                            </a>
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="Everyone">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="text-center">Mail that has been sent to all users of the system as a group.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="Admins">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="text-center">Mail that has been sent to all admins of the system as a group.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="Teachers">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="text-center">Mail that has been sent to all teachers of the system as a group.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade in" id="Students">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <span class="text-center">Mail that has been sent to all students of the system as a group.</span>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <hr>
+<nav>
+  <ul class="pager">
+    <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
+    <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav>
+
+
+{% endblock %}

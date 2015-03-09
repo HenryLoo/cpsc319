@@ -31,11 +31,17 @@ urlpatterns = patterns('',
                    
     #messages
     url(r'^messages/','messages.views.send_email',name='send_email'),
+    url(r'^sent_messages/','messages.views.sent_mail',name='sent_mail'),
+    url(r'^class_grading/','school_components.views.classes_view.class_grading',name='class_grading'),
+    url(r'^class_attendance/','school_components.views.classes_view.class_attendance',name='class_attendance'),
                        
     #reports
 
     # send to the school_components urls.py
     url(r'^school/', include('school_components.urls', namespace='school', app_name='school')),
+
+    url(r'^createteacher/','accounts.views.create_teacher_page',name='create_teacher_page'),
+
 )
 
 urlpatterns += patterns('',

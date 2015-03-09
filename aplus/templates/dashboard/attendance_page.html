@@ -1,0 +1,103 @@
+{% extends 'basetemplate.html' %}
+{% load googlecharts %}
+
+{% block body %}
+
+<ul class="nav nav-tabs nav-justified">
+  <li role="presentation" class="active"><a href="{% url 'attendance_page' %}">Demo Attendance</a></li>
+  <li role="presentation"><a href="{% url 'grades_page' %}">Demo Grades</a></li>
+</ul>
+
+                <!-- Page Heading -->
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Demo Student Performance <small>Attendance</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Dashboard > Statistics > Student Performance > Demo Attendance</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
+<div class="body-top-bar">
+    <div class="centralize">
+                <div class="row">
+
+                    <div class="col-lg-4">
+                        <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bars"></i> Pie Chart</h3>
+                            </div>
+                            <div class="panel-body" style="max-height: 2; min-height: 2;" >
+                                <div id="pie_chart_div" style="width:400; height:300"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4"  style="max-height: 2; min-height: 2;" >
+                        <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bars"></i> Bar Chart</h3>
+                            </div>
+                            <div class="panel-body" style="max-height: 2; min-height: 2;" >
+                                <div id="bar_chart_div" style="width:400; height:300"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-lg-4">
+                        <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bars"></i> Line Chart</h3>
+                            </div> 
+                            <div class="panel-body" style="max-height: 2; min-height: 2;" >
+                                <div id="line_chart_div" style="width:400; height:300"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+    </div>
+</div>
+
+{% googlecharts %}
+    {% data attendance "data" %}
+        {% col "string" "Attendance" %}"{{ val }}"{% endcol %}
+        {% col "number" "Students" %}{{ val }}{% endcol %}
+    {% enddata %}
+
+    {% options "pie_options" %}
+        kind: "PieChart",
+        options: {
+            width: 300,
+            height: 300
+        }
+    {% endoptions %}
+    {% graph "pie_chart_div" "data" "pie_options" %}
+
+    {% options "bar_options" %}
+        kind: "BarChart",
+        options: {
+            width: 300,
+            height: 300
+        }
+    {% endoptions %}
+    {% graph "bar_chart_div" "data" "bar_options" %}
+
+    {% options "line_options" %}
+        kind: "LineChart",
+        options: {
+            width: 300,
+            height: 300
+        }
+    {% endoptions %}
+    {% graph "line_chart_div" "data" "line_options" %}
+{% endgooglecharts %}
+
+{% endblock %}

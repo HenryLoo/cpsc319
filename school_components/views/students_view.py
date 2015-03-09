@@ -1,6 +1,7 @@
 from django.views import generic
-from school_components.models.students_model import Student, StudentCSVWriter
+from school_components.models.students_model import Student, StudentCSVWriter, CourseRegistration
 from school_components.models.parents_model import Parent
+from school_components.models.courses_model import *
 from school_components.forms.students_form import StudentForm, StudentCSVForm, StudentFormSet
 from school_components.utils import SchoolUtils
 from django.shortcuts import render_to_response, redirect
@@ -87,6 +88,19 @@ def student_export(request):
 			context_dictionary,
 			RequestContext(request))
 
+def course_registration(request, course_id=None):
+	if course_id:
+		context_dictionary = { 'course': Course.objects.get(pk=course_id),
+		'reg_list': CourseRegistration.objects.filter(course=course_id) }
+		return render_to_response("students/course_reg.html",
+			context_dictionary,
+			RequestContext(request))
 
 
+	context_dictionary = {
+		'course_list': Course.objects.all()
+	}
 
+	return render_to_response("students/course_registration.html",
+		context_dictionary,
+		RequestContext(request))

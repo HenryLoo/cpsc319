@@ -14,8 +14,21 @@ $('#edit-class-btn').click(function() {
 {% endblock %}
 
 {% block class_content %}
+  <div class="row">  
+                 <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Classes<small> List</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Classes > List</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
 <div class="col-md-3 school-list">
-	<h2>Classes</h2>
 
 	<div class="filters-holder">
 		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
@@ -32,7 +45,7 @@ $('#edit-class-btn').click(function() {
 		  </div>
 		</div>
 	</div>
-
+<br><br>
 	{% if class_list %}
 	<ul class="list-unstyled school-list">
 		{% for class in class_list %}

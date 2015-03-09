@@ -4,14 +4,7 @@
 <script>
     // disable all tabs but the first one 
     // if a class is not selected
-    // TODO: think about this some more...
-    {% if not class %}
-     $("ul.nav-tabs>li").each(function(i,k) { 
-        if (i > 1) { 
-            $(k).addClass("disabled disabled-link"); 
-        } 
-    });
-    {% endif %}
+    // TODO: think about this some more..
 
     // sets current tab to active
     $("ul.nav-tabs>li").each(function(k, v) { 
@@ -38,56 +31,14 @@
 {% endblock %}
 
 
-{% block menu %}
-<ul class="nav navbar-nav side-nav">
-    <li>
-        <a href="{% url 'statistics_page' %}">
-        	<i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
-    </li>
-    <li>
-        <a href="{% url 'school:studentlist' %}">
-        	<i class="fa fa-child"></i>  Students</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-user"></i>  Admin</a>
-    </li>
-    <li>
-        <a href="{% url 'teacherstable_page' %}"><i class="fa fa-users"></i>  Teachers</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-users"></i>  Parents</a>
-    </li>  
-    <li class="active">
-        <a href="#"><i class="fa fa-table"></i>  Classes</a>
-    </li>              
-    <li>
-        <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-calendar"></i>  Periods</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-university"></i>  Schools</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-book"></i>  Courses</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-envelope"></i>  Email</a>
-    </li>
-    <li>
-        <a href="#"><i class="fa fa-fw fa-wrench"></i> Settings</a>
-    </li>
-</ul>
-{% endblock %} 
-
 {% block body %}
 <ul class="nav nav-tabs nav-justified">
-    <li role="presentation"><a href="{%url 'school:classlist' %}">Select Class</a></li>
+    <li role="presentation"><a href="{%url 'school:classlist' %}">View Classes</a></li>
     <li role="presentation"><a href="{%url 'school:classcreate' %}">Create Class</a></li>
     <li role="presentation"><a href="{%url 'school:classregistration' %}">Class Registration</a></li>
-    <li role="presentation"><a href="#">Assignments</a></li>
-    <li role="presentation"><a href="#">Attendance</a></li>
+    <li role="presentation"><a href="{%url 'school:classassignment' %}">Assignments</a></li>
+    <li role="presentation"><a href="{%url 'school:classattendance' %}">Attendance</a></li>
+    <li role="presentation"><a href="{%url 'school:classperformance' %}">Grading</a></li>
 </ul>
 
 {% block class_content %}

@@ -38,7 +38,20 @@ $('#enroll-btn').click(function() {
 
 {% block course_content %}
 
-	<h3> Register Students in  {{ course.name }} </h3>
+  <div class="row">   
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Courses<small> Register</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Courses > Register</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
+	<h2> Register Students in  {{ course.name }} </h2>
 
 	{% if errors %}
 		<div class="panel panel-danger">

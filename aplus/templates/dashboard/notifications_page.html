@@ -1,46 +1,5 @@
 {%extends 'basetemplate.html'%}
 
-{% block menu %}
-                <ul class="nav navbar-nav side-nav">
-                    <li class="active">
-                        <a href="{% url 'statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-child"></i>  Students</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-user"></i>  Admin</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'teacherstable_page' %}"><i class="fa fa-users"></i>  Teachers</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-users"></i>  Parents</a>
-                    </li>  
-                    <li>
-                        <a href="#"><i class="fa fa-table"></i>  Classes</a>
-                    </li>              
-                    <li>
-                        <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-calendar"></i>  Periods</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-university"></i>  Schools</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-book"></i>  Courses</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-envelope"></i>  Email</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-wrench"></i> Settings</a>
-                    </li>
-                </ul>
-{% endblock %} 
-
 {%block body%}
 
 <ul class="nav nav-tabs nav-justified">
@@ -91,7 +50,7 @@
 
 										</div>
 										<!-- /.row -->
-
+										<br>
 										<div class="row">
 											<div class="col-lg-4">
 												<div class="list-group" style="width: 600px;">
@@ -100,7 +59,7 @@
 												    <h4 class="list-group-item-heading">
 												    	<div class="row">
 												    		<div class="col-lg-4" style="width:425px;word-wrap:break-word;">
-												    			<span class="label label-primary">Attendance</span> Notification Title
+												    			<span class="label label-primary">Attendance</span> Student Name
 												    		</div>
 												    		<div class="row">
 													    		<select class="btn btn-default dropdown-toggle" name="calledOption" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
@@ -113,14 +72,14 @@
 												    		</div>
 												    	</div>
 												    </h4>
-												    <p class="list-group-item-text" style="word-wrap:break-word;">Content</p>
+												    <p class="list-group-item-text" style="word-wrap:break-word;">Missed [determined number] of classes in a row</p>
 												  </a>
-												  
+												  <br>
 												  <a href="#" class="list-group-item list-group-item-info">
 												    <h4 class="list-group-item-heading">
 												    	<div class="row">
 												    		<div class="col-lg-4" style="width:425px;word-wrap:break-word;">
-												    			<span class="label label-primary">Performance</span> Notification Title
+												    			<span class="label label-primary">Performance</span> Student Name
 												    		</div>
 												    		<div class="row">
 													    		<select class="btn btn-default dropdown-toggle" name="calledOption" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
@@ -133,14 +92,14 @@
 												    		</div>
 												    	</div>
 												    </h4>
-												    <p class="list-group-item-text" style="word-wrap:break-word;">Content</p>
+												    <p class="list-group-item-text" style="word-wrap:break-word;">Performance lowest than [determined]% </p>
 												  </a>
-
+												  <br>
 												  <a href="#" class="list-group-item list-group-item-info">
 												    <h4 class="list-group-item-heading">
 												    	<div class="row">
 												    		<div class="col-lg-4" style="width:425px;word-wrap:break-word;">
-												    			<span class="label label-primary">Assignment</span> Notification Title
+												    			<span class="label label-primary">Assignment</span> Student Name
 												    		</div>
 												    		<div class="row">
 													    		<select class="btn btn-default dropdown-toggle" name="calledOption" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
@@ -153,7 +112,7 @@
 												    		</div>
 												    	</div>
 												    </h4>
-												    <p class="list-group-item-text" style="word-wrap:break-word;">Content</p>
+												    <p class="list-group-item-text" style="word-wrap:break-word;">Do not delivered [assignment] for [classname]</p>
 												  </a>
 												  
 												</div>

@@ -37,8 +37,21 @@ $('#enroll-btn').click(function() {
 {% endblock hacky_script %}
 
 {% block class_content %}
+  <div class="row">  
+                 <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Classes<small> Class Registration</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Classes > Class Registration</a>
+                            </li>
+                        </ol>
 
-	<h3> Register Students in  {{ class.course }} {{ class.section }}</h3>
+                    </div>
+                </div>
+
+	<h2> Register Students in  {{ class.course }} {{ class.section }}</h2>
 
 	{% if errors %}
 		<div class="panel panel-danger">

@@ -1,0 +1,44 @@
+{% extends "schools/base_school.html" %}
+
+
+
+{% block school_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation">
+        <a href="{% url 'school:schoollist' %}">View Schools</a>
+    </li>
+    <li role="presentation" class="active">
+        <a href="{% url 'school:schoolcreate' %}">Add School</a>
+    </li>
+</ul>
+
+  <div class="row">   
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Schools<small> Create</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Schools > Create</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
+
+	{% if errors %}
+		<div class="panel panel-danger">
+			{{ errors }}
+		</div>
+	{% endif %}
+
+	<form role="form" action="{%url 'school:schoolcreate' %}" method="post">
+		{% csrf_token %}
+		<table class="table table-hover school-form">
+	    {{ school_form.as_table }}
+	    </table>
+	    <input class="btn btn-default" type="submit" value="Submit" />
+	</form> 
+
+{% endblock school_content %}

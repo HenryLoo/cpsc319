@@ -49,4 +49,12 @@ class StudentCSVWriter(object):
 	def write(self, value):
 		return value
 
-
+class CourseRegistration(models.Model):
+    course = models.ForeignKey('Course')
+    student = models.ForeignKey('Student')
+    school = models.ForeignKey('School')
+    period = models.ForeignKey('Period')
+    date = models.DateTimeField(auto_now_add=True)
+        
+    class Meta:
+        app_label = 'school_components'

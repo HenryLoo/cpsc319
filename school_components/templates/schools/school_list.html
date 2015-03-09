@@ -1,0 +1,102 @@
+{% extends "schools/base_school.html" %}
+
+{% block hacky_script %}
+$('#edit-course-btn').click(function() {
+	var fields = $('td:nth-child(2)')
+	$.each(fields, function(i,elm) { 
+		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
+	})
+});
+{% endblock hacky_script %}
+
+{% block school_content %}
+
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active">
+        <a href="{% url 'school:schoollist' %}">View Schools</a>
+    </li>
+    <li role="presentation">
+        <a href="{% url 'school:schoolcreate' %}">Add School</a>
+    </li>
+</ul>
+
+  <div class="row">   
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Schools<small> List</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Schools > List</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
+<div class="col-md-3 school-list">
+
+	<div class="filters-holder">
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
+		aria-expanded="false" aria-controls="collapseExample">
+	  	Filters
+		</a>
+		<div class="collapse" id="filters">
+		  <div>
+		    <input type="checkbox"> <label>Title</label> <input>
+		  </div>
+		</div>
+	</div>
+<br><br>
+
+	{% if school_list %}
+	<ul class="list-unstyled school-list">
+		{% for school in school_list %}
+	  		<li>
+	  		<a href="{% url 'school:schoollist' school.id %}">
+	  			 {{ school.name }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No schools have been added.</div>
+	{% endif %}
+
+</div>
+
+<div class="col-md-9 school-info">
+	{% if school %}
+	<span>
+		<h3> School Info </h3>
+		<a href="#" id="edit-course-btn" class="pull-right"> Edit </a>
+	</span>
+	<table class="table table-hover">
+		<tr> 
+			<td> Title: </td>
+			<td> 
+				{{ school.title }} 
+			</td>
+		</tr>
+		<tr> 
+			<td> Address: </td>
+			<td> 
+				{{ school.address }} 
+			</td>
+		</tr>
+		<tr> 
+			<td> Phone: </td>
+			<td> {{ school.phone }} </td>
+		</tr>
+	</table>
+
+	<a href="{% url 'school:courseregistration' course.id %}"> Edit School </a>
+
+	{% else %}
+		<div class="content alert alert-info" role="alert">
+			Select a school to view details.
+		</div>
+	{% endif %}
+</div>
+{% endblock school_content %}

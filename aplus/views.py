@@ -10,6 +10,12 @@ def statistics_page(request):
 
 	return render_to_response("dashboard/statistics_page.html",context_dictionary,RequestContext(request))
 
+def demostatistics_page(request):
+
+	context_dictionary = {}
+
+	return render_to_response("dashboard/demostatistics_page.html",context_dictionary,RequestContext(request))
+
 def notifications_page(request):
 
 	context_dictionary = {}
@@ -41,3 +47,8 @@ def assignment(request):
 	return render_to_response("school_components/assignment.html",context_dictionary,RequestContext(request))
 
 
+def settings_page(request):
+
+	context_dictionary = {}
+
+	return render_to_response("settings_page.html",context_dictionary,RequestContext(request))

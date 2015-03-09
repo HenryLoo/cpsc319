@@ -1,6 +1,7 @@
 from school_components.models.classes_model import Class, ClassRegistration
 from school_components.forms.classes_form import ClassForm, ClassRegistrationForm
 from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -37,19 +38,22 @@ def class_create(request):
 		RequestContext(request))
 
 def class_registration(request):
-	class_id = int(request.session['class'])
-	context_dictionary = {
-		'class': Class.objects.get(pk=class_id), 
-		'reg_list': ClassRegistration.objects.filter(reg_class=class_id),
-		'reg_form': ClassRegistrationForm() }
-
+	#class_id = int(request.session['class'])
+	# context_dictionary = {
+	# 	'class': Class.objects.get(pk=class_id), 
+	# 	'reg_list': ClassRegistration.objects.filter(reg_class=class_id),
+	# 	'reg_form': ClassRegistrationForm() }
+	context_dictionary ={}
+	
 	return render_to_response("classes/class_registration.html",
 		context_dictionary,
 		RequestContext(request))
 
 def class_attendance(request):
-	return render(request, 'school_components/class_attendance.html')
+	return render(request, 'classes/class_attendance.html')
 
-def class_grading(request):
-	return render(request, 'school_components/class_grading.html')
+def class_performance(request):
+	return render(request, 'classes/class_grading.html')
 
+def class_assignment(request):
+	return render(request, 'classes/class_assignment.html')

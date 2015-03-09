@@ -14,8 +14,21 @@ $('#edit-course-btn').click(function() {
 {% endblock %}
 
 {% block course_content %}
+
+  <div class="row">   
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Courses<small> List</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Courses > List</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
 <div class="col-md-3 school-list">
-	<h2>Courses</h2>
 
 	<div class="filters-holder">
 		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
@@ -32,6 +45,7 @@ $('#edit-course-btn').click(function() {
 		  </div>
 		</div>
 	</div>
+<br><br>
 
 	{% if course_list %}
 	<ul class="list-unstyled school-list">

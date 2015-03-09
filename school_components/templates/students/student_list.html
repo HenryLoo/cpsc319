@@ -15,9 +15,25 @@ $('#edit-student-btn').click(function() {
 
 {% block student_content %}
 
-<div class="col-md-3 student-list">
-	<h2>Students</h2>
 
+                <!-- Page Heading -->
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Students <small>List</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Students > Students List</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
+<div class="col-md-3 student-list">
+<br>
 	<div class="filters-holder">
 		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
 		aria-expanded="false" aria-controls="collapseExample">
@@ -34,6 +50,7 @@ $('#edit-student-btn').click(function() {
 		  </div>
 		</div>
 	</div>
+<br><br>
 
 	{% if student_list %}
 	<ul class="list-unstyled student-list">

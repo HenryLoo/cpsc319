@@ -21,7 +21,13 @@ urlpatterns = patterns('',
 	url(r'^students/export/$', 
 		'school_components.views.students_view.student_export', 
 		name='studentexport'),
-
+	url(r'^students/register/$',
+		'school_components.views.students_view.course_registration',
+		name='courseregistration'),
+    url(r'^students/register/(?P<course_id>\d+)/$', 
+		'school_components.views.students_view.course_registration', 
+		name='courseregistration'),   
+    
 	# parents
 	url(r'^parents/$', 
 		'school_components.views.parents_view.parent_list', 
@@ -46,12 +52,7 @@ urlpatterns = patterns('',
 	url(r'^courses/create/$', 
 		'school_components.views.courses_view.course_create', 
 		name='coursecreate'),
-	url(r'^courses/register/$', 
-		'school_components.views.courses_view.course_registration', 
-		name='courseregistration'),
-	url(r'^courses/register/(?P<course_id>\d+)/$', 
-		'school_components.views.courses_view.course_registration', 
-		name='courseregistration'),
+
 
 	# departments
 	url(r'^departments/create/$', 
@@ -71,4 +72,37 @@ urlpatterns = patterns('',
 	url(r'^classes/register/$', 
 		'school_components.views.classes_view.class_registration', 
 		name='classregistration'),
+    url(r'^classes/attendance/$',
+        'school_components.views.classes_view.class_attendance',
+        name='classattendance'),
+    url(r'^classes/performance/$',
+        'school_components.views.classes_view.class_performance',
+        name='classperformance'),
+    url(r'^classes/assignment/$',
+        'school_components.views.classes_view.class_assignment',
+        name='classassignment'),
+                       
+                       
+    # schools
+    url(r'^schools/$',
+        'school_components.views.schools_view.school_list',
+        name='schoollist'),
+    url(r'^schools/(?P<school_id>\d+)/$',
+        'school_components.views.schools_view.school_list',
+        name='schoollist'),
+    url(r'^schools/create/$',
+        'school_components.views.schools_view.school_create',
+        name='schoolcreate'),
+
+    # periods
+    url(r'^periods/$',
+        'school_components.views.periods_view.period_list',
+        name='periodlist'),
+    url(r'^periods/(?P<period_id>\d+)/$',
+        'school_components.views.periods_view.period_list',
+        name='schoollist'),
+    url(r'^periods/create/$',
+        'school_components.views.periods_view.period_create',
+        name='periodcreate'),
+                       
 )

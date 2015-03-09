@@ -1,46 +1,5 @@
 {%extends 'basetemplate.html'%}
 
-{% block menu %}
-                <ul class="nav navbar-nav side-nav">
-                    <li class="active">
-                        <a href="{% url 'statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-child"></i>  Students</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-user"></i>  Admin</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'teacherstable_page' %}"><i class="fa fa-users"></i>  Teachers</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-users"></i>  Parents</a>
-                    </li>  
-                    <li>
-                        <a href="#"><i class="fa fa-table"></i>  Classes</a>
-                    </li>              
-                    <li>
-                        <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-calendar"></i>  Periods</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-university"></i>  Schools</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-book"></i>  Courses</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-envelope"></i>  Email</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-wrench"></i> Settings</a>
-                    </li>
-                </ul>
-{% endblock %} 
-
 {%block body%}
 
 <ul class="nav nav-tabs nav-justified">
@@ -53,11 +12,11 @@
 
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Dashboard <small>Notications Overview</small>
+                            Dashboard <small>Notications Settings</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Dashboard > Notifications > Settings</a>
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Dashboard > Notifications > Notifications Settings</a>
                             </li>
                         </ol>
 
@@ -83,32 +42,23 @@
 													</button>
 												</div>
 
-												<div class="col-lg-4">
-													<button type="button" class="btn btn-default btn-sm" aria-label="Delete">
-															Add New <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-													</button>
-												</div>
-
 											</div>
 											<!-- /.row -->
 
 										</div>
 										<!-- /.row -->
 
+
 										<div class="row">
 											<div class="col-lg-4">
 												<div class="list-group" style="width: 600px;">
-												  
+												 
 												  <a href="#" class="list-group-item list-group-item-info">
 												    <h4 class="list-group-item-heading">
 												    	<div class="row">
 												    		<div class="col-lg-4" style="width:550px;">
 												    			<form class="form-inline">
-													    			<select class="btn btn-primary dropdown-toggle" name="notificationType" type="button" id="notificationType" data-toggle="dropdown" aria-expanded="true" style="width: 140px; height: 30px">
-					                            <option value="Not Called">Attendance</option>
-					                     	      <option value="Called">Performance</option>
-					               	            <option value="Called">Assignment</option>
-					                          </select>
+													    			Attendance <br><br>
 
 													   				<div class="input-group">
 																		  <input type="text" class="form-control" placeholder="Notification Title" aria-describedby="notificationType">
@@ -135,18 +85,48 @@
 															</div>
 														</p>
 												  </a>
+												  <br>
 
 												  <a href="#" class="list-group-item list-group-item-info">
 												    <h4 class="list-group-item-heading">
 												    	<div class="row">
 												    		<div class="col-lg-4" style="width:550px;">
 												    			<form class="form-inline">
-													    			<select class="btn btn-primary dropdown-toggle" name="notificationType" type="button" id="notificationType" data-toggle="dropdown" aria-expanded="true" style="width: 140px; height: 30px">
-					                            <option value="Not Called">Attendance</option>
-					                     	      <option value="Called">Performance</option>
-					               	            <option value="Called">Assignment</option>
-					                          </select>
+													    			Performance <br><br>
+													   				<div class="input-group">
+																		  <input type="text" class="form-control" placeholder="Notification Title" aria-describedby="notificationType">
+																		</div>
 
+																		<select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption" data-toggle="dropdown" aria-expanded="true" style="width: 60px; height: 30px">
+			                                <option value="greaterThan">&#x3C;</option>
+			                                <option value="lessThan">&#x3E;</option>
+			                              </select>
+
+			                              <div class="input-group" style="width: 60px;">
+																			<input type="text" class="form-control" placeholder="Cond" aria-describedby="conditionOption">
+																		</div>
+																	</form>
+												    		</div>
+													    	<button type="button" class="btn btn-default btn-sm" aria-label="Delete">
+																  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+																</button>
+												    	</div>
+												    </h4>
+												    <p>
+												    	<div class="input-group" style="width: 550px;">
+																<input type="text" class="form-control" placeholder="Content">
+															</div>
+														</p>
+												  </a>
+
+										<br>
+
+												  <a href="#" class="list-group-item list-group-item-info">
+												    <h4 class="list-group-item-heading">
+												    	<div class="row">
+												    		<div class="col-lg-4" style="width:550px;">
+												    			<form class="form-inline">
+													    			Assignment <br><br>
 													   				<div class="input-group">
 																		  <input type="text" class="form-control" placeholder="Notification Title" aria-describedby="notificationType">
 																		</div>
@@ -176,7 +156,8 @@
 												</div>
 											</div>
 										</div>
-										<!-- /.row -->
+
+
 
 										<div class="row">
 											<div class="col-lg-4">

@@ -1,54 +1,20 @@
-{% extends 'basetemplate.html' %}
+{% extends "classes/base_class.html" %}
 
-{% block menu %}
-                <ul class="nav navbar-nav side-nav">
-                    <li >
-                        <a href="{% url 'statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-child"></i>  Students</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-user"></i>  Admin</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-users"></i>  Teachers</a>
-                    </li> 
-                    <li>
-                        <a href="#"><i class="fa fa-users"></i>  Parents</a>
-                    </li>  
-                    <li class="active">
-                        <a href="{% url 'class_attendance' %}"><i class="fa fa-table"></i>  Classes</a>
-                    </li>              
-                    <li>
-                        <a href="#"><i class="fa fa-file-o"></i>  Reports</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-calendar"></i>  Periods</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-university"></i>  Schools</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-book"></i>  Courses</a>
-                    </li>
-                    <li>
-                        <a href="{% url 'send_email' %}"><i class="fa fa-users"></i>  Email</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-fw fa-wrench"></i> Settings</a>
-                    </li>
-                </ul>
-{% endblock %} 
+{% block class_content %}
+  <div class="row">  
+                 <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Classes<small> Create</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Classes > Create</a>
+                            </li>
+                        </ol>
 
-{% block body %}
-<div class="row">
-<div class="page-header">
-  <h1>Classes<div class="pull-right"><button type="button" class="btn btn-primary btn-md"><span class="glyphicon glyphicon-plus">
-                </span>
-                Add New Class</button></div></h1>
-</div>
-</div>
+                    </div>
+                </div>
+
 <div class="col-md-2">
 <div class="list-group">
   <a href="#" class="list-group-item active">
@@ -63,15 +29,6 @@
 </div>
         <div class="col-md-8">
 
-<!-- Nav tabs -->
-            <ul class="nav nav-tabs">
-                <li><a href="#">Class Info</a></li>
-                <li><a href="#">Students</a></li>
-                <li><a href="#">Teachers</a></li>
-                <li><a href="{% url 'class_attendance' %}">Attendance</a></li>
-                <li class="active"><a href="#Grading" data-toggle="tab">Grading</a></li>
-                <li><a href="#">Assignments</a></li>
-            </ul>
             <!-- Tab panes -->
 <div class="tab-pane fade in" id="Grading">
 <br>
@@ -232,4 +189,4 @@
 
 
 
-{% endblock %}
+{% endblock class_content %}

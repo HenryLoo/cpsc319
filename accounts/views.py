@@ -63,7 +63,7 @@ def create_admin_view(request):
     if request.method == 'POST':
 
         user_form = MyUserCreationForm(request.POST)
-        admin_form = AdminForm(request.POST)
+        admin_form = UserProfileForm(request.POST)
 
         if user_form.is_valid() and admin_form.is_valid():
 
@@ -88,7 +88,7 @@ def create_admin_view(request):
             })
 
     user_form = MyUserCreationForm()
-    admin_form = AdminForm()
+    admin_form = UserProfileForm()
 
     return render(request, 'admins/create_admin.html', {
         'user_form': user_form,
@@ -99,11 +99,11 @@ def create_admin_view(request):
 
 
 def view_teachers_view (request, teacher_id=None):
-	teacher_list = TeacherInfo.objects.all()
+	teacher_list = TeacherUser.objects.all()
 	context_dictionary = {'teacher_list': teacher_list}
 
 	if teacher_id:
-		context_dictionary['teacher'] = TeacherInfo.objects.get(pk=teacher_id)
+		context_dictionary['teacher'] = TeacherUser.objects.get(pk=teacher_id)
 
 	return render(request, "teachers/teacher_list.html",
 		context_dictionary)
@@ -115,11 +115,11 @@ def upload_teachers_view (request):
     return render(request, "teachers/teacher_upload.html")
 
 def view_admins_view (request, admin_id=None):
-	admin_list = AdminInfo.objects.all()
+	admin_list = UserProfile.objects.all()
 	context_dictionary = {'admin_list': admin_list}
 
 	if admin_id:
-		context_dictionary['admin'] = AdminInfo.objects.get(pk=admin_id)
+		context_dictionary['admin'] = UserProfile.objects.get(pk=admin_id)
 
 	return render(request, "admins/admin_list.html",
 		context_dictionary)

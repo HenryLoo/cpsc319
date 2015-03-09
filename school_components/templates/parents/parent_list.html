@@ -14,8 +14,23 @@ $('#edit-parent-btn').click(function() {
 {% endblock hacky_script %}
 
 {% block parent_content %}
+
+                 <div class="row">   
+                 	<div class="col-lg-12">
+                        <h1 class="page-header">
+                            Parents<small> List</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Parents > List</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
 <div class="col-md-3 parent-list">
-	<h2>Parents</h2>
+
 
 	<div class="filters-holder">
 		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
@@ -30,7 +45,7 @@ $('#edit-parent-btn').click(function() {
 		  </div>
 		</div>
 	</div>
-
+<br><br>
 	{% if parent_list %}
 	<ul class="list-unstyled parent-list">
 		{% for parent in parent_list %}

@@ -29,6 +29,8 @@ def classes_schedule_page(request):
         
     return render_to_response("dashboard/classes_schedule_page.html",context_dictionary,RequestContext(request))
 
+
+
 def attendance_page(request):
     return_dict = {}
 

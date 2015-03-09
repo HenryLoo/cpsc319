@@ -1,10 +1,20 @@
-{% extends "courses/base_course.html" %}
+{% extends "students/base_student.html" %}
 
-{% block current_tab %}
-  "Course Registration"                
-{% endblock %}
+{% block student_content %}
 
-{% block course_content %}
+  <div class="row">   
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Students<small> Course Registration</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Students > Course Registration</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
 <div class="col-md-8" id="student-reg-form">
 
 <form>
@@ -166,4 +176,4 @@
 </form>
 
 
-{% endblock course_content %}
+{% endblock student_content %}

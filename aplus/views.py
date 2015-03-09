@@ -21,3 +21,17 @@ def classes_schedule_page(request):
 	context_dictionary = {}
 
 	return render_to_response("dashboard/classes_schedule_page.html",context_dictionary,RequestContext(request))
+
+def view_reports(request):
+
+	context_dictionary = {}
+
+	return render_to_response("reports/view_reports.html",context_dictionary,RequestContext(request))
+
+def view_assignment(request):
+
+	context_dictionary = {}
+
+	return render_to_response("school_components/view_assignment.html",context_dictionary,RequestContext(request))
+
+

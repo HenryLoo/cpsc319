@@ -1,6 +1,10 @@
 {% extends "parents/base_parent.html" %}
 
 {% block parent_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'school:parentlist' %}">View Parents</a></li>
+    <li role="presentation"><a href="{% url 'school:parentcreate' %}">Add Parent</a></li>
+</ul>
 
 <table class="table table-hover">
 	<tr> 

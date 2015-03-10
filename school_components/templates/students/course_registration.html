@@ -1,6 +1,15 @@
 {% extends "students/base_student.html" %}
 
 {% block student_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active">
+        <a href="{% url 'school:courseregistration' %}">Special Course Registration</a>
+    </li>
+    <li role="presentation"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+    <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
+    <li role="presentation"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
+    <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
+</ul>
 
   <div class="row">   
                     <div class="col-lg-12">
@@ -9,13 +18,13 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Students > Course Registration</a>
+                                <i class="fa fa-sitemap"></i> <a> Students > Course Registration</a>
                             </li>
                         </ol>
 
                     </div>
 
-<div class="col-md-8" id="student-reg-form">
+<div class="col-md-9" id="student-reg-form">
 
 <form>
 <div class="panel panel-default">
@@ -27,6 +36,7 @@
         <label>Full Name:</label>
         <input type="text" class="form-control" placeholder="First name">
         <input type="text" class="form-control" placeholder="Last name">
+        <button><i class="fa fa-search"></i></button><font size=1> *If already student, Click here to complete form automatically</font>
         </div>
 
         <label>Gender:</label>
@@ -122,57 +132,213 @@
   </div>
 </div>
 
-
 <div class="panel panel-default">
-  <div class="panel-heading">Courses</div>
+  <div class="panel-heading">Student Levels</div>
   <div class="panel-body">
-      <div class="form-group">
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox1" value="option1"> Sikh History
-          <input type="text" class="form-control" placeholder="Course Number">
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox2" value="option2"> Tantee Saaj
-          <input type="text" class="form-control" placeholder="Course Number">
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox3" value="option3"> Dastaar
-          <input type="text" class="form-control" placeholder="Course Number">
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox3" value="option3"> Gurmukhi/Santhiya
-          <input type="text" class="form-control" placeholder="Course Number">
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox3" value="option3"> Tabla
-          <input type="text" class="form-control" placeholder="Course Number">
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox3" value="option3"> Wrestling
-          <input type="text" class="form-control" placeholder="Course Number">
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox3" value="option3"> Gatka/Activity
-          <input type="text" class="form-control" placeholder="Course Number">
-        </label>
-        <label class="checkbox-inline">
-          <input type="checkbox" id="inlineCheckbox3" value="option3"> Waja
-          <input type="text" class="form-control" placeholder="Course Number">
-        </label>
+
+     <div class="table-responsive">
+
+<table id="mytable" class="table table-bordred table-striped">
+    <thead>
+      <tr>
+        <th>Course</th>
+        <th>Level</th>
+        <th>Comment</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Sikh History</td>
+        <td>Level 1</td>
+        <td>Test needed</td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+      </tr>
+      <tr>
+        <td>Gurmukhi/Santhiya</td>
+        <td> - </td>
+        <td> - </td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+      </tr>
+      <tr>
+        <td>Gatka/Activity</td>
+        <td>Level 2</td>
+        <td> - </td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+      </tr>
+      <tr>
+        <td>Tantee Saaj</td>
+        <td>Level 1</td>
+        <td> - </td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+      </tr>
+      <tr>
+        <td>Tabla</td>
+        <td> - </td>
+        <td> - </td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+      </tr>
+      <tr>
+        <td>Waja</td>
+        <td> - </td>
+        <td> - </td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+      </tr>
+      <tr>
+        <td>Dastaar</td>
+        <td> Level 2 </td>
+        <td> - </td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+
+      </tr>
+      <tr>
+        <td>Wrestling</td>
+        <td> - </td>
+        <td> - </td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+      </tr>
+    </tbody>
+  </table>
+
       </div>
   </div>
 </div>
 
 <div class="panel panel-default">
+  <div class="panel-heading">Courses</div>
   <div class="panel-body">
-  <span class="form-inline">
+      <div class="form-group">
+<div class="row">  
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox1" value="option1"> Sikh History
+           <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Course Number <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 <span class="badge">21</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 2 <span class="badge">9</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+              </ul>
+            </div>
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox2" value="option2"> Tantee Saaj
+          <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Course Number <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 <span class="badge">11</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 2 <span class="badge">2</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+              </ul>
+            </div>
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox3" value="option3"> Dastaar        
+          <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Course Number <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 <span class="badge">22</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 2 <span class="badge">0</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+              </ul>
+            </div>        
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox3" value="option3"> Gurmukhi/Santhiya
+           <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Course Number <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 <span class="badge">9</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 2 <span class="badge">9</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+              </ul>
+            </div>
+        </label>
+</div>
+<br>
+<div class="row">  
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox3" value="option3"> Tabla
+           <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Course Number <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 <span class="badge">11</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 2 <span class="badge">0</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+              </ul>
+            </div>
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox3" value="option3"> Wrestling
+           <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Course Number <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 <span class="badge">2</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 2 <span class="badge">10</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+              </ul>
+            </div>
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox3" value="option3"> Gatka/Activity
+           <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Course Number <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 <span class="badge">25</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 2 <span class="badge">2</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+              </ul>
+            </div>
+        </label>
+        <label class="checkbox-inline">
+          <input type="checkbox" id="inlineCheckbox3" value="option3"> Waja
+           <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Course Number <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 <span class="badge">2</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 2 <span class="badge">7</span></a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+              </ul>
+            </div>
+        </label>
+</div>
+      </div>
+  </div>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Payment</div>
+  <div class="panel-body">
+<div class="form-group">
       <label for="exampleInputEmail1"><strong>Receipt No:</strong></label>
       <input type="text" class="form-control">
+
+      <label for="exampleInputEmail1"><strong>Amount:</strong></label>
+      <input type="text" class="form-control">
+
+    </div>
+
   </span>
   </div>
 </div>
 
-<button type="submit" class="btn btn-default">Submit</button>
+<button type="submit" class="btn btn-primary center-block">Submit</button>
+<br><br>
 </form>
 
 

@@ -24,3 +24,6 @@ class DepartmentForm(forms.ModelForm):
 	class Meta:
 		model = Department
 		fields = '__all__'
+		widgets = {
+			'description': forms.Textarea(attrs={'rows': 5}),
+		}

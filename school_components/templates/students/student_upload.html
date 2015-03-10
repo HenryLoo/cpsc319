@@ -6,25 +6,32 @@
 
 
 {% block student_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation">
+        <a href="{% url 'school:courseregistration' %}">Special Course Registration</a>
+    </li>
+    <li role="presentation"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+    <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
+    <li role="presentation" class="active"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
+    <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
+</ul>
 
                 <!-- Page Heading -->
                 <div class="row">
-
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             Students <small>Upload</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Students > Upload</a>
+                                <i class="fa fa-sitemap"></i> <a> Students > Upload</a>
                             </li>
                         </ol>
 
                     </div>
                 </div>
 
-	<p class="content">
-	To add multiple students to the system, upload a CSV with the following fields. 
+	To add multiple students to the system, upload a CSV with the following fields
 	<br>
 	<strong>First Name, Last Name, Birthdate, Home Address, Phone Number, Parent First Name, 
 	Parent Last Name, Allergies, Emergency Contact Name, Emergency Contact Phone Number</strong>
@@ -38,7 +45,7 @@
 		<div class="form-group">
 		    <input type="file" id="exampleInputFile">
 		    <br>
-		    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#student-list-csv">
+		    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#student-list-csv">
 		  	Submit
 			</button>
 	  	</div>
@@ -120,7 +127,7 @@
 	      </div>
 	    </div>
 	  </div>
-	</div>
+
 
 
 <!-- {% if message %}

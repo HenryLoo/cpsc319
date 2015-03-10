@@ -14,7 +14,15 @@ $('#edit-student-btn').click(function() {
 {% endblock hacky_script %}
 
 {% block student_content %}
-
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation">
+        <a href="{% url 'school:courseregistration' %}">Special Course Registration</a>
+    </li>
+    <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+    <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
+    <li role="presentation"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
+    <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
+</ul>
 
                 <!-- Page Heading -->
                 <div class="row">
@@ -25,15 +33,14 @@ $('#edit-student-btn').click(function() {
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Students > Students List</a>
+                                <i class="fa fa-sitemap"></i> <a> Students > Students List</a>
                             </li>
                         </ol>
-
                     </div>
-                </div>
+
 
 <div class="col-md-3 student-list">
-<br>
+
 	<div class="filters-holder">
 		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
 		aria-expanded="false" aria-controls="collapseExample">

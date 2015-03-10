@@ -5,6 +5,13 @@
 {% endblock %}
 
 {% block teacher_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><a href="{% url 'account:view_teachers' %}">View Teachers</a></li>
+    <li role="presentation"><a href="{% url 'account:create_teacher' %}">Add Teacher</a></li>
+    <li role="presentation" class="active"><a href="{% url 'account:upload_teachers' %}">Upload CSV</a></li>
+    <li role="presentation"><a href="{% url 'account:export_teachers' %}">Export Teacher Data</a></li>
+</ul>
+
 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
@@ -12,15 +19,14 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Teachers > Upload</a>
+                                <i class="fa fa-sitemap"></i> <a> Teachers > Upload</a>
                             </li>
                         </ol>
 
                     </div>
                 </div>
 
-	<p class="content">
-	To add multiple teachers to the system, upload a CSV with the following fields. 
+	To add multiple teachers to the system, upload a CSV with the following fields:
 	<br>
 	<strong>First Name, Last Name, Branch Location, Skill Level, Teaching Availability, Phone Number, Username, 
 	Password, Email</strong>
@@ -123,7 +129,6 @@
 	      </div>
 	    </div>
 	  </div>
-	</div>
 
 
 <!-- {% if message %}

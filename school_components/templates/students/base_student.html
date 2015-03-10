@@ -35,15 +35,6 @@
 
 
 {% block body %}
-<ul class="nav nav-tabs nav-justified">
-    <li role="presentation">
-        <a href="{% url 'school:courseregistration' %}">Special Course Registration</a>
-    </li>
-    <li role="presentation"><a href="{% url 'school:studentlist' %}">View Students</a></li>
-    <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
-    <li role="presentation"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
-    <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
-</ul>
 
 {% block student_content %}
 {% endblock student_content %}

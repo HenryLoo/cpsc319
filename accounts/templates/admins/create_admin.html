@@ -6,6 +6,11 @@
 
 
 {% block admin_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><a href="{% url 'account:view_admins' %}">View Admins</a></li>
+    <li role="presentation" class="active"><a href="{% url 'account:create_admin' %}">Add Admin</a></li>
+</ul>
+
  <!-- Page Heading -->
                 <div class="row">
 
@@ -15,7 +20,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Admins > Create</a>
+                                <i class="fa fa-sitemap"></i> <a> Admins > Create</a>
                             </li>
                         </ol>
 
@@ -38,7 +43,11 @@
 	    	{{ user_form.as_table }}
 			{{ admin_form.as_table }}
 		</table>
-	    <input type="submit" value="Submit" />
+
+	    <input type="submit" class="btn btn-primary center-block" value="Submit" />
 	</form> 
+
+	<a href="#">Generate password</a>
+<br><br>
 
 {% endblock admin_content %}

@@ -27,17 +27,6 @@
 
 {% block body %}
 
-<ul class="nav nav-tabs nav-justified">
-    <li role="presentation" class="active">
-        <a href="{% url 'school:courselist' %}">View Courses</a>
-    </li>
-    <li role="presentation">
-        <a href="{% url 'school:coursecreate' %}">Add Course</a>
-    </li>
-    <li role="presentation">
-        <a href="{% url 'school:deptcreate' %}">Add Department</a>
-    </li>
-</ul>
 
 {% block course_content %}
 {% endblock course_content %}

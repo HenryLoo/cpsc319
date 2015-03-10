@@ -5,6 +5,15 @@
 {% endblock %}
 
 {% block student_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation">
+        <a href="{% url 'school:courseregistration' %}">Special Course Registration</a>
+    </li>
+    <li role="presentation"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+    <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
+    <li role="presentation"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
+    <li role="presentation" class="active"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
+</ul>
 
  <!-- Page Heading -->
                 <div class="row">
@@ -15,7 +24,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Students > Export</a>
+                                <i class="fa fa-sitemap"></i> <a> Students > Export</a>
                             </li>
                         </ol>
 
@@ -23,16 +32,13 @@
                 </div>
 
 
-<div class="content">
 <form role="form" action="{%url 'school:studentexport' %}" method="post">
 Export the following students as CSV.
 	{% csrf_token %}
-    <input class="btn btn-default" type="submit" value="Download CSV" />
+    <input class="btn btn-default pull-right" type="submit" value="Download CSV" />
 </form> 
-</div>
 
-
-
+<br>
 <table class="table table-bordered table-hover">
 	<tr>
 		<th>First Name</th>
@@ -163,5 +169,6 @@ Export the following students as CSV.
 		<td>Donald Moore</td>
 	</tr>
 </table>
+
 
 {% endblock student_content %}

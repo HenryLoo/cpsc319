@@ -5,20 +5,30 @@
 {% endblock %}
 
 {% block course_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation">
+        <a href="{% url 'school:courselist' %}">View Courses</a>
+    </li>
+    <li role="presentation">
+        <a href="{% url 'school:coursecreate' %}">Add Course</a>
+    </li>
+    <li role="presentation" class="active">
+        <a href="{% url 'school:deptcreate' %}">Add Department</a>
+    </li>
+</ul>
 
-
-  <div class="row">   
+<div class="row">   
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             Courses<small> Create Department</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Courses > Create Department</a>
+                                <i class="fa fa-sitemap"></i> <a> Courses > Create Department</a>
                             </li>
                         </ol>
-
                     </div>
+</div>
 
 	{% if errors %}
 		<div class="panel panel-danger">
@@ -31,7 +41,7 @@
 		<table class="table table-hover school-form">
 	    {{ dept_form.as_table }}
 	    </table>
-	    <input class="btn btn-default" type="submit" value="Submit" />
+	    <input class="btn btn-primary center-block" type="submit" value="Submit" />
 	</form> 
 
 {% endblock course_content %}

@@ -2,6 +2,7 @@ from django.forms import *
 from django import forms
 from accounts.models import *
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 #class TeachersForm(ModelForm):
 
@@ -17,23 +18,30 @@ from django.contrib.auth.forms import UserCreationForm
  #			'description' : forms.Textarea(attrs={'rows': '4', 'cols' : '42','maxlength' : Teachers._meta.get_field('description').max_length}),
   #      }
 
-class MyUserCreationForm(UserCreationForm):
-
-    email = EmailField(required=True)
-    first_name = CharField(required=True)
-    last_name = CharField(required=True)
+# class MyUserCreationForm(UserCreationForm):
+    # email = EmailField(required=True)
+    # first_name = CharField(required=True)
+    # last_name = CharField(required=True)
     
-    def save(self, commit=True):
-        user = super(MyUserCreationForm, self).save(commit=False)
-        user.username = self.cleaned_data["email"]
-        user.email = self.cleaned_data["email"]
-        #password = generate random password, check if unique
-        #user.password = password
-        user.first_name = self.cleaned_data["first_name"]
-        user.last_name = self.cleaned_data["last_name"]
-        if commit:
-            user.save()
-        return user
+
+    # def save(self, commit=True):
+    #     user = super(MyUserCreationForm, self).save(commit=False)
+    #     user.username = self.cleaned_data["email"]
+    #     user.email = self.cleaned_data["email"]
+
+    #     #password = generate random password, check if unique
+    #     #user.password = password
+    #     user.first_name = self.cleaned_data["first_name"]
+    #     user.last_name = self.cleaned_data["last_name"]
+    #     if commit:
+    #         user.save()
+    #     return user
+class MyUserCreationForm(ModelForm):
+
+    class Meta():
+        model = User
+        fields = ['email', 'password', 'first_name', 'last_name']
+
 
 class UserProfileForm(ModelForm):
     

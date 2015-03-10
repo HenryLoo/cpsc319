@@ -37,6 +37,15 @@ $('#enroll-btn').click(function() {
 {% endblock hacky_script %}
 
 {% block class_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><a href="{%url 'school:classlist' %}">View Classes</a></li>
+    <li role="presentation"><a href="{%url 'school:classcreate' %}">Add Class</a></li>
+    <li role="presentation" class="active"><a href="{%url 'school:classregistration' %}">Class Registration</a></li>
+    <li role="presentation"><a href="{%url 'school:classassignment' %}">Assignments</a></li>
+    <li role="presentation"><a href="{%url 'school:classattendance' %}">Attendance</a></li>
+    <li role="presentation"><a href="{%url 'school:classperformance' %}">Grading</a></li>
+</ul>
+
   <div class="row">  
                  <div class="col-lg-12">
                         <h1 class="page-header">
@@ -44,7 +53,7 @@ $('#enroll-btn').click(function() {
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Classes > Class Registration</a>
+                                <i class="fa fa-sitemap"></i> <a> Classes > Class Registration</a>
                             </li>
                         </ol>
 

@@ -1,7 +1,12 @@
 {% extends "teachers/base_teacher.html" %}
 
 {% block teacher_content %}
-
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'account:view_teachers' %}">View Teachers</a></li>
+    <li role="presentation"><a href="{% url 'account:create_teacher' %}">Add Teacher</a></li>
+    <li role="presentation"><a href="{% url 'account:upload_teachers' %}">Upload CSV</a></li>
+    <li role="presentation"><a href="{% url 'account:export_teachers' %}">Export Teacher Data</a></li>
+</ul>
 
 <table class="table table-hover teacher-detail">
 		<tr> 

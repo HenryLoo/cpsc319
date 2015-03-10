@@ -14,6 +14,17 @@ $('#edit-course-btn').click(function() {
 {% endblock %}
 
 {% block course_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active">
+        <a href="{% url 'school:courselist' %}">View Courses</a>
+    </li>
+    <li role="presentation">
+        <a href="{% url 'school:coursecreate' %}">Add Course</a>
+    </li>
+    <li role="presentation">
+        <a href="{% url 'school:deptcreate' %}">Add Department</a>
+    </li>
+</ul>
 
   <div class="row">   
                     <div class="col-lg-12">
@@ -22,7 +33,7 @@ $('#edit-course-btn').click(function() {
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Courses > List</a>
+                                <i class="fa fa-sitemap"></i> <a>Courses > List</a>
                             </li>
                         </ol>
 

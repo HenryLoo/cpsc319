@@ -24,11 +24,9 @@ urlpatterns = patterns('',
 
     url(r'^create_new_report_page/','reports.views.create_new_report_page',name='create_new_report_page'),
 
-<<<<<<< HEAD
+
     url(r'^view_assignment/','assignment.views.view_assignment',name='view_assignment'),                   
 
-=======
->>>>>>> 50460982d79dd15497f3d7b5372a2c82d236d9b3
                   
    
 )

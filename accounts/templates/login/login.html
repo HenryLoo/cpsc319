@@ -128,10 +128,10 @@ body {
 		<form class="login-card" id="login_form" method="post" action="/account/login/">
 			{% csrf_token %}
 			{{ error }}
-			{% if login_form.errors %} Please enter a username and password.
+			{% if login_form.errors %} Please enter a valid email address and password.
 			{% endif %}
-			<input type="text" placeholder="username" name="username" 
-			{%if login_form.username.value %} value={{login_form.username.value}} {% endif %}><br>
+			<input type="text" placeholder="email" name="email" 
+			{%if login_form.email.value %} value={{login_form.email.value}} {% endif %}><br>
 			<input type="password" placeholder="password" name="password" 
 			{%if login_form.password.value %} value={{login_form.password.value}} {% endif %}><br>
 

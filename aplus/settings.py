@@ -109,4 +109,5 @@ TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
 
+AUTH_USER_MODEL = 'accounts.User'
 

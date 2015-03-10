@@ -35,19 +35,37 @@ $('#edit-admin-btn').click(function() {
 		</div>
 	</div>
 
-	{% if admin_list %}
+	<div> <h4> System admins </h4> </div>
+	{% if system_admin_list %}
 	<ul class="list-unstyled admin-list">
-		{% for admin in admin_list %}
+		{% for admin in system_admin_list %}
 	  		<li>
 	  		<a href="{% url 'account:view_admins' admin.id %}">
-	  			 {{ admin.user_info.first_name }} {{ admin.user_info.last_name }}
+	  			 {{ admin.first_name }} {{ admin.last_name }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}
 	</ul>
 
 	{% else %}
-		<div class="alert alert-info" role="alert">No admins have been added.</div>
+		<div class="alert alert-info" role="alert">No system admins have been added.</div>
+	{% endif %}
+	
+	<div> <h4> School admins </h4> </div>
+	{% if school_admin_list %}
+
+	<ul class="list-unstyled admin-list">
+		{% for admin in school_admin_list %}
+	  		<li>
+	  		<a href="{% url 'account:view_admins' admin.id %}">
+	  			 {{ admin.first_name }} {{ admin.last_name }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No school admins have been added.</div>
 	{% endif %}
 
 </div>
@@ -66,23 +84,20 @@ $('#edit-admin-btn').click(function() {
 		<tr> 
 			<td> Name: </td>
 			<td> 
-				{{ admin.user_info.first_name}} 
-				{{ admin.user_info.last_name }}
+				{{ admin.first_name}} 
+				{{ admin.last_name }}
 			</td>
 		</tr>
 		<tr> 
 			<td> Type: </td>
 			<td> 
-				{{ admin.user_info.role.role}} 
+				{{ admin.role}} 
 			</td>
 		</tr>
-		<tr> 
-			<td> Username: </td>
-			<td> {{ admin.user_info.username }} </td>
-		</tr>
+	
 		<tr> 
 			<td> Email: </td>
-			<td> {{ admin.user_info.email }} </td>
+			<td> {{ admin.email }} </td>
 		</tr>
 		<tr> 
 			<td> Phone number: </td>
@@ -90,7 +105,7 @@ $('#edit-admin-btn').click(function() {
 		</tr>
 		<tr> 
 			<td> School branch: </td>
-			<td> {{ admin.branch_location }} </td>
+			<td> {{ admin.school_branch }} </td>
 		</tr>
 
 	</table>

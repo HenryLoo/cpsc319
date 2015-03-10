@@ -35,3 +35,4 @@ def view_assignment(request):
 	return render_to_response("school_components/view_assignment.html",context_dictionary,RequestContext(request))
 
 
+

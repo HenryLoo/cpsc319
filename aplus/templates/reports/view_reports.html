@@ -2,53 +2,132 @@
 
 {% block body %}
   <div class="row">  
-                 <div class="col-lg-12">
+                <div class="col-lg-12">
                         <h1 class="page-header">
                             Reports<small> View</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> [Website Path] > Courses > Reports</a>
+                                <i class="fa fa-sitemap"></i> <a> Courses > Reports</a>
                             </li>
                         </ol>
 
                     </div>
                 </div>
 
+<div class="row">
+
              <div class="col-lg-4">
-                        <div class="panel panel-default" style="max-height: 200px; min-height: 200px;">
-
-                            <div class="panel-body">
-                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 50px; margin-left: 110px"></i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 60px; margin-left: 80px">Print Student</i>
-                            </div>
-                        </div>
-             </div>
+                         <a href="#" class="btn btn-default" style="width: 280px; height: 200px;">
+                        
+                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Student-Phone</i>
+                        </a>
+                </div>
             
-            <div class="col-lg-4">
-                        <div class="panel panel-default" style="max-height: 200px; min-height: 200px;">
-
-                            <div class="panel-body">
-                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 50px; margin-left: 110px"></i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 60px; margin-left: 60px">Print Attendance</i>
-                            </div>
-                        </div>
-             </div>
+             <div class="col-lg-4">
+                         <a href="#" class="btn btn-default" style="width: 280px; height: 200px;">
+                        
+                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Attendance</i>
+                        </a>
+                </div>
              
-             <div class="col-lg-4">
-                        <div class="panel panel-default" style="max-height: 200px; min-height: 200px;">
+              <div class="col-lg-4">
+                        <button class="btn btn-default" type="button" data-toggle="modal" data-target="#exportdatabase-modal" style="width: 280px; height: 200px;">
+                        
+                                <i class="glyphicon glyphicon-export" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Export from database</i>
+                        </button>
+            </div>
+             
+      </div>  
+</div>
 
-                            <div class="panel-body">
-                                <i class="glyphicon glyphicon-export" style="font-size: 75px; margin-top: 50px; margin-left: 110px"></i><br>
-                                <i class="button" onclick="openWin()" style="font-size: 25px ; margin-top: 60px; margin-left: 70px">Export Report
-                                    <script>
-                                        function openWin() {
-                                                                window.open("http://localhost:8080/create_new_report_page/", "_blank", "width=500, height=500");
-                                                              }
-                                    </script>
-                                </i>
-                            </div>
-                        </div>
-             </div>
+<!-- Multiple students Modal -->
+<div class="modal fade" id="exportdatabase-modal" tabindex="-1" role="dialog" 
+aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Export Database</h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control" placeholder="Report Title" aria-describedby="sizing-addon1">
+                    </div>
+        </div>
+
+        <div class="form-group">
+                    <div class="btn-group">
+                        <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            Detabase Set <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">Students</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">Teachers</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">Admins</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">Classes</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">Courses</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">...</a>
+                            </li>
+                        </ul>
+                    </div> 
+        </div>
+
+        <div class="form-group">
+            <div class="filters-holder">
+                <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" aria-expanded="false" aria-controls="collapseExample"> Filters </a>
+                <div class="collapse" id="filters">
+                    <div>
+                        <input type="checkbox"> <label>Name</label> <input>
+                        <br>
+                        <input type="checkbox"> <label>Class</label> <input>
+                        <br>
+                        <input type="checkbox"> <label>Year</label> <input>
+                        <br>
+                    </div>
+                </div>
+            </div>  
+        </div>
             
+        <div class="form-group">
+                    <div class="btn-group">
+                        <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            File Type <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">PDF</a>
+                            </li>
+                            <li role="presentation">
+                                <a role="menuitem" tabindex="-1" href="#">CSV</a>
+                            </li>
+                        </ul>
+                    </div> 
+        </div>
+
+    </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" onclick="window.close()()" class="btn btn-primary">Export</button>
+      </div>
+    </div>
+  </div>
+
 {% endblock %}

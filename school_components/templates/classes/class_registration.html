@@ -58,9 +58,21 @@ $('#enroll-btn').click(function() {
                         </ol>
 
                     </div>
-                </div>
 
-	<h2> Register Students in  {{ class.course }} {{ class.section }}</h2>
+
+<div class="col-md-3">
+<div class="list-group">
+  <a href="#" class="list-group-item active">
+    Tabla 201
+  </a>
+  <a href="#" class="list-group-item">Sikh History 203</a>
+  <a href="#" class="list-group-item">Sikh History 105</a>
+  <a href="#" class="list-group-item">Gurmukhi/Santhiya 250</a>
+  <a href="#" class="list-group-item">Tabla 101</a>
+</div>
+</div>
+
+<div class="col-md-8">
 
 	{% if errors %}
 		<div class="panel panel-danger">
@@ -76,20 +88,74 @@ $('#enroll-btn').click(function() {
 	    <input type="submit" class="btn btn-default" value="Add Students" />
 	</form>  -->
 
-	<div class="col-md-offset-2 col-md-8" id="search-student-div">
-	    <div class="input-group">
-	      <span class="input-group-btn">
+	<div class="col-md-8" id="search-student-div">
+		<h4> Register Students  {{ class.course }} {{ class.section }}</h4>
+
+	    <div class="input-group pull-left" >
+	      <span class="input-group-btn" >
 	        <button class="btn btn-default" type="button">Go!</button>
 	      </span>
 	      <input type="text" class="form-control" placeholder="Search for student...">
 	    </div>
+
+<br><br>
+	<div>
+		<button class="btn btn-default center-block" type="button" data-toggle="modal" 
+		data-target="#multiple-students-modal">
+		Edit Multiple Students</button>
+	</div>
 	</div>
 
-	<div class="col-md-12">
+	<div class="col-md-8">
+		<br>
+		<h5>Number of students: 3</h5>
+		<br>
+<!-- 		<h5>Number of students: {{ reg_list|length }}</h5> -->
 		<h4>Registered Students:</h4>
-		<h5>Number of students: {{ reg_list|length }}</h5>
+		
+		        <div class="table-responsive">
 
-		<table class="table table-hover table-bordered" id="registration-table">
+<table id="mytable" class="table table-bordred table-striped">
+    <thead>
+      <tr>
+        <th>Student name</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a>Jack</a></td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+      </tr>
+      <tr>
+        <td><a>Sarah</a></td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+      </tr>
+      <tr>
+        <td><a>Rosie</a></td>
+        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+      </tr>
+    </tbody>
+  </table>
+
+<div class="clearfix"></div>
+<ul class="pagination pull-right">
+  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+  <li class="active"><a href="#">1</a></li>
+  <li><a href="#">2</a></li>
+  <li><a href="#">3</a></li>
+  <li><a href="#">4</a></li>
+  <li><a href="#">5</a></li>
+  <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
+</ul>
+                
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- 		<table class="table table-hover table-bordered" id="registration-table">
 		{% for reg in reg_list %}
 		<tr>
 			<td> <input type="checkbox" class="student-box" style="display:none"/>  
@@ -105,13 +171,9 @@ $('#enroll-btn').click(function() {
 			</td>
 		</tr>
 		{% endfor %}
-		</table>
-
-		<div>
-			<button class="btn btn-default pull-right" type="button" data-toggle="modal" 
-			data-target="#multiple-students-modal">
-			Edit Multiple Students</button>
-		</div>
+		</table> -->
+</div>
+</div>
 
 		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-sm">
@@ -142,7 +204,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
       
       	<div class="form-half-size">
       		<div class="form-group">
-		  		<label>Unenrolled Students</label>
+		  		<label>Unenrolled Students from Course Registration</label>
 		  		<select multiple class="form-control" id="unenrolled-select">
 				  <option>Huey Morrison</option>
 				  <option>George Wallace</option>

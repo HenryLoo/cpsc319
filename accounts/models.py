@@ -2,11 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 #User table comes complete with import User with:
-#the username for the user account;
-#the account’s password;
-#the user’s email address;
-#the user’s first name; and
-#the user’s surname.
+
 
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.

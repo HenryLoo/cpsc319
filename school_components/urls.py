@@ -42,6 +42,11 @@ urlpatterns = patterns('',
 		'school_components.views.parents_view.parent_form', 
 		name='parentform'),
 
+	# payment
+	url(r'^payment/(?P<parent_id>\d+)/$', 
+		'school_components.views.parents_view.payment_create', 
+		name='paymentcreate'),
+
 	# courses
 	url(r'^courses/$', 
 		'school_components.views.courses_view.course_list', 

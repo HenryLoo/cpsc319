@@ -53,6 +53,19 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                 <h4 class="modal-title">Print Student-Phone</h4>
             </div>
             <div class="modal-body">
+                <div class="dropdown">
+                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption1" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                        <option value="Blnak">Select Class</option>
+                        <option value="Tabla 201">Tabla 201</option>
+                        <option value="Sikh History 203">Sikh History 203</option>
+                        <option value="Sikh History 105">Sikh History 105</option>
+                        <option value="Gurmukhi/Santhiya 250">Gurmukhi/Santhiya 250</option>
+                        <option value="Tabla 101">Tabla 101</option>
+                        <option value="...">...</option>
+                     </select>
+                </div>
+                
+                <br>
                 <table id="attendancetable" class="table table-bordred table-striped">
                     <thead>
                         <tr>
@@ -62,13 +75,18 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Student 1</td>
+                            <td>Jack</td>
                             <td>123-456-7890</td>
                         </tr>
                     
                         <tr>
-                            <td>Student 2</td>
+                            <td>Sarah</td>
                             <td>012-345-6789</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Rosie</td>
+                            <td>098-765-4321</td>
                         </tr>
                     </tbody>
             
@@ -104,11 +122,25 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                                           });
                          </script>
                         </div>
-                        <div class="form-group">
+                    </form>
+                </div>
+                
+                <br>
+                <div class="dropdown">
+                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption2" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                        <option value="Blnak">Select Class</option>
+                        <option value="Tabla 201">Tabla 201</option>
+                        <option value="Sikh History 203">Sikh History 203</option>
+                        <option value="Sikh History 105">Sikh History 105</option>
+                        <option value="Gurmukhi/Santhiya 250">Gurmukhi/Santhiya 250</option>
+                        <option value="Tabla 101">Tabla 101</option>
+                        <option value="...">...</option>
+                     </select>
+                </div>
+
+                <div class="form-group">
                             <br>
                             <button type="submit" class="btn btn-primary">Search</button>
-                            </div>
-                    </form>
                 </div>
                 
                 <br>
@@ -116,27 +148,39 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                     <thead>
                         <tr>
                             <th>Student Name</th>
-                            <th>Class</th>
-                            <th>Date</th>
-                            <th>Attendance</th>
-                            <th>Comment</th>
+                            <th>Thu(Jan 01, 2015)</th>
+                            <th>Tue(Jan 06, 2015)</th>
+                            <th>Thu(Jan 08, 2015)</th>
+                            <th>Tue(Jan 13, 2015)</th>
+                            <th>...</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Student 1</td>
-                            <td>Sikh History</td>
-                            <td>2014/03/07</td>
+                            <td>Jack</td>
                             <td>P</td>
-                            <td> </td>
-                        </tr>
-                    
-                        <tr>
-                            <td>Student 2</td>
-                            <td>Sikh History</td>
-                            <td>2014/03/07</td>
+                            <td>P</td>
+                            <td>P</td>
                             <td>L</td>
-                            <td>Arrived at 8:15 AM</td>
+                            <td>...</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Sarah</td>
+                            <td>A</td>
+                            <td>P</td>
+                            <td>P</td>
+                            <td>P</td>
+                            <td>...</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Rosie</td>
+                            <td>A</td>
+                            <td>A</td>
+                            <td>A</td>
+                            <td>P</td>
+                            <td>...</td>
                         </tr>
                     </tbody>
             

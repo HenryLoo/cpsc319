@@ -1,0 +1,3519 @@
+[
+{
+    "pk": 1, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "logentry", 
+        "name": "log entry", 
+        "app_label": "admin"
+    }
+},
+{
+    "pk": 2, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "permission", 
+        "name": "permission", 
+        "app_label": "auth"
+    }
+},
+{
+    "pk": 3, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "group", 
+        "name": "group", 
+        "app_label": "auth"
+    }
+},
+{
+    "pk": 4, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "user", 
+        "name": "user", 
+        "app_label": "auth"
+    }
+},
+{
+    "pk": 5, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "contenttype", 
+        "name": "content type", 
+        "app_label": "contenttypes"
+    }
+},
+{
+    "pk": 6, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "session", 
+        "name": "session", 
+        "app_label": "sessions"
+    }
+},
+{
+    "pk": 7, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "sentmessage", 
+        "name": "sent message", 
+        "app_label": "messages"
+    }
+},
+{
+    "pk": 8, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "email", 
+        "name": "email", 
+        "app_label": "messages"
+    }
+},
+{
+    "pk": 9, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "userprofile", 
+        "name": "user profile", 
+        "app_label": "accounts"
+    }
+},
+{
+    "pk": 10, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "teachingavailability", 
+        "name": "teaching availability", 
+        "app_label": "accounts"
+    }
+},
+{
+    "pk": 11, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "teacheruser", 
+        "name": "teacher user", 
+        "app_label": "accounts"
+    }
+},
+{
+    "pk": 12, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "parent", 
+        "name": "parent", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 13, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "payment", 
+        "name": "payment", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 14, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "student", 
+        "name": "student", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 15, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "courseregistration", 
+        "name": "course registration", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 16, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "course", 
+        "name": "course", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 17, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "prerequisite", 
+        "name": "prerequisite", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 18, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "department", 
+        "name": "department", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 19, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "class", 
+        "name": "class", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 20, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "classteacher", 
+        "name": "class teacher", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 21, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "classregistration", 
+        "name": "class registration", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 22, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "classattendance", 
+        "name": "class attendance", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 23, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "assignment", 
+        "name": "assignment", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 24, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "grading", 
+        "name": "grading", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 25, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "school", 
+        "name": "school", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 26, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "period", 
+        "name": "period", 
+        "app_label": "school_components"
+    }
+},
+{
+    "pk": 27, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "notificationtype", 
+        "name": "notification type", 
+        "app_label": "dashboard"
+    }
+},
+{
+    "pk": 28, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "notification", 
+        "name": "notification", 
+        "app_label": "dashboard"
+    }
+},
+{
+    "pk": 29, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "chart", 
+        "name": "chart", 
+        "app_label": "dashboard"
+    }
+},
+{
+    "pk": 30, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "attendance", 
+        "name": "attendance", 
+        "app_label": "dashboard"
+    }
+},
+{
+    "pk": 31, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "grade", 
+        "name": "grade", 
+        "app_label": "dashboard"
+    }
+},
+{
+    "pk": 32, 
+    "model": "contenttypes.contenttype", 
+    "fields": {
+        "model": "reports", 
+        "name": "reports", 
+        "app_label": "reports"
+    }
+},
+{
+    "pk": "c8wuuobwp5h7plqjmbe4wqpsh7oe3koh", 
+    "model": "sessions.session", 
+    "fields": {
+        "expire_date": "2015-03-26T05:39:57.006Z", 
+        "session_data": "NjI2Njg3ZmQyOTZjY2M5NTk5MmJmZjM0MWUzZjdiYTVjZmZkN2ZlNjp7Il9hdXRoX3VzZXJfaWQiOjEsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiY2xhc3MiOiI0In0="
+    }
+},
+{
+    "pk": 1, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "555-3234", 
+        "first_name": "Mama", 
+        "last_name": "Bear", 
+        "email": "mama@example.com"
+    }
+},
+{
+    "pk": 2, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "555-3234", 
+        "first_name": "Mama", 
+        "last_name": "Bear", 
+        "email": "mama@example.com"
+    }
+},
+{
+    "pk": 3, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "8-(354)235-6820", 
+        "first_name": "Teresa", 
+        "last_name": "Price", 
+        "email": "jwillis0@xing.com"
+    }
+},
+{
+    "pk": 4, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "7-(887)447-0021", 
+        "first_name": "Earl", 
+        "last_name": "Fox", 
+        "email": "caustin1@nbcnews.com"
+    }
+},
+{
+    "pk": 5, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "7-(662)254-1698", 
+        "first_name": "Theresa", 
+        "last_name": "Carter", 
+        "email": "sallen2@artisteer.com"
+    }
+},
+{
+    "pk": 6, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "2-(000)761-3555", 
+        "first_name": "Denise", 
+        "last_name": "Medina", 
+        "email": "jscott3@imgur.com"
+    }
+},
+{
+    "pk": 7, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "4-(647)482-1595", 
+        "first_name": "Willie", 
+        "last_name": "Ramirez", 
+        "email": "tkennedy4@patch.com"
+    }
+},
+{
+    "pk": 8, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "4-(720)470-1362", 
+        "first_name": "Charles", 
+        "last_name": "Berry", 
+        "email": "jgeorge5@shinystat.com"
+    }
+},
+{
+    "pk": 9, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "6-(075)649-2036", 
+        "first_name": "Rachel", 
+        "last_name": "Ray", 
+        "email": "nberry6@goodreads.com"
+    }
+},
+{
+    "pk": 10, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "9-(887)570-7625", 
+        "first_name": "Frank", 
+        "last_name": "Russell", 
+        "email": "chenderson7@abc.net.au"
+    }
+},
+{
+    "pk": 11, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "3-(928)752-7858", 
+        "first_name": "Kenneth", 
+        "last_name": "Meyer", 
+        "email": "rhawkins8@nifty.com"
+    }
+},
+{
+    "pk": 12, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "6-(498)571-1911", 
+        "first_name": "Ashley", 
+        "last_name": "Gibson", 
+        "email": "cruiz9@adobe.com"
+    }
+},
+{
+    "pk": 13, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "4-(091)713-9579", 
+        "first_name": "Gregory", 
+        "last_name": "Mendoza", 
+        "email": "rowensa@mail.ru"
+    }
+},
+{
+    "pk": 14, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "6-(683)342-3828", 
+        "first_name": "Sean", 
+        "last_name": "Chavez", 
+        "email": "swatsonb@amazon.com"
+    }
+},
+{
+    "pk": 15, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "6-(828)892-2277", 
+        "first_name": "Emily", 
+        "last_name": "Martin", 
+        "email": "nhicksc@com.com"
+    }
+},
+{
+    "pk": 16, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "6-(291)812-9230", 
+        "first_name": "Patrick", 
+        "last_name": "Richards", 
+        "email": "gstevensd@tinypic.com"
+    }
+},
+{
+    "pk": 17, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "2-(854)056-9373", 
+        "first_name": "Lisa", 
+        "last_name": "Anderson", 
+        "email": "chamiltone@hexun.com"
+    }
+},
+{
+    "pk": 18, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "0-(443)323-1767", 
+        "first_name": "Amanda", 
+        "last_name": "Fowler", 
+        "email": "afrazierf@cdbaby.com"
+    }
+},
+{
+    "pk": 19, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "4-(673)058-5792", 
+        "first_name": "Kevin", 
+        "last_name": "Alexander", 
+        "email": "awrightg@chronoengine.com"
+    }
+},
+{
+    "pk": 20, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "9-(546)058-5158", 
+        "first_name": "Nicholas", 
+        "last_name": "Marshall", 
+        "email": "ewalkerh@is.gd"
+    }
+},
+{
+    "pk": 21, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "5-(934)724-7310", 
+        "first_name": "Ann", 
+        "last_name": "Perry", 
+        "email": "rwheeleri@illinois.edu"
+    }
+},
+{
+    "pk": 22, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "2-(058)215-1869", 
+        "first_name": "Nicole", 
+        "last_name": "Dean", 
+        "email": "jcarrj@va.gov"
+    }
+},
+{
+    "pk": 23, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "5-(036)391-8287", 
+        "first_name": "Craig", 
+        "last_name": "Armstrong", 
+        "email": "cgibsonk@networkadvertising.org"
+    }
+},
+{
+    "pk": 24, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "2-(691)309-7643", 
+        "first_name": "Benjamin", 
+        "last_name": "Wright", 
+        "email": "lrobertsl@cargocollective.com"
+    }
+},
+{
+    "pk": 25, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "1-(193)843-3461", 
+        "first_name": "Terry", 
+        "last_name": "Snyder", 
+        "email": "mkelleym@ucla.edu"
+    }
+},
+{
+    "pk": 26, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "8-(399)170-5407", 
+        "first_name": "Terry", 
+        "last_name": "Wagner", 
+        "email": "rfieldsn@acquirethisname.com"
+    }
+},
+{
+    "pk": 27, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "5-(866)220-3800", 
+        "first_name": "Theresa", 
+        "last_name": "Owens", 
+        "email": "dgarretto@wunderground.com"
+    }
+},
+{
+    "pk": 28, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "0-(408)604-8689", 
+        "first_name": "Steven", 
+        "last_name": "Knight", 
+        "email": "pgomezp@who.int"
+    }
+},
+{
+    "pk": 29, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "7-(025)499-6809", 
+        "first_name": "Michael", 
+        "last_name": "Reynolds", 
+        "email": "kbarnesq@digg.com"
+    }
+},
+{
+    "pk": 30, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "8-(237)747-6742", 
+        "first_name": "Lori", 
+        "last_name": "Harvey", 
+        "email": "avasquezr@ucoz.com"
+    }
+},
+{
+    "pk": 31, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "1-(840)381-9108", 
+        "first_name": "Melissa", 
+        "last_name": "Holmes", 
+        "email": "khunts@plala.or.jp"
+    }
+},
+{
+    "pk": 32, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "0-(257)397-9586", 
+        "first_name": "Norma", 
+        "last_name": "Mcdonald", 
+        "email": "lgarzat@xing.com"
+    }
+},
+{
+    "pk": 33, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "9-(489)636-7663", 
+        "first_name": "Emily", 
+        "last_name": "Simpson", 
+        "email": "dphillipsu@google.it"
+    }
+},
+{
+    "pk": 34, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "2-(798)229-3026", 
+        "first_name": "Norma", 
+        "last_name": "Gibson", 
+        "email": "eortizv@indiatimes.com"
+    }
+},
+{
+    "pk": 35, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "4-(418)165-6967", 
+        "first_name": "Daniel", 
+        "last_name": "Matthews", 
+        "email": "jdiazw@icio.us"
+    }
+},
+{
+    "pk": 36, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "7-(984)764-1025", 
+        "first_name": "Sara", 
+        "last_name": "Clark", 
+        "email": "mweaverx@themeforest.net"
+    }
+},
+{
+    "pk": 37, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "2-(459)358-5649", 
+        "first_name": "David", 
+        "last_name": "Cruz", 
+        "email": "bwrighty@eepurl.com"
+    }
+},
+{
+    "pk": 38, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "0-(393)268-0096", 
+        "first_name": "Douglas", 
+        "last_name": "Matthews", 
+        "email": "mbaileyz@tiny.cc"
+    }
+},
+{
+    "pk": 39, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "2-(433)394-6330", 
+        "first_name": "Stephanie", 
+        "last_name": "Ruiz", 
+        "email": "agray10@nationalgeographic.com"
+    }
+},
+{
+    "pk": 40, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "5-(915)331-9906", 
+        "first_name": "Wayne", 
+        "last_name": "Crawford", 
+        "email": "emartin11@moonfruit.com"
+    }
+},
+{
+    "pk": 41, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "3-(712)210-7100", 
+        "first_name": "Gerald", 
+        "last_name": "Rice", 
+        "email": "mcrawford12@geocities.jp"
+    }
+},
+{
+    "pk": 42, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "4-(768)947-1933", 
+        "first_name": "Mark", 
+        "last_name": "Walker", 
+        "email": "bhernandez13@amazon.com"
+    }
+},
+{
+    "pk": 43, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "1-(868)680-6347", 
+        "first_name": "Gerald", 
+        "last_name": "Elliott", 
+        "email": "jpeters14@blogger.com"
+    }
+},
+{
+    "pk": 44, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "1-(768)668-8435", 
+        "first_name": "Chris", 
+        "last_name": "Perry", 
+        "email": "rhamilton15@un.org"
+    }
+},
+{
+    "pk": 45, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "0-(548)682-4454", 
+        "first_name": "Mark", 
+        "last_name": "Mcdonald", 
+        "email": "spierce16@livejournal.com"
+    }
+},
+{
+    "pk": 46, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "6-(914)772-4170", 
+        "first_name": "Karen", 
+        "last_name": "Ferguson", 
+        "email": "mmorris17@dmoz.org"
+    }
+},
+{
+    "pk": 47, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "5-(188)725-5712", 
+        "first_name": "Julie", 
+        "last_name": "Price", 
+        "email": "tlittle18@unblog.fr"
+    }
+},
+{
+    "pk": 48, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "8-(786)981-7256", 
+        "first_name": "Jeffrey", 
+        "last_name": "Andrews", 
+        "email": "ppeters19@newyorker.com"
+    }
+},
+{
+    "pk": 49, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "8-(033)848-5461", 
+        "first_name": "Lillian", 
+        "last_name": "Schmidt", 
+        "email": "mjones1a@nba.com"
+    }
+},
+{
+    "pk": 50, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "9-(039)098-5750", 
+        "first_name": "Shawn", 
+        "last_name": "Morgan", 
+        "email": "cfranklin1b@blogtalkradio.com"
+    }
+},
+{
+    "pk": 51, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "5-(537)886-8933", 
+        "first_name": "Elizabeth", 
+        "last_name": "Lane", 
+        "email": "mwoods1c@shop-pro.jp"
+    }
+},
+{
+    "pk": 52, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "0-(190)032-5732", 
+        "first_name": "Thomas", 
+        "last_name": "Robinson", 
+        "email": "wreyes1d@seesaa.net"
+    }
+},
+{
+    "pk": 53, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "4-(513)402-9129", 
+        "first_name": "William", 
+        "last_name": "Clark", 
+        "email": "arice1e@phoca.cz"
+    }
+},
+{
+    "pk": 54, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "5-(262)430-2757", 
+        "first_name": "Sarah", 
+        "last_name": "Garcia", 
+        "email": "lharris1f@comsenz.com"
+    }
+},
+{
+    "pk": 55, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "2-(388)306-7224", 
+        "first_name": "Helen", 
+        "last_name": "Parker", 
+        "email": "dpeters1g@discuz.net"
+    }
+},
+{
+    "pk": 56, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "9-(351)760-2348", 
+        "first_name": "Nicole", 
+        "last_name": "Arnold", 
+        "email": "lfernandez1h@geocities.jp"
+    }
+},
+{
+    "pk": 57, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "7-(498)926-0699", 
+        "first_name": "Kathleen", 
+        "last_name": "Howard", 
+        "email": "lwilliamson1i@yale.edu"
+    }
+},
+{
+    "pk": 58, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "3-(992)304-9246", 
+        "first_name": "Walter", 
+        "last_name": "Welch", 
+        "email": "ckelly1j@feedburner.com"
+    }
+},
+{
+    "pk": 59, 
+    "model": "school_components.parent", 
+    "fields": {
+        "cell_phone": "8-(211)384-7566", 
+        "first_name": "Mark", 
+        "last_name": "Bennett", 
+        "email": "ecarroll1k@drupal.org"
+    }
+},
+{
+    "pk": 1, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "1234", 
+        "amount": "10.45", 
+        "parent": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "0002", 
+        "amount": "552.19", 
+        "parent": null
+    }
+},
+{
+    "pk": 3, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "100043", 
+        "amount": "123.32", 
+        "parent": null
+    }
+},
+{
+    "pk": 4, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "0000001", 
+        "amount": "9.00", 
+        "parent": null
+    }
+},
+{
+    "pk": 5, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "12321", 
+        "amount": "3213.00", 
+        "parent": null
+    }
+},
+{
+    "pk": 6, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "55555", 
+        "amount": "1111.00", 
+        "parent": null
+    }
+},
+{
+    "pk": 7, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "11111", 
+        "amount": "11111.00", 
+        "parent": 1
+    }
+},
+{
+    "pk": 8, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "2222", 
+        "amount": "22222.00", 
+        "parent": 1
+    }
+},
+{
+    "pk": 9, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "48389", 
+        "amount": "10.00", 
+        "parent": 2
+    }
+},
+{
+    "pk": 10000, 
+    "model": "school_components.payment", 
+    "fields": {
+        "receipt_no": "Sally Ally", 
+        "amount": "10.33", 
+        "parent": null
+    }
+},
+{
+    "pk": 1, 
+    "model": "school_components.school", 
+    "fields": {
+        "phone": "555-1234", 
+        "address": "123 Main St.", 
+        "title": "School A"
+    }
+},
+{
+    "pk": 2, 
+    "model": "school_components.school", 
+    "fields": {
+        "phone": "555-8034", 
+        "address": "888 Pender St", 
+        "title": "School B"
+    }
+},
+{
+    "pk": 1, 
+    "model": "school_components.period", 
+    "fields": {
+        "school": 1, 
+        "description": "2015-Winter", 
+        "end_date": "2015-04-10", 
+        "start_date": "2015-01-05"
+    }
+},
+{
+    "pk": 2, 
+    "model": "school_components.period", 
+    "fields": {
+        "school": 1, 
+        "description": "2014-Summer", 
+        "end_date": "2014-06-30", 
+        "start_date": "2014-05-05"
+    }
+},
+{
+    "pk": 3, 
+    "model": "school_components.period", 
+    "fields": {
+        "school": 1, 
+        "description": "2014-Winter", 
+        "end_date": "2014-12-19", 
+        "start_date": "2014-09-03"
+    }
+},
+{
+    "pk": 1, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Raggedy", 
+        "last_name": "Ann", 
+        "emergency_contact_phone": "555-1223", 
+        "emergency_contact_name": "Raggedy Andy", 
+        "parent": 1, 
+        "gender": "FEMALE", 
+        "school": 1, 
+        "birthdate": "2015-03-11", 
+        "period": 1, 
+        "allergies": "Peanuts", 
+        "home_phone": "555-1343", 
+        "address": "479-7649 Sem St.", 
+        "email": "43423@gfd.com"
+    }
+},
+{
+    "pk": 3, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Winnie", 
+        "last_name": "Pooh", 
+        "emergency_contact_phone": "555-0000", 
+        "emergency_contact_name": "Piglet", 
+        "parent": 2, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2001-11-11", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "555-1234", 
+        "address": "100 Acre Wood", 
+        "email": "hunny@example.com"
+    }
+},
+{
+    "pk": 4, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Carolyn", 
+        "last_name": "Jones", 
+        "emergency_contact_phone": "6-(621)832-5904", 
+        "emergency_contact_name": "Julie Willis", 
+        "parent": 3, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2004-06-30", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "7-(272)438-7908", 
+        "address": "06738 Sauthoff Junction", 
+        "email": "jwillis0@photobucket.com"
+    }
+},
+{
+    "pk": 5, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Henry", 
+        "last_name": "Kelly", 
+        "emergency_contact_phone": "1-(582)009-8140", 
+        "emergency_contact_name": "Clarence Austin", 
+        "parent": 4, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2010-07-23", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "5-(991)035-2219", 
+        "address": "94 Sutteridge Trail", 
+        "email": "caustin1@jugem.jp"
+    }
+},
+{
+    "pk": 6, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Jacqueline", 
+        "last_name": "Burke", 
+        "emergency_contact_phone": "9-(693)626-9517", 
+        "emergency_contact_name": "Sara Allen", 
+        "parent": 5, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2012-09-15", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "0-(995)097-2961", 
+        "address": "3 Victoria Way", 
+        "email": "sallen2@yellowpages.com"
+    }
+},
+{
+    "pk": 7, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Janet", 
+        "last_name": "Graham", 
+        "emergency_contact_phone": "5-(053)318-1483", 
+        "emergency_contact_name": "Jane Scott", 
+        "parent": 6, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2003-06-19", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "6-(325)352-1651", 
+        "address": "46459 Vernon Park", 
+        "email": "jscott3@yolasite.com"
+    }
+},
+{
+    "pk": 8, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Roy", 
+        "last_name": "Thomas", 
+        "emergency_contact_phone": "0-(377)358-6346", 
+        "emergency_contact_name": "Thomas Kennedy", 
+        "parent": 7, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2011-04-17", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "5-(097)636-0960", 
+        "address": "4 Kensington Court", 
+        "email": "tkennedy4@vinaora.com"
+    }
+},
+{
+    "pk": 9, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Gary", 
+        "last_name": "Wells", 
+        "emergency_contact_phone": "3-(073)564-1663", 
+        "emergency_contact_name": "Johnny George", 
+        "parent": 8, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2004-08-07", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "6-(487)368-6761", 
+        "address": "7 Grover Road", 
+        "email": "jgeorge5@state.gov"
+    }
+},
+{
+    "pk": 10, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Marie", 
+        "last_name": "Cole", 
+        "emergency_contact_phone": "9-(635)021-7255", 
+        "emergency_contact_name": "Nancy Berry", 
+        "parent": 9, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2004-01-01", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "6-(256)769-4083", 
+        "address": "2 Schmedeman Way", 
+        "email": "nberry6@nih.gov"
+    }
+},
+{
+    "pk": 11, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Louis", 
+        "last_name": "Foster", 
+        "emergency_contact_phone": "5-(684)586-7671", 
+        "emergency_contact_name": "Clarence Henderson", 
+        "parent": 10, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2013-11-07", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "9-(053)821-7877", 
+        "address": "27 Springview Street", 
+        "email": "chenderson7@myspace.com"
+    }
+},
+{
+    "pk": 12, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Joshua", 
+        "last_name": "Carroll", 
+        "emergency_contact_phone": "9-(362)910-5648", 
+        "emergency_contact_name": "Ryan Hawkins", 
+        "parent": 11, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2002-03-03", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "9-(083)314-8146", 
+        "address": "8523 Pleasure Hill", 
+        "email": "rhawkins8@tamu.edu"
+    }
+},
+{
+    "pk": 13, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Jean", 
+        "last_name": "Bryant", 
+        "emergency_contact_phone": "3-(632)998-9477", 
+        "emergency_contact_name": "Christine Ruiz", 
+        "parent": 12, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2001-09-10", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "0-(521)587-4168", 
+        "address": "299 Hoepker Avenue", 
+        "email": "cruiz9@whitehouse.gov"
+    }
+},
+{
+    "pk": 14, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Ryan", 
+        "last_name": "Armstrong", 
+        "emergency_contact_phone": "7-(945)189-8935", 
+        "emergency_contact_name": "Roger Owens", 
+        "parent": 13, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2000-06-06", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "6-(769)581-0155", 
+        "address": "89 Derek Lane", 
+        "email": "rowensa@illinois.edu"
+    }
+},
+{
+    "pk": 15, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Eugene", 
+        "last_name": "Cox", 
+        "emergency_contact_phone": "9-(317)642-9781", 
+        "emergency_contact_name": "Steven Watson", 
+        "parent": 14, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2010-02-14", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "0-(687)528-7507", 
+        "address": "75 Heffernan Circle", 
+        "email": "swatsonb@indiegogo.com"
+    }
+},
+{
+    "pk": 16, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Anna", 
+        "last_name": "Sullivan", 
+        "emergency_contact_phone": "3-(791)885-1076", 
+        "emergency_contact_name": "Nancy Hicks", 
+        "parent": 15, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2006-12-08", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "5-(117)911-9637", 
+        "address": "47 Forest Dale Pass", 
+        "email": "nhicksc@admin.ch"
+    }
+},
+{
+    "pk": 17, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Timothy", 
+        "last_name": "Rice", 
+        "emergency_contact_phone": "0-(936)803-2496", 
+        "emergency_contact_name": "Gerald Stevens", 
+        "parent": 16, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2005-10-20", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "7-(631)859-4323", 
+        "address": "32 Esch Lane", 
+        "email": "gstevensd@nationalgeographic.com"
+    }
+},
+{
+    "pk": 18, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Judith", 
+        "last_name": "Price", 
+        "emergency_contact_phone": "2-(024)032-2818", 
+        "emergency_contact_name": "Christina Hamilton", 
+        "parent": 17, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2011-12-21", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "2-(111)817-7656", 
+        "address": "0 Menomonie Point", 
+        "email": "chamiltone@nhs.uk"
+    }
+},
+{
+    "pk": 19, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Kimberly", 
+        "last_name": "Cruz", 
+        "emergency_contact_phone": "6-(907)513-3347", 
+        "emergency_contact_name": "Anne Frazier", 
+        "parent": 18, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2007-06-07", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "8-(835)822-4058", 
+        "address": "467 Kensington Parkway", 
+        "email": "afrazierf@bloomberg.com"
+    }
+},
+{
+    "pk": 20, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Joseph", 
+        "last_name": "Harrison", 
+        "emergency_contact_phone": "9-(591)703-8177", 
+        "emergency_contact_name": "Andrew Wright", 
+        "parent": 19, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2014-08-24", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "6-(465)520-6010", 
+        "address": "2 Hoffman Street", 
+        "email": "awrightg@pcworld.com"
+    }
+},
+{
+    "pk": 21, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Brandon", 
+        "last_name": "Davis", 
+        "emergency_contact_phone": "5-(575)778-2606", 
+        "emergency_contact_name": "Eugene Walker", 
+        "parent": 20, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2001-11-20", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "1-(614)520-3859", 
+        "address": "25 Jana Pass", 
+        "email": "ewalkerh@cargocollective.com"
+    }
+},
+{
+    "pk": 22, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Paula", 
+        "last_name": "Black", 
+        "emergency_contact_phone": "6-(359)214-4052", 
+        "emergency_contact_name": "Ruby Wheeler", 
+        "parent": 21, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2005-02-28", 
+        "period": 1, 
+        "allergies": "OCTINOXATE", 
+        "home_phone": "7-(092)820-4736", 
+        "address": "4 Milwaukee Road", 
+        "email": "rwheeleri@sogou.com"
+    }
+},
+{
+    "pk": 23, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Pamela", 
+        "last_name": "Freeman", 
+        "emergency_contact_phone": "5-(993)423-7695", 
+        "emergency_contact_name": "Joan Carr", 
+        "parent": 22, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2005-03-18", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "2-(875)976-0310", 
+        "address": "18 Stoughton Lane", 
+        "email": "jcarrj@unesco.org"
+    }
+},
+{
+    "pk": 24, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Jesse", 
+        "last_name": "Bowman", 
+        "emergency_contact_phone": "2-(918)796-7206", 
+        "emergency_contact_name": "Carl Gibson", 
+        "parent": 23, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2009-08-06", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "4-(684)863-2581", 
+        "address": "35409 Corry Hill", 
+        "email": "cgibsonk@plala.or.jp"
+    }
+},
+{
+    "pk": 25, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Andrew", 
+        "last_name": "Brown", 
+        "emergency_contact_phone": "7-(774)983-0413", 
+        "emergency_contact_name": "Lawrence Roberts", 
+        "parent": 24, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2008-11-14", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "8-(672)863-2213", 
+        "address": "2435 Ryan Way", 
+        "email": "lrobertsl@about.me"
+    }
+},
+{
+    "pk": 26, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Kevin", 
+        "last_name": "Ford", 
+        "emergency_contact_phone": "4-(067)562-4783", 
+        "emergency_contact_name": "Mark Kelley", 
+        "parent": 25, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2014-02-18", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "9-(769)264-6395", 
+        "address": "5972 Erie Center", 
+        "email": "mkelleym@twitpic.com"
+    }
+},
+{
+    "pk": 27, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Larry", 
+        "last_name": "Phillips", 
+        "emergency_contact_phone": "4-(367)178-7435", 
+        "emergency_contact_name": "Ryan Fields", 
+        "parent": 26, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2007-05-31", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "1-(952)651-5254", 
+        "address": "5116 Sheridan Parkway", 
+        "email": "rfieldsn@indiatimes.com"
+    }
+},
+{
+    "pk": 28, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Barbara", 
+        "last_name": "Webb", 
+        "emergency_contact_phone": "2-(838)420-4123", 
+        "emergency_contact_name": "Denise Garrett", 
+        "parent": 27, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2004-09-20", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "8-(105)803-8460", 
+        "address": "3 Muir Road", 
+        "email": "dgarretto@goodreads.com"
+    }
+},
+{
+    "pk": 29, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Ronald", 
+        "last_name": "Ramos", 
+        "emergency_contact_phone": "3-(719)553-9821", 
+        "emergency_contact_name": "Patrick Gomez", 
+        "parent": 28, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2006-11-19", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "9-(981)445-9425", 
+        "address": "45231 Hallows Plaza", 
+        "email": "pgomezp@unblog.fr"
+    }
+},
+{
+    "pk": 30, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Justin", 
+        "last_name": "Sanchez", 
+        "emergency_contact_phone": "9-(460)253-6901", 
+        "emergency_contact_name": "Keith Barnes", 
+        "parent": 29, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2001-07-21", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "4-(958)148-0046", 
+        "address": "585 Luster Plaza", 
+        "email": "kbarnesq@home.pl"
+    }
+},
+{
+    "pk": 31, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Irene", 
+        "last_name": "West", 
+        "emergency_contact_phone": "5-(451)499-1974", 
+        "emergency_contact_name": "Angela Vasquez", 
+        "parent": 30, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2004-05-05", 
+        "period": 1, 
+        "allergies": "Fluoxetine Hydrochloride", 
+        "home_phone": "6-(642)391-1565", 
+        "address": "3 Melrose Avenue", 
+        "email": "avasquezr@marketwatch.com"
+    }
+},
+{
+    "pk": 32, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Mary", 
+        "last_name": "Martin", 
+        "emergency_contact_phone": "2-(862)813-6237", 
+        "emergency_contact_name": "Kathy Hunt", 
+        "parent": 31, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2002-08-13", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "2-(609)916-7441", 
+        "address": "03630 Hanover Center", 
+        "email": "khunts@nifty.com"
+    }
+},
+{
+    "pk": 33, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Sharon", 
+        "last_name": "Hernandez", 
+        "emergency_contact_phone": "5-(336)218-6409", 
+        "emergency_contact_name": "Louise Garza", 
+        "parent": 32, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2002-03-29", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "3-(716)879-7691", 
+        "address": "3531 Monterey Point", 
+        "email": "lgarzat@reuters.com"
+    }
+},
+{
+    "pk": 34, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Pamela", 
+        "last_name": "Smith", 
+        "emergency_contact_phone": "7-(632)712-2233", 
+        "emergency_contact_name": "Debra Phillips", 
+        "parent": 33, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2002-11-23", 
+        "period": 1, 
+        "allergies": "SALICYLIC ACID", 
+        "home_phone": "6-(545)554-1742", 
+        "address": "10252 Armistice Road", 
+        "email": "dphillipsu@cdbaby.com"
+    }
+},
+{
+    "pk": 35, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Robin", 
+        "last_name": "Morgan", 
+        "emergency_contact_phone": "7-(717)515-3657", 
+        "emergency_contact_name": "Emily Ortiz", 
+        "parent": 34, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2002-02-11", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "0-(587)662-8402", 
+        "address": "34 Heffernan Hill", 
+        "email": "eortizv@ezinearticles.com"
+    }
+},
+{
+    "pk": 36, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Benjamin", 
+        "last_name": "Robertson", 
+        "emergency_contact_phone": "4-(750)996-3563", 
+        "emergency_contact_name": "Jack Diaz", 
+        "parent": 35, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2007-08-13", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "1-(074)058-8941", 
+        "address": "8 Gerald Way", 
+        "email": "jdiazw@tinyurl.com"
+    }
+},
+{
+    "pk": 37, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Barbara", 
+        "last_name": "Smith", 
+        "emergency_contact_phone": "5-(788)824-3420", 
+        "emergency_contact_name": "Maria Weaver", 
+        "parent": 36, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2012-06-14", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "3-(704)865-6419", 
+        "address": "37 Ilene Terrace", 
+        "email": "mweaverx@homestead.com"
+    }
+},
+{
+    "pk": 38, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Ronald", 
+        "last_name": "Owens", 
+        "emergency_contact_phone": "9-(722)238-1567", 
+        "emergency_contact_name": "Bobby Wright", 
+        "parent": 37, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2001-02-01", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "9-(001)679-0231", 
+        "address": "0 Bashford Point", 
+        "email": "bwrighty@comsenz.com"
+    }
+},
+{
+    "pk": 39, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "John", 
+        "last_name": "Tucker", 
+        "emergency_contact_phone": "1-(983)573-5571", 
+        "emergency_contact_name": "Martin Bailey", 
+        "parent": 38, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2003-08-25", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "6-(117)322-5259", 
+        "address": "84940 Barnett Center", 
+        "email": "mbaileyz@nydailynews.com"
+    }
+},
+{
+    "pk": 40, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Debra", 
+        "last_name": "Morrison", 
+        "emergency_contact_phone": "8-(525)261-7041", 
+        "emergency_contact_name": "Amanda Gray", 
+        "parent": 39, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2006-12-25", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "3-(855)206-3771", 
+        "address": "02 Lotheville Parkway", 
+        "email": "agray10@myspace.com"
+    }
+},
+{
+    "pk": 41, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Arthur", 
+        "last_name": "Rice", 
+        "emergency_contact_phone": "6-(427)600-6053", 
+        "emergency_contact_name": "Edward Martin", 
+        "parent": 40, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2006-12-22", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "5-(157)975-0188", 
+        "address": "26 Rowland Road", 
+        "email": "emartin11@toplist.cz"
+    }
+},
+{
+    "pk": 42, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Henry", 
+        "last_name": "Johnson", 
+        "emergency_contact_phone": "2-(383)511-8774", 
+        "emergency_contact_name": "Martin Crawford", 
+        "parent": 41, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2008-12-20", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "3-(098)940-4554", 
+        "address": "5294 Sycamore Pass", 
+        "email": "mcrawford12@elegantthemes.com"
+    }
+},
+{
+    "pk": 43, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Roy", 
+        "last_name": "Daniels", 
+        "emergency_contact_phone": "4-(220)308-8559", 
+        "emergency_contact_name": "Brandon Hernandez", 
+        "parent": 42, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2006-05-06", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "0-(095)675-3213", 
+        "address": "3475 Westridge Plaza", 
+        "email": "bhernandez13@g.co"
+    }
+},
+{
+    "pk": 44, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Steven", 
+        "last_name": "Jackson", 
+        "emergency_contact_phone": "9-(869)022-7966", 
+        "emergency_contact_name": "Jason Peters", 
+        "parent": 43, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2011-02-08", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "1-(290)437-7252", 
+        "address": "84 Sherman Crossing", 
+        "email": "jpeters14@desdev.cn"
+    }
+},
+{
+    "pk": 45, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "George", 
+        "last_name": "Welch", 
+        "emergency_contact_phone": "5-(797)796-1745", 
+        "emergency_contact_name": "Ralph Hamilton", 
+        "parent": 44, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2008-02-29", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "9-(240)876-6889", 
+        "address": "5000 Warrior Pass", 
+        "email": "rhamilton15@csmonitor.com"
+    }
+},
+{
+    "pk": 46, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Howard", 
+        "last_name": "Simmons", 
+        "emergency_contact_phone": "4-(014)317-8596", 
+        "emergency_contact_name": "Sean Pierce", 
+        "parent": 45, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2002-07-06", 
+        "period": 1, 
+        "allergies": "Phenol", 
+        "home_phone": "4-(858)989-5448", 
+        "address": "803 Bluejay Way", 
+        "email": "spierce16@bravesites.com"
+    }
+},
+{
+    "pk": 47, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Barbara", 
+        "last_name": "Hanson", 
+        "emergency_contact_phone": "1-(356)334-1004", 
+        "emergency_contact_name": "Martha Morris", 
+        "parent": 46, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2008-11-13", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "4-(536)993-0328", 
+        "address": "92 Grasskamp Drive", 
+        "email": "mmorris17@techcrunch.com"
+    }
+},
+{
+    "pk": 48, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Paula", 
+        "last_name": "Baker", 
+        "emergency_contact_phone": "0-(918)364-5301", 
+        "emergency_contact_name": "Teresa Little", 
+        "parent": 47, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2004-10-06", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "4-(369)500-5510", 
+        "address": "35 Truax Alley", 
+        "email": "tlittle18@phpbb.com"
+    }
+},
+{
+    "pk": 49, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Kenneth", 
+        "last_name": "Allen", 
+        "emergency_contact_phone": "6-(859)795-5767", 
+        "emergency_contact_name": "Patrick Peters", 
+        "parent": 48, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2001-11-16", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "6-(607)791-6702", 
+        "address": "18 Bluestem Lane", 
+        "email": "ppeters19@earthlink.net"
+    }
+},
+{
+    "pk": 50, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Lillian", 
+        "last_name": "Williams", 
+        "emergency_contact_phone": "1-(341)350-6412", 
+        "emergency_contact_name": "Marilyn Jones", 
+        "parent": 49, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2007-08-31", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "6-(781)765-0953", 
+        "address": "157 Esch Circle", 
+        "email": "mjones1a@wired.com"
+    }
+},
+{
+    "pk": 51, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Henry", 
+        "last_name": "Price", 
+        "emergency_contact_phone": "1-(814)738-5898", 
+        "emergency_contact_name": "Charles Franklin", 
+        "parent": 50, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2013-08-26", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "4-(151)695-2534", 
+        "address": "56182 Artisan Parkway", 
+        "email": "cfranklin1b@businessinsider.com"
+    }
+},
+{
+    "pk": 52, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Sarah", 
+        "last_name": "Jackson", 
+        "emergency_contact_phone": "1-(669)706-9479", 
+        "emergency_contact_name": "Marilyn Woods", 
+        "parent": 51, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2005-06-28", 
+        "period": 1, 
+        "allergies": "Acebutolol Hydrochloride", 
+        "home_phone": "9-(664)460-8482", 
+        "address": "4 Sycamore Place", 
+        "email": "mwoods1c@cocolog-nifty.com"
+    }
+},
+{
+    "pk": 53, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Charles", 
+        "last_name": "Gonzales", 
+        "emergency_contact_phone": "7-(167)889-9825", 
+        "emergency_contact_name": "Wayne Reyes", 
+        "parent": 52, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2001-11-04", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "8-(618)395-0258", 
+        "address": "230 Chinook Terrace", 
+        "email": "wreyes1d@hc360.com"
+    }
+},
+{
+    "pk": 54, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Henry", 
+        "last_name": "Gibson", 
+        "emergency_contact_phone": "1-(161)962-5521", 
+        "emergency_contact_name": "Anthony Rice", 
+        "parent": 53, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2002-04-22", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "8-(090)709-3341", 
+        "address": "54 Lotheville Pass", 
+        "email": "arice1e@mtv.com"
+    }
+},
+{
+    "pk": 55, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Heather", 
+        "last_name": "Ferguson", 
+        "emergency_contact_phone": "3-(285)861-2130", 
+        "emergency_contact_name": "Laura Harris", 
+        "parent": 54, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2005-07-11", 
+        "period": 1, 
+        "allergies": "Alcohol", 
+        "home_phone": "7-(706)263-9602", 
+        "address": "32777 Cody Point", 
+        "email": "lharris1f@dailymotion.com"
+    }
+},
+{
+    "pk": 56, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Bonnie", 
+        "last_name": "Webb", 
+        "emergency_contact_phone": "7-(104)304-3734", 
+        "emergency_contact_name": "Deborah Peters", 
+        "parent": 55, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2003-06-02", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "9-(086)697-2326", 
+        "address": "02 Fair Oaks Hill", 
+        "email": "dpeters1g@pinterest.com"
+    }
+},
+{
+    "pk": 57, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Michelle", 
+        "last_name": "Parker", 
+        "emergency_contact_phone": "5-(056)634-6556", 
+        "emergency_contact_name": "Laura Fernandez", 
+        "parent": 56, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2010-04-08", 
+        "period": 1, 
+        "allergies": "Yellow Hornet hymenoptera venom Multidose", 
+        "home_phone": "4-(490)148-1386", 
+        "address": "63 Becker Alley", 
+        "email": "lfernandez1h@imdb.com"
+    }
+},
+{
+    "pk": 58, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Barbara", 
+        "last_name": "Fisher", 
+        "emergency_contact_phone": "2-(029)230-6211", 
+        "emergency_contact_name": "Louise Williamson", 
+        "parent": 57, 
+        "gender": "F", 
+        "school": 1, 
+        "birthdate": "2010-07-16", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "9-(592)782-4565", 
+        "address": "70 Buell Circle", 
+        "email": "lwilliamson1i@godaddy.com"
+    }
+},
+{
+    "pk": 59, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Frank", 
+        "last_name": "Gibson", 
+        "emergency_contact_phone": "9-(920)573-8300", 
+        "emergency_contact_name": "Chris Kelly", 
+        "parent": 58, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2004-05-29", 
+        "period": 1, 
+        "allergies": "Hydrocortisone", 
+        "home_phone": "4-(836)709-7552", 
+        "address": "85 Columbus Drive", 
+        "email": "ckelly1j@shinystat.com"
+    }
+},
+{
+    "pk": 60, 
+    "model": "school_components.student", 
+    "fields": {
+        "first_name": "Patrick", 
+        "last_name": "Stephens", 
+        "emergency_contact_phone": "0-(826)448-0007", 
+        "emergency_contact_name": "Eric Carroll", 
+        "parent": 59, 
+        "gender": "M", 
+        "school": 1, 
+        "birthdate": "2003-11-21", 
+        "period": 1, 
+        "allergies": "", 
+        "home_phone": "4-(462)966-1665", 
+        "address": "90665 Stephen Terrace", 
+        "email": "ecarroll1k@irs.gov"
+    }
+},
+{
+    "pk": 2, 
+    "model": "school_components.course", 
+    "fields": {
+        "school": 1, 
+        "description": "The aim of the group is to make students comfortable with incorporating Sikhism into their daily practices and strengthening their foundation in Guru Ji's teachings.", 
+        "age_requirement": 0, 
+        "period": 1, 
+        "department": 1, 
+        "name": "Sikh History"
+    }
+},
+{
+    "pk": 3, 
+    "model": "school_components.course", 
+    "fields": {
+        "school": 1, 
+        "description": "Using games, puzzles, and interactive activities, young students are taught: 35 Gurmukhi Letters, numbers, colors, Mool Mantar, basic Gurbani Shabads, simple Sikh Stories and basic level Gatka (Ages 5-6)", 
+        "age_requirement": 3, 
+        "period": 1, 
+        "department": 2, 
+        "name": "Little Khalsa Club"
+    }
+},
+{
+    "pk": 4, 
+    "model": "school_components.course", 
+    "fields": {
+        "school": 1, 
+        "description": "The objective of this class is to introduce, develop and strengthen the students' skills in reading, writing and speaking Punjabi.", 
+        "age_requirement": 5, 
+        "period": 1, 
+        "department": 4, 
+        "name": "Gurmukhi"
+    }
+},
+{
+    "pk": 5, 
+    "model": "school_components.course", 
+    "fields": {
+        "school": 1, 
+        "description": "The teaching of this traditional Sikh martial arts focuses on the development of the students' physical fitness and agility, mental clarity, discipline and respect of the art.", 
+        "age_requirement": 0, 
+        "period": 1, 
+        "department": 2, 
+        "name": "Gatka"
+    }
+},
+{
+    "pk": 6, 
+    "model": "school_components.course", 
+    "fields": {
+        "school": 1, 
+        "description": "Gobind Sarvar offers a Dastaar class in which students can learn any type of Dastaar style, such as Dumaala, Keski, or Patiala Shahi Dastaar etc.", 
+        "age_requirement": 0, 
+        "period": 1, 
+        "department": 2, 
+        "name": "Dastaar Tying"
+    }
+},
+{
+    "pk": 7, 
+    "model": "school_components.course", 
+    "fields": {
+        "school": 1, 
+        "description": "The Kirtan program at Gobind Sarvar is very unique in many aspects. our focus is not solely for students to learn how to play the harmonium and sing. Our goal is to connect the youth with Gurbani at a much deeper level through Kirtan. ", 
+        "age_requirement": 0, 
+        "period": 1, 
+        "department": 3, 
+        "name": "Kirtan"
+    }
+},
+{
+    "pk": 8, 
+    "model": "school_components.course", 
+    "fields": {
+        "school": 1, 
+        "description": "After completing Level 1 Kirtan at the minimum, students may begin learning the Sikh string instruments such as rabab, saranda, dilruba or sitar among many instruments.", 
+        "age_requirement": 0, 
+        "period": 1, 
+        "department": 3, 
+        "name": "String Instruments"
+    }
+},
+{
+    "pk": 1, 
+    "model": "school_components.prerequisite", 
+    "fields": {
+        "course": 8, 
+        "prereq": 7
+    }
+},
+{
+    "pk": 1, 
+    "model": "school_components.department", 
+    "fields": {
+        "school": 1, 
+        "description": "History"
+    }
+},
+{
+    "pk": 2, 
+    "model": "school_components.department", 
+    "fields": {
+        "school": 1, 
+        "description": "Activity"
+    }
+},
+{
+    "pk": 3, 
+    "model": "school_components.department", 
+    "fields": {
+        "school": 1, 
+        "description": "Music"
+    }
+},
+{
+    "pk": 4, 
+    "model": "school_components.department", 
+    "fields": {
+        "school": 1, 
+        "description": "Language"
+    }
+},
+{
+    "pk": 1, 
+    "model": "school_components.class", 
+    "fields": {
+        "school": 1, 
+        "description": "Level 1 section 1 Sikh History", 
+        "start_time": "17:00:00", 
+        "period": 1, 
+        "course": 2, 
+        "duration": "1.00", 
+        "section": "101", 
+        "room": "A"
+    }
+},
+{
+    "pk": 2, 
+    "model": "school_components.class", 
+    "fields": {
+        "school": 1, 
+        "description": "", 
+        "start_time": "22:37:30", 
+        "period": 1, 
+        "course": 2, 
+        "duration": "1.00", 
+        "section": "102", 
+        "room": ""
+    }
+},
+{
+    "pk": 3, 
+    "model": "school_components.class", 
+    "fields": {
+        "school": 1, 
+        "description": "", 
+        "start_time": "22:37:48", 
+        "period": 1, 
+        "course": 8, 
+        "duration": "1.00", 
+        "section": "101", 
+        "room": ""
+    }
+},
+{
+    "pk": 4, 
+    "model": "school_components.class", 
+    "fields": {
+        "school": 1, 
+        "description": "", 
+        "start_time": null, 
+        "period": 1, 
+        "course": 3, 
+        "duration": "1.00", 
+        "section": "001", 
+        "room": ""
+    }
+},
+{
+    "pk": 5, 
+    "model": "school_components.class", 
+    "fields": {
+        "school": 1, 
+        "description": "", 
+        "start_time": null, 
+        "period": 1, 
+        "course": 6, 
+        "duration": "1.00", 
+        "section": "101", 
+        "room": ""
+    }
+},
+{
+    "pk": 6, 
+    "model": "school_components.class", 
+    "fields": {
+        "school": 1, 
+        "description": "", 
+        "start_time": null, 
+        "period": 1, 
+        "course": 6, 
+        "duration": "1.00", 
+        "section": "201", 
+        "room": ""
+    }
+},
+{
+    "pk": 7, 
+    "model": "school_components.class", 
+    "fields": {
+        "school": 1, 
+        "description": "", 
+        "start_time": null, 
+        "period": 1, 
+        "course": 5, 
+        "duration": "1.00", 
+        "section": "300", 
+        "room": ""
+    }
+},
+{
+    "pk": 1, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_logentry", 
+        "name": "Can add log entry", 
+        "content_type": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_logentry", 
+        "name": "Can change log entry", 
+        "content_type": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_logentry", 
+        "name": "Can delete log entry", 
+        "content_type": 1
+    }
+},
+{
+    "pk": 4, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_permission", 
+        "name": "Can add permission", 
+        "content_type": 2
+    }
+},
+{
+    "pk": 5, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_permission", 
+        "name": "Can change permission", 
+        "content_type": 2
+    }
+},
+{
+    "pk": 6, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_permission", 
+        "name": "Can delete permission", 
+        "content_type": 2
+    }
+},
+{
+    "pk": 7, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_group", 
+        "name": "Can add group", 
+        "content_type": 3
+    }
+},
+{
+    "pk": 8, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_group", 
+        "name": "Can change group", 
+        "content_type": 3
+    }
+},
+{
+    "pk": 9, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_group", 
+        "name": "Can delete group", 
+        "content_type": 3
+    }
+},
+{
+    "pk": 10, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_user", 
+        "name": "Can add user", 
+        "content_type": 4
+    }
+},
+{
+    "pk": 11, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_user", 
+        "name": "Can change user", 
+        "content_type": 4
+    }
+},
+{
+    "pk": 12, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_user", 
+        "name": "Can delete user", 
+        "content_type": 4
+    }
+},
+{
+    "pk": 13, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_contenttype", 
+        "name": "Can add content type", 
+        "content_type": 5
+    }
+},
+{
+    "pk": 14, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_contenttype", 
+        "name": "Can change content type", 
+        "content_type": 5
+    }
+},
+{
+    "pk": 15, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_contenttype", 
+        "name": "Can delete content type", 
+        "content_type": 5
+    }
+},
+{
+    "pk": 16, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_session", 
+        "name": "Can add session", 
+        "content_type": 6
+    }
+},
+{
+    "pk": 17, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_session", 
+        "name": "Can change session", 
+        "content_type": 6
+    }
+},
+{
+    "pk": 18, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_session", 
+        "name": "Can delete session", 
+        "content_type": 6
+    }
+},
+{
+    "pk": 19, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_sentmessage", 
+        "name": "Can add sent message", 
+        "content_type": 7
+    }
+},
+{
+    "pk": 20, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_sentmessage", 
+        "name": "Can change sent message", 
+        "content_type": 7
+    }
+},
+{
+    "pk": 21, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_sentmessage", 
+        "name": "Can delete sent message", 
+        "content_type": 7
+    }
+},
+{
+    "pk": 22, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_email", 
+        "name": "Can add email", 
+        "content_type": 8
+    }
+},
+{
+    "pk": 23, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_email", 
+        "name": "Can change email", 
+        "content_type": 8
+    }
+},
+{
+    "pk": 24, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_email", 
+        "name": "Can delete email", 
+        "content_type": 8
+    }
+},
+{
+    "pk": 25, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_userprofile", 
+        "name": "Can add user profile", 
+        "content_type": 9
+    }
+},
+{
+    "pk": 26, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_userprofile", 
+        "name": "Can change user profile", 
+        "content_type": 9
+    }
+},
+{
+    "pk": 27, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_userprofile", 
+        "name": "Can delete user profile", 
+        "content_type": 9
+    }
+},
+{
+    "pk": 28, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teachingavailability", 
+        "name": "Can add teaching availability", 
+        "content_type": 10
+    }
+},
+{
+    "pk": 29, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teachingavailability", 
+        "name": "Can change teaching availability", 
+        "content_type": 10
+    }
+},
+{
+    "pk": 30, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teachingavailability", 
+        "name": "Can delete teaching availability", 
+        "content_type": 10
+    }
+},
+{
+    "pk": 31, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_teacheruser", 
+        "name": "Can add teacher user", 
+        "content_type": 11
+    }
+},
+{
+    "pk": 32, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_teacheruser", 
+        "name": "Can change teacher user", 
+        "content_type": 11
+    }
+},
+{
+    "pk": 33, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_teacheruser", 
+        "name": "Can delete teacher user", 
+        "content_type": 11
+    }
+},
+{
+    "pk": 34, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_parent", 
+        "name": "Can add parent", 
+        "content_type": 12
+    }
+},
+{
+    "pk": 35, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_parent", 
+        "name": "Can change parent", 
+        "content_type": 12
+    }
+},
+{
+    "pk": 36, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_parent", 
+        "name": "Can delete parent", 
+        "content_type": 12
+    }
+},
+{
+    "pk": 37, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_payment", 
+        "name": "Can add payment", 
+        "content_type": 13
+    }
+},
+{
+    "pk": 38, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_payment", 
+        "name": "Can change payment", 
+        "content_type": 13
+    }
+},
+{
+    "pk": 39, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_payment", 
+        "name": "Can delete payment", 
+        "content_type": 13
+    }
+},
+{
+    "pk": 40, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_student", 
+        "name": "Can add student", 
+        "content_type": 14
+    }
+},
+{
+    "pk": 41, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_student", 
+        "name": "Can change student", 
+        "content_type": 14
+    }
+},
+{
+    "pk": 42, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_student", 
+        "name": "Can delete student", 
+        "content_type": 14
+    }
+},
+{
+    "pk": 43, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_courseregistration", 
+        "name": "Can add course registration", 
+        "content_type": 15
+    }
+},
+{
+    "pk": 44, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_courseregistration", 
+        "name": "Can change course registration", 
+        "content_type": 15
+    }
+},
+{
+    "pk": 45, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_courseregistration", 
+        "name": "Can delete course registration", 
+        "content_type": 15
+    }
+},
+{
+    "pk": 46, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_course", 
+        "name": "Can add course", 
+        "content_type": 16
+    }
+},
+{
+    "pk": 47, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_course", 
+        "name": "Can change course", 
+        "content_type": 16
+    }
+},
+{
+    "pk": 48, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_course", 
+        "name": "Can delete course", 
+        "content_type": 16
+    }
+},
+{
+    "pk": 49, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_prerequisite", 
+        "name": "Can add prerequisite", 
+        "content_type": 17
+    }
+},
+{
+    "pk": 50, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_prerequisite", 
+        "name": "Can change prerequisite", 
+        "content_type": 17
+    }
+},
+{
+    "pk": 51, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_prerequisite", 
+        "name": "Can delete prerequisite", 
+        "content_type": 17
+    }
+},
+{
+    "pk": 52, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_department", 
+        "name": "Can add department", 
+        "content_type": 18
+    }
+},
+{
+    "pk": 53, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_department", 
+        "name": "Can change department", 
+        "content_type": 18
+    }
+},
+{
+    "pk": 54, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_department", 
+        "name": "Can delete department", 
+        "content_type": 18
+    }
+},
+{
+    "pk": 55, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_class", 
+        "name": "Can add class", 
+        "content_type": 19
+    }
+},
+{
+    "pk": 56, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_class", 
+        "name": "Can change class", 
+        "content_type": 19
+    }
+},
+{
+    "pk": 57, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_class", 
+        "name": "Can delete class", 
+        "content_type": 19
+    }
+},
+{
+    "pk": 58, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_classteacher", 
+        "name": "Can add class teacher", 
+        "content_type": 20
+    }
+},
+{
+    "pk": 59, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_classteacher", 
+        "name": "Can change class teacher", 
+        "content_type": 20
+    }
+},
+{
+    "pk": 60, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_classteacher", 
+        "name": "Can delete class teacher", 
+        "content_type": 20
+    }
+},
+{
+    "pk": 61, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_classregistration", 
+        "name": "Can add class registration", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 62, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_classregistration", 
+        "name": "Can change class registration", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 63, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_classregistration", 
+        "name": "Can delete class registration", 
+        "content_type": 21
+    }
+},
+{
+    "pk": 64, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_classattendance", 
+        "name": "Can add class attendance", 
+        "content_type": 22
+    }
+},
+{
+    "pk": 65, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_classattendance", 
+        "name": "Can change class attendance", 
+        "content_type": 22
+    }
+},
+{
+    "pk": 66, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_classattendance", 
+        "name": "Can delete class attendance", 
+        "content_type": 22
+    }
+},
+{
+    "pk": 67, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_assignment", 
+        "name": "Can add assignment", 
+        "content_type": 23
+    }
+},
+{
+    "pk": 68, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_assignment", 
+        "name": "Can change assignment", 
+        "content_type": 23
+    }
+},
+{
+    "pk": 69, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_assignment", 
+        "name": "Can delete assignment", 
+        "content_type": 23
+    }
+},
+{
+    "pk": 70, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_grading", 
+        "name": "Can add grading", 
+        "content_type": 24
+    }
+},
+{
+    "pk": 71, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_grading", 
+        "name": "Can change grading", 
+        "content_type": 24
+    }
+},
+{
+    "pk": 72, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_grading", 
+        "name": "Can delete grading", 
+        "content_type": 24
+    }
+},
+{
+    "pk": 73, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_school", 
+        "name": "Can add school", 
+        "content_type": 25
+    }
+},
+{
+    "pk": 74, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_school", 
+        "name": "Can change school", 
+        "content_type": 25
+    }
+},
+{
+    "pk": 75, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_school", 
+        "name": "Can delete school", 
+        "content_type": 25
+    }
+},
+{
+    "pk": 76, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_period", 
+        "name": "Can add period", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 77, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_period", 
+        "name": "Can change period", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 78, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_period", 
+        "name": "Can delete period", 
+        "content_type": 26
+    }
+},
+{
+    "pk": 79, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_notificationtype", 
+        "name": "Can add notification type", 
+        "content_type": 27
+    }
+},
+{
+    "pk": 80, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_notificationtype", 
+        "name": "Can change notification type", 
+        "content_type": 27
+    }
+},
+{
+    "pk": 81, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_notificationtype", 
+        "name": "Can delete notification type", 
+        "content_type": 27
+    }
+},
+{
+    "pk": 82, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_notification", 
+        "name": "Can add notification", 
+        "content_type": 28
+    }
+},
+{
+    "pk": 83, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_notification", 
+        "name": "Can change notification", 
+        "content_type": 28
+    }
+},
+{
+    "pk": 84, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_notification", 
+        "name": "Can delete notification", 
+        "content_type": 28
+    }
+},
+{
+    "pk": 85, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_chart", 
+        "name": "Can add chart", 
+        "content_type": 29
+    }
+},
+{
+    "pk": 86, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_chart", 
+        "name": "Can change chart", 
+        "content_type": 29
+    }
+},
+{
+    "pk": 87, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_chart", 
+        "name": "Can delete chart", 
+        "content_type": 29
+    }
+},
+{
+    "pk": 88, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_attendance", 
+        "name": "Can add attendance", 
+        "content_type": 30
+    }
+},
+{
+    "pk": 89, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_attendance", 
+        "name": "Can change attendance", 
+        "content_type": 30
+    }
+},
+{
+    "pk": 90, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_attendance", 
+        "name": "Can delete attendance", 
+        "content_type": 30
+    }
+},
+{
+    "pk": 91, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_grade", 
+        "name": "Can add grade", 
+        "content_type": 31
+    }
+},
+{
+    "pk": 92, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_grade", 
+        "name": "Can change grade", 
+        "content_type": 31
+    }
+},
+{
+    "pk": 93, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_grade", 
+        "name": "Can delete grade", 
+        "content_type": 31
+    }
+},
+{
+    "pk": 94, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "add_reports", 
+        "name": "Can add reports", 
+        "content_type": 32
+    }
+},
+{
+    "pk": 95, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "change_reports", 
+        "name": "Can change reports", 
+        "content_type": 32
+    }
+},
+{
+    "pk": 96, 
+    "model": "auth.permission", 
+    "fields": {
+        "codename": "delete_reports", 
+        "name": "Can delete reports", 
+        "content_type": 32
+    }
+},
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "admin", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2015-03-12T05:00:05.451Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$PuzOsR99QY4O$7IEgjy6UEVIqDytc6aEqWx6OIK17hAfMbLohbchybk0=", 
+        "email": "admin@example.com", 
+        "date_joined": "2015-03-11T07:51:15.972Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "", 
+        "first_name": "Holland", 
+        "last_name": "Opus", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2015-03-12T06:04:56.630Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "teacher", 
+        "email": "teacher@example.com", 
+        "date_joined": "2015-03-12T06:04:56.630Z"
+    }
+},
+{
+    "pk": 3, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "teacher", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2015-03-12T06:07:58.300Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$0ZJ7wYkf7ypb$pv5hE1p0dR2AgeHpWa+1vHUOit0YTV36hBbO/lC6cRw=", 
+        "email": "", 
+        "date_joined": "2015-03-12T06:07:58.300Z"
+    }
+},
+{
+    "pk": 1, 
+    "model": "accounts.userprofile", 
+    "fields": {
+        "phone": "555-1432", 
+        "school": 1, 
+        "role": "TEACHER", 
+        "user": 3, 
+        "period": 1
+    }
+},
+{
+    "pk": 1, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 2, 
+        "action_time": "2015-03-12T05:00:26.115Z", 
+        "object_repr": "School object", 
+        "object_id": "2", 
+        "change_message": "Changed phone and address.", 
+        "user": 1, 
+        "content_type": 25
+    }
+},
+{
+    "pk": 2, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:05:37.891Z", 
+        "object_repr": "Period object", 
+        "object_id": "1", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 26
+    }
+},
+{
+    "pk": 3, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:06:30.358Z", 
+        "object_repr": "2014-Summer", 
+        "object_id": "2", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 26
+    }
+},
+{
+    "pk": 4, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:06:53.888Z", 
+        "object_repr": "2014-WInter", 
+        "object_id": "3", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 26
+    }
+},
+{
+    "pk": 5, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 2, 
+        "action_time": "2015-03-12T05:07:06.625Z", 
+        "object_repr": "2015-WInter", 
+        "object_id": "1", 
+        "change_message": "Changed description.", 
+        "user": 1, 
+        "content_type": 26
+    }
+},
+{
+    "pk": 6, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 2, 
+        "action_time": "2015-03-12T05:07:16.020Z", 
+        "object_repr": "2014-Winter", 
+        "object_id": "3", 
+        "change_message": "Changed description.", 
+        "user": 1, 
+        "content_type": 26
+    }
+},
+{
+    "pk": 7, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 2, 
+        "action_time": "2015-03-12T05:07:21.355Z", 
+        "object_repr": "2015-Winter", 
+        "object_id": "1", 
+        "change_message": "Changed description.", 
+        "user": 1, 
+        "content_type": 26
+    }
+},
+{
+    "pk": 8, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:30:44.665Z", 
+        "object_repr": "Little Khalsa Club", 
+        "object_id": "3", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 16
+    }
+},
+{
+    "pk": 9, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 2, 
+        "action_time": "2015-03-12T05:37:19.280Z", 
+        "object_repr": "Sikh History 101", 
+        "object_id": "1", 
+        "change_message": "No fields changed.", 
+        "user": 1, 
+        "content_type": 19
+    }
+},
+{
+    "pk": 10, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:37:34.274Z", 
+        "object_repr": "Sikh History 102", 
+        "object_id": "2", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 19
+    }
+},
+{
+    "pk": 11, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:37:52.106Z", 
+        "object_repr": "String Instruments 101", 
+        "object_id": "3", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 19
+    }
+},
+{
+    "pk": 12, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:38:07.117Z", 
+        "object_repr": "Little Khalsa Club 001", 
+        "object_id": "4", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 19
+    }
+},
+{
+    "pk": 13, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:38:21.807Z", 
+        "object_repr": "Dastaar Tying 101", 
+        "object_id": "5", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 19
+    }
+},
+{
+    "pk": 14, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:38:34.886Z", 
+        "object_repr": "Dastaar Tying 201", 
+        "object_id": "6", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 19
+    }
+},
+{
+    "pk": 15, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T05:38:55.060Z", 
+        "object_repr": "Gatka 300", 
+        "object_id": "7", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 19
+    }
+},
+{
+    "pk": 16, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T06:07:58.362Z", 
+        "object_repr": "teacher", 
+        "object_id": "3", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 4
+    }
+},
+{
+    "pk": 17, 
+    "model": "admin.logentry", 
+    "fields": {
+        "action_flag": 1, 
+        "action_time": "2015-03-12T06:52:32.263Z", 
+        "object_repr": "teacher", 
+        "object_id": "1", 
+        "change_message": "", 
+        "user": 1, 
+        "content_type": 9
+    }
+}
+]

@@ -28,7 +28,7 @@ class Prerequisite(models.Model):
 
 class Department(models.Model):
 	school = models.ForeignKey('School')
-	description = models.CharField(max_length=250)
+	description = models.CharField(max_length=500)
 
 	def __unicode__(self):
 		return self.description

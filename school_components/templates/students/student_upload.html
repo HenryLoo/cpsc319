@@ -40,7 +40,7 @@
 	<form role="form" action="{%url 'school:studentupload' %}" method="post" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="form-group">
-		    <input type="file" id="exampleInputFile">
+		    <input type="file" id="exampleInputFile" name="file">
 		    <br>
 		    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#student-list-csv">
 		  	Submit

@@ -33,7 +33,7 @@ $('#edit-parent-btn').click(function() {
                     </div>
 
 
-<div class="col-md-3 parent-list">
+<div class="col-md-3 school-list">
 
 	<div class="filters-holder">
 		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
@@ -51,7 +51,7 @@ $('#edit-parent-btn').click(function() {
 
 <br><br>
 	{% if parent_list %}
-	<ul class="list-unstyled parent-list">
+	<ul class="list-unstyled school-list">
 		{% for parent in parent_list %}
 	  		<li>
 	  		<a href="{% url 'school:parentlist' parent.id %}">
@@ -67,7 +67,7 @@ $('#edit-parent-btn').click(function() {
 
 </div>
 
-<div class="col-md-9 parent-info">
+<div class="col-md-9 school-info">
 	{% if parent %}
 	<span>
 		<h3> Parent Info </h3>

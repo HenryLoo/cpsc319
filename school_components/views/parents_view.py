@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 
 
 def parent_list(request, parent_id=None):
-	parent_list = Parent.objects.all()
+	parent_list = Parent.objects.all().order_by('last_name')
 	context_dictionary = {'parent_list': parent_list}
 
 	if parent_id:

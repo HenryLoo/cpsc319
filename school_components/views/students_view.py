@@ -14,7 +14,7 @@ import csv
 
 
 def student_list(request, student_id=None):
-	student_list = Student.objects.all()
+	student_list = Student.objects.all().order_by('last_name')
 	context_dictionary = {'student_list': student_list}
 
 	if student_id:
@@ -61,10 +61,10 @@ def student_upload(request):
 		context_dictionary['message'] = 'These students were created.'
 		context_dictionary['student_list'] = Student.objects.filter(id__lte=20)
 
-		# form = StudentCSVForm(request.POST, request.FILES)
-		# student_list = SchoolUtils.parse_csv(request.FILES['file'])
-		# context_dictionary['message'] = 'These students were created.'
-		# context_dictionary['student_list'] = student_list
+		form = StudentCSVForm(request.POST, request.FILES)
+		student_list = SchoolUtils.parse_csv(request.FILES['file'])
+		context_dictionary['message'] = 'These students were created.'
+		context_dictionary['student_list'] = student_list
 
 	return render_to_response('students/student_upload.html',
 		context_dictionary, RequestContext(request))

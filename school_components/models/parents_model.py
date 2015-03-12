@@ -3,7 +3,6 @@ from django.db import models
 class Parent(models.Model):
 	first_name = models.CharField(max_length=50)
 	last_name = models.CharField(max_length=50)
-	home_phone = models.CharField(max_length=20)
 	cell_phone = models.CharField(max_length=20)
 	email = models.EmailField()
 

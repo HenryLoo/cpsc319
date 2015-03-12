@@ -58,7 +58,7 @@ $('#edit-admin-btn').click(function() {
 		{% for admin in admin_list %}
 	  		<li>
 	  		<a href="{% url 'account:view_admins' admin.id %}">
-	  			 {{ admin.user_info.first_name }} {{ admin.user_info.last_name }}
+	  			 {{ admin.user.first_name }} {{ admin.user.last_name }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}
@@ -84,23 +84,23 @@ $('#edit-admin-btn').click(function() {
 		<tr> 
 			<td> Name: </td>
 			<td> 
-				{{ admin.user_info.first_name}} 
-				{{ admin.user_info.last_name }}
+				{{ admin.user.first_name}} 
+				{{ admin.user.last_name }}
 			</td>
 		</tr>
 		<tr> 
 			<td> Type: </td>
 			<td> 
-				{{ admin.user_info.role.role}} 
+				{{ admin.role}} 
 			</td>
 		</tr>
 		<tr> 
 			<td> Username: </td>
-			<td> {{ admin.user_info.username }} </td>
+			<td> {{ admin.user.username }} </td>
 		</tr>
 		<tr> 
 			<td> Email: </td>
-			<td> {{ admin.user_info.email }} </td>
+			<td> {{ admin.user.email }} </td>
 		</tr>
 		<tr> 
 			<td> Phone number: </td>
@@ -108,7 +108,7 @@ $('#edit-admin-btn').click(function() {
 		</tr>
 		<tr> 
 			<td> School branch: </td>
-			<td> {{ admin.branch_location }} </td>
+			<td> {{ admin.school.title }} </td>
 		</tr>
 
 	</table>

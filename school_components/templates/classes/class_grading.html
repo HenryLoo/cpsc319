@@ -35,24 +35,28 @@
 </div>
 </div>
 
-        <div class="col-md-8">
+<div class="col-md-8">
 
-            <!-- Tab panes -->
-<div class="tab-pane fade in" id="Grading">
-        <div class='col-md-4'>
-        <div class="list-group">
-  <a href="#" class="list-group-item">Assignment 1</a>
-  <a href="#" class="list-group-item">Assignment 2</a>
-  <a href="#" class="list-group-item active">Assignment 3</a>
-  <a href="#" class="list-group-item">Assignment 4</a>
-  <a href="#" class="list-group-item">Assignment 5</a>
-  <a href="#" class="list-group-item"><span class="glyphicon glyphicon-plus"></span> Add Assignment</a>
+  <div class='col-md-4'>
+
+
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    Assignment
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Assignment 1</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Assignment 2</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Assignment 3</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-plus"></span> Add Assignment</a></a></li>
+  </ul>
 </div>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <h4>Assignment Grades <span class="glyphicon glyphicon-plus pull-right">
-                </span></h4>
+
+</div>
+
+<div class="col-md-12">
+        <h4>Assignment Grades</h4>
         <div class="table-responsive">
 
                 
@@ -65,8 +69,6 @@
                    <th>Total</th>
                      <th>Grade</th>
                      <th>Comments</th>
-                      <th>Edit</th>
-                       <th>Delete</th>
                    </thead>
     <tbody>
     
@@ -84,8 +86,6 @@
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
     </div>
     </td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
         <tr>
     <td><input type="checkbox" class="checkthis" /></td>
@@ -101,9 +101,6 @@
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
     </div>
     </td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-    </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
     <td>Rosie</td>
@@ -114,8 +111,6 @@
     </div>
     </td>
     <td>3 Days Late</td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
@@ -131,8 +126,6 @@
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
     </div>
     </td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
@@ -148,8 +141,6 @@
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
     </div>
     </td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
@@ -165,8 +156,6 @@
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
     </div>
     </td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
@@ -182,8 +171,6 @@
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
     </div>
     </td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
-    <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
     </tr>
     </tbody>
         

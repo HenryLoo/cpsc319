@@ -53,7 +53,7 @@ $('#edit-course-btn').click(function() {
 		{% for school in school_list %}
 	  		<li>
 	  		<a href="{% url 'school:schoollist' school.id %}">
-	  			 {{ school.name }}
+	  			 {{ school.title }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}
@@ -89,8 +89,6 @@ $('#edit-course-btn').click(function() {
 			<td> {{ school.phone }} </td>
 		</tr>
 	</table>
-
-	<a href="{% url 'school:courseregistration' course.id %}"> Edit School </a>
 
 	{% else %}
 		<div class="content alert alert-info" role="alert">

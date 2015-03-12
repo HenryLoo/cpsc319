@@ -2,22 +2,12 @@
 
 {% block javascript_block %}
 <script>
-    // disable all tabs but the first one 
-    // if a class is not selected
-    // TODO: think about this some more..
-
-    // sets current tab to active
-    $("ul.nav-tabs>li").each(function(k, v) { 
-        var tab = $(v);
-        if (tab.text().includes(
-                {% block current_tab %}
-                {% endblock %}
-            )) {
-            tab.addClass("active");
-        } else {
-            tab.removeClass("active");
-        }   
-    }); 
+    // date picker for the form 
+    $(".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1980:" + new Date().getFullYear(),
+    });
 
     {% block hacky_script %}
     {% endblock hacky_script %}

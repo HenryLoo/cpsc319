@@ -20,17 +20,17 @@ $('#edit-course-btn').click(function() {
 </ul>
 
   <div class="row">   
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Periods<small> List</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Periods > List</a>
-                            </li>
-                        </ol>
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Periods<small> List</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Periods > List</a>
+            </li>
+        </ol>
 
-                    </div>
+    </div>
 
 
 <div class="col-md-3 school-list">
@@ -53,7 +53,7 @@ $('#edit-course-btn').click(function() {
 		{% for period in period_list %}
 	  		<li>
 	  		<a href="{% url 'school:periodlist' period.id %}">
-	  			 {{ period.name }}
+	  			 {{ period.description }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}
@@ -95,8 +95,6 @@ $('#edit-course-btn').click(function() {
 			<td> {{ period.school }} </td>
 		</tr>
 	</table>
-
-	<a href="{% url 'school:period' period.id %}"> Edit Period </a>
 
 	{% else %}
 		<div class="content alert alert-info" role="alert">

@@ -1,22 +1,29 @@
 from django.db import models
 from datetime import datetime, date
 from school_components.models.parents_model import Parent
+from school_components.models.school_model import School
+from school_components.models.period_model import Period
 
 # used to create students from CSV
-# what to do if parent is not in the system already?
-# TODO: parent
 class StudentManager(models.Manager):
 	def create_student(self, first_name, last_name, gender, birthdate, home_phone,
-		address, email, allergies, emergency_contact_name, emergency_contact_phone):
+		address, email, allergies, emergency_contact_name, emergency_contact_phone, parent_first_name,
+		parent_last_name, parent_cell_phone, parent_email):
 
 		bd = datetime.strptime(birthdate, "%Y-%m-%d").date()
-		p = Parent.objects.get(pk=1)
+
+		p = Parent(first_name=parent_first_name, last_name=parent_last_name,
+				cell_phone=parent_cell_phone, email=parent_email)
+		p.save()
+
+		s = School.objects.get(pk=1)
+		per = Period.objects.get(pk=1)
 
 
 		student = self.create(first_name=first_name, last_name=last_name, gender=gender, 
 			birthdate=bd, home_phone=home_phone, address=address, email=email, 
 			allergies=allergies, emergency_contact_name=emergency_contact_name, 
-			emergency_contact_phone=emergency_contact_phone, parent=p)
+			emergency_contact_phone=emergency_contact_phone, parent=p, school=s, period=per)
 
 		return student
 
@@ -48,13 +55,3 @@ class Student(models.Model):
 class StudentCSVWriter(object):
 	def write(self, value):
 		return value
-
-class CourseRegistration(models.Model):
-    course = models.ForeignKey('Course')
-    student = models.ForeignKey('Student')
-    school = models.ForeignKey('School')
-    period = models.ForeignKey('Period')
-    date = models.DateTimeField(auto_now_add=True)
-        
-    class Meta:
-        app_label = 'school_components'

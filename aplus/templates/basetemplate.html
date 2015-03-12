@@ -186,10 +186,13 @@
                         <a href="{% url 'statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
                     </li>
                     <li>
+                        <a href="{% url 'school:courseregister' %}"><i class="fa fa-smile-o"></i>  Registration</a>
+                    </li>
+                    <li>
                         <a href="{% url 'school:studentlist' %}"><i class="fa fa-child"></i>  Students</a>
                     </li>
                     <li>
-                        <a href="{% url 'account:view_admins' %}"><i class="fa fa-user"></i>  Admin</a>
+                        <a href="{% url 'account:view_admins' %}"><i class="fa fa-user"></i>  Administrators</a>
                     </li>
                     <li>
                         <a href="{% url 'account:view_teachers' %}"><i class="fa fa-users"></i>  Teachers</a>
@@ -254,7 +257,10 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="{% static '/static/js/sb-admin-2.js' %}"></script>
-    
+
+    <!-- jQuery UI -->
+    <script src="{% static '/static/js/jquery-ui.min.js'%}"></script>
+
     {% block javascript_block %}
     {% endblock %}
 

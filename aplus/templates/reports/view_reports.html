@@ -18,54 +18,201 @@
 <div class="row">
 
              <div class="col-lg-4">
-                         <a href="#" class="btn btn-default" style="width: 280px; height: 200px;">
+                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#exportstudentdatabase-modal" style="width: 280px; height: 200px;">
                         
                                 <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
                                 <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Student-Phone</i>
-                        </a>
-                </div>
+                        </button>
+            </div>
             
              <div class="col-lg-4">
-                         <a href="#" class="btn btn-default" style="width: 280px; height: 200px;">
+                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#exportattendancedatabase-modal" style="width: 280px; height: 200px;">
                         
                                 <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
                                 <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Attendance</i>
-                        </a>
-                </div>
+                        </button>
+            </div>
              
-              <div class="col-lg-4">
+            <div class="col-lg-4">
                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#exportdatabase-modal" style="width: 280px; height: 200px;">
                         
                                 <i class="glyphicon glyphicon-export" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
                                 <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Export from database</i>
                         </button>
             </div>
-             
-      </div>  
+              
 </div>
 
 <!-- Multiple students Modal -->
+<div class="modal fade" id="exportstudentdatabase-modal" tabindex="-1" role="dialog" 
+aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Print Student-Phone</h4>
+            </div>
+            <div class="modal-body">
+                <div class="dropdown">
+                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption1" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                        <option value="Blnak">Select Class</option>
+                        <option value="Tabla 201">Tabla 201</option>
+                        <option value="Sikh History 203">Sikh History 203</option>
+                        <option value="Sikh History 105">Sikh History 105</option>
+                        <option value="Gurmukhi/Santhiya 250">Gurmukhi/Santhiya 250</option>
+                        <option value="Tabla 101">Tabla 101</option>
+                        <option value="...">...</option>
+                     </select>
+                </div>
+                
+                <br>
+                <table id="attendancetable" class="table table-bordred table-striped">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Phone Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jack</td>
+                            <td>123-456-7890</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>Sarah</td>
+                            <td>012-345-6789</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Rosie</td>
+                            <td>098-765-4321</td>
+                        </tr>
+                    </tbody>
+            
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" onclick="window.close()" class="btn btn-primary">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exportattendancedatabase-modal" tabindex="-1" role="dialog" 
+aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Print Attendance</h4>
+            </div>
+            <div class="modal-body">
+                <div class='col-md-4'>
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <div class='input-group date' id='datetimepicker1'>
+                                <input type='text' class="form-control" placeholder="Start Date yyyy/mm/dd"> to  <input type='text' class="form-control" placeholder="End Date yyyy/mm/dd">
+                            </div>
+                        <script type="text/javascript">
+                            $(function () {
+                                            $('#datetimepicker1').datetimepicker();
+                                          });
+                         </script>
+                        </div>
+                    </form>
+                </div>
+                
+                <br>
+                <div class="dropdown">
+                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption2" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                        <option value="Blnak">Select Class</option>
+                        <option value="Tabla 201">Tabla 201</option>
+                        <option value="Sikh History 203">Sikh History 203</option>
+                        <option value="Sikh History 105">Sikh History 105</option>
+                        <option value="Gurmukhi/Santhiya 250">Gurmukhi/Santhiya 250</option>
+                        <option value="Tabla 101">Tabla 101</option>
+                        <option value="...">...</option>
+                     </select>
+                </div>
+
+                <div class="form-group">
+                            <br>
+                            <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+                
+                <br>
+                <table id="studenttable" class="table table-bordred table-striped">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Thu(Jan 01, 2015)</th>
+                            <th>Tue(Jan 06, 2015)</th>
+                            <th>Thu(Jan 08, 2015)</th>
+                            <th>Tue(Jan 13, 2015)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jack</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Sarah</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Rosie</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+            
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" onclick="window.close()" class="btn btn-primary">Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <div class="modal fade" id="exportdatabase-modal" tabindex="-1" role="dialog" 
 aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Export Database</h4>
-      </div>
-      <div class="modal-body">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Export Database</h4>
+            </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <div class="input-group input-group-lg">
+                    <input type="text" class="form-control" placeholder="Report Title" aria-describedby="sizing-addon1">
+                </div>
+            </div>
 
-        <div class="form-group">
-                    <div class="input-group input-group-lg">
-                        <input type="text" class="form-control" placeholder="Report Title" aria-describedby="sizing-addon1">
-                    </div>
-        </div>
-
-        <div class="form-group">
-                    <div class="btn-group">
-                        <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+            <div class="form-group">
+                <div class="btn-group">
+                    <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
                             Detabase Set <span class="caret"></span>
-                        </button>
+                    </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">Students</a>
@@ -86,30 +233,30 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                                 <a role="menuitem" tabindex="-1" href="#">...</a>
                             </li>
                         </ul>
-                    </div> 
-        </div>
-
-        <div class="form-group">
-            <div class="filters-holder">
-                <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" aria-expanded="false" aria-controls="collapseExample"> Filters </a>
-                <div class="collapse" id="filters">
-                    <div>
-                        <input type="checkbox"> <label>Name</label> <input>
-                        <br>
-                        <input type="checkbox"> <label>Class</label> <input>
-                        <br>
-                        <input type="checkbox"> <label>Year</label> <input>
-                        <br>
-                    </div>
-                </div>
-            </div>  
-        </div>
+                </div> 
+            </div>
             
-        <div class="form-group">
-                    <div class="btn-group">
-                        <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                            File Type <span class="caret"></span>
-                        </button>
+            <div class="form-group">
+                <div class="filters-holder">
+                    <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" aria-expanded="false" aria-controls="collapseExample"> Filters </a>
+                    <div class="collapse" id="filters">
+                        <div>
+                            <input type="checkbox"> <label>Name</label> <input>
+                            <br>
+                            <input type="checkbox"> <label>Class</label> <input>
+                            <br>
+                            <input type="checkbox"> <label>Year</label> <input>
+                            <br>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+            
+            <div class="form-group">
+                <div class="btn-group">
+                    <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                    File Type <span class="caret"></span>
+                    </button>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#">PDF</a>
@@ -118,16 +265,18 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                                 <a role="menuitem" tabindex="-1" href="#">CSV</a>
                             </li>
                         </ul>
-                    </div> 
+                </div> 
+            </div>
+
         </div>
 
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" onclick="window.close()()" class="btn btn-primary">Export</button>
+        </div>
+        </div>
     </div>
+</div>
 
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" onclick="window.close()()" class="btn btn-primary">Export</button>
-      </div>
-    </div>
-  </div>
 
 {% endblock %}

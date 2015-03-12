@@ -9,19 +9,6 @@
       yearRange: "1980:" + new Date().getFullYear(),
     });
 
-    // sets current tab to active
-    $("ul.nav-tabs>li").each(function(k, v) { 
-        var tab = $(v);
-        if (tab.text().includes(
-                {% block current_tab %}
-                {% endblock %}
-            )) {
-            tab.addClass("active");
-        } else {
-            tab.removeClass("active");
-        }   
-    }); 
-
     {% block hacky_script %}
     {% endblock hacky_script %}
 

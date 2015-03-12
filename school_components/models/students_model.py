@@ -3,8 +3,6 @@ from datetime import datetime, date
 from school_components.models.parents_model import Parent
 
 # used to create students from CSV
-# what to do if parent is not in the system already?
-# TODO: parent
 class StudentManager(models.Manager):
 	def create_student(self, first_name, last_name, gender, birthdate, home_phone,
 		address, email, allergies, emergency_contact_name, emergency_contact_phone):
@@ -48,13 +46,3 @@ class Student(models.Model):
 class StudentCSVWriter(object):
 	def write(self, value):
 		return value
-
-class CourseRegistration(models.Model):
-    course = models.ForeignKey('Course')
-    student = models.ForeignKey('Student')
-    school = models.ForeignKey('School')
-    period = models.ForeignKey('Period')
-    date = models.DateTimeField(auto_now_add=True)
-        
-    class Meta:
-        app_label = 'school_components'

@@ -1,0 +1,41 @@
+{% extends "basetemplate.html" %}
+
+{% block head %}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'main-style.css' %}" />
+{% endblock %}
+
+{% block javascript_block %}
+<script>
+    $('#search-student-reg').click(function(e) {
+        $('#gender').attr('checked', true);
+        $('#street-address').val('5211 Pender Street');
+        $('#city').val('Surrey');
+        $('#postcode').val('V7G P01');
+        $('#birthdate').val('2013-12-01');
+        $('#phone').val('(604) 555-9133');
+        $('#email').val('123@example.com');
+
+        $('#parent-first-name').val('Michael');
+        $('#parent-last-name').val('Smith');
+        $('#parent-phone').val('(778) 555-9877');
+        $('#parent-email').val('msmith@gmail.com')
+
+        $('#emergency-first-name').val('Angela');
+        $('#emergency-last-name').val('Miller');
+        $('#relation').val('Aunt');
+        $('#emergency-cell-phone').val('(778) 555-0212')
+        $('#emergency-home-phone').val('(604) 555-9424')
+
+        $('#student-levels-div').removeClass('hidden')
+    });
+</script>
+
+{% endblock javascript_block%}
+
+
+
+{% block body %}
+    {% block register_content %}
+    {% endblock register_content %}
+{% endblock body %}

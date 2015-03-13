@@ -1,5 +1,5 @@
 from django.views import generic
-from school_components.models.students_model import Student, StudentCSVWriter, CourseRegistration
+from school_components.models.students_model import Student, StudentCSVWriter
 from school_components.models.parents_model import Parent
 from school_components.models.courses_model import *
 from school_components.forms.students_form import StudentForm, StudentCSVForm, StudentFormSet
@@ -14,7 +14,7 @@ import csv
 
 
 def student_list(request, student_id=None):
-	student_list = Student.objects.all()
+	student_list = Student.objects.all().order_by('last_name')
 	context_dictionary = {'student_list': student_list}
 
 	if student_id:
@@ -61,10 +61,10 @@ def student_upload(request):
 		context_dictionary['message'] = 'These students were created.'
 		context_dictionary['student_list'] = Student.objects.filter(id__lte=20)
 
-		# form = StudentCSVForm(request.POST, request.FILES)
-		# student_list = SchoolUtils.parse_csv(request.FILES['file'])
-		# context_dictionary['message'] = 'These students were created.'
-		# context_dictionary['student_list'] = student_list
+		form = StudentCSVForm(request.POST, request.FILES)
+		student_list = SchoolUtils.parse_csv(request.FILES['file'])
+		context_dictionary['message'] = 'These students were created.'
+		context_dictionary['student_list'] = student_list
 
 	return render_to_response('students/student_upload.html',
 		context_dictionary, RequestContext(request))
@@ -87,20 +87,3 @@ def student_export(request):
 		return render_to_response('students/student_export.html',
 			context_dictionary,
 			RequestContext(request))
-
-def course_registration(request, course_id=None):
-	if course_id:
-		context_dictionary = { 'course': Course.objects.get(pk=course_id),
-		'reg_list': CourseRegistration.objects.filter(course=course_id) }
-		return render_to_response("students/course_reg.html",
-			context_dictionary,
-			RequestContext(request))
-
-
-	context_dictionary = {
-		'course_list': Course.objects.all()
-	}
-
-	return render_to_response("students/course_registration.html",
-		context_dictionary,
-		RequestContext(request))

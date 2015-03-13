@@ -186,6 +186,9 @@
                         <a href="{% url 'dashboard:statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
                     </li>
                     <li>
+                        <a href="{% url 'school:courseregister' %}"><i class="fa fa-smile-o"></i>  Registration</a>
+                    </li>
+                    <li>
                         <a href="{% url 'school:studentlist' %}"><i class="fa fa-child"></i>  Students</a>
                     </li>
                     <li>
@@ -254,7 +257,10 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="{% static '/static/js/sb-admin-2.js' %}"></script>
-    
+
+    <!-- jQuery UI -->
+    <script src="{% static '/static/js/jquery-ui.min.js'%}"></script>
+
     {% block javascript_block %}
     {% endblock %}
 

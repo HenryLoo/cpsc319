@@ -37,7 +37,7 @@ class TeachingAvailability(models.Model):
     friday = models.BooleanField()
 
     def __unicode__(self):
-        return self.teacher_info.user_info.first_name + " " + self.teacher_info.user_info.last_name + "availability"
+        return "availability"
     
 class TeacherUser(models.Model):
     user = models.ForeignKey(UserProfile)
@@ -46,5 +46,5 @@ class TeacherUser(models.Model):
     #classes has a many-to-many relation with this
 
     def __unicode__(self):
-        return self.user_info.first_name + " " + self.user_info.last_name + "role"
+        return self.user.user.first_name + " " + self.user.user.last_name + "role"
 

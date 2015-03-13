@@ -58,7 +58,7 @@ $('#edit-teacher-btn').click(function() {
 		{% for teacher in teacher_list %}
 	  		<li>
 	  		<a href="{% url 'account:view_teachers' teacher.id %}">
-	  			 {{ teacher.user_info.first_name }} {{ teacher.user_info.last_name }}
+	  			{{ teacher.user.user.first_name }} {{ teacher.user.user.last_name }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}
@@ -84,25 +84,25 @@ $('#edit-teacher-btn').click(function() {
 		<tr> 
 			<td> Name: </td>
 			<td> 
-				{{ teacher.user_info.first_name}} 
-				{{ teacher.user_info.last_name }}
+				{{ teacher.user.user.first_name}} 
+				{{ teacher.user.user.last_name }}
 			</td>
 		</tr>
 		<tr> 
 			<td> Username: </td>
-			<td> {{ teacher.user_info.username }} </td>
+			<td> {{ teacher.user.user.username }} </td>
 		</tr>
 		<tr> 
 			<td> Email: </td>
-			<td> {{ teacher.user_info.email }} </td>
+			<td> {{ teacher.user.user.email }} </td>
 		</tr>
 		<tr> 
 			<td> Phone number: </td>
-			<td> {{ teacher.phone }} </td>
+			<td> {{ teacher.user.phone }} </td>
 		</tr>
 		<tr> 
 			<td> School branch: </td>
-			<td> {{ teacher.branch_location }} </td>
+			<td> {{ teacher.user.school.title }} </td>
 		</tr>
 		<tr> 
 			<td> Skill level: </td>

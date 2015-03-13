@@ -2,6 +2,15 @@ from django.conf.urls import patterns, url
 from school_components import views
 
 urlpatterns = patterns('',
+	# registration
+	url(r'^register/$', 
+		'school_components.views.register_view.course_register', 
+		name='courseregister'),
+	url(r'^registerlkc/$', 
+		'school_components.views.register_view.lkccourse_register', 
+		name='lkccourseregister'),
+
+
 	# students
 	url(r'^students/$', 
 		'school_components.views.students_view.student_list', 
@@ -21,12 +30,6 @@ urlpatterns = patterns('',
 	url(r'^students/export/$', 
 		'school_components.views.students_view.student_export', 
 		name='studentexport'),
-	url(r'^students/register/$',
-		'school_components.views.students_view.course_registration',
-		name='courseregistration'),
-    url(r'^students/register/(?P<course_id>\d+)/$', 
-		'school_components.views.students_view.course_registration', 
-		name='courseregistration'),   
     
 	# parents
 	url(r'^parents/$', 
@@ -41,6 +44,11 @@ urlpatterns = patterns('',
 	url(r'^parents/form/$', 
 		'school_components.views.parents_view.parent_form', 
 		name='parentform'),
+
+	# payment
+	url(r'^payment/(?P<parent_id>\d+)/$', 
+		'school_components.views.parents_view.payment_create', 
+		name='paymentcreate'),
 
 	# courses
 	url(r'^courses/$', 
@@ -100,7 +108,7 @@ urlpatterns = patterns('',
         name='periodlist'),
     url(r'^periods/(?P<period_id>\d+)/$',
         'school_components.views.periods_view.period_list',
-        name='schoollist'),
+        name='periodlist'),
     url(r'^periods/create/$',
         'school_components.views.periods_view.period_create',
         name='periodcreate'),

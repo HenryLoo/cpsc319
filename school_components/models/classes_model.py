@@ -7,12 +7,27 @@ class Class(models.Model):
 	period = models.ForeignKey('Period')
 	section = models.CharField(max_length=50, blank=True)
 	description = models.CharField(max_length=250, blank=True)
-	start_time = models.TimeField(null=True, blank=True)
-	duration = models.DecimalField(max_digits=5, decimal_places=2, default=1)
+	spots_number = models.IntegerField(blank = True, null = True)
 	room = models.CharField(max_length=50, blank=True)
 
 	def __unicode__(self):
 		return self.course.name + ' ' + self.section # + self.period
+
+	class Meta:
+		app_label = 'school_components'
+
+class ClassSchedule(models.Model):
+	sch_class = models.ForeignKey('Class')
+	weekday = models.CharField(max_length = 12, choices =
+                            (
+                             ('Mon', 'Monday'),
+                             ('Tue', 'Tuesday'),
+                             ('Wed', 'Wednesday'),
+                             ('Thu', 'Thursday'),
+                             ('Fri', 'Friday')
+                             ))
+	start_time = models.TimeField(null=True, blank=True)
+	end_time = models.TimeField(null=True, blank=True)
 
 	class Meta:
 		app_label = 'school_components'
@@ -33,6 +48,8 @@ class ClassRegistration(models.Model):
 	student = models.ForeignKey('Student', related_name='enrolled_student')
 	school = models.ForeignKey('School')
 	period = models.ForeignKey('Period')
+	registration_status = models.BooleanField()
+	comments = models.CharField(max_length=500)
 
 	class Meta:
 		app_label = 'school_components'
@@ -46,6 +63,7 @@ class ClassAttendance(models.Model):
 	period = models.ForeignKey('Period')
 	attendance = models.CharField(max_length=5, blank=True)
 	date = models.TimeField(null=True, blank=True)
+	comments = models.CharField(max_length=500)
 
 	class Meta:
 		app_label = 'school_components'
@@ -56,8 +74,11 @@ class Assignment(models.Model):
 	period = models.ForeignKey('Period')
 	title = models.CharField(max_length=100, blank=True)
 	date = models.TimeField(null=True, blank=True)
+
 	#change - how to store pdf
 	content = models.CharField(max_length=10, blank=True)
+	grade_weight = models.IntegerField(blank = True, null = True)
+	total_weight = models.IntegerField(blank = True, null = True)
 
 	class Meta:
 		app_label = 'school_components'
@@ -70,6 +91,9 @@ class Grading(models.Model):
 	grade = models.CharField(max_length=5, blank=True)
 	assignment = models.CharField(max_length=100, blank=True)
 	date = models.TimeField(null=True, blank=True)
+	comments = models.CharField(max_length=500)
+	grade_weight = models.IntegerField(blank = True, null = True)
+	total_weight = models.IntegerField(blank = True, null = True)
 
 	class Meta:
 		app_label = 'school_components'

@@ -8,7 +8,6 @@ admin.site.register(Prerequisite)
 admin.site.register(Department)
 admin.site.register(Class)
 admin.site.register(ClassRegistration)
-admin.site.register(CourseRegistration)
 admin.site.register(School)
 admin.site.register(Period)
 

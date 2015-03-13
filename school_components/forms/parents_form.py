@@ -10,4 +10,4 @@ class ParentForm(ModelForm):
 class PaymentForm(ModelForm):
 	class Meta:
 		model = Payment
-		fields = ['receipt_no', 'amount']
+		fields = ['receipt_no', 'amount', 'date']

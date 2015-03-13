@@ -1,6 +1,6 @@
-from school_components.models.courses_model import Course, Prerequisite, Department, CourseRegistration
+from school_components.models.courses_model import Course, Prerequisite, Department
 from school_components.forms.courses_form import CourseForm, DepartmentForm
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -59,4 +59,5 @@ def dept_create(request):
 		context_dictionary,
 		RequestContext(request))
 
-
+def course_assignment(request):
+	return render(request, 'courses/course_assignment.html')

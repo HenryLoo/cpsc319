@@ -21,6 +21,7 @@ $('#edit-class-btn').click(function() {
     <li role="presentation"><a href="{%url 'school:classassignment' %}">Assignments</a></li>
     <li role="presentation"><a href="{%url 'school:classattendance' %}">Attendance</a></li>
     <li role="presentation"><a href="{%url 'school:classperformance' %}">Grading</a></li>
+    <li role="presentation"><a href="{%url 'school:classreportcard' %}">Report Card</a></li>
 </ul>
 
   <div class="row">  
@@ -112,10 +113,16 @@ $('#edit-class-btn').click(function() {
 		</tr>
 	</table>
 
+	<h4>Teachers</h4>
+	<ul>
+		<li><a href="#">Teacher Name 1</a></li>
+		<li><a href="#">Teacher Name 2</a></li>
+		<li><a href="#">TA Name</a></li>
+	</ul>
+
+
 	<!-- Button trigger modal -->
 	<a href="{% url 'school:classregistration' %}"> Edit Class Registration </a>
-
-
 
 	{% if reg_list %}
 		<h5>Registered Students:</h5>

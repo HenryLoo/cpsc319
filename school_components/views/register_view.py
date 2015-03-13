@@ -1,4 +1,4 @@
-from school_components.models.courses_model import Course, Prerequisite, Department, CourseRegistration
+from school_components.models.courses_model import Course, Prerequisite, Department
 from school_components.forms.courses_form import CourseForm, DepartmentForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext

@@ -7,18 +7,18 @@
     <li role="presentation"><a href="{%url 'school:classregistration' %}">Class Registration</a></li>
     <li role="presentation"><a href="{%url 'school:classassignment' %}">Assignments</a></li>
     <li role="presentation"><a href="{%url 'school:classattendance' %}">Attendance</a></li>
-    <li role="presentation" class="active"><a href="{%url 'school:classperformance' %}">Grading</a></li>
-    <li role="presentation"><a href="{%url 'school:classreportcard' %}">Report Card</a></li>
+    <li role="presentation"><a href="{%url 'school:classperformance' %}">Grading</a></li>
+    <li role="presentation" class="active"><a href="{%url 'school:classreportcard' %}">Report Card</a></li>
 </ul>
 
   <div class="row">  
                  <div class="col-lg-12">
                         <h1 class="page-header">
-                            Classes<small> Grading</small>
+                            Classes<small> Create</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Classes > Grading</a>
+                                <i class="fa fa-sitemap"></i> <a> Classes > Report Card</a>
                             </li>
                         </ol>
 
@@ -43,21 +43,21 @@
 
 <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-    Assignment
+    Student
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Assignment 1</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Assignment 2</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Assignment 3</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-plus"></span> Add Assignment</a></a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sara</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mike</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Jack</a></li>
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
   </ul>
 </div>
 
 </div>
 
 <div class="col-md-12">
-        <h4>Assignment Grades</h4>
+        <h4>Report Card - Student Name</h4>
         <div class="table-responsive">
 
                 
@@ -66,24 +66,16 @@
                    <thead>
                    
                    <th><input type="checkbox" id="checkall" /></th>
-                   <th>Name</th>
-                   <th>Total</th>
-                   <th>Weight</th>
-                     <th>Grade</th>
-                     <th>Comments</th>
+                   <th>Assignment</th>
+                   <th>Grading</th>
+                   <th>Comments</th>
                    </thead>
     <tbody>
     
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
-    <td>Jack</td>
-    <td>100</td>
-    <td>20%</td>
-    <td>
-    <div class="input-group" style="width: 50px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
+    <td>Assignment 1</td>
+    <td>60%</td>
     <td>
     <div class="input-group" style="width: 100px;">
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
@@ -92,14 +84,8 @@
     </tr>
         <tr>
     <td><input type="checkbox" class="checkthis" /></td>
-    <td>Sarah</td>
-    <td>100</td>
-    <td>20%</td>
-    <td>
-    <div class="input-group" style="width: 50px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
+    <td>Assignment 2</td>
+    <td>70%</td>
     <td>
     <div class="input-group" style="width: 100px;">
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
@@ -107,26 +93,14 @@
     </td>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
-    <td>Rosie</td>
-    <td>100</td>
-    <td>20%</td>
-    <td>
-    <div class="input-group" style="width: 50px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
+    <td>Assignment 3</td>
+    <td>50%</td>
     <td>3 Days Late</td>
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
-    <td>Mike</td>
-    <td>100</td>
-    <td>20%</td>
-    <td>
-    <div class="input-group" style="width: 50px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
+    <td>Assignment 4</td>
+    <td>80%</td>
     <td>
     <div class="input-group" style="width: 100px;">
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
@@ -135,14 +109,8 @@
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
-    <td>Jerry</td>
-    <td>100</td>
-    <td>20%</td>
-    <td>
-    <div class="input-group" style="width: 50px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
+    <td>Assignment 5</td>
+    <td>100%</td>
     <td>
     <div class="input-group" style="width: 100px;">
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
@@ -151,14 +119,8 @@
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
-    <td>Sally</td>
-    <td>100</td>
-    <td>20%</td>
-    <td>
-    <div class="input-group" style="width: 50px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
+    <td>Assignment 6</td>
+    <td>100%</td>
     <td>
     <div class="input-group" style="width: 100px;">
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">
@@ -167,14 +129,8 @@
     </tr>
     <tr>
     <td><input type="checkbox" class="checkthis" /></td>
-    <td>Inderpreet</td>
-    <td>100</td>
-    <td>20%</td>
-    <td>
-    <div class="input-group" style="width: 50px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
+    <td>Assignment 7</td>
+    <td>90%</td>
     <td>
     <div class="input-group" style="width: 100px;">
     <input type="text" class="form-control" placeholder="" aria-describedby="grade">

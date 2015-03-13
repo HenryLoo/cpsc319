@@ -37,22 +37,21 @@
 			<td> {{ teacher.branch_location }} </td>
 		</tr>
 		<tr> 
-			<td> Skill level: </td>
-			<td> {%if teacher.skill_level %} {{ teacher.skill_level }} 
-				 {%else%} Not specified {%endif%} </td>
+			<td> Comments: </td>
+			<td> {{ teacher.comments }} </td>
 		</tr>
 		<tr> 
 			<td> Days available: </td>
 			<td> 
-			        {% if teacher.teaching_availability.monday %} Monday {% endif %}
+			        {% if teacher.teaching_availability.monday %} Monday: {{ teacher.monday_times }} {% endif %}
 				
-					{% if teacher.teaching_availability.tuesday %} Tuesday {% endif %}		
+					{% if teacher.teaching_availability.tuesday %} Tuesday: {{ teacher.tuesday_times }}{% endif %}		
 			
-					{% if teacher.teaching_availability.wednesday%} Wednesday {% endif %}
+					{% if teacher.teaching_availability.wednesday%} Wednesday: {{ teacher.wednesday_times }}{% endif %}
 				
-					{% if teacher.teaching_availability.thursday%} Thursday {% endif %}
+					{% if teacher.teaching_availability.thursday%} Thursday: {{ teacher.thursday_times }}{% endif %}
 			
-					{% if teacher.teaching_availability.friday%} Friday {% endif %}					</td>
+					{% if teacher.teaching_availability.friday%} Friday: {{ teacher.friday_times }} {% endif %}					</td>
 		</tr>
 </table>
 {% endblock teacher_content %}

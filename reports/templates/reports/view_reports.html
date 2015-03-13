@@ -32,7 +32,28 @@
                                 <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Attendance</i>
                         </button>
             </div>
-             
+
+             <div class="col-lg-4">
+                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#exportreportcardteacher-modal" style="width: 280px; height: 200px;">
+                        
+                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Report Card</i><br>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Teacher</i>
+                        </button>
+            </div>
+</div>
+<br><br>
+<div class="row">
+
+             <div class="col-lg-4">
+                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#exportreportcardadm-modal" style="width: 280px; height: 200px;">
+                        
+                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Report Card</i><br>
+                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Administrator</i>
+                        </button>
+            </div>
+
             <div class="col-lg-4">
                         <button class="btn btn-default" type="button" data-toggle="modal" data-target="#exportdatabase-modal" style="width: 280px; height: 200px;">
                         
@@ -76,17 +97,45 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                     <tbody>
                         <tr>
                             <td>Jack</td>
+                            <td>123-456-7330</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>Sarah</td>
+                            <td>012-315-6789</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Rosie</td>
+                            <td>098-725-4441</td>
+                        </tr>
+                        <tr>
+                            <td>Mike</td>
+                            <td>123-456-7890</td>
+                        </tr>
+                    
+                        <tr>
+                            <td>Joe</td>
+                            <td>012-345-5559</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Rosie</td>
+                            <td>098-765-4621</td>
+                        </tr>
+                        <tr>
+                            <td>Jack</td>
                             <td>123-456-7890</td>
                         </tr>
                     
                         <tr>
                             <td>Sarah</td>
-                            <td>012-345-6789</td>
+                            <td>122-345-6789</td>
                         </tr>
                         
                         <tr>
-                            <td>Rosie</td>
-                            <td>098-765-4321</td>
+                            <td>Laura</td>
+                            <td>092-333-4221</td>
                         </tr>
                     </tbody>
             
@@ -178,6 +227,52 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                             <td></td>
                             <td></td>
                         </tr>
+                        <tr>
+                            <td>Mike</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    
+                        <tr>
+                            <td>Joe</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Rosie</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Jack</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    
+                        <tr>
+                            <td>Sarah</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td>Laura</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                     </tbody>
             
                 </table>
@@ -192,6 +287,181 @@ aria-labelledby="myModalLabel" aria-hidden="true">
 </div>
 
 
+<div class="modal fade" id="exportreportcardteacher-modal" tabindex="-1" role="dialog" 
+aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Print Report Card - Teacher</h4>
+            </div>
+            <div class="modal-body">
+                <div class='col-md-4'>
+                 
+                </div>
+                
+                <br>
+                <div class="dropdown">
+                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption2" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                        <option value="Blnak">Select Class</option>
+                        <option value="Tabla 201">Tabla 201</option>
+                        <option value="Sikh History 203">Sikh History 203</option>
+                        <option value="Sikh History 105">Sikh History 105</option>
+                        <option value="Gurmukhi/Santhiya 250">Gurmukhi/Santhiya 250</option>
+                        <option value="Tabla 101">Tabla 101</option>
+                        <option value="...">...</option>
+                     </select>
+                </div>
+
+                <br>
+                <div class="dropdown">
+                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption2" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                        <option value="Blnak">Select Student</option>
+                        <option value="Tabla 201">Jack</option>
+                        <option value="Sikh History 203">Sara</option>
+                        <option value="Sikh History 105">John</option>
+                        <option value="Gurmukhi/Santhiya 250">Mike</option>
+                        <option value="Tabla 101">Rosie</option>
+                        <option value="...">...</option>
+                     </select>
+                </div>
+                <h3>Student Name</h3>
+                <table id="studenttable" class="table table-bordred table-striped">
+        <table id="mytable" class="table table-bordred table-striped">
+                   
+                   <thead>
+                   
+                   <th>Assignment</th>
+                   <th>Grading</th>
+                   <th>Comments</th>
+                   </thead>
+    <tbody>
+    
+    <tr>
+    <td>Assignment 1</td>
+    <td>60%</td>
+    <td>
+    </td>
+    </tr>
+        <tr>
+    <td>Assignment 2</td>
+    <td>70%</td>
+    <td>
+    </td>
+    <tr>
+    <td>Assignment 3</td>
+    <td>50%</td>
+    <td>3 Days Late</td>
+    </tr>
+    <tr>
+    <td>Assignment 4</td>
+    <td>80%</td>
+    <td>
+    </td>
+    </tr>
+    <tr>
+    <td>Assignment 5</td>
+    <td>100%</td>
+    <td>
+    </td>
+    </tr>
+    <tr>
+    <td>Assignment 6</td>
+    <td>100%</td>
+    <td>
+    </td>
+    </tr>
+    <tr>
+    <td>Assignment 7</td>
+    <td>90%</td>
+    <td>
+    </td>
+    </tr>
+    </tbody>
+        
+</table>
+</div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" onclick="window.close()" class="btn btn-primary">Print Report Card</button>
+                <button type="submit" onclick="window.close()" class="btn btn-primary">Print for all class</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exportreportcardadm-modal" tabindex="-1" role="dialog" 
+aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Print Report Card - Teacher</h4>
+            </div>
+            <div class="modal-body">
+                <div class='col-md-4'>
+                 
+                </div>
+
+                <br>
+                <div class="dropdown">
+                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption2" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                        <option value="Blnak">Select Student</option>
+                        <option value="Tabla 201">Jack</option>
+                        <option value="Sikh History 203">Sara</option>
+                        <option value="Sikh History 105">John</option>
+                        <option value="Gurmukhi/Santhiya 250">Mike</option>
+                        <option value="Tabla 101">Rosie</option>
+                        <option value="...">...</option>
+                     </select>
+                </div>
+                <h3>Student Name</h3>
+                <table id="studenttable" class="table table-bordred table-striped">
+        <table id="mytable" class="table table-bordred table-striped">
+                   
+                   <thead>
+                   
+                   <th>Assignment</th>
+                   <th>Grading</th>
+                   <th>Comments</th>
+                   </thead>
+    <tbody>
+    
+    <tr>
+    <td>Class 1</td>
+    <td>60%</td>
+    <td>Missed 30% os classes</td>
+    </tr>
+        <tr>
+    <td>Class 2</td>
+    <td>70%</td>
+    <td>
+    </td>
+    <tr>
+    <td>Class 3</td>
+    <td>100%</td>
+    <td></td>
+    </tr>
+    <tr>
+    <td>Class 4</td>
+    <td>80%</td>
+    <td>
+    </td>
+    </tr>
+    </tbody>
+        
+</table>
+</div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" onclick="window.close()" class="btn btn-primary">Print Report Card</button>
+                <button type="submit" onclick="window.close()" class="btn btn-primary">Print for all class</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="exportdatabase-modal" tabindex="-1" role="dialog" 
 aria-labelledby="myModalLabel" aria-hidden="true">

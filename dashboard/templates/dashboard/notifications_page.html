@@ -23,7 +23,7 @@
                     </div>
                 </div>
 
-                <div class="body-top-bar">
+				 <div class="body-top-bar">
     							<div class="centralize">
                			<div class="row">
 
@@ -38,18 +38,23 @@
 											<div class="row">
 
 												<div class="col-lg-4">
-													<div class="list-group" style="width: 210px;">
-													<a class="btn btn-default btn-sm pull-right" href="{% url 'dashboard:notifications_settings_page' %}" role="button">
+													<a class="btn btn-default btn-sm" href="{% url 'dashboard:notifications_settings_page' %}" role="button">
 														Notification Settings <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 													</a>
-												</div>
+												  <button type="button" class="btn btn-default btn-sm" aria-label="Delete">
+														Apply <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+													</button>
 												</div>
 											</div>
 											<!-- /.row -->
 
 										</div>
 										<!-- /.row -->
+									
+
+
 										<br>
+
 										<div class="row">
 											<div class="col-lg-4">
 												<div class="list-group" style="width: 600px;">

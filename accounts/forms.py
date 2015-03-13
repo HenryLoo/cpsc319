@@ -53,14 +53,14 @@ class TeacherForm(ModelForm):
 
     class Meta():
         model = TeacherUser
-        fields = ['skill_level']
+        fields = ['comments']
 
 
 class AvailabilityForm(ModelForm):
     
     class Meta():
         model = TeachingAvailability
-        fields = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+        fields = '__all__'
         
    
 

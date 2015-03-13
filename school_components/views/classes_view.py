@@ -1,5 +1,5 @@
 from school_components.models.classes_model import Class, ClassRegistration
-from school_components.forms.classes_form import ClassForm, ClassRegistrationForm
+from school_components.forms.classes_form import ClassForm, ClassRegistrationForm, ClassScheduleForm
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import RequestContext
@@ -22,7 +22,7 @@ def class_list(request, class_id=None):
 		RequestContext(request))
 
 def class_create(request):
-	context_dictionary = {'class_form': ClassForm()}
+	context_dictionary = {'class_form': ClassForm(), 'classday_form': ClassScheduleForm()}
 	if request.method == 'POST':
 		cf = ClassForm(request.POST)
 		if cf.is_valid():
@@ -57,3 +57,6 @@ def class_performance(request):
 
 def class_assignment(request):
 	return render(request, 'classes/class_assignment.html')
+
+def class_reportcard(request):
+    return render(request, 'classes/class_reportcard.html')

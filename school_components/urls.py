@@ -60,7 +60,9 @@ urlpatterns = patterns('',
 	url(r'^courses/create/$', 
 		'school_components.views.courses_view.course_create', 
 		name='coursecreate'),
-
+	url(r'^courses/assignments/$', 
+		'school_components.views.courses_view.course_assignment', 
+		name='courseassignment'),
 
 	# departments
 	url(r'^departments/create/$', 
@@ -89,7 +91,9 @@ urlpatterns = patterns('',
     url(r'^classes/assignment/$',
         'school_components.views.classes_view.class_assignment',
         name='classassignment'),
-                       
+    url(r'^classes/reportcard/$',
+        'school_components.views.classes_view.class_reportcard',
+        name='classreportcard'),
                        
     # schools
     url(r'^schools/$',

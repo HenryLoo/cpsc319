@@ -30,19 +30,24 @@ class UserProfile(models.Model):
         return self.user.username
 
 class TeachingAvailability(models.Model):
-    monday = models.BooleanField()
-    tuesday = models.BooleanField()
-    wednesday = models.BooleanField()
-    thursday = models.BooleanField()
-    friday = models.BooleanField()
+    monday = models.NullBooleanField()
+    monday_times = models.CharField(max_length = 500, blank=True, null=True)
+    tuesday = models.NullBooleanField()
+    tuesday_times = models.CharField(max_length = 500, blank=True, null=True)
+    wednesday = models.NullBooleanField()
+    wednesday_times = models.CharField(max_length = 500, blank=True, null=True)
+    thursday = models.NullBooleanField()
+    thursday_times = models.CharField(max_length = 500, blank=True, null=True)
+    friday = models.NullBooleanField()
+    friday_times = models.CharField(max_length = 500, blank=True, null=True)
 
     def __unicode__(self):
         return "availability"
     
 class TeacherUser(models.Model):
     user = models.ForeignKey(UserProfile)
-    skill_level = models.IntegerField(blank = True, null = True)
     teaching_availability = models.ForeignKey(TeachingAvailability)
+    comments = models.CharField(max_length = 500)
     #classes has a many-to-many relation with this
 
     def __unicode__(self):

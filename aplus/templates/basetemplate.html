@@ -61,7 +61,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'statistics_page' %}"> <i class="fa fa-graduation-cap"></i> A<SUP>plus</SUP> </a>
+                <a class="navbar-brand" href="{% url 'dashboard:statistics_page' %}"> <i class="fa fa-graduation-cap"></i> A<SUP>plus</SUP> </a>
             </div>
 
             <!-- Top Menu Items -->
@@ -111,7 +111,7 @@
                         </li>
 
                             <a class="text-center" href="#">
-                            <a href="{% url 'notifications_page' %}">Read All Notifications</a>
+                            <a href="{% url 'dashboard:notifications_page' %}">Read All Notifications</a>
                         </li>
                     </ul>
                 </li>
@@ -183,7 +183,7 @@
                     
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="{% url 'statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
+                        <a href="{% url 'dashboard:statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
                     </li>
                     <li>
                         <a href="{% url 'school:studentlist' %}"><i class="fa fa-child"></i>  Students</a>
@@ -201,7 +201,7 @@
                         <a href="{% url 'school:classlist' %}"><i class="fa fa-table"></i>  Classes</a>
                     </li>              
                     <li>
-                        <a href="{% url 'view_reports' %}"><i class="fa fa-file-o"></i>  Reports</a>
+                        <a href="{% url 'reports:view_reports' %}"><i class="fa fa-file-o"></i>  Reports</a>
                     </li>
                     <li>
                         <a href="{% url 'school:courselist' %}"><i class="fa fa-book"></i>  Courses</a>
@@ -213,7 +213,7 @@
                         <a href="{% url 'school:periodlist' %}"><i class="fa fa-calendar"></i>  Periods</a>
                     </li>
                     <li>
-                        <a href="{% url 'send_email' %}"><i class="fa fa-envelope"></i>  Email</a>
+                        <a href="{% url 'messages:send_email' %}"><i class="fa fa-envelope"></i>  Email</a>
                     </li>
                     <li>
                         <a href="{% url 'settings_page' %}"><i class="fa fa-fw fa-wrench"></i> Settings</a>

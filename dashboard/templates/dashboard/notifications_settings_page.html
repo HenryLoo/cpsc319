@@ -3,9 +3,9 @@
 {%block body%}
 
 <ul class="nav nav-tabs nav-justified">
-  <li role="presentation"><a href="{% url 'statistics_page' %}">Statistics</a></li>
-  <li role="presentation" class="active"><a href="{% url 'notifications_page' %}">Notifications</a></li>
-  <li role="presentation"><a href="{% url 'classes_schedule_page' %}">Classes Schedule</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:statistics_page' %}">Statistics</a></li>
+  <li role="presentation" class="active"><a href="{% url 'dashboard:notifications_page' %}">Notifications</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:classes_schedule_page' %}">Classes Schedule</a></li>
 </ul>
                 <!-- Page Heading -->
                 <div class="row">
@@ -34,7 +34,7 @@
 											<div class="row">
 
 												<div class="col-lg-4">
-													<a class="btn btn-default btn-sm" href="{% url 'notifications_page' %}" role="button">
+													<a class="btn btn-default btn-sm" href="{% url 'dashboard:notifications_page' %}" role="button">
 														Inbox <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
 													</a>
 												  <button type="button" class="btn btn-default btn-sm" aria-label="Delete">

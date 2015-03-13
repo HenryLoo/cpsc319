@@ -3,9 +3,9 @@
 {%block body%}
 
 <ul class="nav nav-tabs nav-justified">
-  <li role="presentation" class="active"><a href="{% url 'statistics_page' %}">Statistics</a></li>
-  <li role="presentation"><a href="{% url 'notifications_page' %}">Notifications</a></li>
-  <li role="presentation"><a href="{% url 'classes_schedule_page' %}">Classes Schedule</a></li>
+  <li role="presentation" class="active"><a href="{% url 'dashboard:statistics_page' %}">Statistics</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:notifications_page' %}">Notifications</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:classes_schedule_page' %}">Classes Schedule</a></li>
 </ul>
 
                 <!-- Page Heading -->
@@ -17,7 +17,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a>Dashboard > Statistics</a>
+                                <i class="fa fa-sitemap"></i><a> Dashboard > Statistics</a>
                             </li>
                         </ol>
 
@@ -89,7 +89,6 @@
 
                             <div class="panel-body">
 
-
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-hover table-striped">
                                         <thead>
@@ -133,7 +132,7 @@
                             </div>
                             <div class="panel-body">
 
-                                    <form class="form-horizontal" role="form" action="{% url 'custom_statistic_page' %}">
+                                    <form class="form-horizontal" role="form" action="{% url 'dashboard:custom_statistic_page' %}">
 
                                       <div class="form-group">
                                         <label class="control-label col-sm-5" for="title">Title:</label>
@@ -242,7 +241,7 @@
 
                                       <div class="form-group"> 
                                         <div class="col-sm-offset-4 col-sm-10">
-                                           <a href="{% url 'demostatistics_page' %}" class="btn btn-primary" style="width: 100px; height: 35px;">Create</a>
+                                           <a href="{% url 'dashboard:statistics_page' %}" class="btn btn-primary" style="width: 100px; height: 35px;">Create</a>
                                         </div>
                                       </div>
 
@@ -291,7 +290,7 @@
                             </div>
                             <div class="panel-body" style="max-height: 2; min-height: 2;" >
                                 <i class="fa fa-pie-chart" style="font-size: 260px; margin-top: 20px; margin-left: 20px"></i>
-                                <form class="form-horizontal" role="form" action="{% url 'attendance_page' %}">
+                                <form class="form-horizontal" role="form" action="{% url 'dashboard:attendance_page' %}">
                                 <input type="submit" class="btn btn-primary btn-right" style="width: 65px; height: 30px;" value="Demo">
                                 </form>
                             </div>
@@ -318,7 +317,29 @@
                     </div>
 
                 </div>
+
+                <div class="row">
+
+                    <div class="col-lg-4">
+                        <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-bars"></i> Students Attendance</h3>
+                                 <div class="text-right">
+                                    <div class="row" style="margin-right: 1px;">
+                                        <a href="#">View &nbsp</a>
+                                        <a href="#">Edit</a>
+                                        <a><i class="fa fa-times"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-body" style="max-height: 2; min-height: 2;" >
+                                <i class="fa fa-pie-chart" style="font-size: 260px; margin-top: 20px; margin-left: 20px"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
 {%endblock%}
-                <!-- /.row -->
 
  

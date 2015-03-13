@@ -4,8 +4,8 @@
 {% block body %}
 
 <ul class="nav nav-tabs nav-justified">
-  <li role="presentation"><a href="{% url 'attendance_page' %}">Demo Attendance</a></li>
-  <li role="presentation" class="active"><a href="{% url 'grades_page' %}">Demo Grades</a></li>
+  <li role="presentation" class="active"><a href="{% url 'dashboard:attendance_page' %}">Demo Attendance</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:grades_page' %}">Demo Grades</a></li>
 </ul>
 
                 <!-- Page Heading -->
@@ -13,11 +13,11 @@
 
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Demo Student Performance <small>Grades</small>
+                            Demo Student Performance <small>Attendance</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i><a> Dashboard > Statistics > Student Performance > Demo Grades</a>
+                                <i class="fa fa-sitemap"></i><a> Dashboard > Statistics > Student Performance > Demo Attendance</a>
                             </li>
                         </ol>
 
@@ -67,8 +67,8 @@
 </div>
 
 {% googlecharts %}
-    {% data grades "data" %}
-        {% col "string" "Grades" %}"{{ val }}"{% endcol %}
+    {% data attendance "data" %}
+        {% col "string" "Attendance" %}"{{ val }}"{% endcol %}
         {% col "number" "Students" %}{{ val }}{% endcol %}
     {% enddata %}
 

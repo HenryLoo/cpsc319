@@ -3,9 +3,9 @@
 {%block body%}
 
 <ul class="nav nav-tabs nav-justified">
-  <li role="presentation"><a href="{% url 'statistics_page' %}">Statistics</a></li>
-  <li role="presentation" class="active"><a href="{% url 'notifications_page' %}">Notifications</a></li>
-  <li role="presentation"><a href="{% url 'classes_schedule_page' %}">Classes Schedule</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:statistics_page' %}">Statistics</a></li>
+  <li role="presentation" class="active"><a href="{% url 'dashboard:notifications_page' %}">Notifications</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:classes_schedule_page' %}">Classes Schedule</a></li>
 </ul>
                 <!-- Page Heading -->
                 <div class="row">
@@ -39,7 +39,7 @@
 
 												<div class="col-lg-4">
 													<div class="list-group" style="width: 210px;">
-													<a class="btn btn-default btn-sm pull-right" href="{% url 'notifications_settings_page' %}" role="button">
+													<a class="btn btn-default btn-sm pull-right" href="{% url 'dashboard:notifications_settings_page' %}" role="button">
 														Notification Settings <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 													</a>
 												</div>

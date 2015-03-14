@@ -51,8 +51,6 @@ $('#edit-course-btn').click(function() {
 		</a>
 		<div class="collapse" id="filters">
 		  <div>
-		    <input type="checkbox"> <label>Year</label> <input>
-		    <br>
 		    <input type="checkbox"> <label>Name</label> <input>
 		    <br>
 		    <input type="checkbox"> <label>Department</label> <input>
@@ -66,7 +64,7 @@ $('#edit-course-btn').click(function() {
 		{% for course in course_list %}
 	  		<li>
 	  		<a href="{% url 'school:courselist' course.id %}">
-	  			 {{ course.name }}
+	  			 {{ course.name }} Level {{ course.level }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}
@@ -88,7 +86,7 @@ $('#edit-course-btn').click(function() {
 		<tr> 
 			<td> Name: </td>
 			<td> 
-				{{ course.name }} 
+				{{ course.name }} Level {{ course.level }}
 			</td>
 		</tr>
 		<tr> 
@@ -121,7 +119,12 @@ $('#edit-course-btn').click(function() {
 		</tr>
 	</table>
 
-	<a href="#"> Edit Course Registration </a>
+	<h4>Waiting List</h4>
+	<ol>
+		<li>Quanah Saturnus</li>
+		<li>Lucrèce Dragan</li>
+		<li>Trinidad Miltiades</li>
+	</ol>
 
 	{% else %}
 		<div class="content alert alert-info" role="alert">

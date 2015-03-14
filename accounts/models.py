@@ -41,12 +41,12 @@ class TeachingAvailability(models.Model):
     friday = models.NullBooleanField()
     friday_times = models.CharField(max_length = 500, blank=True, null=True)
 
-    def __unicode__(self):
-        return "availability"
     
 class TeacherUser(models.Model):
     user = models.ForeignKey(UserProfile)
-    teaching_availability = models.ForeignKey(TeachingAvailability)
+    first_name = models.CharField(max_length = 15, blank=True, null=True)
+    last_name = models.CharField(max_length = 15, blank=True, null=True)
+    teaching_availability = models.ForeignKey(TeachingAvailability, null=True)
     comments = models.CharField(max_length = 500)
     #classes has a many-to-many relation with this
 

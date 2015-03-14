@@ -1,0 +1,300 @@
+{% extends "registration/base_registration.html" %}
+
+{% block register_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'school:courseregister' 1 %}">Registration Form</a></li>
+    <li role="presentation"><a href="{% url 'school:lkccourseregister' %}">LKC Registration Form</a></li>
+</ul>
+
+  <div class="row">   
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Registration<small> Registration Form</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Registration > Registration Form</a>
+            </li>
+        </ol>
+
+    </div>
+  </div>
+
+<h3><small>1. Parent Info </small>&nbsp;2. Student Registration&nbsp;<small>3. Summary&nbsp;4. Payment </small></h3>
+
+<div class="col-md-9" id="student-reg-form">
+
+<form>
+  <div class="panel panel-default">
+    <div class="panel-heading">Student Info</div>
+    <div class="panel-body">
+
+      <div class="form-group">
+        <div class="form-inline">
+          <label>Full Name:</label>
+          <input type="text" class="form-control" placeholder="First name">
+          <input type="text" class="form-control" placeholder="Last name">
+          <span class="btn btn-default" id="search-student-reg"><i class="fa fa-search"></i></span>
+            <font size=1> *If already registered, click here to complete form automatically</font>
+        </div>
+
+        <label>Gender:</label>
+        <label class="radio-inline">
+          <input type="radio" id="gender" name="inlineRadioOptions" value="option2"> M
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="inlineRadioOptions" value="option2"> F
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>Address:</label>
+        <input type="text" class="form-control" id="street-address" placeholder="Street Address">
+      </div>
+      <div class="form-group">
+        <span class="form-inline">
+          <input type="text" class="form-control" id="city" placeholder="City">
+          <input type="text" class="form-control" id="postcode" placeholder="Postal Code">
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleInputEmail1">Birth Date</label>
+        <input type="date" class="form-control" id="birthdate">
+      </div>
+
+      <div class="form-group">
+        <div class="form-half-size">
+          <label for="exampleInputEmail1">Home Phone</label>
+          <input type="tel" class="form-control" id="phone">
+        </div>
+        <div class="form-half-size">
+          <label for="exampleInputEmail1">Email address</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="panel panel-default hidden" id="student-levels-div">
+    <div class="panel-heading">Course History</div>
+    <div class="panel-body">
+        <div class="table-responsive">
+          <table id="mytable" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Course</th>
+                  <th>Level</th>
+                  <th>Comment</th>
+                  <th>Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Sikh History</td>
+                  <td>Level 1</td>
+                  <td>Test needed</td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                </tr>
+                <tr>
+                  <td>Gurmukhi/Santhiya</td>
+                  <td> - </td>
+                  <td> - </td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                </tr>
+                <tr>
+                  <td>Gatka/Activity</td>
+                  <td>Level 2</td>
+                  <td> - </td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                </tr>
+                <tr>
+                  <td>Tantee Saaj</td>
+                  <td>Level 1</td>
+                  <td> - </td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                </tr>
+                <tr>
+                  <td>Tabla</td>
+                  <td> - </td>
+                  <td> - </td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                </tr>
+                <tr>
+                  <td>Waja</td>
+                  <td> - </td>
+                  <td> - </td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                </tr>
+                <tr>
+                  <td>Dastaar</td>
+                  <td> Level 2 </td>
+                  <td> - </td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+
+                </tr>
+                <tr>
+                  <td>Wrestling</td>
+                  <td> - </td>
+                  <td> - </td>
+                  <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+                </tr>
+              </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Courses</div>
+    <div class="panel-body courses-div">
+        <div class="form-group">
+          <div class="row">  
+            <label class="checkbox-inline">
+              Sikh History
+               <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    ----- <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">-----</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sikh History Girls 7-10 SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sikh History Boys 7-10 SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sikh History Girls 11-13 SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sikh History Girls 14-17 SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sikh History Boys 11-15 SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sikh History Boys 16+ SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sikh History Girls 18+ SUN</a></li>
+                  </ul>
+                </div>
+            </label>
+            <label class="checkbox-inline">
+              Dastaar        
+              <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    ----- <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">-----</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Level 1 TUES/FRI</a></li>
+                  </ul>
+                </div>       
+            </label>
+            <label class="checkbox-inline">
+              Gurmukhi/Santhiya
+               <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    ----- <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">-----</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gurmukhi Beginner SAT/SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gurmukhi Beginner Adult SAT/SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gurmukhi Intermediate SAT/SUN</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gurmukhi Advanced SAT/SUN</a></li>
+                  </ul>
+                </div>
+            </label>
+          </div>
+          <br>
+          <div class="row">  
+                  <label class="checkbox-inline">
+                    Tabla
+                     <div class="dropdown">
+                  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                    ----- <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">-----</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tabla Level 1 (Boys) TUES/FRI</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tabla Level 2 (Boys) TUES/FRI</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tabla Level 3 (Boys) TUES/FRI</a></li>
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Tabla Level 1 (Girls) MON/THURS</a></li>
+                  </ul>
+                </div>
+                  </label>
+                  <label class="checkbox-inline">
+                    Wrestling
+                     <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                        ----- <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">-----</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Wrestling Level 1 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Wrestling Level 2 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Wrestling Level 3 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Wrestling Level 1 (Girls) MON/THURS</a></li>
+                        </ul>
+                      </div>
+                  </label>
+                  <label class="checkbox-inline">
+                    Gatka/Activity
+                     <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                        ----- <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">-----</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gatka/Activity Level 1 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gatka/Activity Level 2 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gatka/Activity Level 3 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Gatka/Activity Level 1 (Girls) MON/THURS</a></li>
+                        </ul>
+                      </div>
+                  </label>
+                  <label class="checkbox-inline">
+                    Waja
+                     <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                        ----- <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">-----</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Waja Level 1 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Waja Level 2 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Waja Level 3 (Boys) TUES/FRI</a></li>
+                          <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Waja Level 1 (Girls) MON/THURS</a></li>
+                        </ul>
+                      </div>
+                  </label>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <a class="btn btn-default pull-left" href="{% url 'school:courseregister' 1 %}">Back</a>
+   <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#confirm-register-modal">
+    Next
+  </button>
+  <br><br>
+</form>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirm-register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+
+        <h4>Are you sure these courses are correct?</h4> 
+
+        <ul>
+          <li>Waja Level 1 (Boys) TUES/FRI</li> 
+          <li>Wrestling Level 2 (Boys) MON/WED</li> 
+        </ul>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="confirm-register-modal-btn">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock register_content %}

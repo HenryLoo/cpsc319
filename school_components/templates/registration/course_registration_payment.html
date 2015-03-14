@@ -1,0 +1,63 @@
+{% extends "registration/base_registration.html" %}
+
+{% block register_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'school:courseregister' %}">Registration Form</a></li>
+    <li role="presentation"><a href="{% url 'school:lkccourseregister' %}">LKC Registration Form</a></li>
+</ul>
+
+  <div class="row">   
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Registration<small> Registration Form</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Registration > Registration Form</a>
+            </li>
+        </ol>
+
+    </div>
+  </div>
+
+<h3><small>1. Parent Info&nbsp;2. Student Registration&nbsp;3. Summary&nbsp;</small>4. Payment</h3>
+
+
+<div class="col-md-9" id="student-reg-form">
+
+<form>
+  <div class="panel panel-default">
+    <div class="panel-heading">Payment</div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label for="exampleInputEmail1"><strong>Receipt No:</strong></label>
+        <input type="text" class="form-control">
+
+        <label for="exampleInputEmail1"><strong>Amount:</strong></label>
+        <input type="text" class="form-control">
+      </div>
+    </div>
+  </div>
+  <a class="btn btn-default pull-left" href="{% url 'school:courseregister' 1 %}">Cancel</a>
+  <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#payment-modal">
+  Make Payment
+  </button>
+</form>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="payment-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        Payment was successfully added.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock register_content %}

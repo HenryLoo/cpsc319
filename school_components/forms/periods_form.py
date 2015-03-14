@@ -7,4 +7,4 @@ class PeriodForm(forms.ModelForm):
 
 	class Meta:
 		model = Period
-		fields = ['description', 'start_date', 'end_date']
+		fields = '__all__'

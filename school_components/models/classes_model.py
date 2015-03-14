@@ -7,7 +7,8 @@ class Class(models.Model):
 	period = models.ForeignKey('Period')
 	section = models.CharField(max_length=50, blank=True)
 	description = models.CharField(max_length=250, blank=True)
-	spots_number = models.IntegerField(blank = True, null = True)
+	class_size = models.IntegerField(blank = True, null = True)
+	waiting_list_size = models.IntegerField(blank = True, null = True)
 	room = models.CharField(max_length=50, blank=True)
 
 	def __unicode__(self):

@@ -1,0 +1,183 @@
+{% extends "registration/base_registration.html" %}
+
+{% block register_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><a href="{% url 'school:courseregister' %}">Registration Form</a></li>
+    <li role="presentation" class="active"><a href="{% url 'school:lkccourseregister' %}">LKC Registration Form</a></li>
+</ul>
+
+  <div class="row">   
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Registration<small> Little Khalsa Club Registration Form</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Registration > LKC Registration Form</a>
+            </li>
+        </ol>
+
+    </div>
+  </div>
+
+<h3><small>1. Parent Info </small>&nbsp;2. Student Registration&nbsp;<small>3. Summary&nbsp;4. Payment </small></h3>
+
+<div class="col-md-9" id="student-reg-form">
+
+<form>
+  <div class="panel panel-default">
+    <div class="panel-heading">Student Info</div>
+    <div class="panel-body">
+
+      <div class="form-group">
+        <div class="form-inline">
+          <label>Full Name:</label>
+          <input type="text" class="form-control" placeholder="First name">
+          <input type="text" class="form-control" placeholder="Last name">
+          <span class="btn btn-default" id="search-student-reg"><i class="fa fa-search"></i></span>
+            <font size=1> *If already registered, click here to complete form automatically</font>
+        </div>
+
+        <label>Gender:</label>
+        <label class="radio-inline">
+          <input type="radio" id="gender" name="inlineRadioOptions" value="option2"> M
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="inlineRadioOptions" value="option2"> F
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>Address:</label>
+        <input type="text" class="form-control" id="street-address" placeholder="Street Address">
+      </div>
+      <div class="form-group">
+        <span class="form-inline">
+          <input type="text" class="form-control" id="city" placeholder="City">
+          <input type="text" class="form-control" id="postcode" placeholder="Postal Code">
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="exampleInputEmail1">Birth Date</label>
+        <input type="date" class="form-control" id="birthdate">
+      </div>
+
+      <div class="form-group">
+        <div class="form-half-size">
+          <label for="exampleInputEmail1">Home Phone</label>
+          <input type="tel" class="form-control" id="phone">
+        </div>
+        <div class="form-half-size">
+          <label for="exampleInputEmail1">Email address</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    <div class="panel panel-default">
+    <div class="panel-heading">Student Levels</div>
+    <div class="panel-body">
+    <div class="table-responsive">
+      <table id="mytable" class="table table-bordred table-striped">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Level</th>
+            <th>Comment</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Little Khalsa Club</td>
+            <td>Level 1</td>
+            <td>-</td>
+            <td><p data-placement="top" data-toggle="tooltip" title="Edit"><button class="btn btn-primary btn-xs" data-title="Edit" data-toggle="modal" data-target="#edit" ><span class="glyphicon glyphicon-pencil"></span></button></p></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default" id="student-levels-div">
+    <div class="panel-heading">Courses</div>
+    <div class="panel-body">
+        <div class="form-group">
+          <table class="table table-bordered">  
+            <tr> 
+              <td>
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1"> Level 1A (Mon/Thurs) 
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1"> Level 1B (Sat/Sun) 
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1"> Level 2A (Mon/Thurs) 
+                </label>
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1"> Level 2B (Sat/Sun) 
+                </label>
+              </td>
+              <td>
+                <label class="checkbox-inline">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1"> Level 3 (Tue/Fri)
+                </label>  
+              </td>
+              <td>
+                <label>Jacket size: 
+                  <input type="text" class="form-control">  
+                </label>
+              </td>
+            </tr>
+          </table>
+      </div>
+    </div>
+  </div>
+
+  <a class="btn btn-default pull-left" href="{% url 'school:lkccourseregister' 1 %}">Back</a>
+   <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#confirm-register-lkc-modal">
+    Next
+  </button>
+  <br><br>
+</form>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirm-register-lkc-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+
+        <h4>Are you sure these courses are correct?</h4> 
+
+        <ul>
+          <li>Little Khalsa Club Level 1 TUES/FRI</li> 
+        </ul>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="confirm-register-lkc-modal-btn">Register</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock register_content %}

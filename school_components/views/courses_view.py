@@ -22,7 +22,7 @@ def course_list(request, course_id=None):
 def course_create(request):
 	course_list = Course.objects.all()
 	context_dictionary = {'course_list': course_list,
-							 'course_form': CourseForm()}
+							 'course_form': CourseForm() }
 	if request.method == 'POST':
 		cf = CourseForm(request.POST)
 		if cf.is_valid():

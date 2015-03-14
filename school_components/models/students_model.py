@@ -11,14 +11,13 @@ class StudentManager(models.Manager):
 		parent_last_name, parent_cell_phone, parent_email):
 
 		bd = datetime.strptime(birthdate, "%Y-%m-%d").date()
+		s = School.objects.get(pk=1)
+		per = Period.objects.get(pk=3)
 
 		p = Parent(first_name=parent_first_name, last_name=parent_last_name,
-				cell_phone=parent_cell_phone, email=parent_email)
+				cell_phone=parent_cell_phone, email=parent_email, school=s, period=per, 
+				comments="")
 		p.save()
-
-		s = School.objects.get(pk=1)
-		per = Period.objects.get(pk=1)
-
 
 		student = self.create(first_name=first_name, last_name=last_name, gender=gender, 
 			birthdate=bd, home_phone=home_phone, address=address, email=email, 

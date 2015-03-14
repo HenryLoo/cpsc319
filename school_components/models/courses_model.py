@@ -33,7 +33,7 @@ class Department(models.Model):
 	description = models.CharField(max_length=500)
 
 	def __unicode__(self):
-		return self.description
+		return self.name
 
 	class Meta:
 		app_label = 'school_components'

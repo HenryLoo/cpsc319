@@ -40,8 +40,10 @@
 	
 	<form role="form" action="{%url 'account:create_teacher' %}" method="post">
 		{% csrf_token %}
+		{% if error %} {{error}} {%endif%}
 		<table class="table table-hover teacher-form">
 	    	{{ user_form.as_table }}
+			{{ teacher_phone.as_table }}
 			{{ teacher_form.as_table }}
 		</table>
 		<div> <h4> Availability </h4> </div>

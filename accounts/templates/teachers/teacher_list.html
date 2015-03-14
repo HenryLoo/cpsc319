@@ -82,15 +82,16 @@ $('#edit-teacher-btn').click(function() {
 			<td> {{ teacher.id }} </td>
 		</tr>
 		<tr> 
-			<td> Name: </td>
+			<td> First Name: </td>
 			<td> 
 				{{ teacher.user.user.first_name}} 
-				{{ teacher.user.user.last_name }}
 			</td>
 		</tr>
 		<tr> 
-			<td> Username: </td>
-			<td> {{ teacher.user.user.username }} </td>
+			<td> Last Name: </td>
+			<td> 
+				{{ teacher.user.user.last_name}} 
+			</td>
 		</tr>
 		<tr> 
 			<td> Email: </td>
@@ -105,22 +106,38 @@ $('#edit-teacher-btn').click(function() {
 			<td> {{ teacher.user.school.title }} </td>
 		</tr>
 		<tr> 
-			<td> Skill level: </td>
-			<td> {%if teacher.skill_level %} {{ teacher.skill_level }} 
-				 {%else%} Not specified {%endif%} </td>
-		</tr>
-		<tr> 
 			<td> Days available: </td>
 			<td> 
-			        {% if teacher.teaching_availability.monday %} Monday {% endif %}
+			        Monday: {% if teacher.teaching_availability.monday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.monday_times %} - {{teacher.teaching_availability.monday_times}} {%endif%}
+						<br>
 				
-					{% if teacher.teaching_availability.tuesday %} Tuesday {% endif %}		
-			
-					{% if teacher.teaching_availability.wednesday%} Wednesday {% endif %}
-				
-					{% if teacher.teaching_availability.thursday%} Thursday {% endif %}
-			
-					{% if teacher.teaching_availability.friday%} Friday {% endif %}					</td>
+					Tuesday: {% if teacher.teaching_availability.tuesday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.tuesday_times %} - {{teacher.teaching_availability.tuesday_times}} {%endif%}
+						<br>
+						
+					Wednesday: {% if teacher.teaching_availability.wednesday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.wednesday_times %} - {{teacher.teaching_availability.wednesday_times}} {%endif%}
+						<br>
+
+					Thursday: {% if teacher.teaching_availability.thursday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.thursday_times %} - {{teacher.teaching_availability.thursday_times}} {%endif%}
+						<br>
+						
+					Friday: {% if teacher.teaching_availability.friday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.friday_times %} - {{teacher.teaching_availability.friday_times}} {%endif%}
+						<br>
+						
+						</td>
+		</tr>
+		<tr> 
+			<td> Additional Comments: </td>
+			<td> {{ teacher.comments }} </td>
 		</tr>
 	</table>
 

@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 
 #User table comes complete with import User with:
 #the username for the user account;
@@ -13,14 +14,13 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User)
-
+    phone_regex = RegexValidator(regex=r'^[\d|-]+$', message="Use only digits and dashes, eg. 604-214-0392")
     # The additional attributes we wish to include.
-    school = models.ForeignKey('school_components.School')
-    period = models.ForeignKey('school_components.Period')
-    phone = models.CharField(max_length = 15, blank=True, null=True)
+    #school = models.ForeignKey('school_components.School')
+    #period = models.ForeignKey('school_components.Period')
+    phone = models.CharField(max_length = 20, validators=[phone_regex], blank=True, null=True,)
     role = models.CharField(max_length = 12, choices =
                             (
-                             ('CODE', 'Code Administrator'),
                              ('SYSTEM_ADMIN', 'System Administrator'),
                              ('SCHOOL_ADMIN', 'School Administrator'),
                              ('TEACHER', 'Teacher')
@@ -47,9 +47,9 @@ class TeachingAvailability(models.Model):
 class TeacherUser(models.Model):
     user = models.ForeignKey(UserProfile)
     teaching_availability = models.ForeignKey(TeachingAvailability)
-    comments = models.CharField(max_length = 500)
+    comments = models.CharField(max_length = 500, blank=True, null=True)
     #classes has a many-to-many relation with this
 
     def __unicode__(self):
-        return self.user.user.first_name + " " + self.user.user.last_name + "role"
+        return self.user.user.first_name + " " + self.user.user.last_name
 

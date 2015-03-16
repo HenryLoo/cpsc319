@@ -1,8 +1,13 @@
 from django.conf.urls import patterns, url
 from school_components import views
+from school_components.views.register_view import CourseRegisterWizard, FORMS
 
 urlpatterns = patterns('',
-	# registration
+	# # registration
+	url(r'^register1/$', 
+		CourseRegisterWizard.as_view(FORMS),
+		name='courseregister'),
+
 	url(r'^register/$', 
 		'school_components.views.register_view.course_register', 
 		name='courseregister'),

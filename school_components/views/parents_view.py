@@ -1,6 +1,5 @@
 from django.views import generic
-from school_components.models.parents_model import Parent, Payment
-from school_components.models.students_model import Student
+from school_components.models import Parent, Payment, Student, School, Period
 from school_components.forms.parents_form import ParentForm, PaymentForm
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
@@ -23,15 +22,23 @@ def parent_list(request, parent_id=None):
 		RequestContext(request))
 
 def parent_create(request):
-	parent_list = Parent.objects.all()
 	p = ParentForm(request.POST)
-	context_dictionary = {'parent_list': parent_list,
-							 'parent_form': ParentForm()}
+	context_dictionary = { 'parent_form': ParentForm() }
 	if request.method == 'POST':
+
 		if p.is_valid():
-			new = p.save()
+			parent = p.save(commit=False)
+
+			school = School.objects.get(pk=request.session['school_id'])
+			period = Period.objects.get(pk=request.session['period_id'])
+			
+			parent.school = school
+			parent.period = period
+		
+			parent.save()
+
 			return HttpResponseRedirect(
-				reverse('school:parentlist', args=(new.id,)))
+				reverse('school:parentlist', args=(parent.id,)))
 		else:
 			context_dictionary['errors'] = p.errors 
 

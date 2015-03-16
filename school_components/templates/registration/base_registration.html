@@ -1,64 +1,13 @@
 {% extends "basetemplate.html" %}
+{% load i18n %}
 
 {% block head %}
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'main-style.css' %}" />
+{{ wizard.form.media }}
 {% endblock %}
 
 {% block javascript_block %}
-<script>
-    $('#search-parent-reg').click(function(e) {
-        $('#parent-first-name').val('Michael');
-        $('#parent-last-name').val('Smith');
-        $('#parent-phone').val('(778) 555-9877');
-        $('#parent-email').val('msmith@gmail.com')
-
-        $('#emergency-first-name').val('Angela');
-        $('#emergency-last-name').val('Miller');
-        $('#relation').val('Aunt');
-        $('#emergency-cell-phone').val('(778) 555-0212');
-        $('#emergency-home-phone').val('(604) 555-9424');
-    });
-
-
-    $('#search-student-reg').click(function(e) {
-        $('#gender').attr('checked', true);
-        $('#street-address').val('5211 Pender Street');
-        $('#city').val('Surrey');
-        $('#postcode').val('V7G P01');
-        $('#birthdate').val('2013-12-01');
-        $('#phone').val('(604) 555-9133');
-        $('#email').val('123@example.com');
-
-        $('#student-levels-div').removeClass('hidden')
-    });
-
-    $('#payment-modal').on('hidden.bs.modal', function (e) {
-        window.location.href = "{% url 'school:courseregister' 1 %}";
-    });
-
-    $('#payment-lkc-modal').on('hidden.bs.modal', function (e) {
-        window.location.href = "{% url 'school:lkccourseregister' 1 %}";
-    });
-
-    $(".courses-div .dropdown-menu li a").click(function(e){
-        e.preventDefault();
-        var txt = $(this).text();
-        $(this).parents('.dropdown').find('.dropdown-toggle').html(txt);
-    });
-
-    $("#confirm-register-modal-btn").click(function() {
-        $('#confirm-register-modal').modal('hide');
-        window.location.href = "{% url 'school:courseregister' 3 %}";
-    });
-
-    $("#confirm-register-lkc-modal-btn").click(function() {
-        $('#confirm-register-lkc-modal').modal('hide');
-        window.location.href = "{% url 'school:lkccourseregister' 3 %}";
-    });
-
-</script>
-
 {% endblock javascript_block%}
 
 {% block body %}

@@ -39,7 +39,7 @@ class Student(models.Model):
 	allergies = models.CharField(max_length=75, blank=True)
 	emergency_contact_name = models.CharField(max_length=75)
 	emergency_contact_phone = models.CharField(max_length=20)
-	comments = models.CharField(max_length=500)
+	comments = models.CharField(max_length=500, blank=True)
 	parent = models.ForeignKey('Parent', null=True)
 	school = models.ForeignKey('School')
 	period = models.ForeignKey('Period', blank=True, null=True)

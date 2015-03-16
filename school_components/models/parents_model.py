@@ -7,7 +7,7 @@ class Parent(models.Model):
 	email = models.EmailField()
 	school = models.ForeignKey('School')
 	period = models.ForeignKey('Period')
-	comments = models.CharField(max_length=500)
+	comments = models.CharField(max_length=500, blank=True)
 
 	def __unicode__(self):
 		return self.first_name + ' ' + self.last_name

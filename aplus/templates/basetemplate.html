@@ -118,7 +118,7 @@
                
 
             <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-university"></i> School <b class="caret"></b></a>
+                    <a href="#" id="current-school" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-university"></i> School <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"> Surrey, BC</a>
@@ -147,7 +147,7 @@
                 </li>
 
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> Period <b class="caret"></b></a>
+                    <a href="#" id="current-period" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> Period <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#"> 2015-Winter</a>
@@ -260,6 +260,12 @@
 
     <!-- jQuery UI -->
     <script src="{% static '/static/js/jquery-ui.min.js'%}"></script>
+
+    <!-- TODO: remove, used for debugging only -->
+    <script>
+        $("#current-period").text( "{{ request.session.period_name }}" );
+        $("#current-school").text( "{{ request.session.school_name }}" );
+    </script>
 
     {% block javascript_block %}
     {% endblock %}

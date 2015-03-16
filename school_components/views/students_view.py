@@ -1,6 +1,5 @@
 from django.views import generic
-from school_components.models.students_model import Student, StudentCSVWriter
-from school_components.models.parents_model import Parent
+from school_components.models import Student, Parent, School, Period
 from school_components.models.courses_model import *
 from school_components.forms.students_form import StudentForm, StudentCSVForm, StudentFormSet
 from school_components.utils import SchoolUtils
@@ -26,15 +25,23 @@ def student_list(request, student_id=None):
 
 # create a new student with form data
 def student_create(request):
-	student_list = Student.objects.all()
 	s = StudentForm(request.POST)
-	context_dictionary = {'student_list': student_list, 'student_form': StudentForm() }
+	context_dictionary = { 'student_form': StudentForm() }
 
 	if request.method == 'POST':
 		if s.is_valid():
-			new = s.save()
+			student = s.save(commit=False)
+
+			school = School.objects.get(pk=request.session['school_id'])
+			period = Period.objects.get(pk=request.session['period_id'])
+			
+			student.school = school
+			student.period = period
+		
+			student.save()
+
 			return HttpResponseRedirect(
-				reverse('school:studentlist', args=(new.id,)))
+				reverse('school:studentlist', args=(student.id,)))
 		else:
 			context_dictionary['errors'] = s.errors 
 

@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^attendance/','dashboard.views.attendance_page',name='attendance_page'),
     url(r'^grades/','dashboard.views.grades_page',name='grades_page'),
     url(r'^customstat/','dashboard.views.custom_statistic_page',name='custom_statistic_page'),
+    url(r'^customstatcreated/','dashboard.views.custom_statistic_created_page',name='custom_statistic_created_page'),
 
 )

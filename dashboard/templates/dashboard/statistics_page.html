@@ -133,7 +133,8 @@
                             </div>
                             <div class="panel-body">
 
-                                    <form class="form-horizontal" role="form" action="{% url 'dashboard:custom_statistic_page' %}">
+                                    <form class="form-horizontal" role="form" action="{% url 'dashboard:custom_statistic_created_page' %}" method="post">
+                                    {% csrf_token %}
 
                                       <div class="form-group">
                                         <label class="control-label col-sm-5" for="title">Title:</label>
@@ -147,20 +148,12 @@
                                         <div class="col-sm-7"> 
 
                                                 <div class="dropdown">
-                                                  <!-- <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    Select data
-                                                    <span class="caret"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Period</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">School</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Student Number</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
-                                                  </ul> -->
                                                   <select class="btn btn-default dropdown-toggle" name="hAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    <option value="Attended">Attendance</option>
-                                                    <option value="Absences">Absences</option>
-                                                    <option value="Grades">Grades</option>
+                                                    <option value="NSTUDENTS">Number of Students</option>
+                                                    <option value="NCLASSES">Number of Classes</option>
+                                                    <option value="NTEACHERS">Number of Teachers</option>
+                                                    <option value="ATTENDANCE">Attendance</option>
+                                                    <option value="PERFORMANCE">Performance</option>
                                                   </select>
                                                 </div>
                                         </div>
@@ -171,19 +164,10 @@
                                         <div class="col-sm-7"> 
 
                                                 <div class="dropdown">
-                                                  <!-- <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    Select data
-                                                    <span class="caret"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Period</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">School</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Student Number</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
-                                                  </ul> -->
                                                   <select class="btn btn-default dropdown-toggle" name="vAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    <option value="Attended">Number of Students</option>
-                                                    <option value="Absences">Date</option>
+                                                    <option value="DATE">Date</option>
+                                                    <option value="STUDENTS">Students</option>
+                                                    <option value="CLASS">Classes</option>
                                                   </select>
                                                 </div>
                                         </div>
@@ -194,20 +178,10 @@
                                         <div class="col-sm-7"> 
 
                                                 <div class="dropdown">
-                                                  <!-- <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    Select type
-                                                    <span class="caret"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Pie</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Bars</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Line</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
-                                                  </ul> -->
                                                   <select class="btn btn-default dropdown-toggle" name="chartType" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    <option value="PieChart">Pie</option>
-                                                    <option value="BarChart">Bars</option>
-                                                    <option value="LineChart">Line</option>
+                                                    <option value="PIE">Pie</option>
+                                                    <option value="BAR">Bar</option>
+                                                    <option value="LINE">Line</option>
                                                   </select>
                                                 </div>
                                         </div>
@@ -218,22 +192,9 @@
                                         <div class="col-sm-7"> 
 
                                                 <div class="dropdown">
-                                                  <!-- <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    Select public
-                                                    <span class="caret"></span>
-                                                  </button>
-                                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">All</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Only System Admins</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Admins</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Only Teachers</a></li>
-                                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
-                                                  </ul> -->
                                                   <select class="btn btn-default dropdown-toggle" name="visibility" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    <option value="all">All</option>
-                                                    <option value="sys">Only System Admins</option>
-                                                    <option value="admin">Admins</option>
-                                                    <option value="teacher">Only Teachers</option>
+                                                    <option value="ADM">Only Administrators</option>
+                                                    <option value="ALL">Administrators and Teachers</option>
                                                   </select>
                                                 </div>
                                         </div>
@@ -242,7 +203,7 @@
 
                                       <div class="form-group"> 
                                         <div class="col-sm-offset-4 col-sm-10">
-                                           <a href="{% url 'dashboard:demostatistics_page' %}" class="btn btn-primary" style="width: 100px; height: 35px;">Create</a>
+                                          <input type="submit" class="btn btn-primary" style="width: 100px; height: 35px;" value="Create">
                                         </div>
                                       </div>
 

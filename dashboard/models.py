@@ -21,7 +21,7 @@ class Chart(models.Model):
     period = models.ForeignKey('school_components.Period')
     chart_type = models.CharField(max_length = 12, choices =
                                    (
-                                    ('BARS', 'bars chart'),
+                                    ('BAR', 'bar chart'),
                                     ('PIE', 'pie chart'),
                                     ('LINE', 'line chart'),
                                     ))

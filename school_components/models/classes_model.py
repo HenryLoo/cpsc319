@@ -47,10 +47,7 @@ class ClassTeacher(models.Model):
 class ClassRegistration(models.Model):
 	reg_class = models.ForeignKey('Class', related_name='enrolled_class')
 	student = models.ForeignKey('Student', related_name='enrolled_student')
-	school = models.ForeignKey('School')
-	period = models.ForeignKey('Period')
 	registration_status = models.BooleanField()
-	comments = models.CharField(max_length=500)
 
 	class Meta:
 		app_label = 'school_components'

@@ -2,7 +2,7 @@
 
 {% block register_content %}
 <ul class="nav nav-tabs nav-justified">
-    <li role="presentation" class="active"><a href="{% url 'school:courseregister' 1 %}">Registration Form</a></li>
+    <li role="presentation" class="active"><a href="{% url 'school:courseregister' %}">Registration Form</a></li>
     <li role="presentation"><a href="{% url 'school:lkccourseregister' %}">LKC Registration Form</a></li>
 </ul>
 
@@ -23,8 +23,16 @@
 
 <div class="col-md-9" id="student-reg-form">
 
-<form>
-  {{ wizard.management_form }}
+{% for field in wizard.form %}
+  {% if field.errors %}
+    {{ field.name }} {{ field.errors }}
+  {% endif %}
+{% endfor %}
+
+<form id="student-registration-form" action="" method="post">
+    {% csrf_token %}
+    {{ wizard.management_form }}
+
   <div class="panel panel-default">
     <div class="panel-heading">Student Info</div>
     <div class="panel-body">
@@ -32,46 +40,56 @@
       <div class="form-group">
         <div class="form-inline">
           <label>Full Name:</label>
-          <input type="text" class="form-control" name="first_name" placeholder="First name">
-          <input type="text" class="form-control" name="last_name" placeholder="Last name">
+          {{ wizard.form.first_name }}
+          {{ wizard.form.last_name }}
           <span class="btn btn-default" id="search-student-reg"><i class="fa fa-search"></i></span>
             <font size=1> *If already registered, click here to complete form automatically</font>
         </div>
 
         <label>Gender:</label>
-        <label class="radio-inline">
-          <input type="radio" id="gender" name="gender" value="option2"> M
-        </label>
-        <label class="radio-inline">
-          <input type="radio" name="gender" value="option2"> F
-        </label>
+        {% for g in  wizard.form.gender %}
+          <label class="radio-inline">
+          {{ g.tag }}
+          {{ g.choice_label }}
+          </label>
+        {% endfor %}
       </div>
 
       <div class="form-group">
         <label>Address:</label>
-        <input type="text" class="form-control" name="street-address" placeholder="Street Address">
+        {{ wizard.form.street_address }}
       </div>
       <div class="form-group">
-        <span class="form-inline">
-          <input type="text" class="form-control" name="city" placeholder="City">
-          <input type="text" class="form-control" name="postcode" placeholder="Postal Code">
-        </span>
+        <div class="form-half-size">
+          {{ wizard.form.city }}
+        </div>
+        <div class="form-half-size">
+          {{ wizard.form.postal_code }}
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="exampleInputEmail1">Birth Date</label>
-        <input type="date" class="form-control" name="birthdate">
+      <div class="form-group form-half-size">
+        <label>Birth Date</label>
+        {{ wizard.form.birthdate }}
       </div>
 
       <div class="form-group">
         <div class="form-half-size">
-          <label for="exampleInputEmail1">Home Phone</label>
-          <input type="tel" class="form-control" name="home_phone">
+          <label>Home Phone</label>
+          {{ wizard.form.home_phone }}
         </div>
         <div class="form-half-size">
-          <label for="exampleInputEmail1">Email address</label>
-          <input type="email" class="form-control" name="email">
+          <label>Email address</label>
+          {{ wizard.form.email }}
         </div>
+      </div>
+      <div class="form-group">
+        <label>Allergies</label>
+        {{ wizard.form.allergies }}
+      </div>
+      <div class="form-group">
+        <label>Comments</label>
+        {{ wizard.form.comments }}
       </div>
     </div>
   </div>
@@ -150,12 +168,18 @@
   <div class="panel panel-default">
     <div class="panel-heading">Courses</div>
     <div class="panel-body courses-div">
+
       {% for field in form %}
-        {% if "dept" in field.name %}
-          <label> {{ field.name }} </label>
-          {{ field }}
+        {% if "dept" in field.help_text %}
+          <table class="table">
+            <tr> 
+              <td> <label> {{ field.name }} </label> </td>
+              <td> {{ field }} </td>
+            </tr>
+          </table>
         {% endif %}
       {% endfor %}
+
        <!--  <div class="form-group">
           <div class="row">  
             <label class="checkbox-inline">
@@ -271,8 +295,10 @@
     </div>
   </div>
 
-  <a class="btn btn-default pull-left" href="{% url 'school:courseregister' 1 %}">Back</a>
-   <button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#confirm-register-modal">
+  <button class="btn btn-primary pull-left" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">
+          Back
+  </button>
+   <button type="button" id="open-confirm-register-btn" class="btn btn-primary pull-right" data-toggle="modal" data-target="#confirm-register-modal">
     Next
   </button>
   <br><br>
@@ -288,15 +314,15 @@
 
         <h4>Are you sure these courses are correct?</h4> 
 
-        <ul>
-          <li>Waja Level 1 (Boys) TUES/FRI</li> 
-          <li>Wrestling Level 2 (Boys) MON/WED</li> 
+        <ul id="class-confirmation-list">
         </ul>
 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="confirm-register-modal-btn">Register</button>
+        <button class="btn btn-primary pull-right" data-dismiss="modal" id="student-register-btn" type="submit" value="submit">
+          Register
+        </button>
       </div>
     </div>
   </div>

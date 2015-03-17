@@ -25,8 +25,9 @@
 <div class="col-md-9" id="student-reg-form">
 
 <div class="alert alert-success" role="alert">
-  Successfully registered in 2 classes. <br>
-  Registered in waiting list for Sikh History Boys 11-15.
+  {{ parent_message }}
+  {{ student_message }}
+  {{ course_status }}
 </div>
 
   <a href="#">Print</a>
@@ -58,11 +59,11 @@
     
   </div>
 
-  <a class="btn btn-default pull-left" href="{% url 'school:courseregister' 2 %}">Back</a>
+  <a class="btn btn-default pull-left" href="#">Back</a>
 
   <div class="pull-right">
-    <a class="btn btn-warning" href="{% url 'school:courseregister' 4 %}">Make Payment</a>
-    <a class="btn btn-default" href="{% url 'school:courseregister' 2 %}">Register another 
+    <a class="btn btn-warning" href="#">Make Payment</a>
+    <a class="btn btn-default" href="#">Register another 
     Student</a>
   </div>
 

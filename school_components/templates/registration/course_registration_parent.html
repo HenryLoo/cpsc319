@@ -22,17 +22,24 @@
 
 <h3>1.  Parent Info <small>&nbsp;2. Student Registration&nbsp;3. Summary&nbsp;4. Payment </small></h3>
 
+{% for field in wizard.form %}
+  {% if field.errors %}
+    {{ field.name }} {{ field.errors }}
+  {% endif %}
+{% endfor %}
+
 <div class="col-md-9" id="student-reg-form">
-  <form action="" method="post">{% csrf_token %}
+  <form action="" method="post">
+    {% csrf_token %}
     {{ wizard.management_form }}
     <div class="panel panel-default">
       <div class="panel-heading">Parent Info</div>
       <div class="panel-body">
          <div class="form-group">
-          <label>Parent Name:</label>
+          <label>{{ wizard.form.first_name.label }}</label>
             <span class="form-inline">
-              <input type="text" class="form-control" name="first_name" placeholder="First name">
-              <input type="text" class="form-control" name="last_name" placeholder="Last name">
+              {{ wizard.form.first_name }}
+              {{ wizard.form.last_name }}
               <span class="btn btn-default" id="search-parent-reg"><i class="fa fa-search"></i></span>
               <font size=1> *If already registered, click here to complete form automatically</font>
             </span>
@@ -40,13 +47,18 @@
 
           <div class="form-group">
             <div class="form-half-size">
-              <label>Cell Phone</label>
-              <input type="tel" class="form-control" name="cell_phone">
+              <label>{{ wizard.form.cell_phone.label }}</label>
+              {{ wizard.form.cell_phone }}
             </div>
             <div class="form-half-size">
-              <label>Email address</label>
-              <input type="email" class="form-control" name="email">
+              <label>{{ wizard.form.email.label }}</label>
+              {{ wizard.form.email }}
             </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Comments</label>
+            {{ wizard.form.parent_comments }}
           </div>
       </div>
     </div>
@@ -57,32 +69,35 @@
          <div class="form-group">
           <label>Name:</label>
             <span class="form-inline">
-              <input type="text" class="form-control" name="emergency_first_name" 
-              placeholder="First name">
-              <input type="text" class="form-control" name="emergency_last_name" 
-              placeholder="Last name">
+              {{ wizard.form.emergency_first_name }}
+              {{ wizard.form.emergency_last_name }}
             </span>
           </div>
 
           <div class="form-group">
-            <label for="exampleInputEmail1">Relation</label>
-            <input type="text" class="form-control" id="relation">
+            <label>Relation</label>
+            {{ wizard.form.emergency_relation }}
           </div>
 
           <div class="form-group">
             <div class="form-half-size">
-              <label for="exampleInputEmail1">Cell Phone</label>
-              <input type="tel" class="form-control" id="emergency-cell-phone">
+              <label>Cell Phone</label>
+              {{ wizard.form.emergency_cell_phone }}
             </div>
             <div class="form-half-size">
-              <label for="exampleInputEmail1">Home Phone</label>
-              <input type="tel" class="form-control" id="emergency-home-phone">
+              <label>Home Phone</label>
+              {{ wizard.form.emergency_home_phone }}
             </div>
+          </div>
+
+          <div class="form-group">
+            <label>Comments</label>
+            {{ wizard.form.contact_comments }}
           </div>
       </div>
     </div>
 
-    <button class="btn btn-primary pull-right" type="submit" value="{{ wizard.steps.next }}">
+    <button class="btn btn-primary pull-right" name="wizard_goto_step" type="submit" value="submit">
       Next
     </button>
     <br><br>

@@ -3,17 +3,18 @@ from school_components import views
 from school_components.views.register_view import CourseRegisterWizard, FORMS
 
 urlpatterns = patterns('',
-	# # registration
-	url(r'^register1/$', 
+
+	url(r'^test/$', 
 		CourseRegisterWizard.as_view(FORMS),
 		name='courseregister'),
 
+	# # registration
 	url(r'^register/$', 
-		'school_components.views.register_view.course_register', 
+		CourseRegisterWizard.as_view(FORMS),
 		name='courseregister'),
-	url(r'^register/(?P<page_no>\d+)/$', 
-		'school_components.views.register_view.course_register', 
-		name='courseregister'),
+	url(r'^payment/(?P<parent_id>\d+)/$', 
+		'school_components.views.register_view.payment_create', 
+		name='paymentcreate'),
 	url(r'^registerlkc/$', 
 		'school_components.views.register_view.lkccourse_register', 
 		name='lkccourseregister'),

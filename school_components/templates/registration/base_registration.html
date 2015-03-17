@@ -8,6 +8,38 @@
 {% endblock %}
 
 {% block javascript_block %}
+<script>
+	// populate the class confirmation modal on the student form
+	$('#open-confirm-register-btn').click(function() {
+		// get selected classes from dropdowns
+		var classes = $('.class-dropdown option:selected');
+		$('#class-confirmation-list').html("");
+
+		$.each(classes, function(i, elm) {
+			if ($(elm).val().length > 0) {
+				$('#class-confirmation-list').append(
+					"<li> "+ $(elm).text() + "</li>"
+				)
+			}
+		})
+	});
+	
+	// makes the modal submit the form
+	$("#student-register-btn").click(function() {
+		$("#confirm-register-modal").modal("hide");
+		$("#student-register-btn").appendTo("#student-registration-form");
+		$("#student-registration-form").submit();
+		return true;
+  	});
+
+	// date picker for the date fields 
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1980:" + new Date().getFullYear(),
+    });
+</script>
+
 {% endblock javascript_block%}
 
 {% block body %}

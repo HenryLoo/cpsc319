@@ -25,151 +25,113 @@
 
                 <div class="body-top-bar">
     							<div class="centralize">
-               			<div class="row">
+    								<form class="form-horizontal" role="form" action="{% url 'dashboard:notifications_settings_page' %}" method="post">
+                  	{% csrf_token %}
+	               			<div class="row">
 
-               				<div class="col-lg-4" style="width:450px;">
-	               				Automatically send these alerts if the conditions are met:
-
-										</div>
-											<div class="row">
-
-												<div class="col-lg-4">
-													<a class="btn btn-default btn-sm" href="{% url 'dashboard:notifications_page' %}" role="button">
-														Inbox <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-													</a>
-												  <button type="button" class="btn btn-default btn-sm" aria-label="Delete">
-														Apply <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-													</button>
+	               				<div class="col-lg-4" style="width:450px;">
+		               				{% if applied == 1 %}
+		               					<div class="alert alert-success" role="alert">Notification settings updated.</div>
+		               				{% endif %}
+		               				<br>
+		               				Automatically send these alerts if the conditions are met:
 												</div>
+												<div class="row">
+
+													<div class="col-lg-4">
+														<a class="btn btn-default btn-sm" href="{% url 'dashboard:notifications_page' %}" role="button">
+															Inbox <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+														</a>
+														<label for="applyButton" class="btn btn-default btn-sm">Apply <i class="glyphicon glyphicon-ok"></i></label>
+														<input id="applyButton" type="submit" class="hidden">
+													</div>
+
+												</div>
+												<!-- /.row -->
 
 											</div>
+											<br>
 											<!-- /.row -->
 
-										</div>
-										<br>
-										<!-- /.row -->
 
+											<div class="row">
+												<div class="col-lg-4">
+													<div class="list-group" style="width: 600px;">
+													 
+													  <div class="list-group-item list-group-item-info form-group">
+													    <h4 class="list-group-item-heading">
+													    		<div style="width:550px;">
+														    		Attendance <br><br>
+													    		</div>
+													    </h4>
+													    <p>
+													    	<div class="col-lg-4">
+													    		<div class="form-group">
+													          <div class="input-group" style="width: 150px;">
+													           	<span class="input-group-addon">&#x3C;</span>
+												   	          <input type="text" class="form-control" name="attendanceCond" placeholder="#" value="{{ settings.0.condition }}">
+												   	          <span class="input-group-addon">day(s)</span>
+													          </div>
+																  </div>
+																</div>
+													    	<div class="input-group" style="width: 550px;">
+																	<input type="text" class="form-control" name="attendanceText" placeholder="Missed 5 classes in a row." value="{{ settings.0.content }}">
+																</div>
+															</p>
+													  </div>
+													  <br>
 
-										<div class="row">
-											<div class="col-lg-4">
-												<div class="list-group" style="width: 600px;">
-												 
-												  <a href="#" class="list-group-item list-group-item-info">
-												    <h4 class="list-group-item-heading">
-												    	<div class="row">
-												    		<div class="col-lg-4" style="width:550px;">
-												    			<form class="form-inline">
-													    			Attendance <br><br>
+													  <div class="list-group-item list-group-item-info form-group">
+													    <h4 class="list-group-item-heading">
+													    		<div style="width:550px;">
+														    		Performance <br><br>
+													    		</div>
+													    </h4>
+													    <p>
+													    	<div class="col-lg-4">
+													    		<div class="form-group">
+													          <div class="input-group" style="width: 120px;">
+													           	<span class="input-group-addon">&#x3C;</span>
+												   	          <input type="text" class="form-control" name="performanceCond" placeholder="#" value="{{ settings.1.condition }}">
+												   	          <span class="input-group-addon">%</span>
+													          </div>
+																  </div>
+																</div>
+													    	<div class="input-group" style="width: 550px;">
+																	<input type="text" class="form-control" name="performanceText" placeholder="Performance lower than 50%" value="{{ settings.1.content }}">
+																</div>
+															</p>
+													  </div>
+													  <br>
 
-						
+													  <div class="list-group-item list-group-item-info form-group">
+													    <h4 class="list-group-item-heading">
+													    		<div style="width:550px;">
+														    		Assignment <br><br>
+													    		</div>
+													    </h4>
+													    <p>
+													    	<div class="col-lg-4">
+													    		<div class="form-group">
+													          <div class="input-group" style="width: 130px;">
+													           	<span class="input-group-addon">&#x3C;</span>
+												   	          <input type="text" class="form-control" name="assignmentCond" placeholder="#" value="{{ settings.2.condition }}">
+												   	          <span class="input-group-addon">qtd</span>
+													          </div>
+																  </div>
+																</div>
+													    	<div class="input-group" style="width: 550px;">
+																	<input type="text" class="form-control" name="assignmentText" placeholder="Missed 2 assignments" value="{{ settings.2.content }}">
+																</div>
+															</p>
+													  </div>
+													  <br>
 
-																		<select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption" data-toggle="dropdown" aria-expanded="true" style="width: 60px; height: 30px">
-			                                <option value="greaterThan">&#x3C;</option>
-			                                <option value="lessThan">&#x3E;</option>
-			                              </select>
-
-			                              <div class="input-group" style="width: 60px;">
-																			<input type="text" class="form-control" placeholder="days" aria-describedby="conditionOption">
-																		</div>
-																	</form>
-												    		</div>
-													    	
-												    	</div>
-												    </h4>
-												    <p>
-												    	<div class="input-group" style="width: 550px;">
-																<input type="text" class="form-control" placeholder="Missed 5 classes in a row">
-															</div>
-														</p>
-												  </a>
-												  <br>
-
-												  <a href="#" class="list-group-item list-group-item-info">
-												    <h4 class="list-group-item-heading">
-												    	<div class="row">
-												    		<div class="col-lg-4" style="width:550px;">
-												    			<form class="form-inline">
-													    			Performance <br><br>
-													
-
-																		<select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption" data-toggle="dropdown" aria-expanded="true" style="width: 60px; height: 30px">
-			                                <option value="greaterThan">&#x3C;</option>
-			                                <option value="lessThan">&#x3E;</option>
-			                              </select>
-
-			                              <div class="input-group" style="width: 60px;">
-																			<input type="text" class="form-control" placeholder="%" aria-describedby="conditionOption">
-																		</div>
-																	</form>
-												    		</div>
-													    	
-												    	</div>
-												    </h4>
-												    <p>
-												    	<div class="input-group" style="width: 550px;">
-																<input type="text" class="form-control" placeholder="Performance lowest than 50%">
-															</div>
-														</p>
-												  </a>
-
-										<br>
-
-												  <a href="#" class="list-group-item list-group-item-info">
-												    <h4 class="list-group-item-heading">
-												    	<div class="row">
-												    		<div class="col-lg-4" style="width:550px;">
-												    			<form class="form-inline">
-													    			Assignment <br><br>
-
-																		<select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption" data-toggle="dropdown" aria-expanded="true" style="width: 60px; height: 30px">
-			                                <option value="greaterThan">&#x3C;</option>
-			                                <option value="lessThan">&#x3E;</option>
-			                              </select>
-
-			                              <div class="input-group" style="width: 60px;">
-																			<input type="text" class="form-control" placeholder="qtd" aria-describedby="conditionOption">
-																		</div>
-																	</form>
-												    		</div>
-				
-												    	</div>
-												    </h4>
-												    <p>
-												    	<div class="input-group" style="width: 550px;">
-																<input type="text" class="form-control" placeholder="Do not delivered 2 assignments">
-															</div>
-														</p>
-												  </a>
-
+													</div>
 												</div>
 											</div>
-										</div>
-
-
-
-										<div class="row">
-											<div class="col-lg-4">
-												<nav>
-												  <ul class="pagination">
-												    <li>
-												      <a href="#" aria-label="Previous">
-												        <span aria-hidden="t-rue">&laquo;</span>
-												      </a>
-												    </li>
-												    <li class="active"><a href="#">1</a></li>
-												    <li><a href="#">2</a></li>
-												    <li><a href="#">3</a></li>
-												    <li><a href="#">4</a></li>
-												    <li><a href="#">5</a></li>
-												    <li>
-												      <a href="#" aria-label="Next">
-												        <span aria-hidden="true">&raquo;</span>
-												      </a>
-												    </li>
-												  </ul>
-												</nav>
-	             			</div>
-	             			<!-- /.row -->
+											<!-- /.row -->
+										</form>
              			</div>
                	</div>
 

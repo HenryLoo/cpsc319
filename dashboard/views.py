@@ -4,6 +4,7 @@ from django.shortcuts import RequestContext
 from dashboard.models import Attendance
 from dashboard.models import Grade
 from dashboard.models import Chart
+from dashboard.models import NotificationType
 
 from accounts.models import UserProfile
 
@@ -68,9 +69,50 @@ def notifications_page(request):
 
 def notifications_settings_page(request):
     
-    context_dictionary = {}
-        
-    return render_to_response("dashboard/notifications_settings_page.html",context_dictionary,RequestContext(request))
+    return_dict = {}
+    
+    if request.method == 'POST':
+        attendanceCond = request.POST.get("attendanceCond")
+        attendanceText = request.POST.get("attendanceText")
+        performanceCond = request.POST.get("performanceCond")
+        performanceText = request.POST.get("performanceText")
+        assignmentCond = request.POST.get("assignmentCond")
+        assignmentText = request.POST.get("assignmentText")
+
+        attendance = NotificationType.objects.filter(notification_type='Attendance')
+        if attendance.count() == 0:
+            attendance = NotificationType(notification_type='Attendance', condition=attendanceCond, content=attendanceText)
+            attendance.save()
+        else:
+            attendance.update(condition=attendanceCond)
+            attendance.update(content=attendanceText)
+
+        performance = NotificationType.objects.filter(notification_type='Performance')
+        if performance.count() == 0:
+            performance = NotificationType(notification_type='Performance', condition=performanceCond, content=performanceText)
+            performance.save()
+        else:
+            performance.update(condition=performanceCond)
+            performance.update(content=performanceText)
+            
+
+        assignment = NotificationType.objects.filter(notification_type='Assignment')
+        if assignment.count() == 0:
+            assignment = NotificationType(notification_type='Assignment', condition=assignmentCond, content=assignmentText)
+            assignment.save()
+        else:
+            assignment.update(condition=assignmentCond)
+            assignment.update(content=assignmentText)
+
+        return_dict['applied'] = 1
+
+    preAttendance = NotificationType.objects.filter(notification_type='Attendance').get()
+    prePerformance = NotificationType.objects.filter(notification_type='Performance').get()
+    preAssignment = NotificationType.objects.filter(notification_type='Assignment').get()
+
+    return_dict['settings'] = [preAttendance, prePerformance, preAssignment]
+
+    return render_to_response("dashboard/notifications_settings_page.html",return_dict,RequestContext(request))
 
 def classes_schedule_page(request):
     
@@ -158,33 +200,33 @@ def custom_statistic_page(request):
     if request.method == 'POST':
         chartId = request.POST.get("customChart")
 
-    chart = Chart.objects.filter(id=chartId)
-    title = chart.values('title')
-    chartType = chart.values('chart_type')
-    xAxis = chart.values('x_axis')
-    yAxis = chart.values('y_axis')
+        chart = Chart.objects.filter(id=chartId)
+        title = chart.values('title')
+        chartType = chart.values('chart_type')
+        xAxis = chart.values('x_axis')
+        yAxis = chart.values('y_axis')
 
-    xAxisValues = 0
-    yAxisValues = 0
-    if xAxis == "DATE":
-    	xAxisValues = Period.objects.filter(id=1).values('start_date')
-    elif xAxis == "CLASSES":
-    	xAxisValues = Attendance.objects.filter(status=0).count()
-    elif xAxis == "STUDENTS":
-    	xAxisValues = Grade.objects.filter(grade__range=(0,100))
+        xAxisValues = 0
+        yAxisValues = 0
+        if xAxis == "DATE":
+        	xAxisValues = Period.objects.filter(id=1).values('start_date')
+        elif xAxis == "CLASSES":
+        	xAxisValues = Attendance.objects.filter(status=0).count()
+        elif xAxis == "STUDENTS":
+        	xAxisValues = Grade.objects.filter(grade__range=(0,100))
 
-    if yAxis == "NSTUDENTS":
-    	yAxisValues = Attendance.objects.filter(status=1).count()
-    elif yAxis == "NCLASSES":
-    	yAxisValues = Attendance.objects.filter(status=0).count()
-    elif yAxis == "NTEACHERS":
-        yAxisValues = Grade.objects.filter(grade__range=(0,100))
-    elif yAxis == "ATTENDANCE":
-        yAxisValues = Grade.objects.filter(grade__range=(0,100))
-    elif yAxis == "PERFORMANCE":
-        yAxisValues = Grade.objects.filter(grade__range=(0,100))
-        
-    return_dict['customStat'] = [[[xAxis, xAxisValues], [yAxis, yAxisValues]], title, chartType]
+        if yAxis == "NSTUDENTS":
+        	yAxisValues = Attendance.objects.filter(status=1).count()
+        elif yAxis == "NCLASSES":
+        	yAxisValues = Attendance.objects.filter(status=0).count()
+        elif yAxis == "NTEACHERS":
+            yAxisValues = Grade.objects.filter(grade__range=(0,100))
+        elif yAxis == "ATTENDANCE":
+            yAxisValues = Grade.objects.filter(grade__range=(0,100))
+        elif yAxis == "PERFORMANCE":
+            yAxisValues = Grade.objects.filter(grade__range=(0,100))
+            
+        return_dict['customStat'] = [[[xAxis, xAxisValues], [yAxis, yAxisValues]], title, chartType]
         
     return render_to_response("dashboard/custom_statistic_page.html",return_dict,RequestContext(request))
 

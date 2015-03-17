@@ -25,21 +25,21 @@ class Chart(models.Model):
                                     ('PIE', 'pie chart'),
                                     ('LINE', 'line chart'),
                                     ))
-                                    
-    x_axis = models.CharField(max_length = 20, choices =
-                                  (
-                                   ('NSTUDENTS', 'Number of Students'),
-                                   ('NCLASSES', 'Number of Classes'),
-                                   ('NTEACHERS', 'Number of Teachers'),
-                                   ('ATTENDANCE', 'Attendance'),
-                                   ('PERFORMANCE', 'Performance'),
-                                   ))
 
-    y_axis = models.CharField(max_length = 20, choices =
+    x_axis = models.CharField(max_length = 20, choices =
                             (
                                ('DATE', 'Date'),
                                ('STUDENTS', 'Students'),
                                ('CLASS', 'Classes'),
+                            ))
+
+    y_axis = models.CharField(max_length = 20, choices =
+                            (
+                               ('NSTUDENTS', 'Number of Students'),
+                               ('NCLASSES', 'Number of Classes'),
+                               ('NTEACHERS', 'Number of Teachers'),
+                               ('ATTENDANCE', 'Attendance'),
+                               ('PERFORMANCE', 'Performance'),
                             ))
                               
     visibility = models.CharField(max_length = 12, choices =

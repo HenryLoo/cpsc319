@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crispy_forms',
     'accounts',
     'messages',
     'school_components',
@@ -109,6 +110,9 @@ STATICFILES_DIRS = (
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 SENDGRID_EMAIL_BACKEND = "sendgrid.backends.SendGridEmailBackend"
 EMAIL_BACKEND = SENDGRID_EMAIL_BACKEND
 SENDGRID_EMAIL_HOST = "smtp.sendgrid.net"

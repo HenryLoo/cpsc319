@@ -1,69 +1,50 @@
 {% extends 'basetemplate.html' %}
+{% load crispy_forms_tags %}
 
 {% block body %}
-<ul class="nav nav-tabs nav-justified">
-  <li role="presentation" class="active"><a href="{% url 'messages:send_email' %}">Send Email</a></li>
-  <li role="presentation"><a href="{% url 'messages:sent_mail' %}">Sent Mail</a></li>
- </li>
-</ul>
+    <ul class="nav nav-tabs nav-justified">
+        <li role="presentation" class="active"><a href="{% url 'messages:send_email' %}">Send Email</a></li>
+        <li role="presentation"><a href="{% url 'messages:sent_mail' %}">Sent Mail</a></li>
+        </li>
+    </ul>
 
-                 <div class="row">   
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Email<small> Send</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Email > Send</a>
-                            </li>
-                        </ol>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Email
+                <small> Send</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-sitemap"></i> <a> Email > Send</a>
+                </li>
+            </ol>
 
-                    </div>
-                </div>
+        </div>
+    </div>
 
-<div class="row">
-<div class="page-header">
-</div>
-</div>
-        <form role="form" class="form-horizontal">
-          <div class="form-group">
-            <label class="col-sm-2" for="inputTo">To</label>
-            <div class="col-sm-10"><input class="form-control" id="inputTo" placeholder="List of recipients" type="email"></div>
-            <div class="col-sm-10"><div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    Group <span class="caret"></span>
+    <div class="row">
+        <div class="page-header">
+        </div>
+    </div>
+
+
+    <div class="row">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              &nbsp;&nbsp;{{ message }}
+            </div>
+          {% endfor %}
+        <div class="col-sm-8 col-sm-offset-2">
+            <form role="form" class="form-horizontal" method="post" action=".">
+                {% crispy form form.helper %}
+                <hr>
+                <a href="{% url 'dashboard:statistics_page' %}" role="button" class="btn btn-default pull left">Cancel</a>
+                <button type="submit" class="btn btn-primary pull-right">Send <i class="fa fa-arrow-circle-right fa-lg"></i>
                 </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Everyone</a></li>
-                    <li><a href="#">All Administrators</a></li>
-                    <li><a href="#">All Teachers</a></li>
-                    <li><a href="#">All Students</a></li>
-                    <li><a href="#">Department 1</a></li>
-                    <li><a href="#">Department 2</a></li>
-                    <li><a href="#">Department 3</a></li>
-                    <li><a href="#">Department 4</a></li>
-                    <li><a href="#">Department ...</a></li>
-                    <li><a href="#">Class 1</a></li>
-                    <li><a href="#">Class 2</a></li>
-                    <li><a href="#">Class 3</a></li>
-                    <li><a href="#">Class 4</a></li>
-                    <li><a href="#">Class ...</a></li>
-                </ul></div>
+            </form>
         </div>
-        </div>
-          <div class="form-group">
-            <label class="col-sm-2" for="inputSubject">Subject</label>
-            <div class="col-sm-10"><input class="form-control" id="inputSubject" placeholder="Subject" type="text"></div>
-          </div>
-          <div class="form-group">
-            <label class="col-sm-12" for="inputBody">Message</label>
-            <div class="col-sm-12"><textarea class="form-control" id="inputBody" rows="8"></textarea></div>
-          </div>
-        </form>
-        <hr>
-
-    
-        <a href="{% url 'dashboard:statistics_page' %}" role="button" class="btn btn-default pull left">Cancel</a> 
-        <button type="button" class="btn btn-primary pull-right">Send <i class="fa fa-arrow-circle-right fa-lg"></i></button>
+    </div>
 
 {% endblock %}

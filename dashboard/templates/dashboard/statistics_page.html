@@ -1,4 +1,5 @@
-{%extends 'basetemplate.html'%}    
+{%extends 'basetemplate.html'%}
+{% load googlecharts %}  
           
 {%block body%}
 
@@ -20,7 +21,9 @@
                                 <i class="fa fa-sitemap"></i> <a>Dashboard > Statistics</a>
                             </li>
                         </ol>
-
+                        {% if createdCustom == 1 %}
+                            <div class="alert alert-success" role="alert">New custom statistic added.</div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -36,31 +39,31 @@
                             </div>
                                 <div class="list-group">
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{statistics.0.0}}</span>
+                                        <span class="badge">{{ usage.0 }}</span>
                                         <i class="fa fa-child"></i> Students
                                     </a>                                   
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{statistics.0.1}}</span>
+                                        <span class="badge">{{ usage.1 }}</span>
                                         <i class="fa fa-user"></i> Admins
                                     </a>
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{statistics.0.2}}</span>
+                                        <span class="badge">{{ usage.2 }}</span>
                                         <i class="fa fa-users"></i> Teachers
                                     </a>
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{statistics.0.3}}</span>
+                                        <span class="badge">{{ usage.3 }}</span>
                                         <i class="fa fa-table"></i> Classes
                                     </a>
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{statistics.0.4}}</span>
+                                        <span class="badge">{{ usage.4 }}</span>
                                         <i class="fa fa-book"></i> Courses
                                     </a>
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{statistics.0.5}}</span>
+                                        <span class="badge">{{ usage.5 }}</span>
                                         <i class="fa fa-calendar"></i> Periods
                                     </a>                                    
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{statistics.0.6}}</span>
+                                        <span class="badge">{{ usage.6 }}</span>
                                         <i class="fa fa-university"></i> Schools
                                     </a>
 
@@ -77,12 +80,12 @@
                             </div>
                                 <div class="list-group">
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{statistics.1.0}}</span>
+                                        <span class="badge">{{ payments.0 }}</span>
                                         <i class="fa fa-fw fa-user"></i> Students with payment not registered
                                     </a>
 
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">$ {{statistics.1.1}}</span>
+                                        <span class="badge">$ {{ payments.1 }}</span>
                                         <i class="fa fa-calculator"></i> Total received
                                     </a>
                                 </div>
@@ -100,9 +103,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for receipt in statistics.1.2 %}
+                                            {% for receipt in payments.2 %}
                                                 <tr>
-                                                    <td>{{ receipt.receipt_no }}</td>
+                                                    <td><a href="{% url 'school:parentlist' receipt.parent_id %}">{{ receipt.receipt_no }}</a></td>
                                                     <td>{{ receipt.date }}</td>
                                                     <td>$ {{ receipt.amount }}</td>
                                                 </tr>
@@ -126,81 +129,80 @@
                             </div>
                             <div class="panel-body">
 
-                                    <form class="form-horizontal" role="form" action="{% url 'dashboard:custom_statistic_created_page' %}" method="post">
-                                    {% csrf_token %}
+                                <form class="form-horizontal" role="form" action="{% url 'dashboard:statistics_page' %}" method="post">
+                                {% csrf_token %}
 
-                                      <div class="form-group">
+                                    <div class="form-group form-group-sm">
                                         <label class="control-label col-sm-5" for="title">Title:</label>
                                         <div class="col-sm-7">
-                                          <input type="title" class="form-control" name="title" placeholder="Enter statistics title">
+                                            <input type="title" class="form-control" id="title" name="title" placeholder="Enter statistics title">
                                         </div>
-                                      </div>
+                                    </div>
 
-                                      <div class="form-group">
-                                        <label class="control-label col-sm-5" for="pwd">Horizontal axis:</label>
+                                    <div class="form-group form-group-sm">
+                                        <label class="control-label col-sm-5" for="xAxis" style="height: 30px;">Independent Variable:</label>
                                         <div class="col-sm-7"> 
 
-                                                <div class="dropdown">
-                                                  <select class="btn btn-default dropdown-toggle" name="xAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
+                                            <div class="dropdown">
+                                                <select class="btn btn-default dropdown-toggle" id="xAxis" name="xAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
                                                     <option value="DATE">Date</option>
                                                     <option value="STUDENTS">Students</option>
                                                     <option value="CLASS">Classes</option>
-                                                  </select>
-                                                </div>
+                                                </select>
+                                            </div>
                                         </div>
-                                      </div>
-                                      
-                                      <div class="form-group">
-                                        <label class="control-label col-sm-5" for="pwd">Vertical axis:</label>
+                                    </div>
+                                          
+                                    <div class="form-group form-group-sm">
+                                        <label class="control-label col-sm-5" for="yAxis" style="height: 30px;">Dependent Variable:</label>
                                         <div class="col-sm-7"> 
 
-                                                <div class="dropdown">
-                                                  <select class="btn btn-default dropdown-toggle" name="yAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px"> 
-                                                    <option value="NSTUDENTS">Number of Students</option>
-                                                    <option value="NCLASSES">Number of Classes</option>
-                                                    <option value="NTEACHERS">Number of Teachers</option>
+                                            <div class="dropdown">
+                                                <select class="btn btn-default dropdown-toggle" id="yAxis" name="yAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px"> 
+                                                    <option value="NSTUDENTS"># of Students</option>
+                                                    <option value="NCLASSES"># of Classes</option>
+                                                    <option value="NTEACHERS"># of Teachers</option>
                                                     <option value="ATTENDANCE">Attendance</option>
                                                     <option value="PERFORMANCE">Performance</option>
-                                                  </select>
-                                                </div>
+                                                </select>
+                                            </div>
                                         </div>
-                                      </div>
+                                    </div>
 
-                                     <div class="form-group">
-                                        <label class="control-label col-sm-5" for="pwd">Chart type:</label>
+                                    <div class="form-group form-group-sm">
+                                        <label class="control-label col-sm-5" for="chartType">Chart Type:</label>
                                         <div class="col-sm-7"> 
 
-                                                <div class="dropdown">
-                                                  <select class="btn btn-default dropdown-toggle" name="chartType" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
+                                            <div class="dropdown">
+                                                <select class="btn btn-default dropdown-toggle" id="chartType" name="chartType" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
                                                     <option value="PIE">Pie</option>
                                                     <option value="BAR">Bar</option>
                                                     <option value="LINE">Line</option>
-                                                  </select>
-                                                </div>
+                                                </select>
+                                            </div>
                                         </div>
-                                      </div>
+                                    </div>
 
                                     <div class="form-group">
-                                        <label class="control-label col-sm-5" for="pwd">Visibility:</label>
+                                        <label class="control-label col-sm-5" for="visibility">Visibility:</label>
                                         <div class="col-sm-7"> 
 
-                                                <div class="dropdown">
-                                                  <select class="btn btn-default dropdown-toggle" name="visibility" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 170px; height: 30px">
-                                                    <option value="ADM">Only Administrators</option>
-                                                    <option value="ALL">Administrators and Teachers</option>
-                                                  </select>
-                                                </div>
+                                            <div class="dropdown">
+                                                <select class="btn btn-default dropdown-toggle" id="visibility" name="visibility" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
+                                                    <option value="ADM">Only Admins</option>
+                                                    <option value="ALL">All</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                    </div>
 
-                                      </div>
-
-                                      <div class="form-group"> 
+                                    <div class="form-group"> 
                                         <div class="col-sm-offset-4 col-sm-10">
-                                          <input type="submit" class="btn btn-primary" style="width: 100px; height: 35px;" value="Create">
+                                            <input type="submit" class="btn btn-primary" style="width: 100px; height: 35px;" value="Create">
                                         </div>
-                                      </div>
+                                    </div>
 
-                                    </form>
+                                </form>
 
                             </div>
                         </div>
@@ -227,7 +229,7 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <i class="fa fa-line-chart" style="font-size: 250px; margin-top: 20px; margin-left: 20px"></i>
+                                <div id="reg_chart_div" style="width: 299px; height: 299px;"></div>
                             </div>
                         </div>
                     </div>
@@ -244,10 +246,7 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="max-height: 2; min-height: 2;" >
-                                <i class="fa fa-pie-chart" style="font-size: 260px; margin-top: 20px; margin-left: 20px"></i>
-                                <form class="form-horizontal" role="form" action="{% url 'dashboard:attendance_page' %}">
-                                <input type="submit" class="btn btn-primary btn-right" style="width: 65px; height: 30px;" value="Demo">
-                                </form>
+                                <div id="performance_chart_div" style="width: 299px; height: 299px;"></div>
                             </div>
                         </div>
                     </div>
@@ -264,7 +263,7 @@
                                 {% csrf_token %}
                                     <input type="submit" class="btn btn-primary btn-right" style="width: 65px; height: 30px;" value="View">
                                     <select class="btn btn-default dropdown-toggle" name="customChart" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
-                                        {% for chart in statistics.2 %}
+                                        {% for chart in charts %}
                                             <option value="{{ chart.id }}">{{ chart.title }}</option>
                                         {% endfor %}
                                     </select>
@@ -274,6 +273,29 @@
                     </div>
 
                 </div>
+
+{% googlecharts %}
+    {% data registrationChart "regData" %}
+        {% col "string" "Period" %}"{{ val }}"{% endcol %}
+        {% col "number" "Students" %}{{ val }}{% endcol %}
+    {% enddata %}
+
+    {% options "regOptions" %}
+        kind: "LineChart"
+    {% endoptions %}
+    {% graph "reg_chart_div" "regData" "regOptions" %}
+
+    {% data performanceChart "performanceData" %}
+        {% col "string" "Grade" %}"{{ val }}"{% endcol %}
+        {% col "number" "Students" %}{{ val }}{% endcol %}
+    {% enddata %}
+
+    {% options "performanceOptions" %}
+        kind: "PieChart"
+    {% endoptions %}
+    {% graph "performance_chart_div" "performanceData" "performanceOptions" %}
+{% endgooglecharts %}
+
 {%endblock%}
                 <!-- /.row -->
 

@@ -9,10 +9,11 @@ from dashboard.models import NotificationType
 from accounts.models import UserProfile
 
 from school_components.models import Class
-#from school_components.models import ClassSchedule
+from school_components.models import ClassSchedule
 from school_components.models import ClassRegistration
 from school_components.models import ClassTeacher
 from school_components.models import Course
+from school_components.models import Grading
 from school_components.models import Parent
 from school_components.models import Payment
 from school_components.models import Period
@@ -27,12 +28,26 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.db.models import Sum
+from django.db.models import Count
 
 import datetime
 
 def statistics_page(request):
     
     return_dict = {}
+
+    if request.method == 'POST':
+        title = request.POST.get("title")
+        xAxis = request.POST.get("xAxis")
+        yAxis = request.POST.get("yAxis")
+        chartType = request.POST.get("chartType")
+        visibility = request.POST.get("visibility")
+        # Need to replace this with actual school and periods
+        school = School.objects.filter(id=1).get()
+        period = Period.objects.filter(id=1).get()
+        chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
+        chart.save()
+        return_dict['createdCustom'] = 1
 
     students = Student.objects.count()
     admins = UserProfile.objects.exclude(role='TEACHER').count()
@@ -51,8 +66,24 @@ def statistics_page(request):
     receipts = Payment.objects.all().order_by('-date')
     charts = Chart.objects.all().order_by('title')
 
-    return_dict['statistics'] = [[students, admins, teachers, classes, courses, periods, schools],[unregistered_paid_students, payment_total, receipts], charts]
-        
+    return_dict['usage'] = [students, admins, teachers, classes, courses, periods, schools]
+    return_dict['payments'] = [unregistered_paid_students, payment_total, receipts]
+    return_dict['charts'] = charts
+
+    regXAxis = Period.objects.all().order_by('start_date').values_list('description', flat=True)
+    regYAxis = ClassRegistration.objects.values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
+    return_dict['registrationChart'] = []
+    for x in zip(regXAxis, regYAxis):
+        return_dict['registrationChart'].append([x[0], x[1]])
+
+    
+    performance = Grading.objects.filter(period_id=1).values('grade').order_by('grade').annotate(num_students=Count('grade'))   
+    performXAxis = performance.values_list('grade', flat=True)
+    performYAxis = performance.values_list('num_students', flat=True)
+    return_dict['performanceChart'] = []
+    for x in zip(performXAxis, performYAxis):
+        return_dict['performanceChart'].append([x[0], x[1]])
+
     return render_to_response("dashboard/statistics_page.html",return_dict,RequestContext(request))
 
 def demostatistics_page(request):

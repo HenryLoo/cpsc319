@@ -46,6 +46,18 @@ class MyUserCreationForm(ModelForm):
         model = User
         fields = ['email', 'password', 'first_name', 'last_name']
 
+class MyUserEditForm(ModelForm):
+
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    
+    class Meta():
+        model = User
+        fields = ['email', 'first_name', 'last_name'] #no password changing on edit
+
+   
+
 
 class AdminProfileForm(ModelForm):
 

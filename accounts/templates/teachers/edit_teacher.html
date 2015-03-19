@@ -71,98 +71,34 @@ $('#edit-teacher-btn').click(function() {
 </div>
 
 <div class="col-md-9 teacher-info">
+	
 	{% if teacher %}
-	<span>
-		<h3> Teacher Info </h3>
-		<a href="{% url 'account:edit_teacher' teacher.id %}" id="edit-teacher-btn" class="pull-right"> Edit </a>
-	</span>
-	<table class="table table-hover">
-		<tr> 
-			<td> ID: </td>
-			<td> {{ teacher.id }} </td>
-		</tr>
-		<tr> 
-			<td> First Name: </td>
-			<td> 
-				{{ teacher.user.user.first_name}} 
-			</td>
-		</tr>
-		<tr> 
-			<td> Last Name: </td>
-			<td> 
-				{{ teacher.user.user.last_name}} 
-			</td>
-		</tr>
-		<tr> 
-			<td> Email: </td>
-			<td> {{ teacher.user.user.email }} </td>
-		</tr>
-		<tr> 
-			<td> Phone number: </td>
-			<td> {{ teacher.user.phone }} </td>
-		</tr>
-		<tr> 
-			<td> School branch: </td>
-			<td> {{ teacher.user.school.title }} </td>
-		</tr>
-		<tr> 
-			<td> Days available: </td>
-			<td> 
-			        Monday: {% if teacher.teaching_availability.monday %} Available
-					{%else%} Not Available {% endif %}
-					{% if teacher.teaching_availability.monday_times %} - {{teacher.teaching_availability.monday_times}} {%endif%}
-						<br>
-				
-					Tuesday: {% if teacher.teaching_availability.tuesday %} Available
-					{%else%} Not Available {% endif %}
-					{% if teacher.teaching_availability.tuesday_times %} - {{teacher.teaching_availability.tuesday_times}} {%endif%}
-						<br>
-						
-					Wednesday: {% if teacher.teaching_availability.wednesday %} Available
-					{%else%} Not Available {% endif %}
-					{% if teacher.teaching_availability.wednesday_times %} - {{teacher.teaching_availability.wednesday_times}} {%endif%}
-						<br>
-
-					Thursday: {% if teacher.teaching_availability.thursday %} Available
-					{%else%} Not Available {% endif %}
-					{% if teacher.teaching_availability.thursday_times %} - {{teacher.teaching_availability.thursday_times}} {%endif%}
-						<br>
-						
-					Friday: {% if teacher.teaching_availability.friday %} Available
-					{%else%} Not Available {% endif %}
-					{% if teacher.teaching_availability.friday_times %} - {{teacher.teaching_availability.friday_times}} {%endif%}
-						<br>
-						
-						</td>
-		</tr>
-		<tr> 
-			<td> Additional Comments: </td>
-			<td> {{ teacher.comments }} </td>
-		</tr>
-	</table>
-
-	<h4>2015</h4>
-	<ul>
-		<li><a href="#">Music Level 1</a></li>
-		<li><a href="#">History Level 2</a></li>
-	</ul>
-
-	<h4>2013</h4>
-	<ul>
-		<li><a href="#">History Level 1</a></li>
-	</ul>
+	
+	{% if edit_success %}
+		<div class="alert alert-info" role="alert">
+			Teacher edited successfully.
+		</div>
+	{% endif %}
+	
+	<form role="form" action="{%url 'account:edit_teacher' teacher.id %}" method="post">
+		{% csrf_token %}
+		{% if error %} {{error}} {%endif%}
+		<table class="table table-hover teacher-form">
+	    	{{ user_form.as_table }}
+			{{ teacher_phone.as_table }}
+			{{ teacher_form.as_table }}
+		</table>
+		<div> <h4> Availability </h4> </div>
+		<table class=" table-hover teacher-form">
+			{{ availability_form.as_table }}
+	    </table>
+	    <input type="submit" class="btn btn-primary center-block" value="Save" />
+	</form> 
 
 	{% else %}
-		{% if not_valid_teacher %}
 		<div class="alert alert-info" role="alert">
 			There is no teacher with that id.
 		</div>
-		
-		{% else %}
-		<div class="alert alert-info" role="alert">
-			Select a teacher to view details.
-		</div>
-		{% endif %}
 	{% endif %}
 </div>
 

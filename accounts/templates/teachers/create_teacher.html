@@ -35,7 +35,7 @@
 	{% endif %}
 
 	{% if user_ret %}
-		<div> Teacher {{user_ret.first_name}} {{user_ret.last_name}} created successfully! </div>
+		<div class="alert alert-info" role="alert"> Teacher {{user_ret.first_name}} {{user_ret.last_name}} created successfully! </div>
 	{% endif %}
 	
 	<form role="form" action="{%url 'account:create_teacher' %}" method="post">

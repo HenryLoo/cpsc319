@@ -51,5 +51,5 @@ class TeacherUser(models.Model):
     #classes has a many-to-many relation with this
 
     def __unicode__(self):
-        return self.user.user.first_name + " " + self.user.user.last_name + "role"
+        return self.first_name + " " + self.last_name
 

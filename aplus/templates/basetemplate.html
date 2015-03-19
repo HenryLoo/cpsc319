@@ -263,9 +263,14 @@
 
     <!-- TODO: remove, used for debugging only -->
     <script>
-        $("#current-period").text( "{{ request.session.period_name }}" );
-        $("#current-school").text( "{{ request.session.school_name }}" );
+        $( ".datepicker" ).datepicker({
+          changeMonth: true,
+          changeYear: true,
+          yearRange: "1980:" + new Date().getFullYear(),
+        });
     </script>
+
+
 
     {% block javascript_block %}
     {% endblock %}

@@ -14,7 +14,6 @@ def parent_list(request, parent_id=None):
 
 	if parent_id:
 		context_dictionary['parent'] = Parent.objects.get(pk=parent_id)
-		context_dictionary['children_list'] = Student.objects.filter(parent=parent_id)
 		context_dictionary['payment_form'] = PaymentForm()
 
 	return render_to_response("parents/parent_list.html",
@@ -27,18 +26,19 @@ def parent_create(request):
 	if request.method == 'POST':
 
 		if p.is_valid():
-			parent = p.save(commit=False)
+			# TODO: update with whatever we decide to do
+			# parent = p.save(commit=False)
 
-			school = School.objects.get(pk=request.session['school_id'])
-			period = Period.objects.get(pk=request.session['period_id'])
+			# school = School.objects.get(pk=request.session['school_id'])
+			# period = Period.objects.get(pk=request.session['period_id'])
 			
-			parent.school = school
-			parent.period = period
+			# parent.school = school
+			# parent.period = period
 		
-			parent.save()
+			new = p.save()
 
 			return HttpResponseRedirect(
-				reverse('school:parentlist', args=(parent.id,)))
+				reverse('school:parentlist', args=(new.id,)))
 		else:
 			context_dictionary['errors'] = p.errors 
 

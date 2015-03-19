@@ -13,149 +13,86 @@
     <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
 </ul>
 
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Students <small>Upload</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Students > Upload</a>
-                            </li>
-                        </ol>
+<!-- Page Heading -->
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Students <small>Upload</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Students > Upload</a>
+            </li>
+        </ol>
 
-                    </div>
-                </div>
+    </div>
+</div>
 
-	To add multiple students to the system, upload a CSV with the following fields
-	<br>
-	<strong>First Name, Last Name, Birthdate, Home Address, Phone Number, Parent First Name, 
-	Parent Last Name, Allergies, Emergency Contact Name, Emergency Contact Phone Number</strong>
-	<br>
-	<br>
-	<a href="#">Click here</a> to download an example of a valid CSV.
-	</p>
+To add multiple students to the system, upload a CSV with the following fields
+<br>
+<strong>
+First Name, Last Name, Gender, Birthdate, Home Phone,
+Home Address, Email, Allergies, Emergency Contact Name, Emergency Contact Phone, 
+Emergency Contact Relation, Parent First Name, Parent Last Name, Parent Cell Phone, Parent Email
+</strong>
+<br>
+<br>
+<a href="{% url 'school:studentsamplecsv' %}">Click here</a> to download an example of a valid CSV.
+</p>
 
-	<form role="form" action="{%url 'school:studentupload' %}" method="post" enctype="multipart/form-data">
-		{% csrf_token %}
-		<div class="form-group">
-		    <input type="file" id="exampleInputFile" name="file">
-		    <br>
-		    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#student-list-csv">
-		  	Submit
-			</button>
-	  	</div>
-	    <!-- <input type="submit" class="btn btn-default" value="Submit" /> -->
-	</form> 
+<form role="form" action="{%url 'school:studentupload' %}" method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<div class="form-group">
+	    <input type="file" id="exampleInputFile" name="file">
+  	</div>
+    <input type="submit" class="btn btn-primary" value="Submit" />
+</form> 
 
+<br> 
 
-
-
-	<div class="modal fade" id="student-list-csv" tabindex="-1" role="dialog" 
-	aria-labelledby="modal" aria-hidden="true">
-	  <div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	        <span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">Upload Students</h4>
-	      </div>
-	      <div class="modal-body">
-	      Would you like to add these students?
-	      <br>
-	      <br>
-
-	      <table class="table table-bordered table-hover">
-	      	<tr>
-	      		<th>First Name</th>
-	      		<th>Last Name</th>
-	      		<th>Birthdate</th>
-	      		<th>Address</th>
-	      		<th>Phone Number</th>
-	      		<th>Parent</th>
-	      	</tr>
-	      	<tr> 
-	      		<td>Richard</td>
-	      		<td>Harris</td>	
-	      		<td>March 4, 2015</td>	
-	      		<td>7 Northport Pass</td>
-	      		<td>605-555-2344</td>
-	      		<td>Elise Harris</td>
-	      	</tr>
-	      	<tr> 
-	      		<td>Marie</td>
-	      		<td>Sims</td>	
-	      		<td>December 4, 2015</td>	
-	      		<td>936 Bashford Parkway</td>
-	      		<td>605-555-2291</td>
-	      		<td>Gregory Day</td>
-	      	</tr>
-	      	<tr> 
-	      		<td>Jeffrey</td>
-	      		<td>Watson</td>	
-	      		<td>April 19, 2015</td>	
-	      		<td>7436 Eliot Road</td>
-	      		<td>605-555-8832</td>
-	      		<td>Elise Harris</td>
-	      	</tr>
-	      	<tr> 
-	      		<td>Michelle</td>
-	      		<td>Hughes</td>	
-	      		<td>June 22, 2015</td>	
-	      		<td>05 Mifflin Center</td>
-	      		<td>605-555-2184</td>
-	      		<td>Paul Hughes</td>
-	      	</tr>
-	      	<tr> 
-	      		<td>Bonnie</td>
-	      		<td>Moore</td>	
-	      		<td>October 1, 2015</td>	
-	      		<td>864 Karstens Crossing</td>
-	      		<td>605-555-3111</td>
-	      		<td>Donald Moore</td>
-	      	</tr>
-		  </table>
-
-	      </div>
-	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save</button>
-	      </div>
-	    </div>
-	  </div>
-
-
-
-<!-- {% if message %}
-	{{ message }}
-	<button> <a href="{%url 'school:studentupload'  %}"> Yes </a></button>
-	<button> No </button>
+{% if errors %}
+	<div class="alert alert-danger" role="alert">
+	SOme fields were invalid. Please fix these errors and try again. <br>
+		{% for error in errors %}
+			{{ error }} <br>
+		{% endfor %}
+	</div>
 {% endif %}
-
-<p>
 
 {% if student_list %}
-	<table class="table">
-		<tr>
-		{% with student_list|first as first_student %}
-			{% for key, value in first_student.items %}
-				<td> {{ key }}</td>
-			{% endfor %}
-		{% endwith %}
-		</tr>
-		<tr>
-			{% for student in student_list %}
-			<tr>
-				{% for key, value in student.items %}
-					<td> {{ value }}</td>
-				{% endfor %}
-			</tr>
-			{% endfor %}
-		</tr>
+	<h4>These students were created</h4>
+	<table class="table table-bordered table-hover">
+	<tr>
+		<td> <strong> Full Name </strong> </td>
+		<td> <strong> Birthdate </strong> </td>
+		<td> <strong> Address </strong> </td>
+		<td> <strong> Phone Number </strong> </td>
+		<td> <strong> Parent </strong> </td>
+		<td> <strong> Allergies </strong> </td>
+		<td> <strong> Emergency Contact </strong> </td>
+	</tr>
+	{% for student in student_list %}
+	<tr>
+		<td> 
+		<a href="{% url 'school:studentlist' student.id %}">
+		{{ student.first_name }} {{ student.last_name }} 
+		</a>
+		</td>
+		<td>{{ student.birthdate }} </td>
+		<td>{{ student.address }} </td>
+		<td>{{ student.home_phone }} </td>
+		<td>{{ student.parent }}: 
+		{{ student.parent.cell_phone }} {{ student.parent.email }}</td>
+		<td>{{ student.allergies }}</td>
+		<td>{{ student.relation }},  
+		{{ student.emergency_contact_name }}: {{ student.emergency_contact_phone }} 
+		</td>
+	</tr>
+	{% endfor %}
 	</table>
+</form>
 {% endif %}
- -->
+
 
 {% endblock student_content %}
 

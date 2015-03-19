@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.core.servers.basehttp import FileWrapper
+from aplus.settings import SAMPLE_CSV_PATH
 import csv
 
 
@@ -17,11 +19,23 @@ def student_list(request, student_id=None):
 	context_dictionary = {'student_list': student_list}
 
 	if student_id:
-		context_dictionary['student'] = Student.objects.get(pk=student_id)
+		student = Student.objects.get(pk=student_id)
+		context_dictionary['student'] = student
+		
+		class_list = [class_history_helper(class_reg) for class_reg in student.enrolled_student.all()]
+		context_dictionary['class_history_list'] = class_list
 
 	return render_to_response("students/student_list.html",
 		context_dictionary,
 		RequestContext(request))
+
+# turn into a dict to help with sorting in UI
+def class_history_helper(class_reg):
+	m = model_to_dict(class_reg)
+	m['period'] = class_reg.reg_class.period.description
+	m['id'] = class_reg.reg_class.id
+	m['class_name'] = class_reg.reg_class
+	return m
 
 # create a new student with form data
 def student_create(request):
@@ -32,11 +46,12 @@ def student_create(request):
 		if s.is_valid():
 			student = s.save(commit=False)
 
-			school = School.objects.get(pk=request.session['school_id'])
-			period = Period.objects.get(pk=request.session['period_id'])
+			# TODO: change to whatever we decide to use
+			# school = School.objects.get(pk=request.session['school_id'])
+			# period = Period.objects.get(pk=request.session['period_id'])
 			
-			student.school = school
-			student.period = period
+			# student.school = school
+			# student.period = period
 		
 			student.save()
 
@@ -51,27 +66,27 @@ def student_create(request):
 
 
 def student_form(request):
-	student_list = Student.objects.all()
-
-	context_dictionary = {'student_list': student_list,
-							'student_form': StudentForm() }
+	context_dictionary = {'student_form': StudentForm() }
 
 	return render_to_response('students/student_form.html',
 		context_dictionary,
 		RequestContext(request))
 
-#  would be nice if to ask for confirmation first...
+
+# TODO: if file is too big, save to disk instead
+# if time figure out a way to confirm
 def student_upload(request):
 	context_dictionary = {'form': StudentCSVForm()}
-
+	form = StudentCSVForm(request.POST, request.FILES)
+	
 	if request.method == 'POST':
-		context_dictionary['message'] = 'These students were created.'
-		context_dictionary['student_list'] = Student.objects.filter(id__lte=20)
+		student_list, errors = SchoolUtils.validate_csv(request.FILES['file'])
 
-		form = StudentCSVForm(request.POST, request.FILES)
-		student_list = SchoolUtils.parse_csv(request.FILES['file'])
-		context_dictionary['message'] = 'These students were created.'
-		context_dictionary['student_list'] = student_list
+		if errors:
+			context_dictionary['errors'] = errors
+		else:
+			map(lambda s: s.save(), student_list)
+			context_dictionary['student_list'] = student_list
 
 	return render_to_response('students/student_upload.html',
 		context_dictionary, RequestContext(request))
@@ -86,11 +101,23 @@ def student_export(request):
 		students = Student.objects.all()
 		writer = csv.writer(response)
 		for student in students:
-			writer.writerow([student.first_name, student.last_name, 
-				student.gender, student.birthdate, student.home_phone])
+			writer.writerow(
+				[student.first_name, student.last_name, student.gender, student.birthdate, 
+				student.home_phone, student.parent, student.parent.cell_phone, student.parent.email, 
+				student.allergies])
 
 		return response
 	else:
 		return render_to_response('students/student_export.html',
 			context_dictionary,
 			RequestContext(request))
+
+def student_sample_csv(request):
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="sample_students.csv"'
+	
+	f = open(SAMPLE_CSV_PATH)
+	response.write(f.read())
+	f.close()
+
+	return response

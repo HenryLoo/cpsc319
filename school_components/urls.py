@@ -3,12 +3,7 @@ from school_components import views
 from school_components.views.register_view import CourseRegisterWizard, FORMS
 
 urlpatterns = patterns('',
-
-	url(r'^test/$', 
-		CourseRegisterWizard.as_view(FORMS),
-		name='courseregister'),
-
-	# # registration
+	# registration
 	url(r'^register/$', 
 		CourseRegisterWizard.as_view(FORMS),
 		name='courseregister'),
@@ -42,6 +37,9 @@ urlpatterns = patterns('',
 	url(r'^students/export/$', 
 		'school_components.views.students_view.student_export', 
 		name='studentexport'),
+	url(r'^students/samplecsv$', 
+		'school_components.views.students_view.student_sample_csv', 
+		name='studentsamplecsv'),
     
 	# parents
 	url(r'^parents/$', 
@@ -58,9 +56,9 @@ urlpatterns = patterns('',
 		name='parentform'),
 
 	# payment
-	url(r'^payment/(?P<parent_id>\d+)/$', 
+	url(r'^paymentone/(?P<parent_id>\d+)/$', 
 		'school_components.views.parents_view.payment_create', 
-		name='paymentcreate'),
+		name='paymentcreateone'),
 
 	# courses
 	url(r'^courses/$', 

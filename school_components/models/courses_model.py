@@ -5,7 +5,6 @@ class Course(models.Model):
 	period = models.ForeignKey('Period')
 	department = models.ForeignKey('Department')
 	name = models.CharField(max_length=50, unique=True)
-	level = models.CharField(max_length=50, unique=True)
 	age_requirement = models.IntegerField(default=0)
 	description = models.CharField(max_length=250, blank=True)
 
@@ -30,13 +29,14 @@ class Prerequisite(models.Model):
 class Department(models.Model):
 	school = models.ForeignKey('School')
 	name = models.CharField(max_length=50)
-	description = models.CharField(max_length=500)
+	description = models.CharField(max_length=500, blank=True)
 
 	def __unicode__(self):
 		return self.name
 
 	class Meta:
 		app_label = 'school_components'
+		unique_together = ('name', 'school')
 		
 
 

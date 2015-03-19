@@ -21,19 +21,19 @@ $('#edit-student-btn').click(function() {
     <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
 </ul>
 
-                <!-- Page Heading -->
-                <div class="row">
+<!-- Page Heading -->
+<div class="row">
 
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Students <small>List</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Students > Students List</a>
-                            </li>
-                        </ol>
-                    </div>
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Students <small>List</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Students > Students List</a>
+            </li>
+        </ol>
+    </div>
 
 
 <div class="col-md-3 student-list">
@@ -122,7 +122,8 @@ $('#edit-student-btn').click(function() {
 		<tr> 
 			<td> Emergency Contact: </td>
 			<td> 
-				{{ student.emergency_contact_name }} 
+				{{ student.emergency_contact_name }}  ({{ student.relation }})
+				<br>			
 				{{ student.emergency_contact_phone }} 
 			</td>
 		</tr>
@@ -132,18 +133,31 @@ $('#edit-student-btn').click(function() {
 			{{ student.parent.first_name }} {{ student.parent.last_name }}</a>
 			</td>
 		</tr>
+		<tr>
+			<td> Comments: </td>
+			{% if student.comments %}
+				<td> {{ student.comments }} </td>
+			{% else %}
+				<td> None </td>
+			{% endif%}
+		</tr>
 	</table>
 
-	<h4>2015</h4>
-	<ul>
-		<li><a href="#">Music Level 1</a></li>
-		<li><a href="#">History Level 2</a></li>
-	</ul>
+	
+	{% regroup class_history_list|dictsort:"period" by period as sorted_class_list %}
+	{% for class_list in sorted_class_list %}
+		<h4>{{ class_list.grouper }}</h4>
+		<ul>
+		{% for class in class_list.list %}
+			<li>
+			<a href="{% url 'school:classlist' class.reg_class %}">
+			{{ class.class_name}} 
+			</a>
+			</li>
+		{% endfor %}
+		</ul>
+	{% endfor %}
 
-	<h4>2013</h4>
-	<ul>
-		<li><a href="#">History Level 1</a></li>
-	</ul>
 
 	{% else %}
 		<div class="alert alert-info" role="alert">

@@ -19,18 +19,18 @@ $('#edit-parent-btn').click(function() {
     <li role="presentation"><a href="{% url 'school:parentcreate' %}">Add Parent</a></li>
 </ul>
 
-                 <div class="row">   
-                 	<div class="col-lg-12">
-                        <h1 class="page-header">
-                            Parents<small> List</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Parents > List</a>
-                            </li>
-                        </ol>
+<div class="row">   
+	<div class="col-lg-12">
+    <h1 class="page-header">
+        Parents<small> List</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li class="active">
+            <i class="fa fa-sitemap"></i> <a> Parents > List</a>
+        </li>
+    </ol>
 
-                    </div>
+</div>
 
 
 <div class="col-md-3 school-list">
@@ -94,36 +94,52 @@ $('#edit-parent-btn').click(function() {
 			<td> {{ parent.email }} </td>
 		</tr>
 		<tr>
-			<td> Children </td>
-			<td>
-			{% if children_list %}
-			<ul>
-			{% for child in children_list %}
-				<li> 
-				<a href="{% url 'school:studentlist' child.id %}">
-				{{ child.first_name }} {{ child.last_name }}
-				</li>
-			{% endfor %}
-			</ul>
+			<td> Comments: </td>
+			{% if parent.comments %}
+				<td> {{ parent.comments }} </td>
 			{% else %}
-				No children are registered.
-			{% endif %}
-			</td>
+				<td> None </td>
+			{% endif%}
 		</tr>
-		<tr> 
-			<td> Amount paid: </td>
-			<td> 
-				{% if parent.payment.all%}
-					<ul>
-					{% for payment in parent.payment.all %}
-						<li>Receipt {{ payment.receipt_no }}: <strong>${{ payment.amount }}</strong></li>
-					{% endfor%}
-					</ul>
+		<tr>
+			<td> Children: </td>
+			<td>
+				{% if parent.student_set.all|length == 0 %}
+					No children are registered.
 				{% else %}
-					 <span class="btn-danger">$0.00</span>
+					<ul>
+					{% for child in parent.student_set.all %}
+						<li> 
+						<a href="{% url 'school:studentlist' child.id %}">
+						{{ child.first_name }} {{ child.last_name }}
+						</a>
+						</li>
+					{% endfor %}
+					</ul>
 				{% endif %}
+			
 			</td>
 		</tr>
+		</table>
+
+		<h4>Payments</h4>
+		{% if parent.payment.all%}
+		<table class="table table-bordered table-hover">
+		{% for payment in parent.payment.all %}
+		<tr> 
+			<td> {{ payment.date }} </td>
+			<td>
+				Receipt {{ payment.receipt_no }}: 
+				<strong>${{ payment.amount }}</strong>
+			</td>
+		</tr>
+		{% endfor%}
+
+		</table>
+		{% else %}
+			 <p class="btn-danger">No payments.</p>
+		{% endif %}
+		
 	</table>
 
 	<a class="btn btn-primary" data-toggle="collapse" href="#payment-form" aria-expanded="false" aria-controls="payment-form">
@@ -132,7 +148,7 @@ $('#edit-parent-btn').click(function() {
 
 	<div class="collapse" id="payment-form">
 		<br>
-		<form role="form" action="{%url 'school:paymentcreate' parent.id %}" method="post">
+		<form role="form" action="{%url 'school:paymentcreateone' parent.id %}" method="post">
 			{% csrf_token %}
 			<table class="table table-bordered">
 				{{ payment_form.as_table }}

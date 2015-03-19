@@ -1,17 +1,32 @@
 from django import forms
 from school_components.models.students_model import Student
-from school_components.models.classes_model import Class, ClassRegistration, ClassSchedule
-
+from school_components.models.classes_model import *
 class ClassForm(forms.ModelForm):
 	class Meta:
 		model = Class
 		fields = '__all__'
 
 class ClassScheduleForm(forms.ModelForm):
-	
 	class Meta:
 		model = ClassSchedule
-		fields = ['weekday','start_time','end_time']
+		exclude = ['sch_class']
+		widgets = {
+			'start_time': forms.TimeInput(
+				attrs={
+					'class':'form-inline',
+					'type': 'time',
+				}),
+			'end_time': forms.TimeInput(
+				attrs={
+					'class':'form-inline',
+					'type': 'time',
+				}),
+		}
+
+class ClassTeacherForm(forms.ModelForm):
+	class Meta:
+		model = ClassTeacher
+		fields = ['teacher']
 
 class ClassRegistrationForm(forms.ModelForm):
 	student = forms.ModelChoiceField(
@@ -24,3 +39,6 @@ class ClassRegistrationForm(forms.ModelForm):
 	class Meta:
 		model = ClassRegistration
 		fields = ['student']
+
+
+

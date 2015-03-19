@@ -7,41 +7,45 @@ class Class(models.Model):
 	period = models.ForeignKey('Period')
 	section = models.CharField(max_length=50, blank=True)
 	description = models.CharField(max_length=250, blank=True)
-	class_size = models.IntegerField(blank = True, null = True)
-	waiting_list_size = models.IntegerField(blank = True, null = True)
+	class_size = models.IntegerField(null=True, blank=True)
+	waiting_list_size = models.IntegerField(null=True, blank=True)
 	room = models.CharField(max_length=50, blank=True)
 
+	# used in displaying class history
 	def __unicode__(self):
-		return self.course.name + ' ' + self.section # + self.period
+		return self.course.name + ' ' + self.section 
 
 	class Meta:
 		app_label = 'school_components'
+		unique_together = ('course', 'section', 'period')
 
 class ClassSchedule(models.Model):
-	sch_class = models.ForeignKey('Class')
-	weekday = models.CharField(max_length = 12, choices =
-                            (
-                             ('Mon', 'Monday'),
-                             ('Tue', 'Tuesday'),
-                             ('Wed', 'Wednesday'),
-                             ('Thu', 'Thursday'),
-                             ('Fri', 'Friday')
-                             ))
-	start_time = models.TimeField(null=True, blank=True)
-	end_time = models.TimeField(null=True, blank=True)
+	# needs to be null to allow class to be created first from form
+	sch_class = models.OneToOneField('Class', related_name='schedule', null=True)
+	monday = models.BooleanField(default=False)
+	tuesday = models.BooleanField(default=False)
+	wednesday = models.BooleanField(default=False)
+	thursday = models.BooleanField(default=False)
+	friday = models.BooleanField(default=False)
+	saturday = models.BooleanField(default=False)
+	sunday = models.BooleanField(default=False)
+	start_time = models.TimeField(
+		default=datetime(2008, 1, 31, 9, 00, 00), blank=True)
+	end_time = models.TimeField(
+		default=datetime(2008, 1, 31, 10, 00, 00), blank=True)
 
 	class Meta:
 		app_label = 'school_components'
 
 
 class ClassTeacher(models.Model):
-	teacher = models.ForeignKey('accounts.TeacherUser')
-	taught_class = models.ForeignKey('Class')
-	period = models.ForeignKey('Period')
-	school = models.ForeignKey('School')
+	# needs to be null to allow class to be created 
+	teacher = models.ForeignKey('accounts.TeacherUser', related_name='teacher')
+	taught_class = models.ForeignKey('Class', related_name='taught_class', null=True)
 
 	class Meta:
 		app_label = 'school_components'
+		unique_together = ('teacher', 'taught_class')
 
 
 class ClassRegistration(models.Model):
@@ -49,27 +53,28 @@ class ClassRegistration(models.Model):
 	student = models.ForeignKey('Student', related_name='enrolled_student')
 	registration_status = models.BooleanField()
 
+	def class_period(self):
+		return self.reg_class.period
+
 	class Meta:
 		app_label = 'school_components'
+		unique_together = ('reg_class', 'student')
 
 
 #change name after
 class ClassAttendance(models.Model):
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
-	school = models.ForeignKey('School')
-	period = models.ForeignKey('Period')
 	attendance = models.CharField(max_length=5, blank=True)
 	date = models.TimeField(null=True, blank=True)
 	comments = models.CharField(max_length=500)
 
 	class Meta:
 		app_label = 'school_components'
+		unique_together = ('reg_class', 'student', 'date')
 
 class Assignment(models.Model):
 	reg_class = models.ForeignKey('Class')
-	school = models.ForeignKey('School')
-	period = models.ForeignKey('Period')
 	title = models.CharField(max_length=100, blank=True)
 	date = models.TimeField(null=True, blank=True)
 
@@ -84,8 +89,6 @@ class Assignment(models.Model):
 class Grading(models.Model):
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
-	school = models.ForeignKey('School')
-	period = models.ForeignKey('Period')
 	grade = models.CharField(max_length=5, blank=True)
 	assignment = models.CharField(max_length=100, blank=True)
 	date = models.TimeField(null=True, blank=True)

@@ -20,9 +20,7 @@ def course_list(request, course_id=None):
 		RequestContext(request))
 
 def course_create(request):
-	course_list = Course.objects.all()
-	context_dictionary = {'course_list': course_list,
-							 'course_form': CourseForm() }
+	context_dictionary = { 'course_form': CourseForm() }
 	if request.method == 'POST':
 		cf = CourseForm(request.POST)
 		if cf.is_valid():
@@ -44,9 +42,7 @@ def course_create(request):
 
 
 def dept_create(request):
-	course_list = Department.objects.all()
-	context_dictionary = {'course_list': course_list,
-							 'dept_form': DepartmentForm()}
+	context_dictionary = {'dept_form': DepartmentForm()}
 	if request.method == 'POST':
 		df = DepartmentForm(request.POST)
 		if df.is_valid():

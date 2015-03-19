@@ -1,5 +1,5 @@
 from school_components.models.classes_model import Class, ClassRegistration
-from school_components.forms.classes_form import ClassForm, ClassRegistrationForm, ClassScheduleForm
+from school_components.forms.classes_form import *
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import RequestContext
@@ -14,19 +14,35 @@ def class_list(request, class_id=None):
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
-		request.session['class'] = class_id
-		context_dictionary['reg_list'] = ClassRegistration.objects.filter(reg_class=class_id)
-
+	
 	return render_to_response("classes/class_list.html",
 		context_dictionary,
 		RequestContext(request))
 
 def class_create(request):
-	context_dictionary = {'class_form': ClassForm(), 'classday_form': ClassScheduleForm()}
+	context_dictionary = {
+		'class_form': ClassForm(prefix='info'), 
+		'classday_form': ClassScheduleForm(prefix='sch'),
+		'classteacher_form': ClassTeacherForm(prefix='te')
+	}
 	if request.method == 'POST':
-		cf = ClassForm(request.POST)
-		if cf.is_valid():
+		cf = ClassForm(request.POST, prefix='info')
+		sf = ClassScheduleForm(request.POST, prefix='sch')
+		te = ClassTeacherForm(request.POST, prefix='te')
+
+		if cf.is_valid() and sf.is_valid() and te.is_valid():
+			# save class
 			new = cf.save()
+
+			# save class schedule
+			schedule = sf.save(commit=False)
+			schedule.sch_class = new
+			schedule.save()
+
+			# save class teacher
+			teacher = te.save(commit=False)
+			teacher.taught_class = new
+			teacher.save()
 
 			return HttpResponseRedirect(
 				reverse('school:classlist', args=(new.id,)))

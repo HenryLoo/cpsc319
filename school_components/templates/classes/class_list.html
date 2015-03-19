@@ -93,7 +93,42 @@ $('#edit-class-btn').click(function() {
 		</tr>
 		<tr> 
 			<td> Time: </td>
-			<td> 17:00 - 18:30 </td>
+			<td> <strong>
+				{% if class.schedule.monday %}
+					Monday 
+				{% endif %}
+				{% if class.schedule.tuesday %}
+					Tuesday 
+				{% endif %}
+				{% if class.schedule.wednesday %}
+					Wednesday 
+				{% endif %}
+				{% if class.schedule.thursday %}
+					Thursday 
+				{% endif %}
+				{% if class.schedule.friday %}
+					Friday 
+				{% endif %}
+				{% if class.schedule.saturday %}
+					Saturday 
+				{% endif %}
+				{% if class.schedule.sunday %}
+					Sunday 
+				{% endif %}
+				</strong>
+
+				{{ class.schedule.start_time }} -
+				{{ class.schedule.end_time }}
+
+			</td>
+		</tr>
+		<tr>
+			<td> Teachers: </td>
+			<td> 
+			{% for classteacher in class.taught_class.all %}
+				{{ classteacher.teacher }}
+			{% endfor %}
+			</td>
 		</tr>
 		<tr> 
 			<td> Class Size: </td>
@@ -109,27 +144,21 @@ $('#edit-class-btn').click(function() {
 		</tr>
 	</table>
 
-	<h4>Teachers</h4>
-	<ul>
-		<li><a href="#">Teacher Name 1</a></li>
-		<li><a href="#">Teacher Name 2</a></li>
-		<li><a href="#">TA Name</a></li>
-	</ul>
 
-
-	<!-- Button trigger modal -->
 	<a href="{% url 'school:classregistration' %}"> Edit Class Registration </a>
 
-	{% if reg_list %}
-		<h5>Registered Students:</h5>
-		<table class="table table-hover col-md-9">
-		{% for reg in reg_list %}
-		<tr>
-			<td> {{ reg.student.first_name }} {{ reg.student.last_name }} </td>
-		</tr>
-		{% endfor %}
-		</table>
-	{% endif %}
+	<h5>Registered Students:</h5>
+	<table class="table table-hover col-md-9">
+
+	{% for reg in class.enrolled_class.all %}
+	<tr>
+		<td> <a href="{% url 'school:studentlist' reg.student.id %}">
+		{{ reg.student.first_name }} {{ reg.student.last_name }} 
+		</td>
+	</tr>
+	{% endfor %}
+	</table>
+
 
 	{% else %}
 		<div class="content alert alert-info" role="alert">

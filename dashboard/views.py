@@ -1,24 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.shortcuts import RequestContext
-from dashboard.models import Attendance
-from dashboard.models import Grade
-from dashboard.models import Chart
-from dashboard.models import NotificationType
+
+from dashboard.models import Chart, NotificationType
 
 from accounts.models import UserProfile
 
-from school_components.models import Class
-from school_components.models import ClassSchedule
-from school_components.models import ClassRegistration
-from school_components.models import ClassTeacher
-from school_components.models import Course
-from school_components.models import Grading
-from school_components.models import Parent
-from school_components.models import Payment
-from school_components.models import Period
-from school_components.models import School
-from school_components.models import Student
+from school_components.models import Class, ClassSchedule, ClassRegistration, ClassTeacher, Course, Grading, Parent, Payment, Period, School, Student
 
 from django.db.models import Q
 
@@ -27,8 +15,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from django.db.models import Sum
-from django.db.models import Count
+from django.db.models import Sum, Count
 
 import datetime
 
@@ -64,11 +51,9 @@ def statistics_page(request):
     if payment_total is None:
         payment_total = "0.00"
     receipts = Payment.objects.all().order_by('-date')
-    charts = Chart.objects.all().order_by('title')
 
     return_dict['usage'] = [students, admins, teachers, classes, courses, periods, schools]
     return_dict['payments'] = [unregistered_paid_students, payment_total, receipts]
-    return_dict['charts'] = charts
 
     regXAxis = Period.objects.all().order_by('start_date').values_list('description', flat=True)
     regYAxis = ClassRegistration.objects.values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
@@ -84,13 +69,52 @@ def statistics_page(request):
     for x in zip(performXAxis, performYAxis):
         return_dict['performanceChart'].append([x[0], x[1]])
 
+    numPass = sum(performance.exclude(grade='F').values_list('num_students', flat=True))
+    numFail = performance.filter(grade='F').values_list('num_students', flat=True).get()
+    return_dict['passFailChart'] = [['Pass', numPass], ['Fail', numFail]]
+
+
+    return_dict['chartTypeOptions'] = Chart._meta.get_field('chart_type').choices
+    return_dict['xAxisOptions'] = Chart._meta.get_field('x_axis').choices
+    return_dict['yAxisOptions'] = Chart._meta.get_field('y_axis').choices
+    return_dict['visibilityOptions'] = Chart._meta.get_field('visibility').choices
+
+    charts = Chart.objects.all()
+    # return_dict['customCharts'] = Student.objects.filter()
+    return_dict['customChartsTriplets'] = []
+    for i in range(0, len(charts), 3):
+        return_dict['customChartsTriplets'].append(charts[i:i+3])
+
+    # for chart in charts:
+    #     xVar = ''
+    #     if chart.x_axis == 'SCHOOL':
+    #         xVar = 'school'
+    #     elif chart.x_axis == 'PERIOD':
+    #         xVar = 'period'
+    #     elif chart.x_axis == 'CLASS':
+    #         xVar = 'class'
+
+    #     chartData = ''
+    #     if chart.y_axis == 'NSTUDENTS':
+    #         chartData = Student.objects.select_related(xVar)
+    #     elif chart.y_axis == 'NCLASSES':
+    #         #
+    #     elif chart.y_axis == 'NTEACHERS':
+    #         #
+    #     elif chart.y_axis == 'ATTENDANCE':
+    #         #
+    #     elif chart.y_axis == 'PERFORMANCE':
+    #         #
+
+    #     return_dict['customCharts'].append([])
+
     return render_to_response("dashboard/statistics_page.html",return_dict,RequestContext(request))
 
-def demostatistics_page(request):
+# def demostatistics_page(request):
     
-    context_dictionary = {}
+#     context_dictionary = {}
         
-    return render_to_response("dashboard/demostatistics_page.html",context_dictionary,RequestContext(request))
+#     return render_to_response("dashboard/demostatistics_page.html",context_dictionary,RequestContext(request))
 
 def notifications_page(request):
     
@@ -195,85 +219,85 @@ def assignment(request):
 #    return render_to_response("dashboard/classes_schedule_page.html",context_dictionary,RequestContext(request))
 
 
-def attendance_page(request):
-    return_dict = {}
+# def attendance_page(request):
+#     return_dict = {}
 
-    viewFilter = request.GET.get("viewFilter")
-    presentStudents = 0
-    absentStudents = 0
-    if viewFilter == "all":
-      presentStudents = Attendance.objects.filter(status=1).count()
-      absentStudents = Attendance.objects.filter(status=0).count()
-    else:
-      presentStudents = Attendance.objects.filter(classID=viewFilter).filter(status=1).count()
-      absentStudents = Attendance.objects.filter(classID=viewFilter).filter(status=0).count()
+#     viewFilter = request.GET.get("viewFilter")
+#     presentStudents = 0
+#     absentStudents = 0
+#     if viewFilter == "all":
+#       presentStudents = Attendance.objects.filter(status=1).count()
+#       absentStudents = Attendance.objects.filter(status=0).count()
+#     else:
+#       presentStudents = Attendance.objects.filter(classID=viewFilter).filter(status=1).count()
+#       absentStudents = Attendance.objects.filter(classID=viewFilter).filter(status=0).count()
         
-    return_dict['attendance'] = [['Present', presentStudents], ['Absent', absentStudents]]
+#     return_dict['attendance'] = [['Present', presentStudents], ['Absent', absentStudents]]
         
-    return render_to_response("dashboard/attendance_page.html",return_dict,RequestContext(request))
+#     return render_to_response("dashboard/attendance_page.html",return_dict,RequestContext(request))
 
-def grades_page(request):
-    return_dict = {}
+# def grades_page(request):
+#     return_dict = {}
         
-    fStudents = Grade.objects.filter(grade__range=(0,49)).count()
-    dStudents = Grade.objects.filter(grade__range=(50,54)).count()
-    cStudents = Grade.objects.filter(grade__range=(55,67)).count()
-    bStudents = Grade.objects.filter(grade__range=(68,79)).count()
-    aStudents = Grade.objects.filter(grade__range=(80,100)).count()
+#     fStudents = Grade.objects.filter(grade__range=(0,49)).count()
+#     dStudents = Grade.objects.filter(grade__range=(50,54)).count()
+#     cStudents = Grade.objects.filter(grade__range=(55,67)).count()
+#     bStudents = Grade.objects.filter(grade__range=(68,79)).count()
+#     aStudents = Grade.objects.filter(grade__range=(80,100)).count()
 
-    return_dict['grades'] = [['A', aStudents], ['B', bStudents], ['C', cStudents], ['D', dStudents], ['F', fStudents]]
+#     return_dict['grades'] = [['A', aStudents], ['B', bStudents], ['C', cStudents], ['D', dStudents], ['F', fStudents]]
         
-    return render_to_response("dashboard/grades_page.html",return_dict,RequestContext(request))
+#     return render_to_response("dashboard/grades_page.html",return_dict,RequestContext(request))
 
-def custom_statistic_page(request):
-    return_dict = {}
+# def custom_statistic_page(request):
+#     return_dict = {}
 
-    if request.method == 'POST':
-        chartId = request.POST.get("customChart")
+#     if request.method == 'POST':
+#         chartId = request.POST.get("customChart")
 
-        chart = Chart.objects.filter(id=chartId)
-        title = chart.values('title')
-        chartType = chart.values('chart_type')
-        xAxis = chart.values('x_axis')
-        yAxis = chart.values('y_axis')
+#         chart = Chart.objects.filter(id=chartId)
+#         title = chart.values('title')
+#         chartType = chart.values('chart_type')
+#         xAxis = chart.values('x_axis')
+#         yAxis = chart.values('y_axis')
 
-        xAxisValues = 0
-        yAxisValues = 0
-        if xAxis == "DATE":
-        	xAxisValues = Period.objects.filter(id=1).values('start_date')
-        elif xAxis == "CLASSES":
-        	xAxisValues = Attendance.objects.filter(status=0).count()
-        elif xAxis == "STUDENTS":
-        	xAxisValues = Grade.objects.filter(grade__range=(0,100))
+#         xAxisValues = 0
+#         yAxisValues = 0
+#         if xAxis == "DATE":
+#         	xAxisValues = Period.objects.filter(id=1).values('start_date')
+#         elif xAxis == "CLASSES":
+#         	xAxisValues = Attendance.objects.filter(status=0).count()
+#         elif xAxis == "STUDENTS":
+#         	xAxisValues = Grade.objects.filter(grade__range=(0,100))
 
-        if yAxis == "NSTUDENTS":
-        	yAxisValues = Attendance.objects.filter(status=1).count()
-        elif yAxis == "NCLASSES":
-        	yAxisValues = Attendance.objects.filter(status=0).count()
-        elif yAxis == "NTEACHERS":
-            yAxisValues = Grade.objects.filter(grade__range=(0,100))
-        elif yAxis == "ATTENDANCE":
-            yAxisValues = Grade.objects.filter(grade__range=(0,100))
-        elif yAxis == "PERFORMANCE":
-            yAxisValues = Grade.objects.filter(grade__range=(0,100))
+#         if yAxis == "NSTUDENTS":
+#         	yAxisValues = Attendance.objects.filter(status=1).count()
+#         elif yAxis == "NCLASSES":
+#         	yAxisValues = Attendance.objects.filter(status=0).count()
+#         elif yAxis == "NTEACHERS":
+#             yAxisValues = Grade.objects.filter(grade__range=(0,100))
+#         elif yAxis == "ATTENDANCE":
+#             yAxisValues = Grade.objects.filter(grade__range=(0,100))
+#         elif yAxis == "PERFORMANCE":
+#             yAxisValues = Grade.objects.filter(grade__range=(0,100))
             
-        return_dict['customStat'] = [[[xAxis, xAxisValues], [yAxis, yAxisValues]], title, chartType]
+#         return_dict['customStat'] = [[[xAxis, xAxisValues], [yAxis, yAxisValues]], title, chartType]
         
-    return render_to_response("dashboard/custom_statistic_page.html",return_dict,RequestContext(request))
+#     return render_to_response("dashboard/custom_statistic_page.html",return_dict,RequestContext(request))
 
-def custom_statistic_created_page(request):
-    return_dict = {}
+# def custom_statistic_created_page(request):
+#     return_dict = {}
 
-    if request.method == 'POST':
-        title = request.POST.get("title")
-        xAxis = request.POST.get("xAxis")
-        yAxis = request.POST.get("yAxis")
-        chartType = request.POST.get("chartType")
-        visibility = request.POST.get("visibility")
-        # Need to replace this with actual school and periods
-        school = School.objects.filter(id=1).get()
-        period = Period.objects.filter(id=1).get()
-        chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
-        chart.save()
+#     if request.method == 'POST':
+#         title = request.POST.get("title")
+#         xAxis = request.POST.get("xAxis")
+#         yAxis = request.POST.get("yAxis")
+#         chartType = request.POST.get("chartType")
+#         visibility = request.POST.get("visibility")
+#         # Need to replace this with actual school and periods
+#         school = School.objects.filter(id=1).get()
+#         period = Period.objects.filter(id=1).get()
+#         chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
+#         chart.save()
 
-    return render_to_response("dashboard/custom_statistic_created_page.html",return_dict,RequestContext(request))
+#     return render_to_response("dashboard/custom_statistic_created_page.html",return_dict,RequestContext(request))

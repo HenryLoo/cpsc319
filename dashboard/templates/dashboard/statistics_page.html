@@ -26,8 +26,6 @@
                         {% endif %}
                     </div>
                 </div>
-
-
                 <!-- /.row -->
 
                 <div class="row">
@@ -145,9 +143,9 @@
 
                                             <div class="dropdown">
                                                 <select class="btn btn-default dropdown-toggle" id="xAxis" name="xAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
-                                                    <option value="DATE">Date</option>
-                                                    <option value="STUDENTS">Students</option>
-                                                    <option value="CLASS">Classes</option>
+                                                    {% for option in xAxisOptions %}
+                                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
@@ -159,11 +157,9 @@
 
                                             <div class="dropdown">
                                                 <select class="btn btn-default dropdown-toggle" id="yAxis" name="yAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px"> 
-                                                    <option value="NSTUDENTS"># of Students</option>
-                                                    <option value="NCLASSES"># of Classes</option>
-                                                    <option value="NTEACHERS"># of Teachers</option>
-                                                    <option value="ATTENDANCE">Attendance</option>
-                                                    <option value="PERFORMANCE">Performance</option>
+                                                    {% for option in yAxisOptions %}
+                                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
@@ -175,9 +171,9 @@
 
                                             <div class="dropdown">
                                                 <select class="btn btn-default dropdown-toggle" id="chartType" name="chartType" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
-                                                    <option value="PIE">Pie</option>
-                                                    <option value="BAR">Bar</option>
-                                                    <option value="LINE">Line</option>
+                                                    {% for option in chartTypeOptions %}
+                                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
@@ -189,8 +185,9 @@
 
                                             <div class="dropdown">
                                                 <select class="btn btn-default dropdown-toggle" id="visibility" name="visibility" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
-                                                    <option value="ADM">Only Admins</option>
-                                                    <option value="ALL">All</option>
+                                                    {% for option in visibilityOptions %}
+                                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                                    {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
@@ -213,8 +210,6 @@
                 <!-- /.row -->
 
 
-
-                <!-- /.row -->
                 <div class="row">
 
                     <div class="col-lg-4">
@@ -255,24 +250,48 @@
                     <div class="col-lg-4">
                         <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
                             <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bars"></i> Custom Statistics</h3>
+                                <h3 class="panel-title"><i class="fa fa-bars"></i> Passing/Failing Students</h3>
+                                <div class="text-right">
+                                     <div class="row" style="margin-right: 1px;">
+                                        <a href="#">View &nbsp</a>
+                                        <a href="#">Edit</a>
+                                    </div>
+                                </div>
                             </div> 
                             <div class="panel-body" >
-                                <i class="fa fa-bar-chart" style="font-size: 250px; margin-top: 20px; margin-left: 20px"></i>
-                                <form class="form-horizontal" role="form" action="{% url 'dashboard:custom_statistic_page' %}" method="post">
-                                {% csrf_token %}
-                                    <input type="submit" class="btn btn-primary btn-right" style="width: 65px; height: 30px;" value="View">
-                                    <select class="btn btn-default dropdown-toggle" name="customChart" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
-                                        {% for chart in charts %}
-                                            <option value="{{ chart.id }}">{{ chart.title }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </form>
+                                <div id="passFail_chart_div" style="width: 299px; height: 299px;"></div>
                             </div>
                         </div>
                     </div>
 
                 </div>
+                <!-- /.row -->
+
+                {% for triplet in customChartsTriplets %}
+                <div class="row">
+
+                    {% for chart in triplet %}
+                        <div class="col-lg-4">
+                            <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><i class="fa fa-bars"></i> {{ chart.title }}</h3>
+                                    <div class="text-right">
+                                        <div class="row" style="margin-right: 1px;">
+                                            <a href="#">View &nbsp</a>
+                                            <a href="#">Edit</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div id="{{ chart.id }}_chart_div" style="width: 299px; height: 299px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+                <!-- /.row -->
+                {% endfor %}
 
 {% googlecharts %}
     {% data registrationChart "regData" %}
@@ -291,12 +310,19 @@
     {% enddata %}
 
     {% options "performanceOptions" %}
-        kind: "PieChart"
+        kind: "BarChart"
     {% endoptions %}
     {% graph "performance_chart_div" "performanceData" "performanceOptions" %}
+
+    {% data passFailChart "passFailData" %}
+        {% col "string" "Pass/Fail" %}"{{ val }}"{% endcol %}
+        {% col "number" "Students" %}{{ val }}{% endcol %}
+    {% enddata %}
+
+    {% options "passFailOptions" %}
+        kind: "PieChart"
+    {% endoptions %}
+    {% graph "passFail_chart_div" "passFailData" "passFailOptions" %}
 {% endgooglecharts %}
 
 {%endblock%}
-                <!-- /.row -->
-
- 

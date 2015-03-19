@@ -69,7 +69,8 @@ def create_teacher_view(request):
 
 
     #if no data is submitted or teacher is created, load blank forms
-    user_form = MyUserCreationForm()
+    password = User.objects.make_random_password()
+    user_form = MyUserCreationForm(initial={'password': password})
     teacher_phone = TeacherProfileForm()
     teacher_form = TeacherForm()
     availability_form = AvailabilityForm()
@@ -220,9 +221,12 @@ def create_admin_view(request):
                 'admin_form': admin_form
             })
 
-    user_form = MyUserCreationForm()
+    password = User.objects.make_random_password()
+    user_form = MyUserCreationForm(initial={'password': password})
     admin_form = AdminProfileForm()
 
+    
+    
     return render(request, 'admins/create_admin.html', {
         'user_form': user_form,
         'admin_form': admin_form,

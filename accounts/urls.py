@@ -21,8 +21,6 @@ urlpatterns = patterns('',
                        
 	url(r'^teachers/upload/$', 'accounts.views.upload_teachers_view', name='upload_teachers'),
 
-	url(r'^teachers/export/$', 'accounts.views.export_teachers_view', name='export_teachers'),
-
     url(r'^admins/create/$','accounts.views.create_admin_view', name='create_admin'),
         
     url(r'^admins/view/$','accounts.views.view_admins_view',name='view_admins'),

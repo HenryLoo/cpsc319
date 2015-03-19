@@ -166,9 +166,6 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
                    context_dictionary)
 
 
-def export_teachers_view (request):
-    return render(request, "teachers/teacher_export.html")
-
 def upload_teachers_view (request):
     return render(request, "teachers/teacher_upload.html")
 

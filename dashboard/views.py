@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.shortcuts import RequestContext
 
-from dashboard.models import Chart, NotificationType
+from dashboard.models import Chart, Notification, NotificationType
 
 from accounts.models import UserProfile
 
@@ -18,6 +18,9 @@ from django.template import RequestContext
 from django.db.models import Sum, Count
 
 import datetime
+
+from operator import attrgetter
+from itertools import chain
 
 def statistics_page(request):
     
@@ -118,9 +121,50 @@ def statistics_page(request):
 
 def notifications_page(request):
     
-    context_dictionary = {}
+    return_dict = {}
+
+    if request.method == 'POST':
+        for key in request.POST:
+            if key != 'csrfmiddlewaretoken':
+                notif = Notification.objects.filter(id=int(key))
+                if request.POST.get(key) == 'Not Called':
+                    notif.update(status=False)
+                elif request.POST.get(key) == 'Called':
+                    notif.update(status=True)
+
+    allNotifications = Notification.objects.all().order_by('-date')
+    notifications = allNotifications
+    return_dict['filter'] = request.GET.get("filter")
+    if return_dict['filter'] == '1':
+        notifications = allNotifications.filter(status=False)
+    elif return_dict['filter'] == '2':
+        notifications = allNotifications.filter(status=True)
+    else:
+        notifications = allNotifications
+    notificationTypes = []
+    studentNames = []
+    for notification in notifications:
+        notificationTypes.append(NotificationType.objects.get(id=notification.notification_type_id))
+        studentNames.append(Student.objects.get(id=notification.student_id))
+    return_dict['numNew'] = allNotifications.filter(status=False).count()
+    return_dict['numOld'] = allNotifications.filter(status=True).count()
+    return_dict['numAll'] = return_dict['numNew'] + return_dict['numOld']
+
+    return_dict['notifications'] = []
+    for x in zip(notifications, notificationTypes, studentNames):
+        return_dict['notifications'].append([x[0], x[1], x[2]])
+
+    # pages = len(return_dict['notifications'])
+    # currentPage = 1
+    # pageRange = [currentPage, currentPage + 7]
+    # 
+    # currentPage = int(request.GET.get("currentPage"))
+    # if currentPage + 7 > pages:
+    #   pageRange = [pages - 7, pages]
+
+    # return_dict['pages'] = [i for i in range(pageRange[0], pageRange[1])]
         
-    return render_to_response("dashboard/notifications_page.html",context_dictionary,RequestContext(request))
+    return render_to_response("dashboard/notifications_page.html",return_dict,RequestContext(request))
 
 def notifications_settings_page(request):
     

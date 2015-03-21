@@ -4,14 +4,14 @@
 	"View"
 {% endblock %}
 
-{% block hacky_script %}
+<!--{% block hacky_script %}
 $('#edit-admin-btn').click(function() {
 	var fields = $('td:nth-child(2)')
 	$.each(fields, function(i,elm) { 
 		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
 	})
 });
-{% endblock hacky_script %}
+{% endblock hacky_script %}-->
 
 {% block admin_content %}
 <ul class="nav nav-tabs nav-justified">
@@ -53,15 +53,13 @@ $('#edit-admin-btn').click(function() {
 		</div>
 	</div>
 <br><br>
-
 <h4> System Admins </h4> 
 	{% if system_admin_list %}
 	<ul class="list-unstyled admin-list">
 		{% for admin in system_admin_list %}
-
 	  		<li>
 	  		<a href="{% url 'account:view_admins' admin.id %}">
-	  			 {{ admin.user }} {{ admin.user.last_name }}
+	  			 {{ admin.user.first_name }} {{ admin.user.last_name }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}
@@ -90,46 +88,29 @@ $('#edit-admin-btn').click(function() {
 </div>
 
 <div class="col-md-9 admin-info">
+	
 	{% if admin %}
-	<span>
-		<h3> Admin Info </h3>
-		<a href="{% url 'account:edit_admin' admin.id %}" id="edit-admin-btn" class="pull-right"> Edit </a>
-	</span>
-	<table class="table table-hover">
-		<tr> 
-			<td> ID: </td>
-			<td> {{ admin.id }} </td>
-		</tr>
-		<tr> 
+	
+	{% if edit_success %}
+		<div class="alert alert-info" role="alert">
+			Admin edited successfully.
+		</div>
+	{% endif %}
+	
+	<form role="form" action="{%url 'account:edit_admin' admin.id%}" method="post">
+		{% csrf_token %}
+		{% if error %} {{error}} {%endif%}
+		<table class="table table-hover admin-form">
+	    	{{ user_form.as_table }}
+			{{ admin_form.as_table }}
+		</table>
 
-			<td> First Name: </td>
-			<td> 
-				{{ admin.user.first_name}} 
-			</td>
-		</tr>
-		<tr> 
-			<td> Last Name: </td>
-			<td> 
-				{{ admin.user.last_name}} 
-			</td>
-		</tr>
-
-		<tr> 
-			<td> Phone number: </td>
-			<td> {{ admin.phone }} </td>
-		</tr>
-		{% if admin.role != "SYSTEM_ADMIN" %}
-		<tr> 
-			<td> School branch: </td>
-			<td> {{ admin.school_branch.title }} </td>
-		</tr>
-		{% endif %}
-
-	</table>
+	    <input type="submit" class="btn btn-primary center-block" value="Save" />
+	</form> 
 
 	{% else %}
 		<div class="alert alert-info" role="alert">
-			Select an admin to view details.
+			There is no admin with that id.
 		</div>
 	{% endif %}
 </div>

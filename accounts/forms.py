@@ -38,19 +38,46 @@ from django.contrib.auth.models import User
     #     return user
 class MyUserCreationForm(ModelForm):
 
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    
     class Meta():
         model = User
         fields = ['email', 'password', 'first_name', 'last_name']
 
+class MyUserEditForm(ModelForm):
 
-class UserProfileForm(ModelForm):
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+    
+    class Meta():
+        model = User
+        fields = ['email', 'first_name', 'last_name'] #no password changing on edit
+
+   
+
+
+class AdminProfileForm(ModelForm):
+
+    role = ChoiceField(label='Admin Type', choices=(('SYSTEM_ADMIN', 'System Admin'), ('SCHOOL_ADMIN', 'School Admin')), required=True)
     
     class Meta():
         model = UserProfile
-        fields = ['school', 'period', 'phone', 'role']
+        fields = [#'school', 'period',
+            'phone', 'role']
+
+class TeacherProfileForm(ModelForm):
+    
+    class Meta():
+        model = UserProfile
+        fields = ['phone']
 
 class TeacherForm(ModelForm):
-
+    
+    comments = forms.CharField(max_length = 500, widget=forms.Textarea, required=False)
+    
     class Meta():
         model = TeacherUser
         fields = ['comments']
@@ -66,7 +93,7 @@ class AvailabilityForm(ModelForm):
 
 class LoginForm(forms.Form):
 
-    username = CharField(max_length=100, required=True)
+    email = EmailField(max_length=100, required=True)
     password = CharField(max_length=100, required=True)
 
     

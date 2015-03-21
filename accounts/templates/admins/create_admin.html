@@ -34,11 +34,12 @@
 	{% endif %}
 
 	{% if user_ret %}
-		<div> Admin {{user_ret.first_name}} {{user_ret.last_name}} created successfully! </div>
+		<div class="alert alert-info" role="alert"> Admin {{user_ret.first_name}} {{user_ret.last_name}} created successfully! </div>
 	{% endif %}
 	
 	<form role="form" action="{%url 'account:create_admin' %}" method="post">
 		{% csrf_token %}
+		{{ error }}
 		<table class="table table-hover admin-form">
 	    	{{ user_form.as_table }}
 			{{ admin_form.as_table }}
@@ -47,7 +48,6 @@
 	    <input type="submit" class="btn btn-primary center-block" value="Submit" />
 	</form> 
 
-	<a href="#">Generate password</a>
 <br><br>
 
 {% endblock admin_content %}

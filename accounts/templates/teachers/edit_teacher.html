@@ -1,0 +1,104 @@
+{% extends "teachers/base_teacher.html" %}
+
+{% block current_tab %}
+	"View"
+{% endblock %}
+
+<!--{% block hacky_script %}
+$('#edit-teacher-btn').click(function() {
+	var fields = $('td:nth-child(2)')
+	$.each(fields, function(i,elm) { 
+		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
+	})
+});
+{% endblock hacky_script %}-->
+
+{% block teacher_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'account:view_teachers' %}">View Teachers</a></li>
+    <li role="presentation"><a href="{% url 'account:create_teacher' %}">Add Teacher</a></li>
+    <li role="presentation"><a href="{% url 'account:upload_teachers' %}">Upload CSV</a></li>
+</ul>
+
+                 <div class="row">   
+                 	<div class="col-lg-12">
+                        <h1 class="page-header">
+                            Teachers<small> List</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> Teachers > List</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
+<div class="col-md-3 school-list">
+
+	<div class="filters-holder">
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
+		aria-expanded="false" aria-controls="collapseExample">
+	  	Filters
+		</a>
+		<div class="collapse" id="filters">
+		  <div>
+		    <input type="checkbox"> <label>Name</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Class</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Year</label> <input>
+		    <br>
+		  </div>
+		</div>
+	</div>
+<br><br>
+	{% if teacher_list %}
+	<ul class="list-unstyled teacher-list">
+		{% for teacher in teacher_list %}
+	  		<li>
+	  		<a href="{% url 'account:view_teachers' teacher.id %}">
+	  			{{ teacher.user.user.first_name }} {{ teacher.user.user.last_name }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No teachers have been added.</div>
+	{% endif %}
+
+</div>
+
+<div class="col-md-9 teacher-info">
+	
+	{% if teacher %}
+	
+	{% if edit_success %}
+		<div class="alert alert-info" role="alert">
+			Teacher edited successfully.
+		</div>
+	{% endif %}
+	
+	<form role="form" action="{%url 'account:edit_teacher' teacher.id %}" method="post">
+		{% csrf_token %}
+		{% if error %} {{error}} {%endif%}
+		<table class="table table-hover teacher-form">
+	    	{{ user_form.as_table }}
+			{{ teacher_phone.as_table }}
+			{{ teacher_form.as_table }}
+		</table>
+		<div> <h4> Availability </h4> </div>
+		<table class=" table-hover teacher-form">
+			{{ availability_form.as_table }}
+	    </table>
+	    <input type="submit" class="btn btn-primary center-block" value="Save" />
+	</form> 
+
+	{% else %}
+		<div class="alert alert-info" role="alert">
+			There is no teacher with that id.
+		</div>
+	{% endif %}
+</div>
+
+{% endblock teacher_content %}

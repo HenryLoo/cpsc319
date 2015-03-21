@@ -4,13 +4,11 @@
 	"Add Teacher"
 {% endblock %}
 
-
 {% block teacher_content %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation"><a href="{% url 'account:view_teachers' %}">View Teachers</a></li>
     <li role="presentation" class="active"><a href="{% url 'account:create_teacher' %}">Add Teacher</a></li>
     <li role="presentation"><a href="{% url 'account:upload_teachers' %}">Upload CSV</a></li>
-    <li role="presentation"><a href="{% url 'account:export_teachers' %}">Export Teacher Data</a></li>
 </ul>
 
 				<div class="row">
@@ -35,13 +33,15 @@
 	{% endif %}
 
 	{% if user_ret %}
-		<div> Teacher {{user_ret.first_name}} {{user_ret.last_name}} created successfully! </div>
+		<div class="alert alert-info" role="alert"> Teacher {{user_ret.first_name}} {{user_ret.last_name}} created successfully! </div>
 	{% endif %}
 	
 	<form role="form" action="{%url 'account:create_teacher' %}" method="post">
 		{% csrf_token %}
+		{% if error %} {{error}} {%endif%}
 		<table class="table table-hover teacher-form">
 	    	{{ user_form.as_table }}
+			{{ teacher_phone.as_table }}
 			{{ teacher_form.as_table }}
 		</table>
 		<div> <h4> Availability </h4> </div>
@@ -51,6 +51,5 @@
 	    <input type="submit" class="btn btn-primary center-block" value="Submit" />
 	</form> 
 
-	<a href="#">Generate password</a>
 	<br>
 {% endblock teacher_content %}

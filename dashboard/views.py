@@ -73,7 +73,10 @@ def statistics_page(request):
         return_dict['performanceChart'].append([x[0], x[1]])
 
     numPass = sum(performance.exclude(grade='F').values_list('num_students', flat=True))
-    numFail = performance.filter(grade='F').values_list('num_students', flat=True).get()
+    try:
+        numFail = performance.filter(grade='F').values_list('num_students', flat=True).get()
+    except:
+        numFail = ''
     return_dict['passFailChart'] = [['Pass', numPass], ['Fail', numFail]]
 
 

@@ -52,7 +52,8 @@ class ClassRegistration(models.Model):
 	reg_class = models.ForeignKey('Class', related_name='enrolled_class')
 	student = models.ForeignKey('Student', related_name='enrolled_student')
 	registration_status = models.BooleanField()
-
+	school = models.ForeignKey('School')
+	period = models.ForeignKey('Period')
 	def class_period(self):
 		return self.reg_class.period
 
@@ -68,6 +69,8 @@ class ClassAttendance(models.Model):
 	attendance = models.CharField(max_length=5, blank=True)
 	date = models.TimeField(null=True, blank=True)
 	comments = models.CharField(max_length=500)
+	school = models.ForeignKey('School')
+	period = models.ForeignKey('Period')
 
 	class Meta:
 		app_label = 'school_components'
@@ -95,6 +98,8 @@ class Grading(models.Model):
 	comments = models.CharField(max_length=500)
 	grade_weight = models.IntegerField(blank = True, null = True)
 	total_weight = models.IntegerField(blank = True, null = True)
+	school = models.ForeignKey('School')
+	period = models.ForeignKey('Period')
 
 	class Meta:
 		app_label = 'school_components'

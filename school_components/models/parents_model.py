@@ -12,6 +12,17 @@ class Parent(models.Model):
 	def __unicode__(self):
 		return self.first_name + ' ' + self.last_name
 
+	def clean_fields(self):
+		if len(self.first_name) > 50:
+			raise ValueError("Parent first name is over 50 characters.")
+		if len(self.last_name) > 50:
+			raise ValueError("Parent last name is over 50 characters.")
+		if len(self.cell_phone) > 20:
+			raise ValueError("Parent phone number is over 20 characters.")	
+		if '@' not in self.email:
+			raise ValueError("Parent email is invalid.")
+		return True
+
 	class Meta:
 		app_label = 'school_components'
 

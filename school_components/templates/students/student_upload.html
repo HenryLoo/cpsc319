@@ -36,6 +36,8 @@ Home Address, Email, Allergies, Emergency Contact Name, Emergency Contact Phone,
 Emergency Contact Relation, Parent First Name, Parent Last Name, Parent Cell Phone, Parent Email
 </strong>
 <br>
+Note that this will create new students and parents for each row in the CSV, not edit existing students.
+<br>
 <br>
 <a href="{% url 'school:studentsamplecsv' %}">Click here</a> to download an example of a valid CSV.
 </p>
@@ -52,7 +54,7 @@ Emergency Contact Relation, Parent First Name, Parent Last Name, Parent Cell Pho
 
 {% if errors %}
 	<div class="alert alert-danger" role="alert">
-	SOme fields were invalid. Please fix these errors and try again. <br>
+	Some fields were invalid. Please fix these errors and try again. <br>
 		{% for error in errors %}
 			{{ error }} <br>
 		{% endfor %}

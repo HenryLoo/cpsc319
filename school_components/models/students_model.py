@@ -30,8 +30,8 @@ class Student(models.Model):
 	first_name = models.CharField(max_length=50)
 	last_name = models.CharField(max_length=50)
 	gender = models.CharField(max_length=6,
-							choices=(('MALE', 'M'),
-									('FEMALE', 'F')))
+							choices=(('M', 'M'),
+									('F', 'F')))
 	birthdate = models.DateField(blank=True)
 	home_phone = models.CharField(max_length=20)
 	address = models.CharField(max_length=75)
@@ -41,14 +41,44 @@ class Student(models.Model):
 	emergency_contact_phone = models.CharField(max_length=20)
 	relation = models.CharField(max_length=75, blank=True)
 	comments = models.CharField(max_length=500, blank=True)
-	parent = models.ForeignKey('Parent', null=True)
-	school = models.ForeignKey('School')
+	parent = models.ForeignKey('Parent', blank=True, null=True)
+	school = models.ForeignKey('School', blank=True, null=True)
 	period = models.ForeignKey('Period', blank=True, null=True)
 
 	objects = StudentManager()
 
 	def __unicode__(self):
 		return self.first_name + ' ' + self.last_name
+
+	def clean_fields(self):
+		if len(self.first_name) > 50:
+			raise ValueError("Student first name is over 50 characters.")
+		if len(self.last_name) > 50:
+			raise ValueError("Student last name is over 50 characters.")
+		if self.gender not in ['M', 'F']:
+			raise ValueError("Gender must be one of M or F.")
+		
+		# will raise error on its own if invalid
+		try:
+			datetime.strptime(self.birthdate, "%Y-%m-%d").date()
+		except Exception:
+			raise ValueError("Birthdate does not match format YYYY-MM-DD.")	
+		if len(self.home_phone) > 20:
+			raise ValueError("Phone number is over 20 characters.")	
+		if len(self.address) > 20:
+			raise ValueError("Address is over 75 characters.")	
+		if '@' not in self.email:
+			raise ValueError("Email is invalid.")
+		if len(self.allergies) > 75:
+			raise ValueError("Allergies is over 75 characters.")
+		if len(self.emergency_contact_name) > 75:
+			raise ValueError("Emergency contact name is over 75 characters.")
+		if len(self.emergency_contact_phone) > 75:
+			raise ValueError("Emergency contact phone is over 20 characters.")
+		if len(self.relation) > 75:
+			raise ValueError("Emergency contact relation is over 75 characters.")
+
+		return True
 
 	class Meta:
 		app_label = 'school_components'

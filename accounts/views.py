@@ -87,22 +87,22 @@ def create_teacher_view(request):
 
 def view_teachers_view (request, teacher_id=None):
 
-	teacher_list = TeacherUser.objects.all()
-	context_dictionary = {'teacher_list': teacher_list}
+    teacher_list = TeacherUser.objects.all()
+    context_dictionary = {'teacher_list': teacher_list}
 
-	if teacher_id:
-            try:
-                teacher = TeacherUser.objects.get(pk=teacher_id)
-		context_dictionary['teacher'] = teacher
-	    except ObjectDoesNotExist:
-                context_dictionary['not_valid_teacher'] = True
+    if teacher_id:
+        try:
+            teacher = TeacherUser.objects.get(pk=teacher_id)
+            context_dictionary['teacher'] = teacher
+        except ObjectDoesNotExist:
+            context_dictionary['not_valid_teacher'] = True
 
-	return render(request, "teachers/teacher_list.html",
-		context_dictionary)
+    return render(request, "teachers/teacher_list.html",
+        context_dictionary)
 
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
-    	teacher_list = TeacherUser.objects.all()
-	context_dictionary = {'teacher_list': teacher_list}
+        teacher_list = TeacherUser.objects.all()
+        context_dictionary = {'teacher_list': teacher_list}
 
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
@@ -169,6 +169,8 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
 def upload_teachers_view (request):
     return render(request, "teachers/teacher_upload.html")
 
+def export_teachers_view (request):
+    return render(request, "teachers/teacher_export.html")
 
 #==============================================================    ADMIN
 
@@ -232,26 +234,26 @@ def create_admin_view(request):
 
 
 def view_admins_view (request, admin_id=None):
-	system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-	school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
-	context_dictionary = {'system_admin_list': system_admin_list,
+    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
+    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
+    context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
-	if admin_id:
-            try:
-                admin = UserProfile.objects.get(pk=admin_id)
-		if admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN':   
-                    context_dictionary['admin'] = admin
-	    except ObjectDoesNotExist:
-                pass
+    if admin_id:
+        try:
+            admin = UserProfile.objects.get(pk=admin_id)
+            if admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN':   
+                context_dictionary['admin'] = admin
+        except ObjectDoesNotExist:
+            pass
 
-	return render(request, "admins/admin_list.html",
-		context_dictionary)
+    return render(request, "admins/admin_list.html",
+        context_dictionary)
 
 def edit_admin_view (request, admin_id): #there should always be a teacher_id here
-    	system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-	school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
-	context_dictionary = {'system_admin_list': system_admin_list,
+        system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
+        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
+        context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
         try:
@@ -331,6 +333,5 @@ def login_view(request):
     else:
         login_form = LoginForm()
         return render(request, 'login/login.html', {'login_form' : login_form})
-
         
         

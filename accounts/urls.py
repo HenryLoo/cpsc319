@@ -27,7 +27,9 @@ urlpatterns = patterns('',
 
 	url(r'^admins/view/(?P<admin_id>\d+)/$', 'accounts.views.view_admins_view', name='view_admins'),
         url(r'^admins/view/(?P<admin_id>\d+)/edit/$', 'accounts.views.edit_admin_view', name='edit_admin'),
-                       
+             
+    url(r'^teachers/export/$', 'accounts.views.export_teachers_view', name='export_teachers'),
+              
 	# admins
 	#url(r'^admins/$', 
 	#	'accounts.views.admins_view.parent_list', 

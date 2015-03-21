@@ -56,12 +56,14 @@ def create_teacher(school_id, period_id, email, password, first_name, last_name,
 #john@john.com, password, John, He, 604-112-1212, He is john, mon=yes,,tues=yes,,wed=yes,,thurs=yes,,fri=no,I'm a Sauder student
 
 def to_bool(string):
+    if 'unknown' in string.lower():
+        return None
     if 'yes' in string.lower():
         return True
     if 'no' in string.lower():
         return False
 
-    raise ValidationError("You must specify either yes or no for each of Monday to Friday.")
+    raise ValidationError("You must specify either yes, no, or unknown for each of Monday to Friday.")
 
 
                         

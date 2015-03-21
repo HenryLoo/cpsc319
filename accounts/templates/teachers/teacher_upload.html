@@ -9,7 +9,6 @@
     <li role="presentation"><a href="{% url 'account:view_teachers' %}">View Teachers</a></li>
     <li role="presentation"><a href="{% url 'account:create_teacher' %}">Add Teacher</a></li>
     <li role="presentation" class="active"><a href="{% url 'account:upload_teachers' %}">Upload CSV</a></li>
-    <li role="presentation"><a href="{% url 'account:export_teachers' %}">Export Teacher Data</a></li>
 </ul>
 
 <div class="row">
@@ -28,29 +27,97 @@
 
 	To add multiple teachers to the system, upload a CSV with the following fields:
 	<br>
-	<strong>First Name, Last Name, Branch Location, Skill Level, Teaching Availability, Phone Number, Username, 
-	Password, Email</strong>
+	<strong>Email, Password, First Name, Last Name, Phone number, Comments, Monday Availability(Yes/No), Monday Availability Comments, 
+	Tuesday Availability(Yes/No), Tuesday Availability Comments, 
+	Wednesday Availability(Yes/No), Wednesday Availability Comments, 
+	Thursday Availability(Yes/No), Thursday Availability Comments, 
+	Friday Availability(Yes/No), Friday Availability Comments</strong>
 	<br>
 	<br>
-	<a href="#">Click here</a> to download an example of a valid CSV.
+	Example of one row: teacher@gmail.com, password, William, Shakespeare, 604-112-1212, He writes plays, mon=yes, ,tues=yes, ,wed=yes, ,thurs=yes, ,fri=no,Friday is for writing plays
+	<br><br>
+	Note: Teachers will be added to the current school branch and period.
+	<br>
+	<!--<a href="#">Click here</a> to download an example of a valid CSV.-->
 	</p>
 
 	<form role="form" action="{%url 'account:upload_teachers' %}" method="post" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="form-group">
-		    <input type="file" id="exampleInputFile">
-		    <br>
-		    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#teacher-list-csv">
-		  	Submit
-			</button>
+		    <input type="file" id="exampleInputFile" name="file">
 	  	</div>
+		<input type="submit" class="btn btn-primary" value="Submit" />
 	    <!-- <input type="submit" class="btn btn-default" value="Submit" /> -->
 	</form> 
 
+	{% if errors %}
+		<div class="alert alert-danger" role="alert">
+		Some fields were invalid. Please fix these errors and try again. <br>
+			{% for error in errors %}
+				{{ error }} <br>
+			{% endfor %}
+		</div>
+	{% endif %}
 
-
-
-	<div class="modal fade" id="teacher-list-csv" tabindex="-1" role="dialog" 
+	{% if teacher_list %}
+		<h4>These teachers were created</h4>
+		<table class="table table-bordered table-hover">
+		<tr>
+			<td> <strong> Full Name </strong> </td>
+			<td> <strong> Email </strong> </td>
+			<td> <strong> Password </strong> </td>
+			<td> <strong> Phone Number </strong> </td>
+			<td> <strong> Comments </strong> </td>
+			<td> <strong> Monday </strong> </td>
+			<td> <strong> Tuesday </strong> </td>
+			<td> <strong> Wednesday </strong> </td>
+			<td> <strong> Thursday </strong> </td>
+			<td> <strong> Friday </strong> </td>
+			
+		</tr>
+		{% for teacher in teacher_list %}
+		<tr>
+			<td> 
+			<a href="{% url 'account:view_teachers' teacher.id %}">
+			{{ teacher.user.user.first_name }} {{ teacher.user.user.last_name }} 
+			</a>
+			</td>
+			<td>{{ teacher.user.user.email }} </td>
+			<td>{{ teacher.user.user.password }} </td> <!-- !!!!!!!!!!change this to show the actual password, not the hash-->
+			<td>{{ teacher.user.phone }} </td>
+			<td>{{ teacher.comments }} </td>
+			<td> 
+			        {% if teacher.teaching_availability.monday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.monday_times %} - {{teacher.teaching_availability.monday_times}} {%endif%}
+			</td>
+			<td>	
+					{% if teacher.teaching_availability.tuesday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.tuesday_times %} - {{teacher.teaching_availability.tuesday_times}} {%endif%}
+			</td>	
+			<td>			
+					{% if teacher.teaching_availability.wednesday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.wednesday_times %} - {{teacher.teaching_availability.wednesday_times}} {%endif%}
+			</td>			
+			<td>
+					{% if teacher.teaching_availability.thursday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.thursday_times %} - {{teacher.teaching_availability.thursday_times}} {%endif%}
+			</td>		
+			<td>			
+					{% if teacher.teaching_availability.friday %} Available
+					{%else%} Not Available {% endif %}
+					{% if teacher.teaching_availability.friday_times %} - {{teacher.teaching_availability.friday_times}} {%endif%}
+				
+						
+			</td>
+		</tr>
+		{% endfor %}
+		</table>
+	{% endif %}
+	<!--<div class="modal fade" id="teacher-list-csv" tabindex="-1" role="dialog" 
 	aria-labelledby="modal" aria-hidden="true">
 	  <div class="modal-dialog modal-lg">
 	    <div class="modal-content">
@@ -66,15 +133,13 @@
 
 	      <table class="table table-bordered table-hover">
 	      	<tr>
-	      		<th>First Name</th>
-	      		<th>Last Name</th>
-	      		<th>Branch Location</th>
-	      		<th>Skill level</th>
-	      		<th>Teaching Availability</th>
-	      		<th>Phone Number</th>
-				<th>Username</th>
+	      		<th>Email</th>
 				<th>Password</th>
-				<th>Email</th>
+				<th>First Name</th>
+	      		<th>Last Name</th>
+	      		<th>Phone Number</th>
+	      		<th>Comments</th>
+	      		<th>Teaching Availability</th>
 	      	</tr>
 			<tr>
 				<td>George</td>
@@ -129,29 +194,29 @@
 	      </div>
 	    </div>
 	  </div>
-
+-->
 
 <!-- {% if message %}
 	{{ message }}
-	<button> <a href="{%url 'school:studentupload'  %}"> Yes </a></button>
+	<button> <a href="{%url 'school:teacherupload'  %}"> Yes </a></button>
 	<button> No </button>
 {% endif %}
 
 <p>
 
-{% if student_list %}
+{% if teacher_list %}
 	<table class="table">
 		<tr>
-		{% with student_list|first as first_student %}
-			{% for key, value in first_student.items %}
+		{% with teacher_list|first as first_teacher %}
+			{% for key, value in first_teacher.items %}
 				<td> {{ key }}</td>
 			{% endfor %}
 		{% endwith %}
 		</tr>
 		<tr>
-			{% for student in student_list %}
+			{% for teacher in teacher_list %}
 			<tr>
-				{% for key, value in student.items %}
+				{% for key, value in teacher.items %}
 					<td> {{ value }}</td>
 				{% endfor %}
 			</tr>

@@ -83,6 +83,9 @@ class TeacherForm(ModelForm):
         fields = ['comments']
 
 
+class TeacherCSVForm(forms.Form):
+	file = forms.FileField()
+	
 class AvailabilityForm(ModelForm):
     
     class Meta():

@@ -3,7 +3,7 @@ from school_components.models import Period, School
 
 class PeriodForm(forms.ModelForm):
 
-	school = forms.ModelChoiceField(queryset=School.objects.all(), required=False)
+	school = forms.ModelChoiceField(queryset=School.objects.all(), required=True)
 
 	class Meta:
 		model = Period

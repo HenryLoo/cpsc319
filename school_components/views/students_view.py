@@ -79,13 +79,15 @@ def student_upload(request):
 	context_dictionary = {'form': StudentCSVForm()}
 	form = StudentCSVForm(request.POST, request.FILES)
 	
-	if request.method == 'POST':
-		student_list, errors = SchoolUtils.validate_csv(request.FILES['file'])
+	if request.method == 'POST' and 'file' in request.FILES:
+		#  check for errors
+		errors = SchoolUtils.validate_csv(request.FILES['file'])
 
 		if errors:
 			context_dictionary['errors'] = errors
 		else:
-			map(lambda s: s.save(), student_list)
+			# actually save
+			student_list = SchoolUtils.parse_csv(request.FILES['file'])
 			context_dictionary['student_list'] = student_list
 
 	return render_to_response('students/student_upload.html',

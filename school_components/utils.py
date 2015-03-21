@@ -1,4 +1,4 @@
-from school_components.models.students_model import Student
+from school_components.models import Student, Parent
 from django.forms.models import model_to_dict
 from datetime import datetime
 
@@ -8,7 +8,6 @@ class SchoolUtils:
 	@staticmethod
 	#  used to check csv for errors
 	def validate_csv(file):
-		student_list = []
 		errors = []
 
 		for i, line in enumerate(file):
@@ -16,24 +15,28 @@ class SchoolUtils:
 			try:
 				std = map(lambda x: x.strip(), line.split(','))
 				if len(std) != 15:
-					raise ValueError("Incorrect number of arguments on line %d." % i)
+					# +1 because not line numbers don't start at 0
+					raise ValueError("Incorrect number of arguments on line %d." % i+1)
 
-				s = Student.objects.create_student(*std)
-				student_list.append(s)
+				student_fields = std[:-4]
+				parent_fields = std[-4:]
+
+				Student('', *student_fields).clean_fields()
+				Parent('', *parent_fields).clean_fields()
 
 			except Exception as e:
-				errors.append(str(e))
+				errors.append("Line %d: %s" % (i+1, str(e)))
 
 			if len(errors) > 10:
 				return None, errors
 
-		return student_list, errors
+		return errors
 
 	@staticmethod
 	def parse_csv(file):
+		result = []
 		for line in file:
 			std = map(lambda x: x.strip(), line.split(','))
 			s = Student.objects.create_student(*std)
-			s.save()
-			result.append(model_to_dict(s))
+			result.append(s)
 		return result

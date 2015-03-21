@@ -1,0 +1,28 @@
+{% extends 'basetemplate.html' %}
+
+{% block body %}
+
+                <!-- Page Heading -->
+                <meta http-equiv="refresh" content="2; url={% url 'dashboard:statistics_page' %}" />
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Custom statistic created!
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i><a> Dashboard > Statistics</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
+<div class="body-top-bar">
+    <div class="centralize">
+        Returning to Statistics panel...
+    </div>
+</div>
+
+{% endblock %}

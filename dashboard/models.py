@@ -21,44 +21,29 @@ class Chart(models.Model):
     period = models.ForeignKey('school_components.Period')
     chart_type = models.CharField(max_length = 12, choices =
                                    (
-                                    ('BARS', 'bars chart'),
-                                    ('PIE', 'pie chart'),
-                                    ('LINE', 'line chart'),
+                                    ('BAR', 'Bar'),
+                                    ('PIE', 'Pie'),
+                                    ('LINE', 'Line'),
                                     ))
-                                    
+
     x_axis = models.CharField(max_length = 20, choices =
-                                  (
-                                   ('NSTUDENTS', 'Number of Students'),
-                                   ('NCLASSES', 'Number of Classes'),
-                                   ('NTEACHERS', 'Number of Teachers'),
-                                   ('ATTENDANCE', 'Attendance'),
-                                   ('PERFORMANCE', 'Performance'),
-                                   ))
+                            (
+                               ('SCHOOL', 'School'),
+                               ('PERIOD', 'Period'),
+                               ('CLASS', 'Classes'),
+                            ))
 
     y_axis = models.CharField(max_length = 20, choices =
                             (
-                               ('DATE', 'Date'),
-                               ('STUDENTS', 'Students'),
-                               ('CLASS', 'Classes'),
+                               ('NSTUDENTS', '# of Students'),
+                               ('NCLASSES', '# of Classes'),
+                               ('NTEACHERS', '# of Teachers'),
+                               ('ATTENDANCE', 'Attendance'),
+                               ('PERFORMANCE', 'Performance'),
                             ))
                               
     visibility = models.CharField(max_length = 12, choices =
                                   (
-                                ('ADM', 'Only Administrators'),
-                                          ('ALL', 'Administrators and Teachers'),
+                                ('ADM', 'Only Admins'),
+                                          ('ALL', 'All'),
                                           ))
-
-
-#TEST tables that contain data to generate charts
-
-class Attendance(models.Model):
-    studentID = models.IntegerField(blank = True, null = True)
-    classID = models.IntegerField(blank = True, null = True)
-    status = models.IntegerField(blank = True, null = True)
-
-class Grade(models.Model):
-    studentID = models.IntegerField(blank = True, null = True)
-    classID = models.IntegerField(blank = True, null = True)
-    assignmentID = models.IntegerField(blank = True, null = True)
-    grade = models.IntegerField(blank = True, null = True)
-

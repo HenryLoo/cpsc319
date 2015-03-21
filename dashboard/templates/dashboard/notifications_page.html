@@ -25,13 +25,32 @@
 
 				 <div class="body-top-bar">
     							<div class="centralize">
+    								<form class="form-horizontal" role="form" action="{% url 'dashboard:notifications_page' %}" method="post">
+                  	{% csrf_token %}
                			<div class="row">
 
                				<div class="col-lg-4">
 	               				<ul class="nav nav-pills" role="tablist">
-	               				  <li role="presentation"><a href="#">All <span class="badge">10</span></a></li>
-													<li role="presentation" class="active"><a href="#">New<span class="badge">3</span></a></li>
-												  <li role="presentation"><a href="#">Old <span class="badge">7</span></a></li>
+	               					{% if filter != '1' and filter != '2'%}
+	               						<li role="presentation" class="active">
+													{% else %}
+														<li role="presentation">
+													{% endif %}
+	               				  	<a href="{% url 'dashboard:notifications_page' %}">All <span class="badge">{{ numAll }}</span></a></li>
+
+	               				  {% if filter == '1' %}
+														<li role="presentation" class="active">
+													{% else %}
+														<li role="presentation">
+													{% endif %}
+														<a href="?filter=1">New<span class="badge">{{ numNew }}</span></a></li>
+													
+													{% if filter == '2' %}
+														<li role="presentation" class="active">
+													{% else %}
+														<li role="presentation">
+													{% endif %}
+												  	<a href="?filter=2">Old <span class="badge">{{ numOld }}</span></a></li>
 												</ul>
 											</div>
 
@@ -41,9 +60,8 @@
 													<a class="btn btn-default btn-sm" href="{% url 'dashboard:notifications_settings_page' %}" role="button">
 														Notification Settings <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 													</a>
-												  <button type="button" class="btn btn-default btn-sm" aria-label="Delete">
-														Apply <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-													</button>
+												  <label for="applyButton" class="btn btn-default btn-sm">Apply <i class="glyphicon glyphicon-ok"></i></label>
+													<input id="applyButton" type="submit" class="hidden">
 												</div>
 											</div>
 											<!-- /.row -->
@@ -57,74 +75,40 @@
 
 										<div class="row">
 											<div class="col-lg-4">
-												<div class="list-group" style="width: 600px;">
-
-													<a href="#" class="list-group-item list-group-item-info">
-												    <h4 class="list-group-item-heading">
-												    	<div class="row">
-												    		<div class="col-lg-4" style="width:425px;word-wrap:break-word;">
-												    			<span class="label label-primary">Attendance</span> Student Name
-												    		</div>
-												    		<div class="row">
-													    		<select class="btn btn-default dropdown-toggle" name="calledOption" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
-	                                  <option value="Not Called">Not Called</option>
-	                                  <option value="Called">Called</option>
-	                                </select>
-													    		<button type="button" class="btn btn-default btn-sm" aria-label="Delete">
-																	  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-																	</button>
-												    		</div>
-												    	</div>
-												    </h4>
-												    <p class="list-group-item-text" style="word-wrap:break-word;">Missed [determined number] of classes in a row</p>
-												  </a>
-												  <br>
-												  <a href="#" class="list-group-item list-group-item-info">
-												    <h4 class="list-group-item-heading">
-												    	<div class="row">
-												    		<div class="col-lg-4" style="width:425px;word-wrap:break-word;">
-												    			<span class="label label-primary">Performance</span> Student Name
-												    		</div>
-												    		<div class="row">
-													    		<select class="btn btn-default dropdown-toggle" name="calledOption" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
-	                                  <option value="Not Called">Not Called</option>
-	                                  <option value="Called">Called</option>
-	                                </select>
-													    		<button type="button" class="btn btn-default btn-sm" aria-label="Delete">
-																	  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-																	</button>
-												    		</div>
-												    	</div>
-												    </h4>
-												    <p class="list-group-item-text" style="word-wrap:break-word;">Performance lowest than [determined]% </p>
-												  </a>
-												  <br>
-												  <a href="#" class="list-group-item list-group-item-info">
-												    <h4 class="list-group-item-heading">
-												    	<div class="row">
-												    		<div class="col-lg-4" style="width:425px;word-wrap:break-word;">
-												    			<span class="label label-primary">Assignment</span> Student Name
-												    		</div>
-												    		<div class="row">
-													    		<select class="btn btn-default dropdown-toggle" name="calledOption" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
-	                                  <option value="Not Called">Not Called</option>
-	                                  <option value="Called">Called</option>
-	                                </select>
-													    		<button type="button" class="btn btn-default btn-sm" aria-label="Delete">
-																	  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-																	</button>
-												    		</div>
-												    	</div>
-												    </h4>
-												    <p class="list-group-item-text" style="word-wrap:break-word;">Do not delivered [assignment] for [classname]</p>
-												  </a>
-												  
+												<div class="list-group" style="width: 600px; max-height: 300px; overflow-y: scroll; overflow-x: hidden;">
+													{% for notification in notifications %}
+														<div class="list-group-item list-group-item-info">
+													    <h4 class="list-group-item-heading">
+													    	<div class="row">
+													    		<div class="col-lg-4" style="width:410px;word-wrap:break-word;">
+													    			<span class="label label-primary">{{ notification.1.notification_type }}</span> {{ notification.2.first_name }} {{ notification.2.last_name }}
+													    		</div>
+													    		<div class="row">
+														    		<select class="btn btn-default dropdown-toggle" name="{{ notification.0.id }}" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">
+														    			{% if notification.0.status %}
+			                                  <option value="Called">Called</option>
+			                                  <option value="Not Called">Not Called</option>
+			                                {% else %}
+			                                  <option value="Not Called">Not Called</option>
+			                                  <option value="Called">Called</option>
+			                                {% endif %}
+		                                </select>
+														    		<button type="button" class="btn btn-default btn-sm" aria-label="Delete">
+																		  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+																		</button>
+													    		</div>
+													    	</div>
+													    </h4>
+													    <p class="list-group-item-text" style="word-wrap:break-word;">{{ notification.1.content }}</p>
+													  </div>
+													  <br>
+												  {% endfor %}
 												</div>
 											</div>
 										</div>
 										<!-- /.row -->
 
-										<div class="row">
+<!-- 										<div class="row">
 											<div class="col-lg-4">
 												<nav>
 												  <ul class="pagination">
@@ -133,11 +117,9 @@
 												        <span aria-hidden="t-rue">&laquo;</span>
 												      </a>
 												    </li>
-												    <li class="active"><a href="#">1</a></li>
-												    <li><a href="#">2</a></li>
-												    <li><a href="#">3</a></li>
-												    <li><a href="#">4</a></li>
-												    <li><a href="#">5</a></li>
+												    {% for i in pages %}
+															<li><a href="?currentPage={{ i }}">{{ i }}</a></li>
+												    {% endfor %}
 												    <li>
 												      <a href="#" aria-label="Next">
 												        <span aria-hidden="true">&raquo;</span>
@@ -145,8 +127,9 @@
 												    </li>
 												  </ul>
 												</nav>
-	             			</div>
+	             			</div> -->
 	             			<!-- /.row -->
+	             			</form>
              			</div>
                	</div>
 

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from accounts.models import *
 from accounts.forms import *
+from accounts.utils import *
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect
@@ -9,6 +10,7 @@ from django.contrib.auth import login
 from django.contrib.auth import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+
 
 #===================                  ======================= TEACHER
 def create_teacher_view(request):
@@ -37,7 +39,8 @@ def create_teacher_view(request):
                     
                 user = User(username=user_form.cleaned_data['email'].lower(), email=user_form.cleaned_data['email'].lower(),
                             first_name=user_form.cleaned_data['first_name'], last_name=user_form.cleaned_data['last_name'])
-                user.set_password(user_form.cleaned_data['password'])
+                #user.set_password(user_form.cleaned_data['password'])
+                user.password = user_form.cleaned_data['password']
                 user.save()
                 #user = user_form.save(username=self.cleaned_data['email'].lower(),commit=False)
                 availability = availability_form.save()
@@ -118,7 +121,7 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
                 
                 teacher_form = TeacherForm(request.POST, instance = teacher)
                 teacher_phone = TeacherProfileForm(request.POST, instance = user_profile)
-                user_form = MyUserEditForm(request.POST, instance = user)
+                user_form = MyUserCreationForm(request.POST, instance = user)
                 availability_form = AvailabilityForm(request.POST, instance = availability)
 
                 context_dictionary['teacher'] = teacher
@@ -158,7 +161,7 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
                 context_dictionary['teacher'] = teacher
                 context_dictionary['teacher_form'] = TeacherForm(instance=teacher) #hope these come with pre-filled fields
                 context_dictionary['teacher_phone'] = TeacherProfileForm(instance=teacher.user)
-                context_dictionary['user_form'] = MyUserEditForm(instance=teacher.user.user)
+                context_dictionary['user_form'] = MyUserCreationForm(instance=teacher.user.user)
                 context_dictionary['availability_form'] = AvailabilityForm(instance=teacher.teaching_availability)    
                 
         except ObjectDoesNotExist:
@@ -168,8 +171,48 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
                    context_dictionary)
 
 
-def upload_teachers_view (request):
-    return render(request, "teachers/teacher_upload.html")
+def upload_teachers_view(request):
+
+    condict = {'upload_form' : TeacherCSVForm()}
+
+    if request.method == 'POST':
+        upload_form = TeacherCSVForm(request.POST, request.FILES)
+        #need to check if the form is valid????
+        tlist, errors = validate_teachers_csv(request.FILES['file'])
+
+        if errors:
+            condict['errors'] = errors
+            
+            #delete the teachers that were created
+            #for teacher in tlist:
+                #t = TeacherUser.objects.all().filter(pk=teacher.id)
+                #if t.exists():
+                 #   user_to_delete = t[0].user.user 
+                 #   t[0].teaching_availability.delete() #deletes the teaching avail and the teacheruser
+                 #   user_to_delete.delete() #deletes the user and user profile
+        else:
+            #save only if the csv had no errors
+            teachers = []
+            for t_tuple in tlist:
+                user = t_tuple[0]
+                profile = t_tuple[1]
+                avail = t_tuple[2]
+                teacher = t_tuple[3]
+
+                user.save()
+                profile.user = user
+                profile.save()
+                teacher.user = profile
+                avail.save()
+                teacher.teaching_availability = avail
+                teacher.save()
+                
+                teachers.append(teacher)
+
+            condict['teacher_list'] = teachers
+
+        
+    return render(request, "teachers/teacher_upload.html", condict)
 
 def export_teachers_view (request):
     return render(request, "teachers/teacher_export.html")
@@ -191,7 +234,8 @@ def create_admin_view(request):
                 
                 user = User(username=user_form.cleaned_data['email'].lower(), email=user_form.cleaned_data['email'].lower(),
                                 first_name=user_form.cleaned_data['first_name'], last_name=user_form.cleaned_data['last_name'])
-                user.set_password(user_form.cleaned_data['password'])
+                #user.set_password(user_form.cleaned_data['password'])
+                user.password = user_form.cleaned_data['password']
                 user.save()
                     
                 profile = admin_form.save(commit=False)
@@ -267,7 +311,7 @@ def edit_admin_view (request, admin_id): #there should always be a teacher_id he
                 user = admin.user
                 
                 admin_form = AdminProfileForm(request.POST, instance = admin)
-                user_form = MyUserEditForm(request.POST, instance = user)
+                user_form = MyUserCreationForm(request.POST, instance = user)
 
                 context_dictionary['admin'] = admin
                 context_dictionary['admin_form'] = admin_form
@@ -301,7 +345,7 @@ def edit_admin_view (request, admin_id): #there should always be a teacher_id he
 
                 context_dictionary['admin'] = admin
                 context_dictionary['admin_form'] = AdminProfileForm(instance=admin) #hope these come with pre-filled fields
-                context_dictionary['user_form'] = MyUserEditForm(instance=admin.user)
+                context_dictionary['user_form'] = MyUserCreationForm(instance=admin.user)
                 
         except ObjectDoesNotExist:
              pass #template will display error message because there's no admin
@@ -317,9 +361,12 @@ def login_view(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
         
-        if login_form.is_valid(): 
+        if login_form.is_valid():
             user = authenticate(username=login_form.cleaned_data['email'].lower(), password=login_form.cleaned_data['password'])
+            #user = User.objects.all().filter(username=login_form.cleaned_data['email'].lower(), password=login_form.cleaned_data['password'])
             if user is not None:
+            #if user.exists():
+                #the_user = user[0]
                 if user.is_active:
                     login(request, user) 
                     print (user.userprofile.school)

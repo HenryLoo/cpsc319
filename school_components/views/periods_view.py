@@ -23,8 +23,10 @@ def period_create(request):
 	if request.method == 'POST':
 		cf = PeriodForm(request.POST)
 		if cf.is_valid():
-			cf.school = request.user.userprofile.school
-			new = cf.save()
+			new = cf.save(commit=False)
+			new.school = request.user.userprofile.school
+			print (request.user.userprofile.school)
+			new.save()
 
 			return HttpResponseRedirect(
 				reverse('school:periodlist', args=(new.id,)))

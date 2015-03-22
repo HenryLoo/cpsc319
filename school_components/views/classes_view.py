@@ -32,9 +32,10 @@ def class_create(request):
 
 		if cf.is_valid() and sf.is_valid() and te.is_valid():
 			# save class
-			cf.school = request.user.userprofile.school
-			cf.period = request.user.userprofile.period
-			new = cf.save()
+			new = cf.save(commit=False)
+			new.school = request.user.userprofile.school
+			new.period = request.user.userprofile.period
+			new.save()
 
 			# save class schedule
 			schedule = sf.save(commit=False)

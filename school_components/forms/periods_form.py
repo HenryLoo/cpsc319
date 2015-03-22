@@ -6,6 +6,7 @@ class PeriodForm(forms.ModelForm):
 
 	class Meta:
 		model = Period
+		school = forms.CharField(widget=forms.HiddenInput())
 		fields = ['description','start_date', 'end_date', 'comments']
 		widgets = {
 			'comments': forms.Textarea(attrs={'rows': 5}),

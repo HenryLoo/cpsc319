@@ -26,9 +26,10 @@ def parent_create(request):
 	if request.method == 'POST':
 
 		if p.is_valid():
-			p.school = request.user.userprofile.school
-			p.period = request.user.userprofile.period
-			new = p.save()
+			new = p.save(commit=False)
+			new.school = request.user.userprofile.school
+			new.period = request.user.userprofile.period
+			new .save()
 
 			return HttpResponseRedirect(
 				reverse('school:parentlist', args=(new.id,)))

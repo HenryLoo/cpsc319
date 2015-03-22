@@ -25,9 +25,10 @@ def course_create(request):
 	if request.method == 'POST':
 		cf = CourseForm(request.POST)
 		if cf.is_valid():
-			cf.school = request.user.userprofile.school
-			cf.period = request.user.userprofile.period
-			new = cf.save()
+			new = cf.save(commit=False)
+			new.school = request.user.userprofile.school
+			new.period = request.user.userprofile.period
+			new.save()
 
 			if cf['prerequisite'].value() != '':
 				prq = Course.objects.get(pk=cf['prerequisite'].value())
@@ -49,8 +50,9 @@ def dept_create(request):
 	if request.method == 'POST':
 		d = DepartmentForm(request.POST)
 		if d.is_valid():
-			d.school = request.user.userprofile.school
-			new = d.save()
+			new = d.save(commit=False)
+			new.school = request.user.userprofile.school
+			new.save()
 			return HttpResponseRedirect(reverse('school:courselist'))
 		else:
 			context_dictionary['errors'] = d.errors 

@@ -45,8 +45,8 @@ def student_create(request):
 	if request.method == 'POST':
 		if s.is_valid():
 			student = s.save(commit=False)
-			s.school = request.user.userprofile.school
-			s.period = request.user.userprofile.period
+			student.school = request.user.userprofile.school
+			student.period = request.user.userprofile.period
 			student.save()
 
 			return HttpResponseRedirect(

@@ -67,79 +67,16 @@
             <!-- Top Menu Items -->
            <ul class="nav navbar-top-links navbar-right">
 
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-alerts">
-                        <li>
-                            <a href="#">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <h5 class="media-heading"><strong>Student Name <span class="label label-danger">Not Called</span></strong>
-                                        </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Today</p>
-                                        <p>Missed [determined number] classes in a row.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <h5 class="media-heading"><strong>Student Name <span class="label label-success">Called</span></strong>
-                                        </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> Yesterday</p>
-                                        <p>Performance lowest than [determined percentage]%.</p>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <h5 class="media-heading"><strong>Student Name <span class="label label-danger">Not Called</span> </strong>
-                                        </h5>
-                                        <p class="small text-muted"><i class="fa fa-clock-o"></i> 2 days ago</p>
-                                        <p>Do not delivered assigment [assignment description] for [class name].</p>
-                  
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-
-                            <a class="text-center" href="#">
-                            <a href="{% url 'dashboard:notifications_page' %}">Read All Notifications</a>
-                        </li>
-                    </ul>
-                </li>
-               
 
             <li class="dropdown">
                     <a href="#" id="current-school" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-university"></i> School <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        {% for school in school_list %}
                         <li>
-                            <a href="#"> Surrey, BC</a>
+                            <a href="#"> {{school.title}} </a>
                         </li>
                         <li class="divider"></li>
-                        <li>
-                            <a href="#"> Calgary, AB</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"> Detroit, MI</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"> Punjab, India</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"> Walsall, West Midlands</a>
-                        </li>
-                        <li class="divider"></li>
+                        {% endfor %}
                         <li>
                             <a href="{% url 'school:schoolcreate' %}">+ Create New School</a>
                         </li>
@@ -149,18 +86,12 @@
                 <li class="dropdown">
                     <a href="#" id="current-period" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> Period <b class="caret"></b></a>
                     <ul class="dropdown-menu">
+                        {% for period in period_list %}
                         <li>
-                            <a href="#"> 2015-Winter</a>
+                            <a href="#"> {{period.description}} </a>
                         </li>
                         <li class="divider"></li>
-                        <li>
-                            <a href="#"> 2014-Summer</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"> 2014-Winter</a>
-                        </li>
-                        <li class="divider"></li>
+                        {% endfor %}
                         <li>
                             <a href="{% url 'school:periodcreate' %}">+ Create New Period</a>
                         </li>

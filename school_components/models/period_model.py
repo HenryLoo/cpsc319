@@ -5,6 +5,7 @@ class Period(models.Model):
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     school = models.ForeignKey('School')
+    comments = models.CharField(max_length = 500)
 
     def __unicode__(self):
     	return self.description

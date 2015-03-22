@@ -5,4 +5,7 @@ class SchoolForm(forms.ModelForm):
 
 	class Meta:
 		model = School
-		fields = ['title', 'address', 'phone']
+		fields = '__all__'
+		widgets = {
+			'comments': forms.Textarea(attrs={'rows': 5}),
+		}

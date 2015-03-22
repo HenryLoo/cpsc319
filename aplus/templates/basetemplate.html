@@ -167,10 +167,13 @@
                     </ul>
                 </li>
 
+{% if user.is_authenticated %}
+
                 <li>
-                    <a href="{% url 'settings_page' %}"><i class="fa fa-user"></i> SystemAdminName</a>
+                    <a href="{% url 'settings_page' %}"><i class="fa fa-user"></i> {{ user.first_name }}</a>
                 </li>
 
+{% endif %}
                 <li>
                     <a href="{% url 'account:login_page' %}"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
                 </li>

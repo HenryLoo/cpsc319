@@ -22,6 +22,8 @@ import datetime
 from operator import attrgetter
 from itertools import chain
 
+from django.contrib.auth import authenticate, login
+
 def statistics_page(request):
     
     return_dict = {}

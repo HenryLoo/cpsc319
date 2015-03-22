@@ -20,5 +20,43 @@
                 </div>
 
 
+<div class="col-md-9">
+{% if user.is_authenticated %}
+
+    <span>
+        <h3> User Info </h3>
+        <a href="#" id="edit-admin-btn" class="pull-right"> Edit </a>
+    </span>
+    <table class="table table-hover">
+
+        <tr> 
+
+            <td> First Name: </td>
+            <td> 
+                {{ user.first_name}} 
+            </td>
+        </tr>
+        <tr> 
+            <td> Last Name: </td>
+            <td> 
+                {{ user.last_name}} 
+            </td>
+        </tr>
+
+        <tr> 
+            <td> Password: </td>
+            <td> {{ user.password }} </td>
+        </tr>
+       
+    </table>
+
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            Select an admin to view details.
+        </div>
+    {% endif %}
+</div>
+
+
 {% endblock %}
  

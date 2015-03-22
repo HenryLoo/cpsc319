@@ -5,6 +5,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
+
 def course_list(request, course_id=None):
 	course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name')
 	context_dictionary = {'course_list': course_list}
@@ -46,13 +47,13 @@ def course_create(request):
 def dept_create(request):
 	context_dictionary = {'dept_form': DepartmentForm()}
 	if request.method == 'POST':
-		df = DepartmentForm(request.POST)
-		if df.is_valid():
-			df.school = request.user.userprofile.school
-			new = df.save()
+		d = DepartmentForm(request.POST)
+		if d.is_valid():
+			d.school = request.user.userprofile.school
+			new = d.save()
 			return HttpResponseRedirect(reverse('school:courselist'))
 		else:
-			context_dictionary['errors'] = df.errors 
+			context_dictionary['errors'] = d.errors 
 
 	return render_to_response('courses/dept_form.html',
 		context_dictionary,

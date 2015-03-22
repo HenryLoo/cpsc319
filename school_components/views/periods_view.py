@@ -17,7 +17,7 @@ def period_list(request, period_id=None):
 		RequestContext(request))
 
 def period_create(request):
-	period_list = Period.objects.all()
+	period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
 	context_dictionary = {'period_list': period_list,
 							 'period_form': PeriodForm()}
 	if request.method == 'POST':

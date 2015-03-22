@@ -68,6 +68,7 @@
            <ul class="nav navbar-top-links navbar-right">
 
             
+            {% if user.userprofile.role == 'SYSTEM_ADMIN' %}
             <li class="dropdown">
                     <a href="#" id="current-school" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-university"></i> {{user.userprofile.school.title}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -85,6 +86,11 @@
                     </ul>
                 </li>
             
+            {%endif%}
+
+
+            {% if user.userprofile.role != 'TEACHER' %}
+
             {% if user.userprofile.school %}
 
                 <li class="dropdown">
@@ -105,6 +111,8 @@
                 </li>
             {% endif %}
 
+            {%endif%}
+
 {% if user.is_authenticated %}
 
                 <li>
@@ -118,6 +126,36 @@
 
 
             </ul>
+
+{% if user.userprofile.role == 'TEACHER'%}
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <a href="{% url 'dashboard:statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'school:studentlist' %}"><i class="fa fa-child"></i>  Students</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'reports:view_reports' %}"><i class="fa fa-file-o"></i>  Reports</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'school:classlist' %}"><i class="fa fa-table"></i>  Classes</a>
+                    </li>              
+                    <li>
+                        <a href="{% url 'messages:send_email' %}"><i class="fa fa-envelope"></i>  Email</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'settings_page' %}"><i class="fa fa-fw fa-wrench"></i> Settings</a>
+                    </li>
+                </ul>
+                <div>
+            <div>
+
+{% else %}
+
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
@@ -252,12 +290,14 @@
                     </li>
 
             {% endif %}
-           
 
                 </ul>
 
                 </div>
             </div>
+
+{%endif%}
+
             <!-- /.navbar-collapse -->
         </nav>
 

@@ -18,10 +18,10 @@ def statistics_page(request):
     context_dictionary = {}
 
     # TODO: make not fake
-    # request.session['school_id'] = 1
-    # request.session['school_name'] = School.objects.get(pk=1).title
-    # request.session['period_id'] = 3
-    # request.session['period_name'] = Period.objects.get(pk=3).description
+    request.session['school_id'] = 1
+    request.session['school_name'] = School.objects.get(pk=1).title
+    request.session['period_id'] = 3
+    request.session['period_name'] = Period.objects.get(pk=3).description
         
     return render_to_response("dashboard/statistics_page.html",context_dictionary,RequestContext(request))
 

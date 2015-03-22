@@ -11,6 +11,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core.servers.basehttp import FileWrapper
 from aplus.settings import SAMPLE_CSV_PATH
+from django.core import serializers
+import json
 import csv
 
 
@@ -36,6 +38,17 @@ def class_history_helper(class_reg):
 	m['id'] = class_reg.reg_class.id
 	m['class_name'] = class_reg.reg_class
 	return m
+
+
+def student_get(request):
+	if request.method == 'GET':
+		student_id = request.GET['student_id']
+		student = Student.objects.get(pk=student_id)
+		student_json = serializers.serialize("json", [student])
+		# extract the fields we want
+		student_json = json.dumps(json.loads(student_json)[0]['fields'])
+		return HttpResponse(student_json, content_type="application/json")
+
 
 # create a new student with form data
 def student_create(request):

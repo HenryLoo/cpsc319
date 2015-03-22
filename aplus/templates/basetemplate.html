@@ -190,9 +190,11 @@
                     <li>
                         <a href="{% url 'school:courselist' %}"><i class="fa fa-book"></i>  Courses</a>
                     </li>
+                    {% if user.userprofile.role == 'SYSTEM_ADMIN' %}
                     <li>
                         <a href="{% url 'school:schoollist' %}"><i class="fa fa-university"></i>  Schools</a>
                     </li>
+                    {% endif %}
                     <li>
                         <a href="{% url 'school:periodlist' %}"><i class="fa fa-calendar"></i>  Periods</a>
                     </li>
@@ -232,9 +234,11 @@
                     <li class="disabled">
                         <a href=""><i class="fa fa-book"></i>  Courses</a>
                     </li>
+                    {% if user.userprofile.role == 'SYSTEM_ADMIN' %}
                     <li>
                         <a href="{% url 'school:schoollist' %}"><i class="fa fa-university"></i>  Schools</a>
                     </li>
+                    {% endif %}
                     <li>
                         <a href="{% url 'school:periodlist' %}"><i class="fa fa-calendar"></i>  Periods</a>
                     </li>

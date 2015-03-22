@@ -46,6 +46,8 @@ class MyUserCreationForm(ModelForm):
         model = User
         fields = ['email', 'password', 'first_name', 'last_name']
 
+
+#WILL NOT USE THIS IF WE'RE JUST STORING THE PASSWORD DIRECTLY IN THE DB
 class MyUserEditForm(ModelForm):
 
     email = forms.EmailField(required=True)

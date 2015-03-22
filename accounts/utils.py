@@ -16,7 +16,8 @@ def create_teacher(school_id, period_id, email, password, first_name, last_name,
     friday = to_bool(friday)
     
     user = User(username=email.lower(), email=email.lower(), first_name=first_name, last_name=last_name)
-    user.set_password(password)
+    #user.set_password(password)
+    user.password = password
     
     user.full_clean()
     

@@ -32,8 +32,6 @@ class Payment(models.Model):
 	amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 	date = models.DateField(null=True, blank=True)
 	parent = models.ForeignKey('Parent', related_name='payment')
-	school = models.ForeignKey('School')
-	period = models.ForeignKey('Period')
 
 	def __unicode__(self):
 		return self.receipt_no

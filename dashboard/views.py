@@ -34,9 +34,9 @@ def statistics_page(request):
         yAxis = request.POST.get("yAxis")
         chartType = request.POST.get("chartType")
         visibility = request.POST.get("visibility")
-        # Need to replace this with actual school and periods
-        school = School.objects.filter(id=1).get()
-        period = Period.objects.filter(id=1).get()
+        # Replaced by current
+        school = request.user.userprofile.school
+        period = Prequest.user.userprofile.period
         chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
         chart.save()
         return_dict['createdCustom'] = 1
@@ -67,7 +67,7 @@ def statistics_page(request):
         return_dict['registrationChart'].append([x[0], x[1]])
 
     
-    performance = Grading.objects.filter(period_id=1).values('grade').order_by('grade').annotate(num_students=Count('grade'))   
+    performance = Grading.objects.filter(reg_class__period=1).values('grade').order_by('grade').annotate(num_students=Count('grade'))   
     performXAxis = performance.values_list('grade', flat=True)
     performYAxis = performance.values_list('num_students', flat=True)
     return_dict['performanceChart'] = []

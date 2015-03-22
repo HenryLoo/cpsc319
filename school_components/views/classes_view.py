@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 
 # would like to render to class_reg.html and then load wih ajax
 def class_list(request, class_id=None):
-	class_list = Class.objects.all().order_by('course')
+	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -32,6 +32,8 @@ def class_create(request):
 
 		if cf.is_valid() and sf.is_valid() and te.is_valid():
 			# save class
+			cf.school = request.user.userprofile.school
+			cf.period = request.user.userprofile.period
 			new = cf.save()
 
 			# save class schedule

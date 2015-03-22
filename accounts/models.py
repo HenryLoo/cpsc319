@@ -16,8 +16,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User)
     phone_regex = RegexValidator(regex=r'^[\d|-]+$', message="Use only digits and dashes, eg. 604-214-0392")
     # The additional attributes we wish to include.
-    #school = models.ForeignKey('school_components.School')
-    #period = models.ForeignKey('school_components.Period')
+    school = models.ForeignKey('school_components.School',blank=True, null=True)
+    period = models.ForeignKey('school_components.Period', blank=True, null=True)
     phone = models.CharField(max_length = 20, validators=[phone_regex], blank=True, null=True,)
     role = models.CharField(max_length = 12, choices =
                             (

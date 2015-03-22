@@ -4,7 +4,8 @@ from school_components.models.classes_model import *
 class ClassForm(forms.ModelForm):
 	class Meta:
 		model = Class
-		fields = '__all__'
+		fields = ['course', 'section', 'description', 'class_size', 'waiting_list_size', 'room']
+
 
 class ClassScheduleForm(forms.ModelForm):
 	class Meta:

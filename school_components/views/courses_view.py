@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 def course_list(request, course_id=None):
-	course_list = Course.objects.all().order_by('name')
+	course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name')
 	context_dictionary = {'course_list': course_list}
 
 	if course_id:
@@ -24,6 +24,8 @@ def course_create(request):
 	if request.method == 'POST':
 		cf = CourseForm(request.POST)
 		if cf.is_valid():
+			cf.school = request.user.userprofile.school
+			cf.period = request.user.userprofile.period
 			new = cf.save()
 
 			if cf['prerequisite'].value() != '':
@@ -46,6 +48,7 @@ def dept_create(request):
 	if request.method == 'POST':
 		df = DepartmentForm(request.POST)
 		if df.is_valid():
+			df.school = request.user.userprofile.school
 			new = df.save()
 			return HttpResponseRedirect(reverse('school:courselist'))
 		else:
@@ -54,6 +57,8 @@ def dept_create(request):
 	return render_to_response('courses/dept_form.html',
 		context_dictionary,
 		RequestContext(request))
+
+#create department view
 
 def course_assignment(request):
 	return render(request, 'courses/course_assignment.html')

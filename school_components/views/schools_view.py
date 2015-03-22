@@ -34,5 +34,14 @@ def school_create(request):
 		context_dictionary,
 		RequestContext(request))
 
+def school_change(request, school_id=None):
+	if school_id:
 
+		new_school = School.objects.get(pk = school_id)
+		request.user.userprofile.school = new_school
+		request.user.userprofile.period = None
+		request.user.userprofile.save()
+
+	return render_to_response('schools/school_list.html',
+		RequestContext(request))
 

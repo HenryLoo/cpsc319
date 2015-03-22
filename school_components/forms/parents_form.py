@@ -4,7 +4,7 @@ from school_components.models import Parent, Payment
 class ParentForm(ModelForm):
 	class Meta:
 		model = Parent
-		# exclude = ['school', 'period']
+		exclude = ['school', 'period']
 
 
 class PaymentForm(ModelForm):

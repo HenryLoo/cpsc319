@@ -67,36 +67,43 @@
             <!-- Top Menu Items -->
            <ul class="nav navbar-top-links navbar-right">
 
-
+            
             <li class="dropdown">
-                    <a href="#" id="current-school" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-university"></i> School <b class="caret"></b></a>
+                    <a href="#" id="current-school" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-university"></i> {{user.userprofile.school.title}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         {% for school in school_list %}
+                        {% if school != user.userprofile.school %}
                         <li>
-                            <a href="#"> {{school.title}} </a>
+                            <a href="{% url 'school:changeschool' school.id %}"> {{school.title}} </a>
                         </li>
                         <li class="divider"></li>
+                        {% endif %}
                         {% endfor %}
                         <li>
                             <a href="{% url 'school:schoolcreate' %}">+ Create New School</a>
                         </li>
                     </ul>
                 </li>
+            
+            {% if user.userprofile.school %}
 
                 <li class="dropdown">
-                    <a href="#" id="current-period" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> Period <b class="caret"></b></a>
+                    <a href="#" id="current-period" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> {{user.userprofile.period.description}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         {% for period in period_list %}
+                        {% if period != user.userprofile.period %}
                         <li>
-                            <a href="#"> {{period.description}} </a>
+                            <a href="{% url 'school:changeperiod' period.id %}"> {{period.description}} </a>
                         </li>
                         <li class="divider"></li>
+                        {% endif %}
                         {% endfor %}
                         <li>
                             <a href="{% url 'school:periodcreate' %}">+ Create New Period</a>
                         </li>
                     </ul>
                 </li>
+            {% endif %}
 
 {% if user.is_authenticated %}
 
@@ -116,6 +123,8 @@
                 <div class="sidebar-nav navbar-collapse">
                     
                 <ul class="nav" id="side-menu">
+            {% if user.userprofile.school %}
+                {% if user.userprofile.period %}
                     <li>
                         <a href="{% url 'dashboard:statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
                     </li>
@@ -155,6 +164,96 @@
                     <li>
                         <a href="{% url 'settings_page' %}"><i class="fa fa-fw fa-wrench"></i> Settings</a>
                     </li>
+
+                    {% else %}
+
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-smile-o"></i>  Registration</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-child"></i>  Students</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-user"></i>  Administrators</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-users"></i>  Teachers</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-users"></i>  Parents</a>
+                    </li>  
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-file-o"></i>  Reports</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-table"></i>  Classes</a>
+                    </li>              
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-book"></i>  Courses</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'school:schoollist' %}"><i class="fa fa-university"></i>  Schools</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'school:periodlist' %}"><i class="fa fa-calendar"></i>  Periods</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-envelope"></i>  Email</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-fw fa-wrench"></i> Settings</a>
+                    </li>
+
+                    {% endif %}
+
+            {% else %}
+
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-smile-o"></i>  Registration</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-child"></i>  Students</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-user"></i>  Administrators</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-users"></i>  Teachers</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-users"></i>  Parents</a>
+                    </li>  
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-file-o"></i>  Reports</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-table"></i>  Classes</a>
+                    </li>              
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-book"></i>  Courses</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'school:schoollist' %}"><i class="fa fa-university"></i>  Schools</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-calendar"></i>  Periods</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-envelope"></i>  Email</a>
+                    </li>
+                    <li class="disabled">
+                        <a href=""><i class="fa fa-fw fa-wrench"></i> Settings</a>
+                    </li>
+
+            {% endif %}
+           
+
                 </ul>
 
                 </div>

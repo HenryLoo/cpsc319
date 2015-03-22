@@ -15,7 +15,7 @@ import csv
 
 
 def student_list(request, student_id=None):
-	student_list = Student.objects.all().order_by('last_name')
+	student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
 	context_dictionary = {'student_list': student_list}
 
 	if student_id:
@@ -45,14 +45,8 @@ def student_create(request):
 	if request.method == 'POST':
 		if s.is_valid():
 			student = s.save(commit=False)
-
-			# TODO: change to whatever we decide to use
-			# school = School.objects.get(pk=request.session['school_id'])
-			# period = Period.objects.get(pk=request.session['period_id'])
-			
-			# student.school = school
-			# student.period = period
-		
+			s.school = request.user.userprofile.school
+			s.period = request.user.userprofile.period
 			student.save()
 
 			return HttpResponseRedirect(

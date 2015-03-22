@@ -4,11 +4,9 @@ from school_components.models import Period, School
 
 class PeriodForm(forms.ModelForm):
 
-	school = forms.ModelChoiceField(queryset=School.objects.all(), required=True)
-
 	class Meta:
 		model = Period
-		fields = '__all__'
+		fields = ['description','start_date', 'end_date', 'comments']
 		widgets = {
 			'comments': forms.Textarea(attrs={'rows': 5}),
 			'start_date': DateInput(attrs={'class':'datepicker'}),

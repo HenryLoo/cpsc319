@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 
 
 def parent_list(request, parent_id=None):
-	parent_list = Parent.objects.all().order_by('last_name')
+	parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
 	context_dictionary = {'parent_list': parent_list}
 
 	if parent_id:
@@ -26,15 +26,8 @@ def parent_create(request):
 	if request.method == 'POST':
 
 		if p.is_valid():
-			# TODO: update with whatever we decide to do
-			# parent = p.save(commit=False)
-
-			# school = School.objects.get(pk=request.session['school_id'])
-			# period = Period.objects.get(pk=request.session['period_id'])
-			
-			# parent.school = school
-			# parent.period = period
-		
+			p.school = request.user.userprofile.school
+			p.period = request.user.userprofile.period
 			new = p.save()
 
 			return HttpResponseRedirect(

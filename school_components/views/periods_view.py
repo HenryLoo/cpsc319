@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 def period_list(request, period_id=None):
-	period_list = Period.objects.all().order_by('description')
+	period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
 	context_dictionary = {'period_list': period_list}
 
 	if period_id:
@@ -23,6 +23,7 @@ def period_create(request):
 	if request.method == 'POST':
 		cf = PeriodForm(request.POST)
 		if cf.is_valid():
+			cf.school = request.user.userprofile.school
 			new = cf.save()
 
 			return HttpResponseRedirect(
@@ -35,4 +36,12 @@ def period_create(request):
 		RequestContext(request))
 
 
+def period_change(request, period_id=None):
+	if period_id:
+		new_period = Period.objects.get(pk = period_id)
+		request.user.userprofile.period = new_period
+		request.user.userprofile.save()
+
+	return render_to_response('periods/period_list.html',
+		RequestContext(request))
 

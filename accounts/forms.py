@@ -56,8 +56,6 @@ class MyUserEditForm(ModelForm):
         model = User
         fields = ['email', 'first_name', 'last_name'] #no password changing on edit
 
-   
-
 
 class AdminProfileForm(ModelForm):
 
@@ -65,8 +63,7 @@ class AdminProfileForm(ModelForm):
     
     class Meta():
         model = UserProfile
-        fields = [#'school', 'period',
-            'phone', 'role']
+        fields = ['phone', 'role']
 
 class TeacherProfileForm(ModelForm):
     

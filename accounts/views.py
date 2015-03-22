@@ -46,6 +46,8 @@ def create_teacher_view(request):
 
                 profile = teacher_phone.save(commit=False)
                 profile.role = 'TEACHER'
+                profile.school = request.user.userprofile.school
+                profile.period = request.user.userprofile.period
                 profile.user = user
                 
                 profile.save()
@@ -87,7 +89,7 @@ def create_teacher_view(request):
 
 def view_teachers_view (request, teacher_id=None):
 
-    teacher_list = TeacherUser.objects.all()
+    teacher_list = TeacherUser.objects.filter(user__period = request.user.userprofile.period, user__school = request.user.userprofile.school)
     context_dictionary = {'teacher_list': teacher_list}
 
     if teacher_id:
@@ -101,7 +103,7 @@ def view_teachers_view (request, teacher_id=None):
         context_dictionary)
 
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
-        teacher_list = TeacherUser.objects.all()
+        teacher_list = TeacherUser.objects.filter(user__period = request.user.userprofile.period, user__school = request.user.userprofile.school)
         context_dictionary = {'teacher_list': teacher_list}
 
         try:
@@ -194,8 +196,8 @@ def create_admin_view(request):
                     
                 profile = admin_form.save(commit=False)
                 profile.user = user
-                #profile.school = current school
-                #profile.period = current period
+                profile.school = request.user.userprofile.school
+                profile.period = request.user.userprofile.period
                 profile.save()
             
                 user_ret = user
@@ -234,6 +236,7 @@ def create_admin_view(request):
 
 
 def view_admins_view (request, admin_id=None):
+
     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
     school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
     context_dictionary = {'system_admin_list': system_admin_list,
@@ -319,7 +322,11 @@ def login_view(request):
             if user is not None:
                 if user.is_active:
                     login(request, user) 
-                    return HttpResponseRedirect('/dashboard/statistics')
+                    print (user.userprofile.school)
+                    if user.userprofile.school != None:
+                        return HttpResponseRedirect('/dashboard/statistics')
+                    else:
+                        return HttpResponseRedirect('/school/schools')
                     
                 else:
                     return render(request, 'login/login.html', {'login_form' : login_form, 'error' : 'Your account has been disabled.' })

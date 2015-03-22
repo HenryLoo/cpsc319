@@ -115,6 +115,9 @@ urlpatterns = patterns('',
     url(r'^schools/create/$',
         'school_components.views.schools_view.school_create',
         name='schoolcreate'),
+    url(r'^changeschool/(?P<school_id>\d+)/$',
+        'school_components.views.schools_view.school_change',
+        name='changeschool'),
 
     # periods
     url(r'^periods/$',
@@ -126,5 +129,9 @@ urlpatterns = patterns('',
     url(r'^periods/create/$',
         'school_components.views.periods_view.period_create',
         name='periodcreate'),
+        #change after
+    url(r'^changeperiod/(?P<period_id>\d+)/$',
+        'school_components.views.periods_view.period_change',
+        name='changeperiod'),
                        
 )

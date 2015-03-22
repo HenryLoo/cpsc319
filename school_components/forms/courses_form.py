@@ -7,7 +7,7 @@ class CourseForm(forms.ModelForm):
 
 	class Meta:
 		model = Course
-		fields = '__all__'
+		fields = ['department', 'name', 'age_requirement', 'description']
 		widgets = {
 			'description': forms.Textarea(attrs={'rows': 5}),
 		}
@@ -22,7 +22,7 @@ class PrerequisiteForm(forms.ModelForm):
 class DepartmentForm(forms.ModelForm):
 	class Meta:
 		model = Department
-		fields = '__all__'
+		fields = ['name', 'description']
 		widgets = {
 			'description': forms.Textarea(attrs={'rows': 5}),
 		}

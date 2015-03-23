@@ -317,17 +317,33 @@ def view_admins_view (request, admin_id=None):
         context_dictionary)
 
 def edit_admin_view (request, admin_id): #there should always be an admin_id here
+    #!!! probably block off this view entirely for teachers !!!
+    
         system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
         school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school)
         context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
         try:
+            context_dictionary['error']='There is no admin with that id.'
             admin = UserProfile.objects.get(pk=admin_id)
+            context_dictionary['error']=None
+            
+            #so as to not display teachers, if a teacher's userprofile id was entered in the url
             if not (admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN'):
-                raise ObjectDoesNotExist#so as to not display teachers, if a teacher's userprofile id was entered in the url
-            if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.user.userprofile.school)):
+                context_dictionary['error']='There is no admin with that id.'
                 raise ObjectDoesNotExist
+
+            #to prevent editing school admins that aren't in the current school
+            if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.user.userprofile.school)):
+                context_dictionary['error']='You are not authorized to edit this admin.'
+                raise ObjectDoesNotExist
+
+            #to prevent school admins from editing system admins
+            if admin.role == 'SYSTEM_ADMIN' and request.user.userprofile.role == 'SCHOOL_ADMIN':
+                context_dictionary['error']='You are not authorized to edit this admin.'
+                raise ObjectDoesNotExist
+
             
             if request.method == 'POST': #assume if it was a post then the admin exists, because otherwise a form wouldn't have appeared
                                         #!!!!! actually can't do that, imagine if this admin is deleted by another admin while on this page
@@ -371,6 +387,7 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
                 context_dictionary['user_form'] = MyUserCreationForm(instance=admin.user)
                 
         except ObjectDoesNotExist:
+            
              pass #template will display error message because there's no admin
 
         return render(request, "admins/edit_admin.html",

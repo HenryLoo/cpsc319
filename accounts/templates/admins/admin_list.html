@@ -93,7 +93,10 @@ $('#edit-admin-btn').click(function() {
 	{% if admin %}
 	<span>
 		<h3> Admin Info </h3>
+		{% if admin.role == 'SYSTEM_ADMIN' and user.userprofile.role == 'SCHOOL_ADMIN' %} 
+		{%else%}
 		<a href="{% url 'account:edit_admin' admin.id %}" id="edit-admin-btn" class="pull-right"> Edit </a>
+		{%endif%}
 	</span>
 	<table class="table table-hover">
 		<tr> 

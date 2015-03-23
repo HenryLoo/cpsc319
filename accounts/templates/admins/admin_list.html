@@ -128,9 +128,15 @@ $('#edit-admin-btn').click(function() {
 	</table>
 
 	{% else %}
+		{%if not_valid_id%} 
+		<div class="alert alert-info" role="alert">
+			There is no admin in this school with that id.
+		</div>
+		{%else%}
 		<div class="alert alert-info" role="alert">
 			Select an admin to view details.
 		</div>
+		{%endif%}
 	{% endif %}
 </div>
 

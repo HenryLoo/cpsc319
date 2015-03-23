@@ -98,6 +98,8 @@ def view_teachers_view (request, teacher_id=None):
     if teacher_id:
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
+            if not (request.user.userprofile.school == teacher.user.school and request.user.userprofile.period == teacher.user.period):
+                raise ObjectDoesNotExist
             context_dictionary['teacher'] = teacher
         except ObjectDoesNotExist:
             context_dictionary['not_valid_teacher'] = True
@@ -105,12 +107,15 @@ def view_teachers_view (request, teacher_id=None):
     return render(request, "teachers/teacher_list.html",
         context_dictionary)
 
+
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
         teacher_list = TeacherUser.objects.filter(user__period = request.user.userprofile.period, user__school = request.user.userprofile.school)
         context_dictionary = {'teacher_list': teacher_list}
 
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
+            if not (request.user.userprofile.school == teacher.user.school and request.user.userprofile.period == teacher.user.period):
+                raise ObjectDoesNotExist
             
             if request.method == 'POST': #assume if it was a post then the teacher exists, because otherwise a form wouldn't have appeared
                                         #!!!!! actually can't do that, imagine if teacher is deleted by another admin while on this page
@@ -267,7 +272,6 @@ def create_admin_view(request):
     password = User.objects.make_random_password()
     user_form = MyUserCreationForm(initial={'password': password})
     admin_form = AdminProfileForm()
-
     
     
     return render(request, 'admins/create_admin.html', {
@@ -280,32 +284,41 @@ def create_admin_view(request):
 def view_admins_view (request, admin_id=None):
 
     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
+    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school)
     context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
     if admin_id:
         try:
             admin = UserProfile.objects.get(pk=admin_id)
-            if admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN':   
+            if admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN':   #so as to not display teachers, if a teacher's userprofile id was entered in the url
+                if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.school)):
+                    raise ObjectDoesNotExist #school admin is from another school
+                
                 context_dictionary['admin'] = admin
+            else:
+                raise ObjectDoesNotExist #ie. admin is a teacher
         except ObjectDoesNotExist:
-            pass
+            context_dictionary['not_valid_id'] = True
 
     return render(request, "admins/admin_list.html",
         context_dictionary)
 
-def edit_admin_view (request, admin_id): #there should always be a teacher_id here
+def edit_admin_view (request, admin_id): #there should always be an admin_id here
         system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
+        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school)
         context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
         try:
             admin = UserProfile.objects.get(pk=admin_id)
+            if not (admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN'):
+                raise ObjectDoesNotExist#so as to not display teachers, if a teacher's userprofile id was entered in the url
+            if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.user.userprofile.school)):
+                raise ObjectDoesNotExist
             
-            if request.method == 'POST': #assume if it was a post then the teacher exists, because otherwise a form wouldn't have appeared
-                                        #!!!!! actually can't do that, imagine if teacher is deleted by another admin while on this page
+            if request.method == 'POST': #assume if it was a post then the admin exists, because otherwise a form wouldn't have appeared
+                                        #!!!!! actually can't do that, imagine if this admin is deleted by another admin while on this page
                 user = admin.user
                 
                 admin_form = AdminProfileForm(request.POST, instance = admin)

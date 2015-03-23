@@ -177,19 +177,17 @@ def upload_teachers_view(request):
 
     if request.method == 'POST':
         upload_form = TeacherCSVForm(request.POST, request.FILES)
-        #need to check if the form is valid????
-        tlist, errors = validate_teachers_csv(request.FILES['file'])
+        
+        if not upload_form.is_valid():
+            return render(request, "teachers/teacher_upload.html", {'upload_form' : upload_form })
+
+        school = request.user.userprofile.school
+        period = request.user.userprofile.period
+        tlist, errors = validate_teachers_csv(request.FILES['file'], school, period)
 
         if errors:
             condict['errors'] = errors
-            
-            #delete the teachers that were created
-            #for teacher in tlist:
-                #t = TeacherUser.objects.all().filter(pk=teacher.id)
-                #if t.exists():
-                 #   user_to_delete = t[0].user.user 
-                 #   t[0].teaching_availability.delete() #deletes the teaching avail and the teacheruser
-                 #   user_to_delete.delete() #deletes the user and user profile
+        
         else:
             #save only if the csv had no errors
             teachers = []

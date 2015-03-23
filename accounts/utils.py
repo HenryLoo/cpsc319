@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 NUM_FIELDS = 16
 
-def create_teacher(school_id, period_id, email, password, first_name, last_name,
+def create_teacher(school, period, email, password, first_name, last_name,
                    phone, comments, monday, monday_times, tuesday, tuesday_times,
                    wednesday, wednesday_times, thursday, thursday_times, friday, friday_times):
 
@@ -21,8 +21,9 @@ def create_teacher(school_id, period_id, email, password, first_name, last_name,
     
     user.full_clean()
     
-    
     profile = UserProfile(user=user, phone=phone, role='TEACHER')
+    profile.school = school
+    profile.period = period
     profile.full_clean()
    
     avail = TeachingAvailability(monday=monday, monday_times=monday_times, tuesday=tuesday, tuesday_times=tuesday_times, wednesday=wednesday,
@@ -68,7 +69,7 @@ def to_bool(string):
 
 
                         
-def validate_teachers_csv(file):
+def validate_teachers_csv(file, school, period):
 
     errors = []
     teacher_list = []
@@ -79,12 +80,8 @@ def validate_teachers_csv(file):
         try:
             if len(teacher) != NUM_FIELDS:
                     raise ValidationError("Line: '{0}'. The number of fields '{1}' is incorrect for a teacher.".format(line,len(teacher)))
-                
-                #create a teacher
-            school_id = 1 #!!!get the current one
-            period_id = 1 #!!!get the current one
                     
-            teach_tuple = create_teacher(school_id, period_id, *teacher) 
+            teach_tuple = create_teacher(school, period, *teacher) 
             teacher_list.append(teach_tuple) #assume the exception doesn't come on this line
 
         except Exception as e:

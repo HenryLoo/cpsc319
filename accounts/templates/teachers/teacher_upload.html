@@ -43,6 +43,7 @@
 
 	<form role="form" action="{%url 'account:upload_teachers' %}" method="post" enctype="multipart/form-data">
 		{% csrf_token %}
+		{% if upload_form.errors %} Please choose a file to upload. {%endif%} <!--CURRENTLY ASSSUMING THAT THE ONLY ERROR IS A MISSING FILE -->
 		<div class="form-group">
 		    <input type="file" id="exampleInputFile" name="file">
 	  	</div>
@@ -83,31 +84,36 @@
 			</a>
 			</td>
 			<td>{{ teacher.user.user.email }} </td>
-			<td>{{ teacher.user.user.password }} </td> <!-- !!!!!!!!!!change this to show the actual password, not the hash-->
+			<td>{{ teacher.user.user.password }} </td> 
 			<td>{{ teacher.user.phone }} </td>
 			<td>{{ teacher.comments }} </td>
 			<td> 
 			        {% if teacher.teaching_availability.monday %} Available
+					{%elif teacher.teaching_availability.monday == None%} Unknown 
 					{%else%} Not Available {% endif %}
 					{% if teacher.teaching_availability.monday_times %} - {{teacher.teaching_availability.monday_times}} {%endif%}
 			</td>
 			<td>	
 					{% if teacher.teaching_availability.tuesday %} Available
+					{%elif teacher.teaching_availability.tuesday == None%} Unknown 
 					{%else%} Not Available {% endif %}
 					{% if teacher.teaching_availability.tuesday_times %} - {{teacher.teaching_availability.tuesday_times}} {%endif%}
 			</td>	
 			<td>			
 					{% if teacher.teaching_availability.wednesday %} Available
+					{%elif teacher.teaching_availability.wednesday == None%} Unknown 
 					{%else%} Not Available {% endif %}
 					{% if teacher.teaching_availability.wednesday_times %} - {{teacher.teaching_availability.wednesday_times}} {%endif%}
 			</td>			
 			<td>
 					{% if teacher.teaching_availability.thursday %} Available
+					{%elif teacher.teaching_availability.thursday == None%} Unknown 
 					{%else%} Not Available {% endif %}
 					{% if teacher.teaching_availability.thursday_times %} - {{teacher.teaching_availability.thursday_times}} {%endif%}
 			</td>		
 			<td>			
 					{% if teacher.teaching_availability.friday %} Available
+					{%elif teacher.teaching_availability.friday == None%} Unknown 
 					{%else%} Not Available {% endif %}
 					{% if teacher.teaching_availability.friday_times %} - {{teacher.teaching_availability.friday_times}} {%endif%}
 				

@@ -1,13 +1,15 @@
+from django.forms import *
 from django import forms
 from school_components.models import *
 from accounts.models import TeacherUser
-class ClassForm(forms.ModelForm):
+
+class ClassForm(ModelForm):
 	class Meta:
 		model = Class
 		fields = ['course', 'section', 'description', 'class_size', 'waiting_list_size', 'room']
 
 
-class ClassScheduleForm(forms.ModelForm):
+class ClassScheduleForm(ModelForm):
 	class Meta:
 		model = ClassSchedule
 		exclude = ['sch_class']
@@ -24,14 +26,14 @@ class ClassScheduleForm(forms.ModelForm):
 				}),
 		}
 
-class ClassTeacherForm(forms.ModelForm):
+class ClassTeacherForm(ModelForm):
 	class Meta:
 		model = ClassTeacher
 		fields = ['teacher']
 
 
 
-class ClassRegistrationForm(forms.ModelForm):
+class ClassRegistrationForm(ModelForm):
 	student = forms.ModelChoiceField(
         queryset=Student.objects.all(),                       
         widget=forms.CheckboxSelectMultiple, 
@@ -43,5 +45,11 @@ class ClassRegistrationForm(forms.ModelForm):
 		model = ClassRegistration
 		fields = ['student']
 
+class ClassAttendanceForm(ModelForm):
+    attendance = ChoiceField(label='', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
+    
+    class Meta:
+        model = ClassAttendance
+        fields = ['comments', 'attendance']
 
 

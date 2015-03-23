@@ -232,7 +232,7 @@ def create_admin_view(request):
         user_form = MyUserCreationForm(request.POST)
         admin_form = None
         if request.user.userprofile.role =='SCHOOL_ADMIN':
-            admin_form = SchoolAdminProfileForm(request.POST)
+            admin_form = NoRoleAdminProfileForm(request.POST)
         elif request.user.userprofile.role =='SYSTEM_ADMIN':
             admin_form = AdminProfileForm(request.POST)
 
@@ -280,7 +280,7 @@ def create_admin_view(request):
     user_form = MyUserCreationForm(initial={'password': password})
     admin_form = None
     if request.user.userprofile.role =='SCHOOL_ADMIN':
-        admin_form = SchoolAdminProfileForm()
+        admin_form = NoRoleAdminProfileForm()
     elif request.user.userprofile.role =='SYSTEM_ADMIN':
         admin_form = AdminProfileForm()
     
@@ -333,7 +333,7 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
                                         #!!!!! actually can't do that, imagine if this admin is deleted by another admin while on this page
                 user = admin.user
                 
-                admin_form = AdminProfileForm(request.POST, instance = admin)
+                admin_form = NoRoleAdminProfileForm(request.POST, instance = admin)
                 user_form = MyUserCreationForm(request.POST, instance = user)
 
                 context_dictionary['admin'] = admin
@@ -367,7 +367,7 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
             else:
 
                 context_dictionary['admin'] = admin
-                context_dictionary['admin_form'] = AdminProfileForm(instance=admin) #hope these come with pre-filled fields
+                context_dictionary['admin_form'] = NoRoleAdminProfileForm(instance=admin) #hope these come with pre-filled fields
                 context_dictionary['user_form'] = MyUserCreationForm(instance=admin.user)
                 
         except ObjectDoesNotExist:

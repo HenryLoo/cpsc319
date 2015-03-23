@@ -60,7 +60,7 @@ class MyUserEditForm(ModelForm):
 
 
 #This is for restricting school admins to being able to only create school admins
-class SchoolAdminProfileForm(ModelForm):
+class NoRoleAdminProfileForm(ModelForm):
     
     class Meta():
         model = UserProfile

@@ -127,7 +127,9 @@ urlpatterns = patterns('',
     url(r'^classes/reportcard/(?P<class_id>\d+)/$', 
 		'school_components.views.classes_view.class_reportcard', 
 		name='classreportcard'),
-                       
+    url(r'^classes/reportcard/(?P<class_id>\d+)/(?P<student_id>\d+)/$', 
+		'school_components.views.classes_view.class_reportcard', 
+		name='classreportcard'),         
     # schools
     url(r'^schools/$',
         'school_components.views.schools_view.school_list',

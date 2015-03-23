@@ -92,7 +92,7 @@ class Grading(models.Model):
 	student = models.ForeignKey('Student')
 	grade = models.CharField(max_length=5, blank=True)
 	assignment = models.CharField(max_length=100, blank=True)
-	date = models.TimeField(null=True, blank=True)
+	date = models.DateField(null=True, blank=True)
 	comments = models.CharField(max_length=500)
 	grade_weight = models.IntegerField(blank = True, null = True)
 	total_weight = models.IntegerField(blank = True, null = True)

@@ -28,7 +28,7 @@
 {% if class_list %}
 <div class="list-group">
     {% for class in class_list %}
-        <a href="{% url 'school:classattendance' class.id %}" class="list-group-item">
+        <a href="{% url 'school:classreportcard' class.id %}" class="list-group-item">
            {{ class.course }} {{ class.section }}
         </a>
       {% endfor %}
@@ -38,28 +38,43 @@
 {% endif %}
 </div>
 
+{% if class %}
+
 <div class="col-md-8">
 
   <div class='col-md-4'>
 
-
+{% if student %}
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    {{ student.first_name }} {{ student.last_name }}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    {% for reg in class.enrolled_class.all %}
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'school:classreportcard' class.id reg.student.id %}" >{{ reg.student.first_name }} {{ reg.student.last_name }} </a></li>
+    {% endfor%}
+  </ul>
+</div>
+{% else %}
 <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
     Student
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sara</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Mike</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Jack</a></li>
-    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">...</a></li>
+    {% for reg in class.enrolled_class.all %}
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'school:classreportcard' class.id reg.student.id %}" >{{ reg.student.first_name }} {{ reg.student.last_name }} </a></li>
+    {% endfor%}
   </ul>
 </div>
+{% endif %}
 
 </div>
 
+{% if student %}
 <div class="col-md-12">
-        <h4>Report Card - Student Name</h4>
+        <h4>Report Card - {{student.first_name}} {{student.last_name}}</h4>
         <div class="table-responsive">
 
                 
@@ -67,149 +82,31 @@
                    
                    <thead>
                    
-                   <th><input type="checkbox" id="checkall" /></th>
                    <th>Assignment</th>
                    <th>Grading</th>
                    <th>Comments</th>
                    </thead>
     <tbody>
     
+    {% for grading in gradinglist%}
     <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>Assignment 1</td>
-    <td>60%</td>
-    <td>
-    <div class="input-group" style="width: 100px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
+    <td>{{grading.assignment}}</td>
+    <td>{{grading.grade}}</td>
+    <td>{{grading.comments}}</td>
     </tr>
-        <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>Assignment 2</td>
-    <td>70%</td>
-    <td>
-    <div class="input-group" style="width: 100px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>Assignment 3</td>
-    <td>50%</td>
-    <td>3 Days Late</td>
-    </tr>
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>Assignment 4</td>
-    <td>80%</td>
-    <td>
-    <div class="input-group" style="width: 100px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
-    </tr>
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>Assignment 5</td>
-    <td>100%</td>
-    <td>
-    <div class="input-group" style="width: 100px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
-    </tr>
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>Assignment 6</td>
-    <td>100%</td>
-    <td>
-    <div class="input-group" style="width: 100px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
-    </tr>
-    <tr>
-    <td><input type="checkbox" class="checkthis" /></td>
-    <td>Assignment 7</td>
-    <td>90%</td>
-    <td>
-    <div class="input-group" style="width: 100px;">
-    <input type="text" class="form-control" placeholder="" aria-describedby="grade">
-    </div>
-    </td>
-    </tr>
+    {%endfor%}
+
     </tbody>
         
 </table>
 
-<div class="clearfix"></div>
-<input type="submit" class="btn btn-primary pull-left" value="Save" />
-<ul class="pagination pagination-sm pull-right">
-  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-  <li class="active"><a href="#">1</a></li>
-  <li><a href="#">2</a></li>
-  <li><a href="#">3</a></li>
-  <li><a href="#">4</a></li>
-  <li><a href="#">5</a></li>
-  <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-</ul>
-                
-            </div>
-            
-        </div>
-    </div>
+<h4>Overall Performance:</h4>            
 
-<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-      <div class="modal-dialog">
-    <div class="modal-content">
-          <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Edit Grade Details</h4>
-      </div>
-          <div class="modal-body">
-          <div class="form-group">
-        <input class="form-control " type="text" placeholder="Name">
-        </div>
-        <div class="form-group">
-        
-        <input class="form-control " type="text" placeholder="Grade">
-        </div>
-        <div class="form-group">
-        <textarea rows="2" class="form-control" placeholder="Comments"></textarea>
-    
-        
-        </div>
-      </div>
-          <div class="modal-footer ">
-        <button type="button" class="btn btn-warning btn-lg" style="width: 100%;"><span class="glyphicon glyphicon-ok-sign"></span> Update</button>
-      </div>
-        </div>
-    <!-- /.modal-content --> 
-  </div>
-      <!-- /.modal-dialog --> 
-    </div>
-    
-    
-    
-    <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="edit" aria-hidden="true">
-      <div class="modal-dialog">
-    <div class="modal-content">
-          <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-        <h4 class="modal-title custom_align" id="Heading">Delete this entry</h4>
-      </div>
-          <div class="modal-body">
-       
-       <div class="alert alert-danger"><span class="glyphicon glyphicon-warning-sign"></span> Are you sure you want to delete this Record?</div>
-       
-      </div>
-        <div class="modal-footer ">
-        <button type="button" class="btn btn-success" ><span class="glyphicon glyphicon-ok-sign"></span> Yes</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> No</button>
-      </div>
-        </div>
+</div>
+</div>
 
+{% endif %}
+{% endif %}
 
 
 {% endblock class_content %}

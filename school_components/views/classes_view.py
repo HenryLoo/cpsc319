@@ -114,15 +114,20 @@ def class_assignment(request, class_id=None):
 	return render_to_response('classes/class_assignment.html', context_dictionary,
 		RequestContext(request))
 
-def class_reportcard(request, class_id=None):
+def class_reportcard(request, class_id=None, student_id=None):
 	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
-		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id)
-		context_dictionary['classregistration'] = class_reg_list
-	
+
+	if student_id:
+		s = Student.objects.get(pk=student_id)
+		context_dictionary['student'] = s
+
+		grading_list = Grading.objects.filter(student=s, reg_class=c).order_by('-date').reverse()
+		context_dictionary['gradinglist'] = grading_list
+
 	return render_to_response('classes/class_reportcard.html', context_dictionary,
 		RequestContext(request))

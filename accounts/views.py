@@ -10,6 +10,7 @@ from django.contrib.auth import login
 from django.contrib.auth import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.forms import ChoiceField
 
 
 #===================                  ======================= TEACHER
@@ -229,7 +230,11 @@ def create_admin_view(request):
     if request.method == 'POST':
 
         user_form = MyUserCreationForm(request.POST)
-        admin_form = AdminProfileForm(request.POST)
+        admin_form = None
+        if request.user.userprofile.role =='SCHOOL_ADMIN':
+            admin_form = SchoolAdminProfileForm(request.POST)
+        elif request.user.userprofile.role =='SYSTEM_ADMIN':
+            admin_form = AdminProfileForm(request.POST)
 
         if user_form.is_valid() and admin_form.is_valid():
 
@@ -245,6 +250,8 @@ def create_admin_view(request):
                 profile.user = user
                 profile.school = request.user.userprofile.school
                 profile.period = request.user.userprofile.period
+                if request.user.userprofile.role == 'SCHOOL_ADMIN':
+                    profile.role = 'SCHOOL_ADMIN'
                 profile.save()
             
                 user_ret = user
@@ -271,7 +278,12 @@ def create_admin_view(request):
 
     password = User.objects.make_random_password()
     user_form = MyUserCreationForm(initial={'password': password})
-    admin_form = AdminProfileForm()
+    admin_form = None
+    if request.user.userprofile.role =='SCHOOL_ADMIN':
+        admin_form = SchoolAdminProfileForm()
+    elif request.user.userprofile.role =='SYSTEM_ADMIN':
+        admin_form = AdminProfileForm()
+    
     
     
     return render(request, 'admins/create_admin.html', {

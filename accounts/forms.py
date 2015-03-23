@@ -59,6 +59,13 @@ class MyUserEditForm(ModelForm):
         fields = ['email', 'first_name', 'last_name'] #no password changing on edit
 
 
+#This is for restricting school admins to being able to only create school admins
+class SchoolAdminProfileForm(ModelForm):
+    
+    class Meta():
+        model = UserProfile
+        fields = ['phone']
+        
 class AdminProfileForm(ModelForm):
 
     role = ChoiceField(label='Admin Type', choices=(('SYSTEM_ADMIN', 'System Admin'), ('SCHOOL_ADMIN', 'School Admin')), required=True)

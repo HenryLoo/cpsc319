@@ -168,7 +168,7 @@ class CourseRegisterWizard(SessionWizardView):
 
 		form_data = form.cleaned_data
 		for field, value in form_data.iteritems():
-			print field, type(value), value
+			print (field, type(value), value)
 			if type(value) is unicode and "id_" in value:
 				class_id = int(value.split('id_')[-1])
 				classs = Class.objects.get(pk=class_id)

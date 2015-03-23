@@ -57,7 +57,7 @@ $('#edit-teacher-btn').click(function() {
 		{% for teacher in teacher_list %}
 	  		<li>
 	  		<a href="{% url 'account:view_teachers' teacher.id %}">
-	  			{{ teacher.first_name }} {{ teacher.last_name }}
+	  			{{ teacher.user.user.first_name }} {{ teacher.user.user.last_name }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}

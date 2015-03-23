@@ -110,7 +110,7 @@ def class_assignment(request, class_id=None):
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
 
-		assigments_list = Assignment.objects.filter(reg_class=c)
+		assigments_list = Assignment.objects.filter(reg_class=c).order_by('-date')
 		context_dictionary['assignments'] = assigments_list
 	
 	if request.method == 'POST':

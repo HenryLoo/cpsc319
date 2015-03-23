@@ -91,7 +91,7 @@ class Assignment(models.Model):
 class Grading(models.Model):
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
-	grade = models.CharField(max_length=5, blank=True)
+	grade = models.IntegerField(blank=True, null=True)
 	#change to foreign key after
 	assignment = models.CharField(max_length=100, blank=True)
 	date = models.DateField(null=True, blank=True)

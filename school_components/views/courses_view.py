@@ -1,5 +1,8 @@
 from school_components.models.courses_model import Course, Prerequisite, Department
 from school_components.forms.courses_form import CourseForm, DepartmentForm
+from school_components.models.classes_model import Assignment, Class
+from school_components.forms.classes_form import ClassAssignmentForm
+
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -63,5 +66,42 @@ def dept_create(request):
 
 #create department view
 
-def course_assignment(request):
-	return render(request, 'courses/course_assignment.html')
+def course_assignment(request, course_id=None):
+
+	course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('-id')
+	context_dictionary = { 'course_list': course_list }
+
+	if course_id:
+		c = Course.objects.get(pk=course_id)
+		context_dictionary['course'] = c
+
+		assigments_list = Assignment.objects.filter(reg_class__course=c).order_by('-date')
+		context_dictionary['assignments'] = assigments_list
+	
+	if request.method == 'POST':
+		c = Course.objects.get(pk=course_id)
+		classes = Class.objects.filter(course=c)
+		for cl in classes:
+
+			form = ClassAssignmentForm(request.POST, request.FILES)
+			if form.is_valid():
+				new = form.save(commit=False)
+				this_class = Class.objects.get(pk=cl.id)
+				new.reg_class = this_class
+				new.content = request.FILES['content']
+				new.save()
+	            # Redirect to the document list after POST
+		
+		return HttpResponseRedirect(
+			reverse('school:courseassignment', args=(course_id,)))
+
+	else:
+		form = ClassAssignmentForm()
+
+	context_dictionary['form'] = form
+
+
+	return render_to_response('courses/course_assignment.html', context_dictionary,
+		RequestContext(request))
+
+

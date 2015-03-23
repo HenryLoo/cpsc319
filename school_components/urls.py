@@ -80,6 +80,9 @@ urlpatterns = patterns('',
 	url(r'^courses/assignments/$', 
 		'school_components.views.courses_view.course_assignment', 
 		name='courseassignment'),
+	url(r'^courses/assignment/(?P<course_id>\d+)/$', 
+		'school_components.views.courses_view.course_assignment', 
+		name='courseassignment'),
 
 	# departments
 	url(r'^departments/create/$', 

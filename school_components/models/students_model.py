@@ -50,7 +50,7 @@ class Student(models.Model):
 	def __unicode__(self):
 		return self.first_name + ' ' + self.last_name
 
-	def clean_fields(self):
+	def clean_fields(self, exclude=None):
 		if len(self.first_name) > 50:
 			raise ValueError("Student first name is over 50 characters.")
 		if len(self.last_name) > 50:
@@ -82,6 +82,7 @@ class Student(models.Model):
 
 	class Meta:
 		app_label = 'school_components'
+		unique_together = ('first_name', 'last_name')
 
 class StudentCSVWriter(object):
 	def write(self, value):

@@ -12,7 +12,7 @@ class Parent(models.Model):
 	def __unicode__(self):
 		return self.first_name + ' ' + self.last_name
 
-	def clean_fields(self):
+	def clean_fields(self, exclude=None):
 		if len(self.first_name) > 50:
 			raise ValueError("Parent first name is over 50 characters.")
 		if len(self.last_name) > 50:
@@ -25,6 +25,7 @@ class Parent(models.Model):
 
 	class Meta:
 		app_label = 'school_components'
+		unique_together = ('first_name', 'last_name')
 
 
 class Payment(models.Model):

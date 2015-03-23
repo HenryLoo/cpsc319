@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 #the user’s surname.
 
 class UserProfile(models.Model):
+    ADMIN_ROLES = ['CODE', 'SYSTEM_ADMIN', 'SCHOOL_ADMIN']
+    
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User)
 

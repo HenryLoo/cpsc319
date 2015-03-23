@@ -10,7 +10,7 @@ def school_period(request):
 	schoollist = School.objects.all().order_by('title') #exclude did not work here always so to fiz bug added "if not current on user" on html
 	periodlist = Period.objects.filter(school=user_school).order_by('-id').reverse()
 
-                return {
-                'school_list': schoollist, 'period_list': periodlist,
-                }
+	return {
+        'school_list': schoollist, 'period_list': periodlist,
+    }
 

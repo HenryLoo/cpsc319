@@ -83,7 +83,7 @@ class CourseRegisterWizard(SessionWizardView):
 			parent_id = self.request.session['parent_id']
 			context_dictionary['payment_parent'] = Parent.objects.get(pk=parent_id)
 
-	 	return self.render_to_response(context_dictionary)
+		return self.render_to_response(context_dictionary)
 
 	# based on parent first and last names
 	def create_parent(self, form):

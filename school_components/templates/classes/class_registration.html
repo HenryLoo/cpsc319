@@ -1,39 +1,5 @@
 {% extends "classes/base_class.html" %}
 
-{% block current_tab %}
-	"Registration"
-{% endblock %}
-
-{% block hacky_script %}
-
-<!-- fake fake fake -->
-$('#search-student-div span>button').click(function() {
-	$('#mytable tr:last').after(
-		'<tr class="success"><td>' + $("#search-student-div input").val().trim() + 
-		'</td><td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td></tr>'
-	);
-	$('#search-student-div input').val("") 
-
-	<!-- bind handlers to the new objects -->
-	$('.remove-student-temp').click(function(e) {
-		$(e.target).parent().remove();
-	});
-})
-
-<!-- multiple modal -->
-$('#remove-btn').click(function() {
-	var selected = $('#enrolled-select > option:selected')
-	$('#unenrolled-select').append(selected)
-})
-
-$('#enroll-btn').click(function() {
-	var selected = $('#unenrolled-select > option:selected')
-	$('#enrolled-select').append(selected)
-})
-
-
-{% endblock hacky_script %}
-
 {% block class_content %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation"><a href="{%url 'school:classlist' %}">View Classes</a></li>
@@ -45,209 +11,96 @@ $('#enroll-btn').click(function() {
     <li role="presentation"><a href="{%url 'school:classreportcard' %}">Report Card</a></li>
 </ul>
 
-  <div class="row">  
-                 <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Classes<small> Class Registration</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Classes > Class Registration</a>
-                            </li>
-                        </ol>
-
-                    </div>
+<div class="row">  
+	<div class="col-lg-12">
+        <h1 class="page-header">
+            Classes<small> Class Registration</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Classes > Class Registration</a>
+            </li>
+ 		</ol>
+ 	</div>
+</div>
 
 
 <div class="col-md-3">
-<div class="list-group">
-  <a href="#" class="list-group-item active">
-    Tabla 201
-  </a>
-  <a href="#" class="list-group-item">Sikh History 203</a>
-  <a href="#" class="list-group-item">Sikh History 105</a>
-  <a href="#" class="list-group-item">Gurmukhi/Santhiya 250</a>
-  <a href="#" class="list-group-item">Tabla 101</a>
-</div>
+	<div class="list-group">
+		{% for classinlist in class_list %}
+			{% if class = classinlist %}
+				<a href="{% url 'school:classregistration' classinlist.id %}" class="list-group-item active">
+			{% else %}
+	  			<a href="{% url 'school:classregistration' classinlist.id %}" class="list-group-item">
+	  		{% endif %}
+
+	    	{{ classinlist }}
+	  			</a>
+	  	{% endfor %}
+	</div>
 </div>
 
 <div class="col-md-8">
-
-	{% if errors %}
-		<div class="panel panel-danger">
-			{{ errors }}
-		</div>
-	{% endif %}
-<!-- 
-	<form role="form" action="{%url 'school:classregistration' %}" method="post">
-		{% csrf_token %}
-		<table class="table table-hover">
-	    	{{ reg_form }}
-	    </table>
-	    <input type="submit" class="btn btn-default" value="Add Students" />
-	</form>  -->
-
-	<div class="col-md-8" id="search-student-div">
-		<h4> Register Students  {{ class.course }} {{ class.section }}</h4>
+	{% if class %}
+	<div id="search-student-div">
+		<h4> Register Students  in {{ class.course }} {{ class.section }}</h4>
 
 	    <div class="input-group pull-left" >
 	      <span class="input-group-btn" >
-	        <button class="btn btn-default" type="button">Go!</button>
+	        <button class="btn btn-default" id="add-student-btn" type="button">Add Student</button>
 	      </span>
-	      <input type="text" class="form-control" placeholder="Search for student...">
+	      <input type="text" id='search-student-input' class="form-control" placeholder="Search for student...">
 	    </div>
-
-<br><br>
-	<div>
-		<button class="btn btn-default center-block" type="button" data-toggle="modal" 
-		data-target="#multiple-students-modal">
-		Edit Multiple Students</button>
-	</div>
 	</div>
 
-	<div class="col-md-8">
-		<br>
+	<div class="col-md-12">
 		<h5>Number of students: 3</h5>
 		<br>
-<!-- 		<h5>Number of students: {{ reg_list|length }}</h5> -->
 		<h4>Registered Students:</h4>
-		
-		        <div class="table-responsive">
+			
+		<div class="table-responsive">
 
-<table id="mytable" class="table table-bordred table-striped">
-    <thead>
-      <tr>
-        <th>Student name</th>
-        <th>Remove</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a>Jack</a></td>
-        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-      </tr>
-      <tr>
-        <td><a>Sarah</a></td>
-        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-      </tr>
-      <tr>
-        <td><a>Rosie</a></td>
-        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-      </tr>
-    </tbody>
-  </table>
-
-<div class="clearfix"></div>
-<ul class="pagination pull-right">
-  <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-  <li class="active"><a href="#">1</a></li>
-  <li><a href="#">2</a></li>
-  <li><a href="#">3</a></li>
-  <li><a href="#">4</a></li>
-  <li><a href="#">5</a></li>
-  <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-</ul>
-                
-            </div>
-            
-        </div>
-    </div>
-</div>
-
-<!-- 		<table class="table table-hover table-bordered" id="registration-table">
-		{% for reg in reg_list %}
-		<tr>
-			<td> <input type="checkbox" class="student-box" style="display:none"/>  
-			{{ reg.student.first_name }} {{ reg.student.last_name }} 
-			</td>
-			<td>
-				{{ reg.student.address }}
-			</td>
-			<td>
-				{{ reg.student.home_phone}}
-			<span class="glyphicon glyphicon-remove pull-right remove-student" data-toggle="modal" data-target="#myModal">
-			</span> 
-			</td>
-		</tr>
-		{% endfor %}
-		</table> -->
-</div>
-</div>
-
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-sm">
-		    <div class="modal-content">
-		      <div class="modal-body">
-		       	Remove John Doe from class?
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary btn-sm">Remove</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
+		<table id="mytable" class="table table-bordred table-striped">
+		<thead>
+		  <tr>
+		    <th>Student name</th>
+		    <th>Remove</th>
+		  </tr>
+			</thead>
+			<tbody>
+				{% for reg in class.enrolled_class.all %}
+			  	<tr>
+				    <td><a href="{% url 'school:studentlist' reg.student.id%}">{{ reg.student }}</a></td>
+				    <td>
+				    	<button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete">
+				    	<span class="glyphicon glyphicon-trash"></span></button>
+				    </td>
+			  	</tr>
+			  	{% endfor %}
+			</tbody>
+		</table>
+		</div> <!-- registered table div-->
 	</div>
+	{% else %}
+	<div class="alert alert-info" role="alert">
+		Select a class to view registration details.
+	</div>
+	{% endif %}
+</div> <!--  content div -->
 
-<!-- Multiple students Modal -->
-<div class="modal fade" id="multiple-students-modal" tabindex="-1" role="dialog" 
-aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Edit Multiple Students</h4>
-      </div>
       <div class="modal-body">
-
-      
-      	<div class="form-half-size">
-      		<div class="form-group">
-		  		<label>Unenrolled Students from Course Registration</label>
-		  		<select multiple class="form-control" id="unenrolled-select">
-				  <option>Huey Morrison</option>
-				  <option>George Wallace</option>
-				  <option>Bonnie Cortez</option>
-				  <option>Michelle Soo</option>
-				  <option>Ali Imran</option>
-				</select>
-			</div>
-			<div class="form-group">
-				<button type="button" class="btn btn-default btn-sm" id="enroll-btn">Add
-				<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-				</button>
-			</div>
-      	</div> 
-
-      	<div class="form-half-size">
-	  		<label>Enrolled Students</label>
-	  		<div class="form-group">
-		  		<select multiple class="form-control" id="enrolled-select">
-				  <option>Peter Parker</option>
-				  <option>Lois Lowry</option>
-				  <option>Margaret Atwood</option>
-				  <option>Mickey Mantle</option>
-				  <option>Geena Davis</option>
-				  <option>Tom Hanks</option>
-				  <option>Betty White</option>
-				  <option>Sarah Joneson</option>
-				</select>
-			</div>
-
-			<div class="form-group">
-      			<button type="button" class="btn btn-default btn-sm" id="remove-btn">
-      				<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Remove
-      			</button>
-      		</div>
-      	</div>
+       	Remove John Doe from class?
       </div>
-
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary btn-sm">Remove</button>
       </div>
     </div>
   </div>
+</div>
 </div>
 
 {% endblock class_content %}

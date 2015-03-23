@@ -34,6 +34,28 @@ class ClassSchedule(models.Model):
 	end_time = models.TimeField(
 		default=datetime(2008, 1, 31, 10, 00, 00), blank=True)
 
+	def __unicode__(self):
+		result = []
+		if self.monday:
+			result.append("MON")
+		if self.tuesday:
+			result.append("TUES")
+		if self.wednesday:
+			result.append("WED")
+		if self.thursday:
+			result.append("THURS")
+		if self.friday:
+			result.append("FRI")
+		if self.saturday:
+			result.append("SAT")
+		if self.sunday:
+			result.append("SUN")
+
+		start = time.strftime(self.start_time, '%H:%M %p')
+		end = time.strftime(self.end_time, '%H:%M %p')
+		return '%s %s-%s' % ('/'.join(result), start, end)
+
+
 	class Meta:
 		app_label = 'school_components'
 

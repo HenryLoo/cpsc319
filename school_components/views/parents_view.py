@@ -43,7 +43,7 @@ def parent_create(request):
 			new = p.save(commit=False)
 			new.school = request.user.userprofile.school
 			new.period = request.user.userprofile.period
-			new .save()
+			new.save()
 
 			return HttpResponseRedirect(
 				reverse('school:parentlist', args=(new.id,)))

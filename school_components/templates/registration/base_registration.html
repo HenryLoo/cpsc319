@@ -44,7 +44,7 @@
     var parentTags = [
     	{% for parent in parent_list %}
     		{'label': '{{ parent.first_name }} {{ parent.last_name }}',
-    		'value': '{{ parent.id }}' },
+    		'id': '{{ parent.id }}' },
     	{% endfor %}
     ]; 
 
@@ -64,7 +64,7 @@
     		$.ajax({
     			type: "GET",
     			url: '{% url "school:parentget" %}', 
-    			data: { parent_id : ui.item.value }, 
+    			data: { parent_id : ui.item.id }, 
     			dataType: "json",   
     			success: function(data) {
     				fillParentForm(data);
@@ -83,7 +83,7 @@
     var studentTags = [
     	{% for student in student_list %}
     		{'label': '{{ student.first_name }} {{ student.last_name }}',
-    		'value': '{{ student.id }}' },
+    		'id': '{{ student.id }}' },
     	{% endfor %}
     ]; 
 
@@ -113,7 +113,7 @@
     		$.ajax({
     			type: "GET",
     			url: '{% url "school:studentget" %}', 
-    			data: { student_id : ui.item.value }, 
+    			data: { student_id : ui.item.id }, 
     			dataType: "json",   
     			success: function(data) {
     				fillStudentForm(data);

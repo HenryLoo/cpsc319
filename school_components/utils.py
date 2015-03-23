@@ -21,8 +21,8 @@ class SchoolUtils:
 				student_fields = std[:-4]
 				parent_fields = std[-4:]
 
-				Student('', *student_fields).clean_fields()
-				Parent('', *parent_fields).clean_fields()
+				Student('', *student_fields).clean_csv_fields()
+				Parent('', *parent_fields).clean_csv_fields()
 
 			except Exception as e:
 				errors.append("Line %d: %s" % (i+1, str(e)))

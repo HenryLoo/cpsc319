@@ -186,7 +186,7 @@ class StudentRegistrationForm(forms.Form):
 				choices[dept] = [('', '----')]			
 			choices[dept].append(
 				('id_%d' % classs.id, 
-				'%s %s' % (classs.course.name, classs.section)))
+				'%s %s %s' % (classs.course.name, classs.section, classs.schedule)))
 		
 		for dept, sections in choices.iteritems():
 			self.fields[dept] = forms.ChoiceField(

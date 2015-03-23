@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.formtools.wizard.views import SessionWizardView
 from school_components.forms.registration_form import *
 from school_components.models import *
+from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 import json
 
@@ -63,8 +64,17 @@ class CourseRegisterWizard(SessionWizardView):
 					files=self.storage.get_step_files(key)
 				)
 
-			parent, context_dictionary['parent_message'] = self.create_parent(forms['parent_form'])
-			student, context_dictionary['student_message'] = self.create_student(parent, forms)
+			parent, parent_msg = self.create_parent(forms['parent_form'])
+			if parent_msg:
+				context_dictionary['parent_message'] = parent_msg
+			student, student_msg = self.create_student(parent, forms)
+			if student_msg:
+				context_dictionary['student_message'] = student_msg
+			classes, course_status = self.register_classes(student, forms['student_form']) 
+
+			context_dictionary['student'] = student
+			context_dictionary['classes'] = classes
+			context_dictionary['course_status'] = course_status
 
 			# save parent to session for payment form
 			self.request.session['parent_id'] = parent.id
@@ -77,12 +87,8 @@ class CourseRegisterWizard(SessionWizardView):
 
 	# based on parent first and last names
 	def create_parent(self, form):
-		#  TODO: school/period
-		school_id = self.request.session['school_id']
-		period_id = self.request.session['period_id']
-
-		school = School.objects.get(pk=school_id)
-		period = Period.objects.get(pk=period_id)
+		school = self.request.user.userprofile.school
+		period = self.request.user.userprofile.period
 
 		if form.is_valid():
 			form_data = form.cleaned_data
@@ -105,17 +111,13 @@ class CourseRegisterWizard(SessionWizardView):
 					setattr(parent, attr, value)
 				parent.save()
 
-			return parent, "%s %s was saved successfully. " % (parent.first_name, parent.last_name)
+			return parent, None
 		else:
-			return None, "%s %s could not be updated. " % (parent.first_name, parent.last_name)
+			return None, "Parent could not be updated. "
 
 	def create_student(self, parent, forms):
-		# TODO: school/period		
-		school_id = self.request.session['school_id']
-		period_id = self.request.session['period_id']
-
-		school = School.objects.get(pk=school_id)
-		period = Period.objects.get(pk=period_id)
+		school = self.request.user.userprofile.school
+		period = self.request.user.userprofile.period
 
 		parent_form = forms['parent_form']
 		student_form = forms['student_form']
@@ -155,28 +157,40 @@ class CourseRegisterWizard(SessionWizardView):
 					setattr(student, attr, value)
 				student.save()
 
-			return student, "%s %s was saved successfully." % (student.first_name, student.last_name)
+			return student, None
 		else:
 			return None, "Student could not be updated."
 
 	# THINK OF SOMETHING BETTER 
 	def register_classes(self, student, form):
-		course_status = {}
+		course_status = []
+		classes = []
 
 		form_data = form.cleaned_data
 		for field, value in form_data.iteritems():
-			if type(value) is str and "id_" in value:
+			print field, type(value), value
+			if type(value) is unicode and "id_" in value:
 				class_id = int(value.split('id_')[-1])
 				classs = Class.objects.get(pk=class_id)
+				classes.append(classs)
 
 				current_size = ClassRegistration.objects.filter(reg_class=classs).count()
-				registered = current_size + 1 <= classs.class_size
+				registered = (current_size + 1 <= classs.class_size)
+				if registered:
+					msg = "Registered successfully."
+				else:
+					msg = "Added to waiting list."
 
-				course_status['%s %s' % (classs.course.name, classs.section)] = registered
+				try:
+					reg = ClassRegistration(reg_class=classs, student=student, 
+						registration_status=registered, school=classs.school, period=classs.period)
+					reg.save()
+				except IntegrityError:
+					msg = "The student is already registered in this class."
 
-				reg = ClassRegistration(reg_class=classs, student=student, 
-					registration_status=registered)
-				reg.save()
+				course_status.append('%s %s: %s' % (classs.course.name, classs.section, msg))
+		
+		return classes, course_status
 
 
 	# process the data from the parent and student forms

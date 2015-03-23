@@ -25,17 +25,17 @@ $('#edit-class-btn').click(function() {
 </ul>
 
   <div class="row">  
-                 <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Classes<small> List</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Classes > List</a>
-                            </li>
-                        </ol>
+ <div class="col-lg-12">
+        <h1 class="page-header">
+            Classes<small> List</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Classes > List</a>
+            </li>
+        </ol>
 
-                    </div>
+    </div>
 
 <div class="col-md-3 school-list">
 
@@ -136,7 +136,7 @@ $('#edit-class-btn').click(function() {
 		</tr>
 		<tr>
 			<td> Enrolled: </td>
-			<td> {{ reg_list|length }} </td>
+			<td> {{ class.enrolled_class.count }} </td>
 		</tr>
 		<tr> 
 			<td> Description: </td>
@@ -145,19 +145,22 @@ $('#edit-class-btn').click(function() {
 	</table>
 
 
-	<a href="{% url 'school:classregistration' %}"> Edit Class Registration </a>
+	<a href="{% url 'school:classregistration' class.id %}"> Edit Class Registration </a>
 
 	<h5>Registered Students:</h5>
-	<table class="table table-hover col-md-9">
 
+	<ul>
 	{% for reg in class.enrolled_class.all %}
-	<tr>
-		<td> <a href="{% url 'school:studentlist' reg.student.id %}">
-		{{ reg.student.first_name }} {{ reg.student.last_name }} 
-		</td>
-	</tr>
+		<li> <a href="{% url 'school:studentlist' reg.student.id %}">
+			{% if reg.registration_status %}
+				{{ reg.student.first_name }} {{ reg.student.last_name }} 
+			{% else %}
+				{{ reg.student.first_name }} {{ reg.student.last_name }} (Waiting list)
+			{% endif %}
+			</a>
+		</li>
 	{% endfor %}
-	</table>
+	</ul>
 
 
 	{% else %}

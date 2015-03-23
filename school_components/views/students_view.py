@@ -61,9 +61,8 @@ def student_create(request):
 			student.school = request.user.userprofile.school
 			student.period = request.user.userprofile.period
 			student.save()
-
 			return HttpResponseRedirect(
-				reverse('school:studentlist', args=(student.id,)))
+					reverse('school:studentlist', args=(student.id,)))
 		else:
 			context_dictionary['errors'] = s.errors 
 

@@ -27,33 +27,27 @@
 <div class="alert alert-success" role="alert">
   {{ parent_message }}
   {{ student_message }}
-  {{ course_status }}
+  {% for status in course_status %}
+    {{ status }}
+  {% endfor %}
 </div>
 
   <a href="#" onclick="window.print()">Print</a>
 
   <div>
 
-      <h3>Jacob Thornton</h3>
+      <h3>{{ student }}</h3>
 
       <table class="table table-bordered" style="font-size: 18px;">
         <tr> 
           <td>Period</td>
-          <td>Jan 5th, 2015 - May 10th, 2015</td>
-        </tr>
-        <tr> 
-          <td>Waja Level 4/5 (Boys) </td>
-          <td>Monday and Thursday, 6:15 - 7:15 pm </td>
-        </tr>
-         <tr> 
-          <td>Gatka/Wrestling Level 3 (Boys)  </td>
-          <td>Wednesday and Saturday, 6:15 - 7:15 pm </td>
-        </tr>
-        <tr> 
-          <td>Sikh History Boys 11-15 <b>(Waiting List)</b> </td>
-          <td>Sunday, 6:15 - 7:15 pm </td>
+          <td>{{ user.userprofile.period }}</td>
         </tr>
 
+        {% for class in classes %}
+          <td> <strong>{{ class }} </strong></td>
+          <td> {{ class.schedule }} </td>
+        {% endfor %}
       </table>
 
     

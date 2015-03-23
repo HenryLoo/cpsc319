@@ -12,7 +12,7 @@ class Parent(models.Model):
 	def __unicode__(self):
 		return self.first_name + ' ' + self.last_name
 
-	def clean_fields(self, exclude=None):
+	def clean_csv_fields(self, exclude=None):
 		if len(self.first_name) > 50:
 			raise ValueError("Parent first name is over 50 characters.")
 		if len(self.last_name) > 50:

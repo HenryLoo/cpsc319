@@ -118,6 +118,9 @@ STATICFILES_DIRS = (
     STATIC_PATH,
 )
 
+MEDIA_ROOT = ''
+MEDIA_URL = '/media/'
+
 # Templates
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,

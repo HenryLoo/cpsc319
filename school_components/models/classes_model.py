@@ -74,15 +74,16 @@ class ClassAttendance(models.Model):
 		app_label = 'school_components'
 		unique_together = ('reg_class', 'student', 'date')
 
+
 class Assignment(models.Model):
 	reg_class = models.ForeignKey('Class')
 	title = models.CharField(max_length=100, blank=True)
-	date = models.TimeField(null=True, blank=True)
-
-	#change - how to store pdf
-	content = models.CharField(max_length=10, blank=True)
+	date = models.DateField(null=True, blank=True)
+	#saves pdf at file assignments inside media at aplus file
+	content = models.FileField(upload_to='aplus/media/assignments', blank = True, null = True)
 	grade_weight = models.IntegerField(blank = True, null = True)
 	total_weight = models.IntegerField(blank = True, null = True)
+	comments = models.CharField(max_length=500)
 
 	class Meta:
 		app_label = 'school_components'
@@ -91,11 +92,10 @@ class Grading(models.Model):
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
 	grade = models.CharField(max_length=5, blank=True)
+	#change to foreign key after
 	assignment = models.CharField(max_length=100, blank=True)
 	date = models.DateField(null=True, blank=True)
 	comments = models.CharField(max_length=500)
-	grade_weight = models.IntegerField(blank = True, null = True)
-	total_weight = models.IntegerField(blank = True, null = True)
 
 	class Meta:
 		app_label = 'school_components'

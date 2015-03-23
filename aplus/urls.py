@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, include, url
 import os
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -31,7 +33,7 @@ urlpatterns = patterns('',
     # send to the school_components urls.py
     url(r'^school/', include('school_components.urls', namespace='school', app_name='school')),
    
-)
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += patterns('',
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',

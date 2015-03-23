@@ -32,7 +32,6 @@ class ClassTeacherForm(ModelForm):
 		fields = ['teacher']
 
 
-
 class ClassRegistrationForm(ModelForm):
 	student = forms.ModelChoiceField(
         queryset=Student.objects.all(),                       
@@ -53,3 +52,13 @@ class ClassAttendanceForm(ModelForm):
         fields = ['comments', 'attendance']
 
 
+class ClassAssignmentForm(ModelForm):
+	content  = forms.FileField()
+
+	class Meta:
+		model = Assignment
+		fields = ['title', 'date', 'grade_weight', 'total_weight', 'comments']
+		widgets = {
+			'comments': forms.Textarea(attrs={'rows': 5}),
+			'date': DateInput(attrs={'class':'datepicker'}),
+		}

@@ -30,7 +30,7 @@
 {% if class_list %}
 <div class="list-group">
     {% for class in class_list %}
-        <a href="{% url 'school:classattendance' class.id %}" class="list-group-item">
+        <a href="{% url 'school:classassignment' class.id %}" class="list-group-item">
            {{ class.course }} {{ class.section }}
         </a>
       {% endfor %}
@@ -40,25 +40,26 @@
 {% endif %}
 </div>
 
+{% if class %}
 <div class="col-md-8">
-    To add an assignment, insert a title and upload the pdf file:
-    <br><br>
-    <div class="input-group" style="width: 550px;">
-                                                                <input type="text" class="form-control" placeholder="Title">
-                                                            </div>
-                                                        <br>
-    <form role="form" action="#" method="post" enctype="multipart/form-data">
+    <h4>Add Assignment</h4>
+    <br><br>   
+
+    <form role="form" action="{%url 'school:classassignment' class.id%}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="form-group">
-            <input type="file" id="exampleInputFile">
-            <br>
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#teacher-list-csv">
-            Upload
-            </button>
-        </div>
+            <table class="table table-hover school-form">
+            {{ form.as_table }}
+             </table>
+
+
+            <input type="submit" class="btn btn-primary pull-right" value="Upload" />
+</form> 
+
         <!-- <input type="submit" class="btn btn-default" value="Submit" /> -->
     </form> 
-    <br>
+
+
+    <br><br><br>
     <h4>Class Assignments</h4>
 
         <div class="table-responsive">
@@ -68,30 +69,26 @@
       <tr>
         <th>Assignment</th>
         <th>Date</th>
+        <th>Weigh</th>
+        <th>Total</th>
+        <th>Comments</th>
         <th>Delete</th>
-        <th>Download</th>
+        <th>Open</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td><a>Assignment Title 1</a></td>
-        <td>Jan 17, 2015</td>
-        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-        <td><a><i class="fa fa-arrow-down"></i></a></td>
-        
-      </tr>
-      <tr>
-        <td><a>Assignment Title 2</a></td>
-        <td>Jan 15, 2015</td>
-        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-         <td><a><i class="fa fa-arrow-down"></i></a></td>
-      </tr>
-      <tr>
-        <td><a>Assignment Title 3</a></td>
-        <td>Jan 12, 2015</td>
-        <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
-         <td><a><i class="fa fa-arrow-down"></i></a></td>
-      </tr>
+        {% for assignment in assignments %}
+            <tr>
+            <td>{{assignment.title}}</td>
+            <td>{{assignment.date}}</td>
+            <td>{{assignment.grade_weight}}</td>
+            <td>{{assignment.total_weight}}</td>
+            <td>{{assignment.comments}}</td>
+            <td><p data-placement="top" data-toggle="tooltip" title="Delete"><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete" ><span class="glyphicon glyphicon-trash"></span></button></p></td>
+            <td><a target="_blank" href="{{assignment.content.url}}"><i class="fa fa-file-pdf-o"></i></a></td>
+        </tr>
+      {% endfor %}
+
     </tbody>
   </table>
 
@@ -101,6 +98,8 @@
         </div>
     </div>
 </div>
+            {%endif%}
+
 {% endblock class_content %}
 
 

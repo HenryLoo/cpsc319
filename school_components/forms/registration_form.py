@@ -1,5 +1,5 @@
 from django import forms
-from school_components.models import Class
+from school_components.models import Class, Payment
 
 class ParentContactRegistrationForm(forms.Form):
 	first_name = forms.CharField(
@@ -50,7 +50,7 @@ class ParentContactRegistrationForm(forms.Form):
 			}
 		))
 	emergency_last_name = forms.CharField(
-		max_length=75,
+		max_length=30,
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control', 
@@ -59,7 +59,7 @@ class ParentContactRegistrationForm(forms.Form):
 			}
 		))
 	emergency_relation = forms.CharField(
-		max_length=75,
+		max_length=45,
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control', 
@@ -129,30 +129,12 @@ class StudentRegistrationForm(forms.Form):
 				'type':'tel'
 			}
 		))
-	street_address = forms.CharField(
+	address = forms.CharField(
 		max_length=75,
 		widget=forms.TextInput(
 			attrs={
 				'class': 'form-control', 
-				'placeholder': "Street address",
-				'type':'text'
-			}
-		))
-	city = forms.CharField(
-		max_length=75,
-		widget=forms.TextInput(
-			attrs={
-				'class': 'form-control', 
-				'placeholder': "City",
-				'type':'text'
-			}
-		))
-	postal_code = forms.CharField(
-		max_length=75,
-		widget=forms.TextInput(
-			attrs={
-				'class': 'form-control', 
-				'placeholder': "Postal Code",
+				'placeholder': "Street address, City, Postal Code",
 				'type':'text'
 			}
 		))
@@ -217,12 +199,31 @@ class StudentRegistrationForm(forms.Form):
 			)
 
 
-class PaymentRegistrationForm(forms.Form):
-	receipt_no = forms.CharField(max_length=50)
-	amount = forms.DecimalField(max_digits=10, decimal_places=2)
-	date = forms.DateField()
+class PaymentRegistrationForm(forms.ModelForm):
+	receipt_no = forms.CharField(max_length=50,
+		widget=forms.TextInput(
+			attrs={
+				'class':'form-control',
+				'type': 'text'
+			}
+		))
+	amount = forms.DecimalField(max_digits=10, decimal_places=2,
+		widget=forms.TextInput(
+			attrs={
+				'class':'form-control'
+			}
+		))
+	date = forms.DateField(
+		widget=forms.DateInput(
+			attrs={
+				'class':'datepicker form-control'
+			}
+		))
+	class Meta:
+		model = Payment
+		exclude = ['parent']
 
 
 class SummaryRegistrationForm(forms.Form):
-	a = forms.CharField(max_length=50)
+	a = forms.CharField(widget=forms.HiddenInput())
 

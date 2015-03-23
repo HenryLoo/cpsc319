@@ -30,7 +30,7 @@
   {{ course_status }}
 </div>
 
-  <a href="#">Print</a>
+  <a href="#" onclick="window.print()">Print</a>
 
   <div>
 
@@ -59,13 +59,23 @@
     
   </div>
 
-  <a class="btn btn-default pull-left" href="#">Back</a>
+  <form id="payment-registration-form" action="" method="post">
+    {% csrf_token %}
+    {{ wizard.management_form }}
+  
+    <button class="btn btn-default pull-left"  name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">
+      Back 
+    </button>
 
-  <div class="pull-right">
-    <a class="btn btn-warning" href="#">Make Payment</a>
-    <a class="btn btn-default" href="#">Register another 
-    Student</a>
-  </div>
+    <div class="pull-right">
+      <button class="btn btn-warning"  name="wizard_goto_step" type="submit" value="{{ wizard.steps.next }}">
+        Make Payment 
+      </button>
+      <button class="btn btn-primary"  name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">
+        Register another Student 
+      </button>
+    </div>
+  </form>
 
 </div>
 

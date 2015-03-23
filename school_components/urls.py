@@ -40,6 +40,9 @@ urlpatterns = patterns('',
 	url(r'^students/samplecsv$', 
 		'school_components.views.students_view.student_sample_csv', 
 		name='studentsamplecsv'),
+	url(r'^students/get$', 
+		'school_components.views.students_view.student_get', 
+		name='studentget'),
     
 	# parents
 	url(r'^parents/$', 
@@ -54,6 +57,10 @@ urlpatterns = patterns('',
 	url(r'^parents/form/$', 
 		'school_components.views.parents_view.parent_form', 
 		name='parentform'),
+	url(r'^parents/get$', 
+		'school_components.views.parents_view.parent_get', 
+		name='parentget'),
+
 
 	# payment
 	url(r'^paymentone/(?P<parent_id>\d+)/$', 

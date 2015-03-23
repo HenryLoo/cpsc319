@@ -61,7 +61,7 @@ $('#edit-admin-btn').click(function() {
 
 	  		<li>
 	  		<a href="{% url 'account:view_admins' admin.id %}">
-	  			 {{ admin.user }} {{ admin.user.last_name }}
+	  			 {{ admin.user.first_name }} {{ admin.user.last_name }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}

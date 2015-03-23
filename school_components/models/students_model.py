@@ -8,21 +8,51 @@ from school_components.models.period_model import Period
 # TODO: update with whatever we're doing for school and period
 class StudentManager(models.Manager):
 	def create_student(self, first_name, last_name, gender, birthdate, home_phone,
-		address, email, allergies, emergency_contact_name, relation, emergency_contact_phone,
-		parent_first_name, parent_last_name, parent_cell_phone, parent_email):
+		address, email, allergies, emergency_contact_name, emergency_contact_phone, relation,
+		parent_first_name, parent_last_name, parent_cell_phone, parent_email, period, school):
 
 		bd = datetime.strptime(birthdate, "%Y-%m-%d").date()
-		s = School.objects.get(pk=1)
-		per = Period.objects.get(pk=1)
 
-		p = Parent(first_name=parent_first_name, last_name=parent_last_name,
-				cell_phone=parent_cell_phone, email=parent_email, school=s, period=per)
-		p.save()
+		parent_defaults = {
+			'cell_phone': parent_cell_phone,
+			'email': parent_email,
+			'school': school,
+			'period': period
+		}
 
-		student = self.create(first_name=first_name, last_name=last_name, gender=gender, 
-			birthdate=bd, home_phone=home_phone, address=address, email=email, 
-			allergies=allergies, emergency_contact_name=emergency_contact_name, 
-			emergency_contact_phone=emergency_contact_phone, relation=relation, parent=p, school=s, period=per)
+		parent, pcreated = Parent.objects.get_or_create(
+			first_name=parent_first_name, 
+			last_name=parent_last_name,
+			defaults=parent_defaults)
+
+		if not pcreated:
+			for attr, value in parent_defaults.iteritems():
+				setattr(parent, attr, value)
+			parent.save()
+
+		student_defaults = {
+			'home_phone': home_phone,
+			'birthdate': birthdate,
+			'address': address,
+			'email': email,
+			'allergies': allergies,
+			'emergency_contact_name' : emergency_contact_name,
+			'emergency_contact_phone' : emergency_contact_phone,
+			'relation' : relation,
+			'parent': parent,
+			'school': school,
+			'period': period
+		}
+
+		student, screated = Student.objects.get_or_create(
+			first_name=first_name, 
+			last_name=last_name,
+			defaults=student_defaults)
+
+		if not screated:
+			for attr, value in student_defaults.iteritems():
+				setattr(student, attr, value)
+			student.save()
 
 		return student
 
@@ -65,7 +95,7 @@ class Student(models.Model):
 			raise ValueError("Birthdate does not match format YYYY-MM-DD.")	
 		if len(self.home_phone) > 20:
 			raise ValueError("Phone number is over 20 characters.")	
-		if len(self.address) > 20:
+		if len(self.address) > 75:
 			raise ValueError("Address is over 75 characters.")	
 		if '@' not in self.email:
 			raise ValueError("Email is invalid.")

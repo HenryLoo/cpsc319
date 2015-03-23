@@ -1,6 +1,6 @@
 from django import forms
-from school_components.models.students_model import Student
-from school_components.models.classes_model import *
+from school_components.models import *
+from accounts.models import TeacherUser
 class ClassForm(forms.ModelForm):
 	class Meta:
 		model = Class
@@ -28,6 +28,8 @@ class ClassTeacherForm(forms.ModelForm):
 	class Meta:
 		model = ClassTeacher
 		fields = ['teacher']
+
+
 
 class ClassRegistrationForm(forms.ModelForm):
 	student = forms.ModelChoiceField(

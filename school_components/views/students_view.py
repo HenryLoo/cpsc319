@@ -94,7 +94,9 @@ def student_upload(request):
 			context_dictionary['errors'] = errors
 		else:
 			# actually save
-			student_list = SchoolUtils.parse_csv(request.FILES['file'])
+			s = request.user.userprofile.school
+			per = request.user.userprofile.period
+			student_list = SchoolUtils.parse_csv(request.FILES['file'], school=s, period=per)
 			context_dictionary['student_list'] = student_list
 
 	return render_to_response('students/student_upload.html',

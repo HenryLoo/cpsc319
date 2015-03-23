@@ -28,9 +28,8 @@ def class_create(request):
 	if request.method == 'POST':
 		cf = ClassForm(request.POST, prefix='info')
 		sf = ClassScheduleForm(request.POST, prefix='sch')
-		te = ClassTeacherForm(request.POST, prefix='te')
 
-		if cf.is_valid() and sf.is_valid() and te.is_valid():
+		if cf.is_valid() and sf.is_valid():
 			# save class
 			new = cf.save(commit=False)
 			new.school = request.user.userprofile.school
@@ -43,14 +42,21 @@ def class_create(request):
 			schedule.save()
 
 			# save class teacher
-			teacher = te.save(commit=False)
-			teacher.taught_class = new
-			teacher.save()
+			try:
+				te = ClassTeacherForm(request.POST, prefix='te')
+				if te.is_valid():
+					teacher = te.save(commit=False)
+					teacher.taught_class = new
+					teacher.save()
+			except Exception as e:
+				pass
 
 			return HttpResponseRedirect(
 				reverse('school:classlist', args=(new.id,)))
 		else:
-			context_dictionary['errors'] = cf.errors 
+			context_dictionary['class_errors'] = cf.errors
+			context_dictionary['schedule_errors'] = sf.errors
+			context_dictionary['teacher_errors'] = te.errors
 
 	return render_to_response('classes/class_form.html',
 		context_dictionary,

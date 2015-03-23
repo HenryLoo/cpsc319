@@ -34,8 +34,8 @@ class CourseRegisterWizard(SessionWizardView):
 		kwargs = {}
 		if step == 'student_form':
 			kwargs = {
-				'school_id': self.request.session['school_id'],
-				'period_id': self.request.session['period_id'],
+				'school_id': self.request.user.userprofile.school,
+				'period_id': self.request.user.userprofile.period,
 			}
 		return kwargs
 

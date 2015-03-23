@@ -27,9 +27,11 @@
     </div>
 </div>
 
-{% if errors %}
+{% if class_errors or teacher_errors or schedule_errors %}
 	<div class="panel panel-danger">
-		{{ errors }}
+		{{ class_errors }}
+        {{ teacher_errors }}
+        {{ schedule_errors }}
 	</div>
 {% endif %}
 

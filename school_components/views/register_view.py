@@ -209,7 +209,7 @@ def payment_create(request, parent_id):
 		if pf.is_valid():
 			payment = pf.save()
 			message['success'] = "Receipt %s was saved successfully." % payment.receipt_no
-			del request.session['parent_id']
+			# del request.session['parent_id']
 			return HttpResponse(json.dumps(message), content_type="application/json")
 		else:
 			message['errors'] =  pf.errors 

@@ -143,17 +143,26 @@
 
     {% endif %}
 
+    $("#print-btn").click(function() {
+        $(".print").printArea();
+    });
+    
+
     {% if payment_parent %}
     	$('#payment-registration-form').submit(function() {
     		$.ajax({
     			type: "POST",
     			url: "{% url 'school:paymentcreate' payment_parent.id %}", 
     			data: $(this).serialize(), 
-    			dataType: "json", 
     			contentType: 'application/x-www-form-urlencoded',
     			success: function(data) {
     				var content_div = $('#payment-modal').find('.modal-body');
-    				content_div.html(xhr.responseText);
+    				content_div.html(data['success']);
+
+                    // on modal close, go back to first page of course registration
+                    $('#payment-modal').on('hidden.bs.modal', function (e) {
+                        window.location.replace('{% url "school:courseregister" %}');
+                    });
     				$('#payment-modal').modal('show');
     			},
     			error: function(xhr) {
@@ -165,10 +174,6 @@
     		return false;
     	})
 
-    	// on modal close, go back to first page of course registration
-    	$('#payment-modal', function () {
- 			window.href.location('{% url "school:courseregister" %}');
-		})
     {% endif %}
 
 </script>

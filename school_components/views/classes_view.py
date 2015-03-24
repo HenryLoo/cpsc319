@@ -166,7 +166,7 @@ def class_performance(request, class_id=None, assignment_id=None):
 			a = Assignment.objects.get(pk=assignment_id)
 			context_dictionary['assignment'] = a
 
-	GradingFormSetFactory = modelformset_factory(Grading, form=ClassGradingForm, extra=0)
+	GradingFormSetFactory = modelformset_factory(Grading, fields=('student', 'grade', 'comments'), form=ClassGradingForm, extra=0)
 		
 	if request.method == "POST":
 
@@ -177,10 +177,10 @@ def class_performance(request, class_id=None, assignment_id=None):
 			instances = formset.save(commit=False)
 
 			for instance in instances:
-				newinstance = instance.save(commit=False)
-				newinstance.reg_class = c
-				newinstance.assignment = a
-				newinstance.save()
+				#newinstance = instance.save(commit=False)
+				instance.reg_class = c
+				instance.assignment = a
+				instance.save()
 
 			# for form in forms:
 			#  	new = form.save(commit=False)

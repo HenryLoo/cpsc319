@@ -71,6 +71,9 @@ class ClassTeacher(models.Model):
 
 
 class ClassRegistration(models.Model):
+	
+	use_for_related_fields = True  
+
 	reg_class = models.ForeignKey('Class', related_name='enrolled_class')
 	student = models.ForeignKey('Student', related_name='enrolled_student')
 	registration_status = models.BooleanField()
@@ -113,6 +116,8 @@ class Assignment(models.Model):
 		app_label = 'school_components'
 
 class Grading(models.Model):
+	use_for_related_fields = True  
+
 	g_id = models.IntegerField(blank=True, null=True)
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')

@@ -45,8 +45,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.formtools',
+    'crispy_forms',
+    'south',
     'accounts',
-    'messages',
+    'aplusmessages',
     'school_components',
     'dashboard',
     'googlecharts',
@@ -126,6 +128,9 @@ MEDIA_URL = '/media/'
 TEMPLATE_DIRS = (
     TEMPLATE_PATH,
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
 SENDGRID_EMAIL_BACKEND = "sendgrid.backends.SendGridEmailBackend"
 EMAIL_BACKEND = SENDGRID_EMAIL_BACKEND
 SENDGRID_EMAIL_HOST = "smtp.sendgrid.net"

@@ -9,8 +9,43 @@
       yearRange: "1980:" + new Date().getFullYear(),
     });
 
-    {% block hacky_script %}
-    {% endblock hacky_script %}
+    // autocomplete for add student
+    var studentTags = [
+    	{% for student in student_list %}
+    		{'label': '{{ student.first_name }} {{ student.last_name }}',
+    		'id': '{{ student.id }}' },
+    	{% endfor %}
+    ]; 
+
+    var sel_student_id; // updated each time selected
+    $('#search-student-input').autocomplete({
+    	source: studentTags,
+    	select: function(event, ui) {
+    		sel_student_id = ui.item.value;
+    	}
+    });
+
+    // send request to register the student
+   //  $('#add-student-btn').click(function() {
+   //  	$.ajax({
+			// type: "POST",
+			// url: "url 'school:classregistration' class.id", 
+			// data: { student_id : sel_student_id },
+			// dataType: "json", 
+			// contentType: 'application/x-www-form-urlencoded',
+			// success: function(data) {
+			// 	var content_div = $('#payment-modal').find('.modal-body');
+			// 	content_div.html(xhr.responseText);
+			// 	$('#payment-modal').modal('show');
+			// },
+			// error: function(xhr) {
+			// 	var content_div = $('#payment-modal').find('.modal-body');
+			// 	content_div.html(xhr.responseText);
+			// 	$('#payment-modal').modal('show');
+			// }
+   //  	});
+   //  	return false;
+   //  });
 
 </script>
 {% endblock %}

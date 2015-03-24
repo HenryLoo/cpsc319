@@ -38,6 +38,124 @@
       changeYear: true,
       yearRange: "1980:" + new Date().getFullYear(),
     });
+
+    {% if parent_list %}
+    // autocomplete for parent info form
+    var parentTags = [
+    	{% for parent in parent_list %}
+    		{'label': '{{ parent.first_name }} {{ parent.last_name }}',
+    		'id': '{{ parent.id }}' },
+    	{% endfor %}
+    ]; 
+
+    function fillParentForm(parent_dict) {
+    	$('#id_parent_form-first_name').val(parent_dict['first_name']);
+    	$('#id_parent_form-last_name').val(parent_dict['last_name']);
+    	$('#id_parent_form-cell_phone').val(parent_dict['cell_phone']);
+    	$('#id_parent_form-email').val(parent_dict['email']);
+    	$('#id_parent_form-parent_comments').val(parent_dict['comments']);
+    }
+
+    $('#id_parent_form-first_name').autocomplete({
+    	source: parentTags,
+    	select: function(event, ui) {
+    		// on selecting from the autocomplete, 
+    		// ask for parent info
+    		$.ajax({
+    			type: "GET",
+    			url: '{% url "school:parentget" %}', 
+    			data: { parent_id : ui.item.id }, 
+    			dataType: "json",   
+    			success: function(data) {
+    				fillParentForm(data);
+    			},
+    			error: function(xhr) {
+    				alert("Something went wrong!");
+    			}
+    		});
+    	}
+    });
+
+    {% endif %}
+
+    {% if student_list %}
+    // autocomplete for student info form
+    var studentTags = [
+    	{% for student in student_list %}
+    		{'label': '{{ student.first_name }} {{ student.last_name }}',
+    		'id': '{{ student.id }}' },
+    	{% endfor %}
+    ]; 
+
+    function fillStudentForm(student_dict) {
+    	$('#id_student_form-first_name').val(student_dict['first_name']);
+    	$('#id_student_form-last_name').val(student_dict['last_name']);
+    	$('#id_student_form-home_phone').val(student_dict['home_phone']);
+    	$('#id_student_form-email').val(student_dict['email']);
+    	$('#id_student_form-birthdate').val(student_dict['birthdate']);
+    	$('#id_student_form-allergies').val(student_dict['allergies']);
+    	$('#id_student_form-comments').val(student_dict['comments']);
+    	$("#id_student_form-address").val(student_dict['address']);
+
+    	// check gender radio button
+    	if (student_dict['gender'] == 'M') {
+    		$("input[value='MALE']").attr('checked', true);
+    	} else {
+    		$("input[value='FEMALE']").attr('checked', true);
+    	}
+    }
+
+    $('#id_student_form-first_name').autocomplete({
+    	source: studentTags,
+    	select: function(event, ui) {
+    		// on selecting from the autocomplete, 
+    		// ask for student info
+    		$.ajax({
+    			type: "GET",
+    			url: '{% url "school:studentget" %}', 
+    			data: { student_id : ui.item.id }, 
+    			dataType: "json",   
+    			success: function(data) {
+    				fillStudentForm(data);
+    				showClassHistory(data['class_history'])
+    			},
+    			error: function(xhr) {
+    				alert("Something went wrong!");
+    			}
+    		});
+    	}
+    });
+
+    {% endif %}
+
+    {% if payment_parent %}
+    	$('#payment-registration-form').submit(function() {
+    		$.ajax({
+    			type: "POST",
+    			url: "{% url 'school:paymentcreate' payment_parent.id %}", 
+    			data: $(this).serialize(), 
+    			dataType: "json", 
+    			contentType: 'application/x-www-form-urlencoded',
+    			success: function(data) {
+    				var content_div = $('#payment-modal').find('.modal-body');
+    				content_div.html(xhr.responseText);
+    				$('#payment-modal').modal('show');
+    			},
+    			error: function(xhr) {
+    				var content_div = $('#payment-modal').find('.modal-body');
+    				content_div.html(xhr.responseText);
+    				$('#payment-modal').modal('show');
+    			}
+    		});
+    		return false;
+    	})
+
+    	// on modal close, go back to first page of course registration
+    	$('#payment-modal', function () {
+ 			window.href.location('{% url "school:courseregister" %}');
+		})
+    {% endif %}
+
 </script>
 
 {% endblock javascript_block%}

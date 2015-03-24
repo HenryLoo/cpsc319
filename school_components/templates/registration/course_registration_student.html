@@ -42,8 +42,6 @@
           <label>Full Name:</label>
           {{ wizard.form.first_name }}
           {{ wizard.form.last_name }}
-          <span class="btn btn-default" id="search-student-reg"><i class="fa fa-search"></i></span>
-            <font size=1> *If already registered, click here to complete form automatically</font>
         </div>
 
         <label>Gender:</label>
@@ -57,15 +55,7 @@
 
       <div class="form-group">
         <label>Address:</label>
-        {{ wizard.form.street_address }}
-      </div>
-      <div class="form-group">
-        <div class="form-half-size">
-          {{ wizard.form.city }}
-        </div>
-        <div class="form-half-size">
-          {{ wizard.form.postal_code }}
-        </div>
+        {{ wizard.form.address }}
       </div>
 
       <div class="form-group form-half-size">
@@ -320,7 +310,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button class="btn btn-primary pull-right" data-dismiss="modal" id="student-register-btn" type="submit" value="submit">
+        <button class="btn btn-primary pull-right" data-dismiss="modal" name="wizard_goto_step" id="student-register-btn" type="submit" value="submit">
           Register
         </button>
       </div>

@@ -11,6 +11,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core.servers.basehttp import FileWrapper
 from aplus.settings import SAMPLE_CSV_PATH
+from django.core import serializers
+import json
 import csv
 
 
@@ -37,6 +39,17 @@ def class_history_helper(class_reg):
 	m['class_name'] = class_reg.reg_class
 	return m
 
+
+def student_get(request):
+	if request.method == 'GET':
+		student_id = request.GET['student_id']
+		student = Student.objects.get(pk=student_id)
+		student_json = serializers.serialize("json", [student])
+		# extract the fields we want
+		student_json = json.dumps(json.loads(student_json)[0]['fields'])
+		return HttpResponse(student_json, content_type="application/json")
+
+
 # create a new student with form data
 def student_create(request):
 	s = StudentForm(request.POST)
@@ -48,9 +61,8 @@ def student_create(request):
 			student.school = request.user.userprofile.school
 			student.period = request.user.userprofile.period
 			student.save()
-
 			return HttpResponseRedirect(
-				reverse('school:studentlist', args=(student.id,)))
+					reverse('school:studentlist', args=(student.id,)))
 		else:
 			context_dictionary['errors'] = s.errors 
 
@@ -81,7 +93,9 @@ def student_upload(request):
 			context_dictionary['errors'] = errors
 		else:
 			# actually save
-			student_list = SchoolUtils.parse_csv(request.FILES['file'])
+			s = request.user.userprofile.school
+			per = request.user.userprofile.period
+			student_list = SchoolUtils.parse_csv(request.FILES['file'], school=s, period=per)
 			context_dictionary['student_list'] = student_list
 
 	return render_to_response('students/student_upload.html',

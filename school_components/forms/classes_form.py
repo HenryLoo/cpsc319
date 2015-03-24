@@ -1,13 +1,15 @@
+from django.forms import *
 from django import forms
-from school_components.models.students_model import Student
-from school_components.models.classes_model import *
-class ClassForm(forms.ModelForm):
+from school_components.models import *
+from accounts.models import TeacherUser
+
+class ClassForm(ModelForm):
 	class Meta:
 		model = Class
 		fields = ['course', 'section', 'description', 'class_size', 'waiting_list_size', 'room']
 
 
-class ClassScheduleForm(forms.ModelForm):
+class ClassScheduleForm(ModelForm):
 	class Meta:
 		model = ClassSchedule
 		exclude = ['sch_class']
@@ -24,12 +26,13 @@ class ClassScheduleForm(forms.ModelForm):
 				}),
 		}
 
-class ClassTeacherForm(forms.ModelForm):
+class ClassTeacherForm(ModelForm):
 	class Meta:
 		model = ClassTeacher
 		fields = ['teacher']
 
-class ClassRegistrationForm(forms.ModelForm):
+
+class ClassRegistrationForm(ModelForm):
 	student = forms.ModelChoiceField(
         queryset=Student.objects.all(),                       
         widget=forms.CheckboxSelectMultiple, 
@@ -41,5 +44,21 @@ class ClassRegistrationForm(forms.ModelForm):
 		model = ClassRegistration
 		fields = ['student']
 
+class ClassAttendanceForm(ModelForm):
+    attendance = ChoiceField(label='', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
+    
+    class Meta:
+        model = ClassAttendance
+        fields = ['comments', 'attendance']
 
 
+class ClassAssignmentForm(ModelForm):
+	content  = forms.FileField()
+
+	class Meta:
+		model = Assignment
+		fields = ['title', 'date', 'grade_weight', 'total_weight', 'comments']
+		widgets = {
+			'comments': forms.Textarea(attrs={'rows': 5}),
+			'date': DateInput(attrs={'class':'datepicker'}),
+		}

@@ -25,23 +25,25 @@
 
 <div class="col-md-9" id="student-reg-form">
 
-<form>
-  <div class="panel panel-default">
-    <div class="panel-heading">Payment</div>
-    <div class="panel-body">
-      <div class="form-group">
-        <label for="exampleInputEmail1"><strong>Receipt No:</strong></label>
-        <input type="text" name="receipt_no" class="form-control">
 
-        <label for="exampleInputEmail1"><strong>Amount:</strong></label>
-        <input type="text" name="amount" class="form-control">
-      </div>
+
+<form id="payment-registration-form" method="post">
+  {% csrf_token %}
+  {{ wizard.management_form }}
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Payment: <strong>{{ payment_parent }}</strong></div>
+    <div class="panel-body">
+      <table class="table table-bordered">
+        {{ wizard.form.as_table }}
+      </table>
     </div>
   </div>
-  <a class="btn btn-default pull-left" href="{% url 'school:courseregister' %}">Cancel</a>
-  <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#payment-modal">
-  Make Payment
-  </button>
+
+    <a class="btn btn-default pull-left" href="{% url 'school:courseregister' %}">Cancel</a>
+    <button class="btn btn-warning pull-right" type="submit" value="submit">
+        Make Payment
+    </button>
 </form>
 
 </div>

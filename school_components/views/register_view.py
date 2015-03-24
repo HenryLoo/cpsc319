@@ -1,18 +1,23 @@
 from school_components.models.courses_model import Course, Prerequisite, Department
 from school_components.forms.courses_form import CourseForm, DepartmentForm
+from school_components.forms.parents_form import PaymentForm
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.contrib.formtools.wizard.views import SessionWizardView
 from school_components.forms.registration_form import *
 from school_components.models import *
+from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
+import json
 
 
 FORMS = [	
 	('parent_form', ParentContactRegistrationForm),
-	('student_form', StudentRegistrationForm)
+	('student_form', StudentRegistrationForm),
+	('summary_form', SummaryRegistrationForm),
+	('payment_form', PaymentRegistrationForm)
 ]
 
 TEMPLATES = {
@@ -22,154 +27,196 @@ TEMPLATES = {
 	'payment_form': "registration/course_registration_payment.html",
 }
 
-TESTTEMPLATES = {
-	'parent_form': "registration/temp.html",
-	'student_form': "registration/temp.html",
-	'summary_form': "registration/temp.html",
-	'payment_form': "registration/temp.html",
-}
-
 class CourseRegisterWizard(SessionWizardView):
 
+	#  TODO: school/period
 	# put current school/period in kwargs to render courses dropdown
 	def get_form_kwargs(self, step=None):
 		kwargs = {}
 		if step == 'student_form':
 			kwargs = {
-				'school_id': self.request.session['school_id'],
-				'period_id': self.request.session['period_id'],
+				'school_id': self.request.user.userprofile.school,
+				'period_id': self.request.user.userprofile.period,
 			}
 		return kwargs
 
 	def get_template_names(self):
 			return [TEMPLATES[self.steps.current]]
+ 
+ 	# do fancy stuff in between forms
+	def render(self, form=None, **kwargs):
+		context_dictionary = self.get_context_data(form=form, **kwargs)
+		#  get parent/students for autocomplete
+		if self.steps.current == 'parent_form':
+			context_dictionary['parent_list'] = Parent.objects.all().values('id', 'first_name', 'last_name')
+		
+		elif self.steps.current == 'student_form':
+			context_dictionary['student_list'] = Student.objects.all().values('id', 'first_name', 'last_name')
+		
+		elif self.steps.current == 'summary_form':
+			#  save parent/student before rendering summary form
+			form_keys = ['parent_form', 'student_form']
+			forms = {}
+			for key in form_keys:
+				forms[key] = self.get_form(
+					step=key, 
+					data=self.storage.get_step_data(key),
+					files=self.storage.get_step_files(key)
+				)
 
+			parent, parent_msg = self.create_parent(forms['parent_form'])
+			if parent_msg:
+				context_dictionary['parent_message'] = parent_msg
+			student, student_msg = self.create_student(parent, forms)
+			if student_msg:
+				context_dictionary['student_message'] = student_msg
+			classes, course_status = self.register_classes(student, forms['student_form']) 
+
+			context_dictionary['student'] = student
+			context_dictionary['classes'] = classes
+			context_dictionary['course_status'] = course_status
+
+			# save parent to session for payment form
+			self.request.session['parent_id'] = parent.id
+
+		elif self.steps.current == 'payment_form':
+			parent_id = self.request.session['parent_id']
+			context_dictionary['payment_parent'] = Parent.objects.get(pk=parent_id)
+
+		return self.render_to_response(context_dictionary)
 
 	# based on parent first and last names
 	def create_parent(self, form):
-		school_id = self.request.session['school_id']
-		period_id = self.request.session['period_id']
-
-		school = School.objects.get(pk=school_id)
-		period = Period.objects.get(pk=period_id)
+		school = self.request.user.userprofile.school
+		period = self.request.user.userprofile.period
 
 		if form.is_valid():
 			form_data = form.cleaned_data
+			defaults = {
+				'cell_phone': form_data['cell_phone'],
+				'email' : form_data['email'],
+				'school' : school,
+				'period': period, 
+				'comments': form_data['parent_comments']
+			}
 
-			try:
-				parent = Parent.objects.get(
-					first_name=form_data['first_name'], 
-					last_name=form_data['last_name'])
+			parent, created = Parent.objects.get_or_create(
+				first_name=form_data['first_name'], 
+				last_name=form_data['last_name'],
+				defaults=defaults)
 
-				parent.cell_phone=form_data['cell_phone']
-				parent.email=form_data['email']
-				parent.school=school
-				parent.period=period 
-				parent.comments=form_data['parent_comments']
+			if not created:
+				# update existing parent with new values
+				for attr, value in defaults.iteritems():
+					setattr(parent, attr, value)
+				parent.save()
 
-			except ObjectDoesNotExist:
-				parent = Parent(
-					first_name=form_data['first_name'], 
-					last_name=form_data['last_name'],
-					cell_phone=form_data['cell_phone'],
-					email=form_data['email'],
-					school=school,
-					period=period, 
-					comments=form_data['parent_comments']
-				)
-
-			parent.save()
-			return parent, "%s %s was saved successfully. " % (parent.first_name, parent.last_name)
+			return parent, None
 		else:
-			return None, "%s %s could not be updated. " % (parent.first_name, parent.last_name)
+			return None, "Parent could not be updated. "
 
-	def create_student(self, parent, form):
-		school_id = self.request.session['school_id']
-		period_id = self.request.session['period_id']
+	def create_student(self, parent, forms):
+		school = self.request.user.userprofile.school
+		period = self.request.user.userprofile.period
 
-		school = School.objects.get(pk=school_id)
-		period = Period.objects.get(pk=period_id)
+		parent_form = forms['parent_form']
+		student_form = forms['student_form']
 
-		if form.is_valid():
-			form_data = form.cleaned_data
+		#  TODO: emergency cell/home phone, emergency comments
+		if student_form.is_valid():
+			form_data = student_form.cleaned_data
+			parent_data = parent_form.cleaned_data
 
-			try:
-				student = Student.objects.get(
-					first_name=form_data['first_name'], 
-					last_name=form_data['last_name'])
+			emergency_name = "{0} {1}".format(
+				parent_data['emergency_first_name'],
+			 	parent_data['emergency_last_name'])
 
-				student.home_phone=form_data['home_phone']
-				address = "{0}, {1} {2}".format(
-					form_data['street_address'], form_data['city'], form_data['postal_code'])
-				student.address=address
-				student.email=form_data['email']
-				student.birthdate=form_data['birthdate']
-				student.allergies=form_data['allergies']
-				student.comments=form_data['comments']
-				student.parent = parent
-				student.school=school
-				student.period=period 
+			defaults = {
+				'home_phone': form_data['home_phone'],
+				'birthdate': form_data['birthdate'],
+				'address': form_data['address'],
+				'email': form_data['email'],
+				'allergies': form_data['allergies'],
+				'comments': form_data['comments'],
+				'emergency_contact_name' : emergency_name,
+				'emergency_contact_phone' : parent_data['emergency_cell_phone'],
+				'relation' : parent_data['emergency_relation'],
+				'parent': parent,
+				'school': school,
+				'period': period
+			}
 
-			except ObjectDoesNotExist:
-				addr = "{0}, {1} {2}".format(
-						form_data['street_address'], form_data['city'], 
-						form_data['postal_code'])
-				student = Student(
-					first_name=form_data['first_name'], 
-					last_name=form_data['last_name'],
-					home_phone=form_data['home_phone'],
-					birthdate=form_data['birthdate'],
-					address=addr,
-					email=form_data['email'],
-					allergies=form_data['allergies'],
-					comments=form_data['comments'],
-					parent = parent,
-					school=school,
-					period=period
-				)
+			student, created = Student.objects.get_or_create(
+				first_name=form_data['first_name'], 
+				last_name=form_data['last_name'],
+				defaults=defaults)
 
-			student.save()
-			return student, "%s %s was saved successfully." % (student.first_name, student.last_name)
+			if not created:
+				# update existing student with new values
+				for attr, value in defaults.iteritems():
+					setattr(student, attr, value)
+				student.save()
+
+			return student, None
 		else:
-			return None, "%s %s could not be updated." % (student.first_name, student.last_name)
+			return None, "Student could not be updated."
 
 	# THINK OF SOMETHING BETTER 
 	def register_classes(self, student, form):
-		course_status = {}
+		course_status = []
+		classes = []
 
 		form_data = form.cleaned_data
 		for field, value in form_data.iteritems():
-			if type(value) is str and "id_" in value:
+			print (field, type(value), value)
+			if type(value) is unicode and "id_" in value:
 				class_id = int(value.split('id_')[-1])
 				classs = Class.objects.get(pk=class_id)
+				classes.append(classs)
 
 				current_size = ClassRegistration.objects.filter(reg_class=classs).count()
-				registered = current_size + 1 <= classs.class_size
+				registered = (current_size + 1 <= classs.class_size)
+				if registered:
+					msg = "Registered successfully."
+				else:
+					msg = "Added to waiting list."
 
-				course_status['%s %s' % (classs.course.name, classs.section)] = registered
+				try:
+					reg = ClassRegistration(reg_class=classs, student=student, 
+						registration_status=registered, school=classs.school, period=classs.period)
+					reg.save()
+				except IntegrityError:
+					msg = "The student is already registered in this class."
 
-				reg = ClassRegistration(reg_class=classs, student=student, 
-					registration_status=registered)
-				reg.save()
+				course_status.append('%s %s: %s' % (classs.course.name, classs.section, msg))
+		
+		return classes, course_status
 
 
 	# process the data from the parent and student forms
 	def done(self, form_list, **kwargs):
-		context_dictionary = {}
-
-		parent, context_dictionary['parent_message'] = self.create_parent(form_list[0])
-		student, context_dictionary['student_message'] = self.create_student(parent, form_list[1])
-		context_dictionary['course_status'] = self.register_classes(student, form_list[1])
-
+		del self.request.session['parent_id']
 		return render_to_response(
-			"registration/course_registration_summary.html", 
+			"registration/course_registration_parent.html", 
 			context_dictionary)
 
 
-
+# TODO: School/Period
+#  should have some way to use the model form...
 def payment_create(request, parent_id):
-	return render_to_response("registration/course_registration_payment.html", 
-		{}, RequestContext(request))
+	message = {}
+	if request.method == 'POST':
+		pay = Payment(parent=Parent.objects.get(pk=parent_id))
+		pf = PaymentRegistrationForm(request.POST, instance=pay, prefix='payment_form')
+		
+		if pf.is_valid():
+			payment = pf.save()
+			message['success'] = "Receipt %s was saved successfully." % payment.receipt_no
+			del request.session['parent_id']
+			return HttpResponse(json.dumps(message), content_type="application/json")
+		else:
+			message['errors'] =  pf.errors 
+			return HttpResponseBadRequest(json.dumps(message), content_type="application/json")
 
 def lkccourse_register(request, page_no=None):
 	if page_no is None or page_no == "1" :

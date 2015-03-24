@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from accounts.models import *
 from accounts.forms import *
+from accounts.utils import *
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
 from django.http import HttpResponseRedirect
@@ -9,6 +10,8 @@ from django.contrib.auth import login
 from django.contrib.auth import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.forms import ChoiceField
+
 
 #===================                  ======================= TEACHER
 def create_teacher_view(request):
@@ -37,7 +40,8 @@ def create_teacher_view(request):
                     
                 user = User(username=user_form.cleaned_data['email'].lower(), email=user_form.cleaned_data['email'].lower(),
                             first_name=user_form.cleaned_data['first_name'], last_name=user_form.cleaned_data['last_name'])
-                user.set_password(user_form.cleaned_data['password'])
+                #user.set_password(user_form.cleaned_data['password'])
+                user.password = user_form.cleaned_data['password']
                 user.save()
                 #user = user_form.save(username=self.cleaned_data['email'].lower(),commit=False)
                 availability = availability_form.save()
@@ -88,13 +92,15 @@ def create_teacher_view(request):
 
 
 def view_teachers_view (request, teacher_id=None):
-    #teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
-    teacher_list = TeacherUser.objects.all()
+    teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
+    #teacher_list = TeacherUser.objects.all()
     context_dictionary = {'teacher_list': teacher_list}
 
     if teacher_id:
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
+            if not (request.user.userprofile.school == teacher.user.school and request.user.userprofile.period == teacher.user.period):
+                raise ObjectDoesNotExist
             context_dictionary['teacher'] = teacher
         except ObjectDoesNotExist:
             context_dictionary['not_valid_teacher'] = True
@@ -102,12 +108,15 @@ def view_teachers_view (request, teacher_id=None):
     return render(request, "teachers/teacher_list.html",
         context_dictionary)
 
+
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
         teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
         context_dictionary = {'teacher_list': teacher_list}
 
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
+            if not (request.user.userprofile.school == teacher.user.school and request.user.userprofile.period == teacher.user.period):
+                raise ObjectDoesNotExist
             
             if request.method == 'POST': #assume if it was a post then the teacher exists, because otherwise a form wouldn't have appeared
                                         #!!!!! actually can't do that, imagine if teacher is deleted by another admin while on this page
@@ -118,7 +127,7 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
                 
                 teacher_form = TeacherForm(request.POST, instance = teacher)
                 teacher_phone = TeacherProfileForm(request.POST, instance = user_profile)
-                user_form = MyUserEditForm(request.POST, instance = user)
+                user_form = MyUserCreationForm(request.POST, instance = user)
                 availability_form = AvailabilityForm(request.POST, instance = availability)
 
                 context_dictionary['teacher'] = teacher
@@ -158,7 +167,7 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
                 context_dictionary['teacher'] = teacher
                 context_dictionary['teacher_form'] = TeacherForm(instance=teacher) #hope these come with pre-filled fields
                 context_dictionary['teacher_phone'] = TeacherProfileForm(instance=teacher.user)
-                context_dictionary['user_form'] = MyUserEditForm(instance=teacher.user.user)
+                context_dictionary['user_form'] = MyUserCreationForm(instance=teacher.user.user)
                 context_dictionary['availability_form'] = AvailabilityForm(instance=teacher.teaching_availability)    
                 
         except ObjectDoesNotExist:
@@ -168,8 +177,46 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
                    context_dictionary)
 
 
-def upload_teachers_view (request):
-    return render(request, "teachers/teacher_upload.html")
+def upload_teachers_view(request):
+
+    condict = {'upload_form' : TeacherCSVForm()}
+
+    if request.method == 'POST':
+        upload_form = TeacherCSVForm(request.POST, request.FILES)
+        
+        if not upload_form.is_valid():
+            return render(request, "teachers/teacher_upload.html", {'upload_form' : upload_form })
+
+        school = request.user.userprofile.school
+        period = request.user.userprofile.period
+        tlist, errors = validate_teachers_csv(request.FILES['file'], school, period)
+
+        if errors:
+            condict['errors'] = errors
+        
+        else:
+            #save only if the csv had no errors
+            teachers = []
+            for t_tuple in tlist:
+                user = t_tuple[0]
+                profile = t_tuple[1]
+                avail = t_tuple[2]
+                teacher = t_tuple[3]
+
+                user.save()
+                profile.user = user
+                profile.save()
+                teacher.user = profile
+                avail.save()
+                teacher.teaching_availability = avail
+                teacher.save()
+                
+                teachers.append(teacher)
+
+            condict['teacher_list'] = teachers
+
+        
+    return render(request, "teachers/teacher_upload.html", condict)
 
 def export_teachers_view (request):
     return render(request, "teachers/teacher_export.html")
@@ -183,7 +230,11 @@ def create_admin_view(request):
     if request.method == 'POST':
 
         user_form = MyUserCreationForm(request.POST)
-        admin_form = AdminProfileForm(request.POST)
+        admin_form = None
+        if request.user.userprofile.role =='SCHOOL_ADMIN':
+            admin_form = NoRoleAdminProfileForm(request.POST)
+        elif request.user.userprofile.role =='SYSTEM_ADMIN':
+            admin_form = AdminProfileForm(request.POST)
 
         if user_form.is_valid() and admin_form.is_valid():
 
@@ -191,13 +242,16 @@ def create_admin_view(request):
                 
                 user = User(username=user_form.cleaned_data['email'].lower(), email=user_form.cleaned_data['email'].lower(),
                                 first_name=user_form.cleaned_data['first_name'], last_name=user_form.cleaned_data['last_name'])
-                user.set_password(user_form.cleaned_data['password'])
+                #user.set_password(user_form.cleaned_data['password'])
+                user.password = user_form.cleaned_data['password']
                 user.save()
                     
                 profile = admin_form.save(commit=False)
                 profile.user = user
                 profile.school = request.user.userprofile.school
                 profile.period = request.user.userprofile.period
+                if request.user.userprofile.role == 'SCHOOL_ADMIN':
+                    profile.role = 'SCHOOL_ADMIN'
                 profile.save()
             
                 user_ret = user
@@ -224,8 +278,12 @@ def create_admin_view(request):
 
     password = User.objects.make_random_password()
     user_form = MyUserCreationForm(initial={'password': password})
-    admin_form = AdminProfileForm()
-
+    admin_form = None
+    if request.user.userprofile.role =='SCHOOL_ADMIN':
+        admin_form = NoRoleAdminProfileForm()
+    elif request.user.userprofile.role =='SYSTEM_ADMIN':
+        admin_form = AdminProfileForm()
+    
     
     
     return render(request, 'admins/create_admin.html', {
@@ -238,36 +296,61 @@ def create_admin_view(request):
 def view_admins_view (request, admin_id=None):
 
     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
+    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school)
     context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
     if admin_id:
         try:
             admin = UserProfile.objects.get(pk=admin_id)
-            if admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN':   
+            if admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN':   #so as to not display teachers, if a teacher's userprofile id was entered in the url
+                if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.school)):
+                    raise ObjectDoesNotExist #school admin is from another school
+                
                 context_dictionary['admin'] = admin
+            else:
+                raise ObjectDoesNotExist #ie. admin is a teacher
         except ObjectDoesNotExist:
-            pass
+            context_dictionary['not_valid_id'] = True
 
     return render(request, "admins/admin_list.html",
         context_dictionary)
 
-def edit_admin_view (request, admin_id): #there should always be a teacher_id here
+def edit_admin_view (request, admin_id): #there should always be an admin_id here
+    #!!! probably block off this view entirely for teachers !!!
+    
         system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN")
+        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school)
         context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
         try:
+            context_dictionary['error']='There is no admin with that id.'
             admin = UserProfile.objects.get(pk=admin_id)
+            context_dictionary['error']=None
             
-            if request.method == 'POST': #assume if it was a post then the teacher exists, because otherwise a form wouldn't have appeared
-                                        #!!!!! actually can't do that, imagine if teacher is deleted by another admin while on this page
+            #so as to not display teachers, if a teacher's userprofile id was entered in the url
+            if not (admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN'):
+                context_dictionary['error']='There is no admin with that id.'
+                raise ObjectDoesNotExist
+
+            #to prevent editing school admins that aren't in the current school
+            if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.user.userprofile.school)):
+                context_dictionary['error']='You are not authorized to edit this admin.'
+                raise ObjectDoesNotExist
+
+            #to prevent school admins from editing system admins
+            if admin.role == 'SYSTEM_ADMIN' and request.user.userprofile.role == 'SCHOOL_ADMIN':
+                context_dictionary['error']='You are not authorized to edit this admin.'
+                raise ObjectDoesNotExist
+
+            
+            if request.method == 'POST': #assume if it was a post then the admin exists, because otherwise a form wouldn't have appeared
+                                        #!!!!! actually can't do that, imagine if this admin is deleted by another admin while on this page
                 user = admin.user
                 
-                admin_form = AdminProfileForm(request.POST, instance = admin)
-                user_form = MyUserEditForm(request.POST, instance = user)
+                admin_form = NoRoleAdminProfileForm(request.POST, instance = admin)
+                user_form = MyUserCreationForm(request.POST, instance = user)
 
                 context_dictionary['admin'] = admin
                 context_dictionary['admin_form'] = admin_form
@@ -300,10 +383,11 @@ def edit_admin_view (request, admin_id): #there should always be a teacher_id he
             else:
 
                 context_dictionary['admin'] = admin
-                context_dictionary['admin_form'] = AdminProfileForm(instance=admin) #hope these come with pre-filled fields
-                context_dictionary['user_form'] = MyUserEditForm(instance=admin.user)
+                context_dictionary['admin_form'] = NoRoleAdminProfileForm(instance=admin) #hope these come with pre-filled fields
+                context_dictionary['user_form'] = MyUserCreationForm(instance=admin.user)
                 
         except ObjectDoesNotExist:
+            
              pass #template will display error message because there's no admin
 
         return render(request, "admins/edit_admin.html",
@@ -317,9 +401,12 @@ def login_view(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
         
-        if login_form.is_valid(): 
+        if login_form.is_valid():
             user = authenticate(username=login_form.cleaned_data['email'].lower(), password=login_form.cleaned_data['password'])
+            #user = User.objects.all().filter(username=login_form.cleaned_data['email'].lower(), password=login_form.cleaned_data['password'])
             if user is not None:
+            #if user.exists():
+                #the_user = user[0]
                 if user.is_active:
                     login(request, user) 
                     print (user.userprofile.school)

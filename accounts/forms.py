@@ -46,6 +46,8 @@ class MyUserCreationForm(ModelForm):
         model = User
         fields = ['email', 'password', 'first_name', 'last_name']
 
+
+#WILL NOT USE THIS IF WE'RE JUST STORING THE PASSWORD DIRECTLY IN THE DB
 class MyUserEditForm(ModelForm):
 
     email = forms.EmailField(required=True)
@@ -57,6 +59,13 @@ class MyUserEditForm(ModelForm):
         fields = ['email', 'first_name', 'last_name'] #no password changing on edit
 
 
+#This is for restricting school admins to being able to only create school admins
+class NoRoleAdminProfileForm(ModelForm):
+    
+    class Meta():
+        model = UserProfile
+        fields = ['phone']
+        
 class AdminProfileForm(ModelForm):
 
     role = ChoiceField(label='Admin Type', choices=(('SYSTEM_ADMIN', 'System Admin'), ('SCHOOL_ADMIN', 'School Admin')), required=True)
@@ -80,6 +89,9 @@ class TeacherForm(ModelForm):
         fields = ['comments']
 
 
+class TeacherCSVForm(forms.Form):
+	file = forms.FileField()
+	
 class AvailabilityForm(ModelForm):
     
     class Meta():

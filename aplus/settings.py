@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     #'sendgrid',
 
 )
+AUTHENTICATION_BACKENDS = ( 'accounts.backend.NoHashBackend', )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

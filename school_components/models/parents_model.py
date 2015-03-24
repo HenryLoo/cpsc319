@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 class Parent(models.Model):
 	first_name = models.CharField(max_length=50)
@@ -25,13 +26,13 @@ class Parent(models.Model):
 
 	class Meta:
 		app_label = 'school_components'
-		unique_together = ('first_name', 'last_name')
+		unique_together = ('first_name', 'last_name', 'period')
 
 
 class Payment(models.Model):
 	receipt_no = models.CharField(max_length=50)
 	amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-	date = models.DateField(null=True, blank=True)
+	date = models.DateField(null=True, blank=True, default=datetime.now())
 	parent = models.ForeignKey('Parent', related_name='payment')
 
 	def __unicode__(self):

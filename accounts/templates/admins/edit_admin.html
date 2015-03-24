@@ -110,7 +110,7 @@ $('#edit-admin-btn').click(function() {
 
 	{% else %}
 		<div class="alert alert-info" role="alert">
-			There is no admin with that id.
+			{{ error }}
 		</div>
 	{% endif %}
 </div>

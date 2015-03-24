@@ -61,7 +61,7 @@ $('#edit-admin-btn').click(function() {
 
 	  		<li>
 	  		<a href="{% url 'account:view_admins' admin.id %}">
-	  			 {{ admin.user }} {{ admin.user.last_name }}
+	  			 {{ admin.user.first_name }} {{ admin.user.last_name }}
 	  		</a>
 	  		</li>
 	  	{% endfor %}
@@ -93,11 +93,14 @@ $('#edit-admin-btn').click(function() {
 	{% if admin %}
 	<span>
 		<h3> Admin Info </h3>
+		{% if admin.role == 'SYSTEM_ADMIN' and user.userprofile.role == 'SCHOOL_ADMIN' %} 
+		{%else%}
 		<a href="{% url 'account:edit_admin' admin.id %}" id="edit-admin-btn" class="pull-right"> Edit </a>
+		{%endif%}
 	</span>
 	<table class="table table-hover">
 		<tr> 
-			<td> ID: </td>
+			<td> Admin ID: </td>
 			<td> {{ admin.id }} </td>
 		</tr>
 		<tr> 
@@ -118,19 +121,25 @@ $('#edit-admin-btn').click(function() {
 			<td> Phone number: </td>
 			<td> {{ admin.phone }} </td>
 		</tr>
-		{% if admin.role != "SYSTEM_ADMIN" %}
+		<!--{% if admin.role != "SYSTEM_ADMIN" %}
 		<tr> 
 			<td> School branch: </td>
-			<td> {{ admin.school_branch.title }} </td>
+			<td> {{ admin.school.title }} </td>
 		</tr>
-		{% endif %}
+		{% endif %}-->
 
 	</table>
 
 	{% else %}
+		{%if not_valid_id%} 
+		<div class="alert alert-info" role="alert">
+			There is no admin in this school with that id.
+		</div>
+		{%else%}
 		<div class="alert alert-info" role="alert">
 			Select an admin to view details.
 		</div>
+		{%endif%}
 	{% endif %}
 </div>
 

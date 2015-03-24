@@ -1,4 +1,5 @@
 from django import forms
+from datetime import datetime
 from school_components.models import Class, Payment
 
 class ParentContactRegistrationForm(forms.Form):
@@ -72,23 +73,6 @@ class ParentContactRegistrationForm(forms.Form):
 			attrs={
 				'class': 'form-control', 
 				'type': 'tel'
-			}
-		))
-	emergency_home_phone = forms.CharField(
-		max_length=20,
-		widget=forms.TextInput(
-			attrs={
-				'class': 'form-control', 
-				'type': 'tel'
-			}
-		))
-	contact_comments = forms.CharField(
-		max_length=500,
-		required=False,
-		widget=forms.Textarea(
-			attrs={
-				'class': 'form-control',
-				'rows': 2
 			}
 		))
 
@@ -214,6 +198,7 @@ class PaymentRegistrationForm(forms.ModelForm):
 			}
 		))
 	date = forms.DateField(
+		initial=datetime.now(),
 		widget=forms.DateInput(
 			attrs={
 				'class':'datepicker form-control'

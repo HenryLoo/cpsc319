@@ -15,6 +15,8 @@ def populate():
     period = Period.objects.create(description='Summer 2015', start_date='2015-03-25', end_date='2015-03-31', comments='First school year of the system', school= school)
 
     system_admin_user = User.objects.create_user(username='admin@email.com', email='admin@email.com', password='admin', first_name='Admin First Name', last_name='Admin Last Name')
+    system_admin_user.password = 'admin'
+    system_admin_user.save()
     system_admin_userprofile = UserProfile.objects.create(user= system_admin_user, phone='778-666-000', role='SYSTEM_ADMIN', period=period, school=school)
 
 if __name__ == '__main__':

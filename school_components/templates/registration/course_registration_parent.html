@@ -2,21 +2,11 @@
 {% load i18n %}
 
 {% block register_content %}
-<ul class="nav nav-tabs nav-justified">
-    <li role="presentation" class="active"><a href="{% url 'school:courseregister' %}">Registration Form</a></li>
-    <li role="presentation"><a href="{% url 'school:lkccourseregister' %}">LKC Registration Form</a></li>
-</ul>
-
 <div class="row">   
   <div class="col-lg-12">
       <h1 class="page-header">
-          Registration<small> Registration Form</small>
+          Registration
       </h1>
-      <ol class="breadcrumb">
-          <li class="active">
-              <i class="fa fa-sitemap"></i> <a> Registration > Registration Form</a>
-          </li>
-      </ol>
   </div>
 </div>
 
@@ -73,25 +63,16 @@
           </div>
 
           <div class="form-group">
-            <label>Relation</label>
-            {{ wizard.form.emergency_relation }}
-          </div>
-
-          <div class="form-group">
             <div class="form-half-size">
               <label>Cell Phone</label>
               {{ wizard.form.emergency_cell_phone }}
             </div>
             <div class="form-half-size">
-              <label>Home Phone</label>
-              {{ wizard.form.emergency_home_phone }}
+              <label>Relation</label>
+              {{ wizard.form.emergency_relation }}
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Comments</label>
-            {{ wizard.form.contact_comments }}
-          </div>
       </div>
     </div>
 

@@ -1,5 +1,5 @@
 
-from school_components.models.classes_model import Class, ClassRegistration, Assignment, Grading, Assignment
+from school_components.models.classes_model import *
 from school_components.models.students_model import Student
 from school_components.forms.classes_form import *
 from django.shortcuts import render_to_response
@@ -71,25 +71,7 @@ def class_create(request):
 
 def class_registration(request, class_id=None):
 	if request.POST:
-		# register student in class
-		student_id = request.GET['student_id']
-		student = Student.objects.get(pk=student_id)
-		classs = Class.objects.get(pk=class_id) 
-		school = request.user.userprofile.school
-		period = request.user.userprofile.period
-
-		try:
-			cr = ClassRegistration(
-				reg_class=classs, student=student, registration_status=True,
-				school=school, period=period)
-			cr.save()
-			return HttpResponse("Successfully registered.")
-
-		except IntegrityError:
-			return HttpResponse("That student is already registered.")
-
-		except Exception as e:
-			return HttpResponseBadRequest(e)
+		return class_registration_helper(request, class_id)
 
 	else:
 		class_list = Class.objects.filter(
@@ -99,12 +81,58 @@ def class_registration(request, class_id=None):
 
 		if class_id:
 			cl = Class.objects.get(pk=class_id)
-			context_dictionary['class'] = cl
+			context_dictionary['class'] = cl 
 			context_dictionary['student_list'] = Student.objects.all()
+			context_dictionary['form'] = ClassRegistrationForm()
+			context_dictionary['remove_form'] = RemoveClassRegistrationForm()
 		
 		return render_to_response("classes/class_registration.html",
 			context_dictionary,
 			RequestContext(request))
+
+# register student to class
+def class_registration_helper(request, class_id):
+	student_id = request.POST['student_id']
+	student = Student.objects.get(pk=student_id)
+	
+	# check if on waiting list
+	reg = student.enrolled_student.filter(reg_class__id=class_id)
+	if len(reg) > 0:
+		class_reg = reg[0]
+		class_reg.registration_status = True
+		class_reg.save()
+		return HttpResponse("Successfully registered.")
+
+	try:
+		reg_class = Class.objects.get(pk=class_id)
+		school = request.user.userprofile.school
+		period = request.user.userprofile.period
+		cr = ClassRegistration(
+			reg_class=reg_class, student=student, school=school, 
+			period=period, registration_status=True)
+
+		cr.save()
+		return HttpResponse("Successfully registered.")
+	except IntegrityError:
+		return HttpResponse("This student is already registered.")
+	
+	except Exception as e:
+		return HttpResponseBadRequest(e)
+
+# delete student from class
+def class_remove_registration(request, class_id):
+	try:
+		student_id = request.POST['student_id']
+		student = Student.objects.get(pk=student_id)
+		reg_class = Class.objects.get(pk=class_id)
+		cr = ClassRegistration.objects.filter(
+			student=student).filter(reg_class=reg_class)
+		cr.delete()
+		return HttpResponse("Successfully removed from course.")
+	
+	except Exception as e:
+		return HttpResponseBadRequest(e)
+
 
 def class_attendance(request, class_id=None):
 	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
@@ -197,7 +225,6 @@ def class_assignment(request, class_id=None):
             # Redirect to the document list after POST
 			return HttpResponseRedirect(
 				reverse('school:classassignment', args=(class_id,)))
-
 	else:
 		form = ClassAssignmentForm()
 

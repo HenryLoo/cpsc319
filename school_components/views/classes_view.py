@@ -246,7 +246,7 @@ def class_reportcard(request, class_id=None, student_id=None):
 		s = Student.objects.get(pk=student_id)
 		context_dictionary['student'] = s
 
-		grading_list = Grading.objects.filter(student=s, reg_class=c).order_by('-date').reverse()
+		grading_list = Grading.objects.filter(student=s, reg_class=c).order_by('-assignment__date').reverse()
 		context_dictionary['gradinglist'] = grading_list
 
 	return render_to_response('classes/class_reportcard.html', context_dictionary,

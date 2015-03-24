@@ -239,7 +239,8 @@ def classes_schedule_page(request):
     if return_dict['weekday'] not in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']:
         return_dict['weekday'] = datetime.datetime.today().strftime('%a')
 
-    classSchedule = ClassSchedule.objects
+    filteredClassIDs = Class.objects.filter(school_id=currentSchool, period_id=currentPeriod).values_list('id', flat=True)
+    classSchedule = ClassSchedule.objects.filter(sch_class_id__in=filteredClassIDs)
     if return_dict['weekday'] == 'Mon':
         classSchedule = classSchedule.filter(monday=True)
     elif return_dict['weekday'] == 'Tue':

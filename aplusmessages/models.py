@@ -60,8 +60,8 @@ class SentMessage(models.Model):
 #previous:
 
 class Email(models.Model):
-	#email = models.CharField(max_length=200)
+    #email = models.CharField(max_length=200)
 
-	def get_absolute_url(self):
-		return reverse()
+    def get_absolute_url(self):
+        return reverse()
 

@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.messages import get_messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import sendgrid
-from school_components.models.students_model import *
+from school_components.models import *
 from accounts.models import UserProfile, TeacherUser
 from .models import SentMessage
 from aplusmessages.forms import EMailForm
@@ -27,13 +27,26 @@ def save_email(request, to_type, to_emails, cc_emails, bcc_emails, from_email, s
                                       status=status, status_message=status_message)
 
 
+
+def get_send_choices(request):
+    user_choices = SentMessage.SEND_CHOICES
+    
+    '''
+    for dep in Department.objects.all():
+        dep = (dep.name, "DEP-"+str(dep.id),)
+        user_choices = user_choices + (dep,)
+    '''
+    return user_choices
+
+
+
 '''
 sends email to selected group of people or to individual
 '''
 def send_email(request):
     clear_messages(request)
     if request.method == 'POST':
-        form = EMailForm(request.POST)
+        form = EMailForm(request.POST, choices=get_send_choices(request))
         if form.is_valid():
             to_group = str(form.cleaned_data['to_group'])
             to_mail = str(form.cleaned_data['to_mail'])
@@ -82,6 +95,7 @@ def send_email(request):
                         email_lists.append(aemail)
 
 
+
                 if email_lists:
                     #removing any empty
                     email_lists = filter(None, email_lists)
@@ -104,7 +118,8 @@ def send_email(request):
 
             if message.bcc or message.to:
                 status, msg = sg.send(message)
-                email_lists = ','.join(map(str, email_lists))
+                if to_group != SentMessage.SEND_IND:
+                    email_lists = ','.join(map(str, email_lists))
                 if status == 200:
                     save_email(request, to_group, email_lists, email_lists, email_lists, from_email, subject_mail, content_mail, content_mail, SentMessage.STATUS_SENT, msg)
                     messages.success(request, 'Your email was successfully sent.')
@@ -114,7 +129,7 @@ def send_email(request):
             else:
                 messages.error(request, 'No emails are present')
     else:
-        form = EMailForm()
+        form = EMailForm(choices=get_send_choices(request))
 
     return render(request, 'messages/messages_page.html', {
         'form': form,
@@ -123,7 +138,7 @@ def send_email(request):
 def sent_mail(request):
     #getting sent mail for logged in user
     #Once authentication is implemented, you can use below instead getting all
-    #sent_messages = SentMessage.objects.filter(sender=UserProfile.objects.get(user=request.user)
+    #sent_messages = SentMessage.objects.filter(sender=UserProfile.objects.get(user=request.user))
     sent_messages = SentMessage.objects.all().order_by('-created')
 
     paginator = Paginator(sent_messages, 10) # Show 10 contacts per page

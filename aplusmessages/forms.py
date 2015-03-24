@@ -5,13 +5,14 @@ from .models import SentMessage
 
 class EMailForm(forms.Form):
 
-    to_group = forms.ChoiceField(label="To", choices=SentMessage.SEND_CHOICES, required=False)
+    to_group = forms.ChoiceField(label="To", required=False)
     to_mail = forms.EmailField(label="Or ", error_messages={'required': "'To' field is required"}, required=False)
     subject_mail = forms.CharField(label="Subject", max_length=100, error_messages={'required': "'Subject' field is required"})
     content_mail = forms.CharField(label="Message", widget=forms.Textarea(attrs={'cols': 54, 'rows': 10}),
       error_messages={'required': "'Message' field is required"})
 
     def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices')
         super(EMailForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_id = 'form-email'
@@ -30,6 +31,8 @@ class EMailForm(forms.Form):
             Div(Field('subject_mail'), css_class="row"),
             Div(Field('content_mail'), css_class="row")
         )
+
+        self.fields['to_group'] = forms.ChoiceField(choices=choices, label="To")
 
 
     def clean(self):

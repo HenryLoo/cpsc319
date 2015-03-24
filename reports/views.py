@@ -25,13 +25,16 @@ def class_list(request, class_id=None):
 
 # fn for generate the section list according to the class above in the dropdown menu   
 def find_section(request, class_id=None):
-    search_text = request.POST['course_name']
-    courses = Course.objects.filter(name = search_text)
-    print courses
-    c = Class.objects.filter(course = courses)[1]
-    print c
-    section_num = c.section.get()
-    return render('reports/view_reports.html',
+        search_text = "Sikh History"
+        courses = Course.objects.filter(name = search_text)
+        print courses
+        c = Class.objects.filter(course = courses)[1]
+        print c
+    # find out all the section for one class
+        section_num = c.section
+        print section_num
+        print [for class_section in c.all()]
+        return render('reports/view_reports.html',
                    {'section_num': section_num})
 
 # fn for searching the st_name and phone # according to the given class name + section #
@@ -59,18 +62,16 @@ def search_st(request):
 # according to the given class name,section # and range of dates
 def search_attendance(request):
     if request.method == "POST":
-        start_date = request.post['start_date']
-        end_date = request.post['end_date']
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
         search_text = request.POST['course_name']
         search_num = request.POST['section']
-        search_st = request.POST['st_name']
         
     courses = Course.objects.filter(name = search_text)
     c = Class.objects.get(course = courses, section = search_num)
     class_attendance = ClassAttendance.objects.get(Class_reg_class= c,
                                                    date__gte= start_date,
-                                                   date__lte= end_date,
-                                                   Student_name= search_st)
+                                                   date__lte= end_date)
     print class_attendance
     return render_to_response('reports/view_reports.html',
 			context_dictionary,

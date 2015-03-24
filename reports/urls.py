@@ -5,7 +5,12 @@ urlpatterns = patterns('',
    
     #reports
     url(r'^view_reports/','reports.views.view_reports',name='view_reports'),
-    url(r'^create_new_report_page/','reports.views.create_new_report_page',name='create_new_report_page'),
-                       
-   
+
+    url(r'^search_st/','reports.views.search_st',name='search_st'),
+
+    url(r'^class_list/','reports.views.class_list',name='class_list'),
+
+    url(r'^find_section/','reports.views.find_section',name='find_section'),
+
+    url(r'^search_attendance/','reports.views.search_attendance',name='search_attendance'),
 )

@@ -16,7 +16,6 @@
                 </div>
 
 <div class="row">
-
              <div class="col-lg-4">
                          <button class="btn btn-default" type="button" data-toggle="modal" data-target="#exportstudentdatabase-modal" style="width: 280px; height: 200px;">
                         
@@ -64,6 +63,7 @@
               
 </div>
 
+
 <!-- Multiple students Modal -->
 <div class="modal fade" id="exportstudentdatabase-modal" tabindex="-1" role="dialog" 
 aria-labelledby="myModalLabel" aria-hidden="true">
@@ -74,72 +74,38 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                 <h4 class="modal-title">Print Student-Phone</h4>
             </div>
             <div class="modal-body">
-                <div class="dropdown">
-                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption1" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                <div class="dropdown" id="stname">
+                    <form action = "{% url 'reports:search_st' %}" method ='POST'>
+                     {% csrf_token %}
+                     <select class="btn btn-default dropdown-toggle" name="course_name" type="button" id="conditionOption1" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
                         <option value="Blnak">Select Class</option>
-                        <option value="Tabla 201">Tabla 201</option>
-                        <option value="Sikh History 203">Sikh History 203</option>
-                        <option value="Sikh History 105">Sikh History 105</option>
-                        <option value="Gurmukhi/Santhiya 250">Gurmukhi/Santhiya 250</option>
-                        <option value="Tabla 101">Tabla 101</option>
+                        <option value="Tabla">Tabla</option>
+                        <option value="Sikh History">Sikh History</option>
+                        <option value="Gurmukhi/Santhiya">Gurmukhi/Santhiya</option>
                         <option value="...">...</option>
                      </select>
+                     <select class="btn btn-default dropdown-toggle" name="section" type="button" id="conditionOption0" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                        <option value="Blnak">Select Section</option>
+                        <option value="201">201</option>
+                        <option value="203">203</option>
+                        <option value="105">105</option>
+                        <option value="250">250</option>
+                        <option value="101">101</option>
+                        <option value="...">...</option>
+                     </select>
+                     <button type="submit" class="btn btn-default" id="search">Search</button>
+                     </form>
+                    <br>
+                    <table id="studentlist" class="table table-bordered table-striped">
+                    {% for c in class.enrolled_class.all%}
+                        <tr>
+                            <td>
+                                {{c.student.first_name}}{{c.student.last_name}}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </table>
                 </div>
-                
-                <br>
-                <table id="attendancetable" class="table table-bordred table-striped">
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Phone Number</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Jack</td>
-                            <td>123-456-7330</td>
-                        </tr>
-                    
-                        <tr>
-                            <td>Sarah</td>
-                            <td>012-315-6789</td>
-                        </tr>
-                        
-                        <tr>
-                            <td>Rosie</td>
-                            <td>098-725-4441</td>
-                        </tr>
-                        <tr>
-                            <td>Mike</td>
-                            <td>123-456-7890</td>
-                        </tr>
-                    
-                        <tr>
-                            <td>Joe</td>
-                            <td>012-345-5559</td>
-                        </tr>
-                        
-                        <tr>
-                            <td>Rosie</td>
-                            <td>098-765-4621</td>
-                        </tr>
-                        <tr>
-                            <td>Jack</td>
-                            <td>123-456-7890</td>
-                        </tr>
-                    
-                        <tr>
-                            <td>Sarah</td>
-                            <td>122-345-6789</td>
-                        </tr>
-                        
-                        <tr>
-                            <td>Laura</td>
-                            <td>092-333-4221</td>
-                        </tr>
-                    </tbody>
-            
-                </table>
             </div>
 
             <div class="modal-footer">
@@ -165,11 +131,6 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                             <div class='input-group date' id='datetimepicker1'>
                                 <input type='text' class="form-control" placeholder="Start Date yyyy/mm/dd"> to  <input type='text' class="form-control" placeholder="End Date yyyy/mm/dd">
                             </div>
-                        <script type="text/javascript">
-                            $(function () {
-                                            $('#datetimepicker1').datetimepicker();
-                                          });
-                         </script>
                         </div>
                     </form>
                 </div>
@@ -302,7 +263,7 @@ aria-labelledby="myModalLabel" aria-hidden="true">
                 
                 <br>
                 <div class="dropdown">
-                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption2" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
+                     <select class="btn btn-default dropdown-toggle" name="cond" type="button" id="conditionOption3" data-toggle="dropdown" aria-expanded="true" style="width: 180px; height: 40px">   
                         <option value="Blnak">Select Class</option>
                         <option value="Tabla 201">Tabla 201</option>
                         <option value="Sikh History 203">Sikh History 203</option>

@@ -1,0 +1,28 @@
+{% block classhistory %}
+
+{% if class_list %}
+	
+<table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Course</th>
+          <th>Period</th>
+        </tr>
+      </thead>
+      <tbody>
+      	{% for class in class_list %}
+        <tr>
+        	<td> {{ class }} </td>
+        	<td> {{ class.period}} </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+  </table>
+
+{% else %}
+
+	This student has not registered in any classes yet.
+
+{% endif %}
+
+{% endblock classhistory %}

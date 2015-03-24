@@ -76,6 +76,8 @@ class ClassRegistration(models.Model):
 	registration_status = models.BooleanField()
 	school = models.ForeignKey('School')
 	period = models.ForeignKey('Period')
+
+	# used in sorting on registration page
 	def class_period(self):
 		return self.reg_class.period
 

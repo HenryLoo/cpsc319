@@ -11,17 +11,27 @@
 <script>
 	// populate the class confirmation modal on the student form
 	$('#open-confirm-register-btn').click(function() {
+        var j = 0;
 		// get selected classes from dropdowns
 		var classes = $('.class-dropdown option:selected');
-		$('#class-confirmation-list').html("");
+        $('#class-confirmation-list').html("");
 
+        // if nothing is actually selected, disable register button
 		$.each(classes, function(i, elm) {
 			if ($(elm).val().length > 0) {
 				$('#class-confirmation-list').append(
 					"<li> "+ $(elm).text() + "</li>"
 				)
+                j++;
 			}
 		})
+
+        if (j == 0) {
+            $('#class-confirmation-list').html("Please select a class.");
+            $('#student-register-btn').prop("disabled",true);
+        } else {
+            $('#student-register-btn').prop("disabled",false);
+        }
 	});
 	
 	// makes the modal submit the form
@@ -103,7 +113,12 @@
     	} else {
     		$("input[value='FEMALE']").attr('checked', true);
     	}
-    }
+    };
+
+    function showClassHistory(class_history_html) {
+        $('#class-history-table').html(class_history_html);
+        $('#student-levels-div').removeClass("hidden");
+    };
 
     $('#id_student_form-first_name').autocomplete({
     	source: studentTags,
@@ -117,7 +132,7 @@
     			dataType: "json",   
     			success: function(data) {
     				fillStudentForm(data);
-    				showClassHistory(data['class_history'])
+    				showClassHistory(data['class_history_html'])
     			},
     			error: function(xhr) {
     				alert("Something went wrong!");

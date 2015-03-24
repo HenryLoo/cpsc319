@@ -27,6 +27,58 @@
 
                     <div class="col-lg-4">
                         <div class="panel panel-default" style="min-width: 800px; max-width: 800px;">
+                        
+                            <ul class="nav nav-pills" role="tablist">
+                                {% if weekday == 'Sun' %}
+                                    <li role="presentation" class="active">
+                                {% else %}
+                                    <li role="presentation">
+                                {% endif %}
+                                    <a href="?weekday=Sun">Sun</a></li>
+
+                                {% if weekday == 'Mon' %}
+                                    <li role="presentation" class="active">
+                                {% else %}
+                                    <li role="presentation">
+                                {% endif %}
+                                    <a href="?weekday=Mon">Mon</a></li>
+
+                                {% if weekday == 'Tue' %}
+                                    <li role="presentation" class="active">
+                                {% else %}
+                                    <li role="presentation">
+                                {% endif %}
+                                    <a href="?weekday=Tue">Tue</a></li>
+
+                                {% if weekday == 'Wed' %}
+                                    <li role="presentation" class="active">
+                                {% else %}
+                                    <li role="presentation">
+                                {% endif %}
+                                    <a href="?weekday=Wed">Wed</a></li>
+
+                                {% if weekday == 'Thu' %}
+                                    <li role="presentation" class="active">
+                                {% else %}
+                                    <li role="presentation">
+                                {% endif %}
+                                    <a href="?weekday=Thu">Thu</a></li>
+
+                                {% if weekday == 'Fri' %}
+                                    <li role="presentation" class="active">
+                                {% else %}
+                                    <li role="presentation">
+                                {% endif %}
+                                    <a href="?weekday=Fri">Fri</a></li>
+
+                                {% if weekday == 'Sat' %}
+                                    <li role="presentation" class="active">
+                                {% else %}
+                                    <li role="presentation">
+                                {% endif %}
+                                    <a href="?weekday=Sat">Sat</a></li>
+                            </ul>
+                                            
                             <table class="table">
                                 <thead>
                                     <tr>
@@ -37,36 +89,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row" style="width: 175px;">09:00 - 10:00</th>
-                                        <td><a href="#">Class 1</a></td>
-                                        <td>20</td>
-                                        <td>2</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="width: 175px;">10:00 - 11:00</th>
-                                        <td><a href="#">Class 2</a></td>
-                                        <td>20</td>
-                                        <td>2</td>
-                                    </tr>
-                                    <tr>
+                                    {% for class in schedule %}
+                                        <tr>
+                                            <th scope="row" style="width: 175px;">{{ class.0 }} - {{ class.1 }}</th>
+                                            <td><a href="{% url 'school:classlist' class.5 %}">{{ class.2 }}</a></td>
+                                            <td>{{ class.3 }}</td>
+                                            <td>{{ class.4 }}</td>
+                                        </tr>
+                                    {% endfor %}
+<!--                                     <tr>
                                         <th scope="row" style="width: 175px;">11:00 - 12:00 <span class="label label-info">Now</span></th>
                                         <td><a href="#">Class 3</a></td>
                                         <td>20</td>
                                         <td>2</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="width: 175px;">12:00 - 13:00</th>
-                                        <td><a href="#">Class 4</a></td>
-                                        <td>20</td>
-                                        <td>2</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="width: 175px;">13:00 - 14:00</th>
-                                        <td><a href="#">Class 5</a></td>
-                                        <td>20</td>
-                                        <td>2</td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>

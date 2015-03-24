@@ -36,31 +36,31 @@
                                 <h3 class="panel-title"><i class="fa fa-tachometer"></i>  Usage</h3>
                             </div>
                                 <div class="list-group">
-                                    <a href="#" class="list-group-item">
+                                    <a href="{% url 'school:studentlist' %}" class="list-group-item">
                                         <span class="badge">{{ usage.0 }}</span>
                                         <i class="fa fa-child"></i> Students
                                     </a>                                   
-                                    <a href="#" class="list-group-item">
+                                    <a href="{% url 'account:view_admins' %}" class="list-group-item">
                                         <span class="badge">{{ usage.1 }}</span>
                                         <i class="fa fa-user"></i> Admins
                                     </a>
-                                    <a href="#" class="list-group-item">
+                                    <a href="{% url 'account:view_teachers' %}" class="list-group-item">
                                         <span class="badge">{{ usage.2 }}</span>
                                         <i class="fa fa-users"></i> Teachers
                                     </a>
-                                    <a href="#" class="list-group-item">
+                                    <a href="{% url 'school:classlist' %}" class="list-group-item">
                                         <span class="badge">{{ usage.3 }}</span>
                                         <i class="fa fa-table"></i> Classes
                                     </a>
-                                    <a href="#" class="list-group-item">
+                                    <a href="{% url 'school:courselist' %}" class="list-group-item">
                                         <span class="badge">{{ usage.4 }}</span>
                                         <i class="fa fa-book"></i> Courses
                                     </a>
-                                    <a href="#" class="list-group-item">
+                                    <a href="{% url 'school:periodlist' %}" class="list-group-item">
                                         <span class="badge">{{ usage.5 }}</span>
                                         <i class="fa fa-calendar"></i> Periods
                                     </a>                                    
-                                    <a href="#" class="list-group-item">
+                                    <a href="{% url 'school:schoollist' %}" class="list-group-item">
                                         <span class="badge">{{ usage.6 }}</span>
                                         <i class="fa fa-university"></i> Schools
                                     </a>
@@ -306,7 +306,7 @@
     {% enddata %}
 
     {% options "performanceOptions" %}
-        kind: "BarChart"
+        kind: "LineChart"
     {% endoptions %}
     {% graph "performance_chart_div" "performanceData" "performanceOptions" %}
 

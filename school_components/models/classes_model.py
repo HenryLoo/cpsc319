@@ -96,7 +96,6 @@ class ClassAttendance(models.Model):
 		app_label = 'school_components'
 		unique_together = ('reg_class', 'student', 'date')
 
-
 class Assignment(models.Model):
 	reg_class = models.ForeignKey('Class')
 	title = models.CharField(max_length=100, blank=True)
@@ -111,12 +110,11 @@ class Assignment(models.Model):
 		app_label = 'school_components'
 
 class Grading(models.Model):
+	g_id = models.IntegerField(blank=True, null=True)
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
 	grade = models.IntegerField(blank=True, null=True)
-	#change to foreign key after
-	assignment = models.CharField(max_length=100, blank=True)
-	date = models.DateField(null=True, blank=True)
+	assignment = models.ForeignKey('Assignment')
 	comments = models.CharField(max_length=500)
 
 	class Meta:

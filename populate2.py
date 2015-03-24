@@ -93,10 +93,6 @@ def populate():
     class_registration2 = ClassRegistration.objects.create(reg_class=class1, student=student2, registration_status=True, school=school1, period=period1)
     class_registration3 = ClassRegistration.objects.create(reg_class=class1, student=student3, registration_status=True, school=school1, period=period1)
 
-    grading1= Grading.objects.create(reg_class=class1, student=student1, grade=10, assignment='Assignment 1', date='2015-03-25', comments='')
-    grading2= Grading.objects.create(reg_class=class1, student=student1, grade=5, assignment='Assignment 2', date='2015-03-26', comments='')
-    grading3= Grading.objects.create(reg_class=class1, student=student1, grade=8, assignment='Assignment 3', date='2015-03-27', comments='')
-
 if __name__ == '__main__':
 
     print ('Starting population script..')

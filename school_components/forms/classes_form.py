@@ -2,6 +2,7 @@ from django.forms import *
 from django import forms
 from school_components.models import *
 from accounts.models import TeacherUser
+from django.forms.models import BaseModelFormSet
 
 class ClassForm(ModelForm):
 	class Meta:
@@ -44,13 +45,6 @@ class ClassRegistrationForm(ModelForm):
 		model = ClassRegistration
 		fields = ['student']
 
-class ClassAttendanceForm(ModelForm):
-    attendance = ChoiceField(label='', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
-    
-    class Meta:
-        model = ClassAttendance
-        fields = ['comments', 'attendance']
-
 
 class ClassAssignmentForm(ModelForm):
 	content  = forms.FileField()
@@ -62,3 +56,17 @@ class ClassAssignmentForm(ModelForm):
 			'comments': forms.Textarea(attrs={'rows': 5}),
 			'date': DateInput(attrs={'class':'datepicker'}),
 		}
+
+class ClassGradingForm(ModelForm):
+
+
+	class Meta:
+		model = Grading
+		fields = ['student', 'grade', 'comments']
+
+class ClassAttendanceForm(ModelForm):
+    attendance = ChoiceField(label='', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
+    
+    class Meta:
+        model = ClassAttendance
+        fields = ['comments', 'attendance']

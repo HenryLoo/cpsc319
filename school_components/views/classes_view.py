@@ -1,5 +1,5 @@
 
-from school_components.models.classes_model import Class, ClassRegistration, Assignment
+from school_components.models.classes_model import Class, ClassRegistration, Assignment, Grading, Assignment
 from school_components.models.students_model import Student
 from school_components.forms.classes_form import *
 from django.shortcuts import render_to_response
@@ -8,6 +8,8 @@ from django.template import RequestContext
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
+from django.forms.formsets import formset_factory
+from django.forms.models import modelformset_factory
 
 def class_list(request, class_id=None):
 	class_list = Class.objects.filter(
@@ -111,22 +113,63 @@ def class_attendance(request, class_id=None):
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
-		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id)
+		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).values()
 		context_dictionary['classregistration'] = class_reg_list
 	
 	return render_to_response('classes/class_attendance.html', context_dictionary,
 		RequestContext(request))
 
-def class_performance(request, class_id=None):
+def class_performance(request, class_id=None, assignment_id=None):
+
 	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
-		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id)
+		
+		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).values('student')
 		context_dictionary['classregistration'] = class_reg_list
 	
+		assigments_list = Assignment.objects.filter(reg_class=c).order_by('-date')
+		context_dictionary['assignment_list'] = assigments_list
+
+		if assignment_id:
+			a = Assignment.objects.get(pk=assignment_id)
+			context_dictionary['assignment'] = a
+
+		GradingFormSetFactory = modelformset_factory(Grading, form=ClassGradingForm, extra=0)
+		
+	if request.method == "POST":
+
+		formset = GradingFormSetFactory(request.POST, queryset=ClassRegistration.objects.filter(reg_class__id = class_id))
+
+		if formset.is_valid():
+
+			instances = formset.save(commit=False)
+
+			for instance in instances:
+				newinstance = instance.save(commit=False)
+				newinstance.reg_class = c
+				newinstance.assignment = a
+				newinstance.save()
+
+			# for form in forms:
+			#  	new = form.save(commit=False)
+			#  	new.reg_class = c
+			#  	new.assignment = a
+			#  	new.save()
+				#form.save()
+		else:
+			context_dictionary['errors'] = formset.errors
+
+		return render_to_response('classes/class_grading.html', context_dictionary,RequestContext(request))
+
+	else:
+		formset = GradingFormSetFactory(queryset=ClassRegistration.objects.filter(reg_class__id = class_id))
+		
+	context_dictionary['formset'] = formset
+
 	return render_to_response('classes/class_grading.html', context_dictionary,
 		RequestContext(request))
 

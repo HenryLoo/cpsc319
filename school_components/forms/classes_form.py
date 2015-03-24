@@ -33,16 +33,22 @@ class ClassTeacherForm(ModelForm):
 
 
 class ClassRegistrationForm(ModelForm):
-	student = forms.ModelChoiceField(
-        queryset=Student.objects.all(),                       
-        widget=forms.CheckboxSelectMultiple, 
-        empty_label=None,
-        required=False
-    )
-
 	class Meta:
 		model = ClassRegistration
 		fields = ['student']
+		widgets = {
+			'student': forms.TextInput(
+				attrs={
+					'id': 'search-student-input',
+					'class': 'form-control',
+					'type': 'text',
+					'placeholder': 'Search for student...'
+				}
+			),
+		}
+
+class RemoveClassRegistrationForm(Form):
+	student_id = forms.CharField(widget=forms.HiddenInput())
 
 class ClassAttendanceForm(ModelForm):
     attendance = ChoiceField(label='', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)

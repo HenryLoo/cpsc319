@@ -1,22 +1,13 @@
 {% extends "courses/base_course.html" %}
 
-{% block hacky_script %}
-$('#edit-course-btn').click(function() {
-	var fields = $('td:nth-child(2)')
-	$.each(fields, function(i,elm) { 
-		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
-	})
-});
-{% endblock hacky_script %}
-
 
 
 {% block course_content %}
 <ul class="nav nav-tabs nav-justified">
-    <li role="presentation" class="active">
+    <li role="presentation">
         <a href="{% url 'school:courselist' %}">View Courses</a>
     </li>
-	<li role="presentation">
+	<li role="presentation" class="active">
         <a href="{% url 'school:deptlist' %}">View Departments</a>
     </li>
     <li role="presentation">
@@ -33,11 +24,11 @@ $('#edit-course-btn').click(function() {
   <div class="row">   
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Courses<small> List</small>
+                            Departments<small> List</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a>Courses > List</a>
+                                <i class="fa fa-sitemap"></i> <a>Departments > List</a>
                             </li>
                         </ol>
 
@@ -60,64 +51,40 @@ $('#edit-course-btn').click(function() {
 	</div>
 <br><br>
 
-	{% if course_list %}
+	{% if dept_list %}
 	<ul class="list-unstyled school-list">
-		{% for course in course_list %}
+		{% for department in dept_list %}
 	  		<li>
-	  		<a href="{% url 'school:courselist' course.id %}">
-	  			 {{ course.name }} 
+	  		<a href="{% url 'school:deptlist' department.id %}">
+	  			 {{ department.name }} 
 	  		</a>
 	  		</li>
 	  	{% endfor %}
 	</ul>
 
 	{% else %}
-		<div class="alert alert-info" role="alert">No courses have been added.</div>
+		<div class="alert alert-info" role="alert">No departments have been added.</div>
 	{% endif %}
 
 </div>
 
 <div class="col-md-9 school-info">
-	{% if course %}
+	{% if department %}
 	<span>
-		<h3> Course Info </h3>
-		<a href="#" id="edit-course-btn" class="pull-right"> Edit </a>
+		<h3> Department Info </h3>
+		<a href="{%url 'school:deptedit' department.id %}" id="edit-course-btn" class="pull-right"> Edit </a>
 	</span>
 	<table class="table table-hover">
 		<tr> 
 			<td> Name: </td>
 			<td> 
-				{{ course.name }}
-			</td>
-		</tr>
-		<tr> 
-			<td> Department: </td>
-			<td> 
-				{{ course.department }} 
-			</td>
-		</tr>
-		{% if course.age_requirement != 0 %}
-		<tr> 
-			<td> Age Requirement: </td>
-			<td> {{ course.age_requirement }} </td>
-		</tr>
-		{% endif %}
-		<tr>
-			<td> Prerequisite: </td>
-			<td> 
-				{% if prereq %} 
-					<a href="{% url 'school:courselist' prereq.id %}"> 
-					{{ prereq.name }} 
-					</a>
-				{% else %}
-					None
-				{% endif %}
+				{{ department.name }}
 			</td>
 		</tr>
 		<tr> 
 			<td> Description: </td>
-			{% if course.description %}
-			<td> {{ course.description }} </td>
+			{% if department.description %}
+			<td> {{ department.description }} </td>
 			{% else %}
 			<td> None </td>
 			{% endif %}
@@ -126,7 +93,7 @@ $('#edit-course-btn').click(function() {
 
 	{% else %}
 		<div class="content alert alert-info" role="alert">
-			Select a course to view details.
+			Select a department to view details.
 		</div>
 	{% endif %}
 </div>

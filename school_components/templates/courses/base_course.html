@@ -1,23 +1,5 @@
 {% extends "basetemplate.html" %}
 
-{% block javascript_block %}
-<script>
-    $("ul.nav-tabs>li").each(function(k, v) { 
-        var tab = $(v);
-        if (tab.text().includes(
-                {% block current_tab %}
-                {% endblock %}
-            )) {
-            tab.addClass("active");
-        } else {
-            tab.removeClass("active");
-        }   
-    }); 
-
-    {% block hacky_script %}
-    {% endblock hacky_script %}
-</script>
-{% endblock %}
 
 {%block head%}
 {% load staticfiles %}

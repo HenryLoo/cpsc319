@@ -17,13 +17,13 @@
   {{ parent_message }}
   {{ student_message }}
   {% for status in course_status %}
-    {{ status }}
+    {{ status }} <br>
   {% endfor %}
 </div>
 
-  <a href="#" onclick="window.print()">Print</a>
+  <a href="#" id="print-btn">Print</a>
 
-  <div>
+  <div class="print">
 
       <h3>{{ student }}</h3>
 
@@ -34,8 +34,10 @@
         </tr>
 
         {% for class in classes %}
-          <td> <strong>{{ class }} </strong></td>
-          <td> {{ class.schedule }} </td>
+          <tr>
+            <td> <strong>{{ class }} </strong></td>
+            <td> {{ class.schedule }} </td>
+          </tr>
         {% endfor %}
       </table>
 

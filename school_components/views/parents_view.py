@@ -71,10 +71,15 @@ def payment_create(request, parent_id):
 		
 		if pf.is_valid():
 			pf.save()
-
-			return HttpResponseRedirect(
-				reverse('school:parentlist', args=(parent_id,)))
+			
+			if request.is_ajax():
+				return HttpResponse("Payment added successfully.")
+			else:
+				return HttpResponseRedirect(
+					reverse('school:parentlist', args=(parent_id,)))
 		else:
+			if request.is_ajax():
+				return HttpResponse("An error occurred. Payment was not made.")
 			return render_to_response('parents/parent_form.html',
 				{'errors': pf.errors },
 				RequestContext(request))

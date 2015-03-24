@@ -14,9 +14,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)), #admin
                        
     url(r'^$', 'accounts.views.login_view', name='login_page'), #landing page = login
-                       
+
+    
+    url(r'^settings/edit/','aplus.views.settings_edit',name='settingsedit'),
     url(r'^settings/','aplus.views.settings_page',name='settings_page'), #settings
-                       
     #accounts
     url(r'^account/', include('accounts.urls', namespace='account', app_name='accounts')),
 

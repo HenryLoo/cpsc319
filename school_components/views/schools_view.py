@@ -4,6 +4,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 
 def school_list(request, school_id=None):
 	school_list = School.objects.all().order_by('title')
@@ -44,4 +45,30 @@ def school_change(request, school_id=None):
 
 	return render_to_response('schools/school_list.html',
 		RequestContext(request))
+
+def school_edit(request, school_id): #there should always be an school_id here
+    #!!! probably block off this view entirely for anybody but system admin !!!
+    
+        school_list = School.objects.all().order_by('title')
+        context_dictionary = {'school_list': school_list}
+        
+        try:
+                c = School.objects.get(pk=school_id)
+                context_dictionary['school_id']=school_id
+                if request.method == 'POST':
+                        school_form = SchoolForm(request.POST, instance = c)
+                        if school_form.is_valid():
+                                school_form.save()
+                                context_dictionary['success']=True
+                else:
+                        school_form = SchoolForm(instance = c)
+                        
+                context_dictionary['school_form'] = school_form
+                
+        except ObjectDoesNotExist:
+                context_dictionary['error'] = 'There is no school with that id.'
+
+        return render_to_response("schools/school_edit.html",
+                        context_dictionary,
+                        RequestContext(request))
 

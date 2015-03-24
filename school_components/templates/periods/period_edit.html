@@ -1,14 +1,5 @@
 {% extends "periods/base_period.html" %}
 
-<!--{% block hacky_script %}
-$('#edit-course-btn').click(function() {
-	var fields = $('td:nth-child(2)')
-	$.each(fields, function(i,elm) { 
-		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
-	})
-});
-{% endblock hacky_script %}-->
-
 {% block period_content %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active">
@@ -66,48 +57,22 @@ $('#edit-course-btn').click(function() {
 </div>
 
 <div class="col-md-9 school-info">
-	{% if period %}
-	<span>
-		<h3> Period Info </h3>
-		<a href="{%url 'school:periodedit' period.id%}" id="edit-course-btn" class="pull-right"> Edit </a>
-	</span>
-	<table class="table table-hover">
-		<tr> 
-			<td> Title: </td>
-			<td> 
-				{{ period.description }} 
-			</td>
-		</tr>
-		<tr> 
-			<td> Start Date: </td>
-			<td> 
-				{{ period.start_date }} 
-			</td>
-		</tr>
-		<tr> 
-			<td> End Date: </td>
-			<td> 
-				{{ period.end_date }} 
-			</td>
-		</tr>
-		<tr> 
-			<td> School: </td>
-			<td> {{ period.school }} </td>
-		</tr>
-		<tr> 
-			<td> Comments: </td>
-			<td> {{ period.comments }} </td>
-		</tr>
-	</table>
-
-	{% elif error %}
-	<div class="content alert alert-info" role="alert">
-			{{error}}
-	</div>
-	{%else%}
-		<div class="content alert alert-info" role="alert">
-			Select a period to view details.
-		</div>
+	{% if success %}
+		<div class="alert alert-info" role="alert">Period was edited successfully!</div>
 	{% endif %}
+	{% if error %}
+		<div class="panel panel-danger">
+			{{ error }}
+		</div>
+	{% else %}
+
+	<form role="form" action="{%url 'school:periodedit' period_id%}" method="post">
+		{% csrf_token %}
+		<table class="table table-hover school-form">
+	    {{ period_form.as_table }}
+	    </table>
+	    <input class="btn btn-primary center-block" type="submit" value="Submit" />
+	</form> 
+	{%endif%}
 </div>
 {% endblock period_content %}

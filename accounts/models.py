@@ -13,7 +13,7 @@ from django.core.validators import RegexValidator
 
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, blank=True,null=True)
     phone_regex = RegexValidator(regex=r'^[\d|-]+$', message="Use only digits and dashes, eg. 604-214-0392")
     # The additional attributes we wish to include.
     school = models.ForeignKey('school_components.School',blank=True, null=True)
@@ -43,8 +43,8 @@ class TeachingAvailability(models.Model):
 
     
 class TeacherUser(models.Model):
-    user = models.ForeignKey(UserProfile)
-    teaching_availability = models.ForeignKey(TeachingAvailability)
+    user = models.ForeignKey(UserProfile, blank=True,null=True)
+    teaching_availability = models.ForeignKey(TeachingAvailability, blank=True,null=True)
     comments = models.CharField(max_length = 500, blank=True, null=True)
     #classes has a many-to-many relation with this
 

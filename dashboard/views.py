@@ -28,6 +28,9 @@ def statistics_page(request):
     
     return_dict = {}
 
+    currentSchool = request.user.userprofile.school
+    currentPeriod = request.user.userprofile.period
+
     if request.method == 'POST':
         title = request.POST.get("title")
         xAxis = request.POST.get("xAxis")
@@ -35,8 +38,8 @@ def statistics_page(request):
         chartType = request.POST.get("chartType")
         visibility = request.POST.get("visibility")
         # Replaced by current
-        school = request.user.userprofile.school
-        period = Prequest.user.userprofile.period
+        school = currentSchool
+        period = cuurentPeriod
         chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
         chart.save()
         return_dict['createdCustom'] = 1
@@ -60,14 +63,14 @@ def statistics_page(request):
     return_dict['usage'] = [students, admins, teachers, classes, courses, periods, schools]
     return_dict['payments'] = [unregistered_paid_students, payment_total, receipts]
 
-    regXAxis = Period.objects.all().order_by('start_date').values_list('description', flat=True)
-    regYAxis = ClassRegistration.objects.values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
+    regXAxis = Period.objects.filter(school_id=currentSchool).all().order_by('start_date').values_list('description', flat=True)
+    regYAxis = ClassRegistration.objects.filter(school_id=currentSchool).values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
     return_dict['registrationChart'] = []
     for x in zip(regXAxis, regYAxis):
         return_dict['registrationChart'].append([x[0], x[1]])
 
     
-    performance = Grading.objects.filter(reg_class__period=1).values('grade').order_by('grade').annotate(num_students=Count('grade'))   
+    performance = Grading.objects.filter(reg_class__school=currentSchool, reg_class__period=currentPeriod).values('grade').order_by('grade').annotate(num_students=Count('grade'))   
     performXAxis = performance.values_list('grade', flat=True)
     performYAxis = performance.values_list('num_students', flat=True)
     return_dict['performanceChart'] = []
@@ -87,7 +90,11 @@ def statistics_page(request):
     return_dict['yAxisOptions'] = Chart._meta.get_field('y_axis').choices
     return_dict['visibilityOptions'] = Chart._meta.get_field('visibility').choices
 
-    charts = Chart.objects.all()
+    charts = Chart.objects.filter(school_id=currentSchool, period_id=currentPeriod)
+    if request.user.userprofile == 'TEACHER':
+        charts = charts.filter(visibility='ALL')
+    charts = charts.all()
+
     # return_dict['customCharts'] = Student.objects.filter()
     return_dict['customChartsTriplets'] = []
     for i in range(0, len(charts), 3):
@@ -128,6 +135,9 @@ def notifications_page(request):
     
     return_dict = {}
 
+    currentSchool = request.user.userprofile.school
+    currentPeriod = request.user.userprofile.period
+
     if request.method == 'POST':
         for key in request.POST:
             if key != 'csrfmiddlewaretoken':
@@ -137,7 +147,7 @@ def notifications_page(request):
                 elif request.POST.get(key) == 'Called':
                     notif.update(status=True)
 
-    allNotifications = Notification.objects.all().order_by('-date')
+    allNotifications = Notification.objects.filter(school_id=currentSchool, period_id=currentPeriod).all().order_by('-date')
     notifications = allNotifications
     return_dict['filter'] = request.GET.get("filter")
     if return_dict['filter'] == '1':
@@ -222,13 +232,52 @@ def classes_schedule_page(request):
     
     return_dict = {}
 
-    today = datetime.datetime.today().strftime('%a')
-    #classSchedule = ClassSchedule.objects.filter(weekday=today).order_by('start_time')
-    #students = Student.objects.select_related('classschedule').distinct().count()
-    #teachers = ClassTeacher.objects.select_related('classschedule').distinct.count()
-    #classes = classSchedule.count()
+    currentSchool = request.user.userprofile.school
+    currentPeriod = request.user.userprofile.period
 
-    #return_dict['schedule'] = [classSchedule, students, teachers, classes]
+    return_dict['weekday'] = request.GET.get("weekday")
+    if return_dict['weekday'] not in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']:
+        return_dict['weekday'] = datetime.datetime.today().strftime('%a')
+
+    classSchedule = ClassSchedule.objects
+    if return_dict['weekday'] == 'Mon':
+        classSchedule = classSchedule.filter(monday=True)
+    elif return_dict['weekday'] == 'Tue':
+        classSchedule = classSchedule.filter(tuesday=True)
+    elif return_dict['weekday'] == 'Wed':
+        classSchedule = classSchedule.filter(wednesday=True)
+    elif return_dict['weekday'] == 'Thu':
+        classSchedule = classSchedule.filter(thursday=True)
+    elif return_dict['weekday'] == 'Fri':
+        classSchedule = classSchedule.filter(friday=True)
+    elif return_dict['weekday'] == 'Sat':
+        classSchedule = classSchedule.filter(saturday=True)
+    elif return_dict['weekday'] == 'Sun':
+        classSchedule = classSchedule.filter(sunday=True)
+    classSchedule = classSchedule.order_by('start_time')
+
+    if request.user.userprofile == 'TEACHER':
+        teacherID = TeacherUser.filter(user_id=request.user.userprofile.user_id).get().teacher_id
+        taughtClasses = ClassTeacher.filter(teacher_id=teacherID).values_list('taught_class_id', flat=True)
+        classSchedule = classSchedule.filter(sch_class_id__in=taughtClasses)
+    
+    classTimes = classSchedule.values_list('start_time', 'end_time')
+    courseIDs = []
+    numStudents = []
+    numTeachers = []
+    classIDs = classSchedule.values_list('sch_class_id', flat=True)
+    for x in classIDs:
+        courseIDs.append(Class.objects.get(pk=x).course_id)
+        numStudents.append(ClassRegistration.objects.filter(reg_class_id=x).count())
+        numTeachers.append(ClassTeacher.objects.filter(taught_class_id=x).count())
+
+    courseNames = []
+    for x in courseIDs:
+        courseNames.append(Course.objects.get(pk=x).name)
+
+    return_dict['schedule'] = []
+    for i in range(0, len(classTimes)):
+        return_dict['schedule'].append([classTimes[i][0].strftime('%H:%M'), classTimes[i][1].strftime('%H:%M'), courseNames[i], numStudents[i], numTeachers[i], classIDs[i]])
 
     return render_to_response("dashboard/classes_schedule_page.html",return_dict,RequestContext(request))
 

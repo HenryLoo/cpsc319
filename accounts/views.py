@@ -92,8 +92,8 @@ def create_teacher_view(request):
 
 
 def view_teachers_view (request, teacher_id=None):
-    #teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
-    teacher_list = TeacherUser.objects.all()
+    teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
+    #teacher_list = TeacherUser.objects.all()
     context_dictionary = {'teacher_list': teacher_list}
 
     if teacher_id:

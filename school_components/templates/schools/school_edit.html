@@ -66,38 +66,26 @@ $('#edit-course-btn').click(function() {
 </div>
 
 <div class="col-md-9 school-info">
-	{% if school %}
-	<span>
-		<h3> School Info </h3>
-		<a href="{% url 'school:schooledit' school.id %}" id="edit-course-btn" class="pull-right"> Edit </a>
-	</span>
-	<table class="table table-hover">
-		<tr> 
-			<td> Title: </td>
-			<td> 
-				{{ school.title }} 
-			</td>
-		</tr>
-		<tr> 
-			<td> Address: </td>
-			<td> 
-				{{ school.address }} 
-			</td>
-		</tr>
-		<tr> 
-			<td> Phone: </td>
-			<td> {{ school.phone }} </td>
-		</tr>
-		<tr> 
-			<td> Comments: </td>
-			<td> {{ school.comments }} </td>
-		</tr>
-	</table>
-
-	{% else %}
-		<div class="content alert alert-info" role="alert">
-			Select a school to view details.
-		</div>
+	{% if success %}
+	<div class="alert alert-info" role="alert"> School edited successfully! </div>
 	{% endif %}
+	
+	<!-- There is an ERROR iff there the school was invalid-->
+	{% if error %}
+		<div class="panel panel-danger">
+			{{ error }}
+		</div>
+	{% else %}
+	<form role="form" action="{%url 'school:schooledit' school_id%}" method="post">
+		{% csrf_token %}
+		<table class="table table-hover school-form">
+	    {{ school_form.as_table }}
+	    </table>
+	    <input class="btn btn-primary center-block" type="submit" value="Submit" />
+	</form> 
+	{% endif %}
+
 </div>
 {% endblock school_content %}
+
+	

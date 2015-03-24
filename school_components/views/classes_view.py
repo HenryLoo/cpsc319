@@ -90,9 +90,18 @@ def class_registration(request, class_id=None):
 
 # register student to class
 def class_registration_helper(request, class_id):
+	student_id = request.POST['student_id']
+	student = Student.objects.get(pk=student_id)
+	
+	# check if on waiting list
+	reg = student.enrolled_student.filter(reg_class__id=class_id)
+	if len(reg) > 0:
+		class_reg = reg[0]
+		class_reg.registration_status = True
+		class_reg.save()
+		return HttpResponse("Successfully registered.")
+
 	try:
-		student_id = request.POST['student_id']
-		student = Student.objects.get(pk=student_id)
 		reg_class = Class.objects.get(pk=class_id)
 		school = request.user.userprofile.school
 		period = request.user.userprofile.period

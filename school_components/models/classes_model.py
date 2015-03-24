@@ -74,6 +74,7 @@ class ClassRegistration(models.Model):
 	reg_class = models.ForeignKey('Class', related_name='enrolled_class')
 	student = models.ForeignKey('Student', related_name='enrolled_student')
 	registration_status = models.BooleanField()
+	date = models.DateTimeField(auto_now_add=True, blank=True)
 	school = models.ForeignKey('School')
 	period = models.ForeignKey('Period')
 

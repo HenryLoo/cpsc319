@@ -46,15 +46,15 @@
 	{% if class %}
 	<div id="search-student-div">
 		<h4> Register Students  in {{ class.course }} {{ class.section }}</h4>
-		<form id="class-registration-form" method="post">
+		<form class="class-registration-form" method="post">
 		{% csrf_token %}
 	    <div class="input-group pull-left" >
 	      <span class="input-group-btn" >
-	        <button class="btn btn-primary" id="add-student-btn" type="submit" value="submit">
+	        <button class="btn btn-success" id="add-student-btn" type="submit" value="submit">
 	        	Add Student
 	        </button>
 	      </span>
-	      {{ form.student }}
+	      <input class="form-control" id="search-student-input" placeholder="Search for student..." type="text">
 	    </div>
 	    </form>
 	</div>
@@ -62,11 +62,12 @@
 	<div class="col-md-12">
 		<h5>Number of students: {{ class.enrolled_class.all|length }}</h5>
 		<br>
+
 		<h4>Registered Students:</h4>
 			
 		<div class="table-responsive">
 
-		<table id="mytable" class="table table-bordred table-striped">
+		<table class="table table-bordred table-striped">
 		<thead>
 		  <tr>
 		    <th>Student name</th>
@@ -75,20 +76,60 @@
 			</thead>
 			<tbody>
 				{% for reg in class.enrolled_class.all %}
-			  	<tr>
-				    <td><a href="{% url 'school:studentlist' reg.student.id%}">{{ reg.student }}</a></td>
-				    <td>
-				    	<button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" 
-				    	data-target="#remove-student-modal" data-student-name="{{ reg.student }}"
-				    	data-student-id="{{ reg.student.id }}">
-				    	<span class="glyphicon glyphicon-trash"></span>
-				    	</button>
-				    </td>
-			  	</tr>
+					{% if reg.registration_status %}
+				  	<tr>
+					    <td><a href="{% url 'school:studentlist' reg.student.id%}">{{ reg.student }}</a></td>
+					    <td>
+					    	<button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" 
+					    	data-target="#remove-student-modal" data-student-name="{{ reg.student }}"
+					    	data-student-id="{{ reg.student.id }}">
+					    	<span class="glyphicon glyphicon-trash"></span>
+					    	</button>
+					    </td>
+				  	</tr>
+				  	{% endif %}
 			  	{% endfor %}
 			</tbody>
 		</table>
 		</div> <!-- registered table div-->
+
+  		<h4>Waiting List</h4>
+		<div id="waiting-list">	
+			<table class="table table-striped">
+			<thead>
+			  <tr>
+			    <th>Student name</th>
+			    <th>Add to Class</th>
+			    <th>Remove</th>
+			  </tr>
+				</thead>
+				<tbody>
+					{% for reg in class.enrolled_class.all|dictsort:"date" %}
+						{% if not reg.registration_status %}
+					  	<tr>
+						    <td><a href="{% url 'school:studentlist' reg.student.id%}">{{ reg.student }}</a></td>
+						    <td>
+						    	<form class="class-registration-form" method="post">
+								{% csrf_token %}
+						    	<button class="btn btn-success btn-xs register-waiting-btn" type="submit" value="submit" data-student-id="{{ reg.student.id }}">
+						    	<span class="glyphicon glyphicon-plus"></span>
+						    	</button>
+						    	</form>
+						    </td>
+						    <td>
+						    	<button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" 
+						    	data-target="#remove-student-modal" data-student-name="{{ reg.student }}"
+						    	data-student-id="{{ reg.student.id }}">
+						    	<span class="glyphicon glyphicon-trash"></span>
+						    	</button>
+						    </td>
+					  	</tr>
+					  	{% endif %}
+				  	{% endfor %}
+				</tbody>
+			</table>
+		</div> <!-- wiaitng list table div-->
+
 	</div>
 	{% else %}
 	<div class="alert alert-info" role="alert">

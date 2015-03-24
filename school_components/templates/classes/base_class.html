@@ -22,17 +22,33 @@
     	source: studentTags,
     	select: function(event, ui) {
     		sel_student_id = ui.item.id;
+    		console.log(sel_student_id);
     	}
     });
 
     {% if class %}
 
-    // send request to register the student
-    $('#class-registration-form').submit(function() {
+    // registration for waiting list students
+    // $('.register-waiting-btn').click(function() {
+    // 	var student_id = ($(this).data('student-id'));
+    // });
+
+    // send request to register the student from input box
+    $('.class-registration-form').submit(function() {
+    	// check if it's the waiting list or the input box
+    	var student_id;
+    	var wait_btn = $(this).find('button');
+    	student_id = $(wait_btn).data('student-id');
+
+    	if (student_id == undefined) {
+    		student_id = sel_student_id;
+    	}
+
+    	var send_data = $(this).serialize() + '&student_id=' + student_id;
     	$.ajax({
 			type: "POST",
 			url: "{%url 'school:classregistration' class.id %}", 
-			data: $(this).serialize()+'&student_id='+sel_student_id,
+			data: send_data,
 			contentType: 'application/x-www-form-urlencoded',
 			success: function(data) {
 				location.reload();

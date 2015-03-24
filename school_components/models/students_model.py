@@ -112,7 +112,7 @@ class Student(models.Model):
 
 	class Meta:
 		app_label = 'school_components'
-		unique_together = ('first_name', 'last_name')
+		unique_together = ('first_name', 'last_name', 'period')
 
 class StudentCSVWriter(object):
 	def write(self, value):

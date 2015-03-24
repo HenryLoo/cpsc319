@@ -28,8 +28,6 @@ TEMPLATES = {
 }
 
 class CourseRegisterWizard(SessionWizardView):
-
-	#  TODO: school/period
 	# put current school/period in kwargs to render courses dropdown
 	def get_form_kwargs(self, step=None):
 		kwargs = {}
@@ -122,7 +120,6 @@ class CourseRegisterWizard(SessionWizardView):
 		parent_form = forms['parent_form']
 		student_form = forms['student_form']
 
-		#  TODO: emergency cell/home phone, emergency comments
 		if student_form.is_valid():
 			form_data = student_form.cleaned_data
 			parent_data = parent_form.cleaned_data

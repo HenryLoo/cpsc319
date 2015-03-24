@@ -56,33 +56,32 @@ def period_change(request, period_id=None):
 
 def period_edit(request, period_id): #there should always be a period_id here
     #!!! probably block off this view entirely for anybody but system admin !!!
-        
-    
-        period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
-	context_dictionary = {'period_list': period_list}
-        
-        try:
-                c = Period.objects.get(pk=period_id)
+		period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
+		context_dictionary = {'period_list': period_list}
+
+		try:
+
+				c = Period.objects.get(pk=period_id)
 
                 #make sure that school admins can only access by url the periods in their school
-                if request.user.userprofile.role == 'SCHOOL_ADMIN' and c.school != request.user.userprofile.school:
-                        raise ObjectDoesNotExist
+				if request.user.userprofile.role == 'SCHOOL_ADMIN' and c.school != request.user.userprofile.school:
+					raise ObjectDoesNotExist
                 
-                context_dictionary['period_id']=period_id
-                if request.method == 'POST':
-                        period_form = PeriodForm(request.POST, instance = c)
-                        if period_form.is_valid():
-                                period_form.save()
-                                context_dictionary['success']=True
-                else:
-                        period_form = PeriodForm(instance = c)
+				context_dictionary['period_id']=period_id
+				if request.method == 'POST':
+					period_form = PeriodForm(request.POST, instance = c)
+					if period_form.is_valid():
+						period_form.save()
+						context_dictionary['success']=True
+				else:
+					period_form = PeriodForm(instance = c)
                         
-                context_dictionary['period_form'] = period_form
-                
-        except ObjectDoesNotExist:
-                context_dictionary['error'] = 'There is no period with that id.'
+				context_dictionary['period_form'] = period_form
 
-        return render_to_response("periods/period_edit.html",
+		except ObjectDoesNotExist:
+				context_dictionary['error'] = 'There is no period with that id.'
+
+		return render_to_response("periods/period_edit.html",
                         context_dictionary,
                         RequestContext(request))
 

@@ -145,22 +145,43 @@ $('#edit-class-btn').click(function() {
 	</table>
 
 
-	<a href="{% url 'school:classregistration' class.id %}"> Edit Class Registration </a>
+	<a href="{% url 'school:classregistration' class.id %}"> 
+	Edit Class Registration </a>
 
-	<h5>Registered Students:</h5>
+<div>
+	<div class="col-md-6">
+		<h5>Registered Students:</h5>
 
-	<ul>
-	{% for reg in class.enrolled_class.all %}
-		<li> <a href="{% url 'school:studentlist' reg.student.id %}">
+		<ul>
+		{% for reg in class.enrolled_class.all %}
 			{% if reg.registration_status %}
-				{{ reg.student.first_name }} {{ reg.student.last_name }} 
-			{% else %}
-				{{ reg.student.first_name }} {{ reg.student.last_name }} (Waiting list)
+			<li> 
+				<a href="{% url 'school:studentlist' reg.student.id %}">
+					{{ reg.student.first_name }} {{ reg.student.last_name }} 
+				</a>
+			</li>
 			{% endif %}
-			</a>
-		</li>
-	{% endfor %}
-	</ul>
+		{% endfor %}
+		</ul>
+	</div>
+
+	<div class="col-md-6">
+		<h5>Waiting List:</h5>
+
+		<ol>
+		{% for reg in class.enrolled_class.all|dictsort:"date" %}
+			{% if not reg.registration_status %}
+			<li> 
+				<a href="{% url 'school:studentlist' reg.student.id %}">
+					{{ reg.student.first_name }} {{ reg.student.last_name }} 
+				{% endif %}
+				</a>
+			</li>
+			{% endfor %}
+		</ol>
+	</div>
+</div>
+	
 
 
 	{% else %}

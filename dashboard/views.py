@@ -37,9 +37,8 @@ def statistics_page(request):
         yAxis = request.POST.get("yAxis")
         chartType = request.POST.get("chartType")
         visibility = request.POST.get("visibility")
-        # Replaced by current
         school = currentSchool
-        period = cuurentPeriod
+        period = currentPeriod
         chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
         chart.save()
         return_dict['createdCustom'] = 1
@@ -52,16 +51,19 @@ def statistics_page(request):
     periods = Period.objects.count()
     schools = School.objects.count()
 
-    paid_students = Student.objects.select_related('parent__payment').values_list('id', flat=True).distinct()
-    registered_students = ClassRegistration.objects.values_list('student_id', flat=True).distinct()
-    unregistered_paid_students = paid_students.exclude(pk__in = registered_students).count()
-    payment_total = Payment.objects.aggregate(Sum('amount')).get('amount__sum')
-    if payment_total is None:
-        payment_total = "0.00"
+    paidParentIDs = Payment.objects.values_list('parent_id', flat=True)
+    parentIDs = Parent.objects.filter(id__in=paidParentIDs, school_id=currentSchool, period_id=currentPeriod).values_list('id', flat=True)
+    paidStudents = Student.objects.filter(parent_id__in=parentIDs).values_list('id', flat=True)
+    registeredStudents = ClassRegistration.objects.values_list('student_id', flat=True).distinct()
+    unregisteredPaidStudents = paidStudents.exclude(pk__in = registeredStudents).count()
+
+    paymentTotal = Payment.objects.aggregate(Sum('amount')).get('amount__sum')
+    if paymentTotal is None:
+        paymentTotal = "0.00"
     receipts = Payment.objects.all().order_by('-date')
 
     return_dict['usage'] = [students, admins, teachers, classes, courses, periods, schools]
-    return_dict['payments'] = [unregistered_paid_students, payment_total, receipts]
+    return_dict['payments'] = [unregisteredPaidStudents, paymentTotal, receipts]
 
     regXAxis = Period.objects.filter(school_id=currentSchool).all().order_by('start_date').values_list('description', flat=True)
     regYAxis = ClassRegistration.objects.filter(school_id=currentSchool).values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)

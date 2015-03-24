@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def course_list(request, course_id=None):
@@ -65,6 +66,51 @@ def dept_create(request):
 		RequestContext(request))
 
 #create department view
+
+def dept_list(request, dept_id = None):
+        dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
+	context_dictionary = {'dept_list': dept_list}
+
+	if dept_id:
+                try:
+                        d = Department.objects.get(pk=dept_id)
+                        if d.school != request.user.userprofile.school:
+                                raise ObjectDoesNotExist
+                        context_dictionary['department'] = d
+                except ObjectDoesNotExist:
+                        context_dictionary['error'] = 'There is no department in this school and period with that id.'
+                        
+	return render_to_response("courses/dept_list.html",
+		context_dictionary,
+		RequestContext(request))
+
+def dept_edit(request, dept_id):
+        dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
+	context_dictionary = {'dept_list': dept_list}
+
+        try:
+                d = Department.objects.get(pk=dept_id)
+                if d.school != request.user.userprofile.school:
+                        raise ObjectDoesNotExist
+                context_dictionary['dept_id'] = dept_id
+
+                dept_form = DepartmentForm(instance = d)
+                
+                if request.method == 'POST':
+                        dept_form = DepartmentForm(request.POST, instance = d)
+                        if dept_form.is_valid():
+                                dept_form.save()
+                                context_dictionary['succ']=True
+                                
+                context_dictionary['dept_form'] = dept_form
+                
+        except ObjectDoesNotExist:
+                context_dictionary['error'] = 'There is no department in this school and period with that id.'
+                        
+	return render_to_response("courses/dept_edit.html",
+		context_dictionary,
+		RequestContext(request))
+
 
 def course_assignment(request, course_id=None):
 

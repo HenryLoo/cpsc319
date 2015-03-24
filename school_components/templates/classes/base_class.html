@@ -21,31 +21,57 @@
     $('#search-student-input').autocomplete({
     	source: studentTags,
     	select: function(event, ui) {
-    		sel_student_id = ui.item.value;
+    		sel_student_id = ui.item.id;
     	}
     });
 
+    {% if class %}
+
     // send request to register the student
-   //  $('#add-student-btn').click(function() {
-   //  	$.ajax({
-			// type: "POST",
-			// url: "url 'school:classregistration' class.id", 
-			// data: { student_id : sel_student_id },
-			// dataType: "json", 
-			// contentType: 'application/x-www-form-urlencoded',
-			// success: function(data) {
-			// 	var content_div = $('#payment-modal').find('.modal-body');
-			// 	content_div.html(xhr.responseText);
-			// 	$('#payment-modal').modal('show');
-			// },
-			// error: function(xhr) {
-			// 	var content_div = $('#payment-modal').find('.modal-body');
-			// 	content_div.html(xhr.responseText);
-			// 	$('#payment-modal').modal('show');
-			// }
-   //  	});
-   //  	return false;
-   //  });
+    $('#class-registration-form').submit(function() {
+    	$.ajax({
+			type: "POST",
+			url: "{%url 'school:classregistration' class.id %}", 
+			data: $(this).serialize()+'&student_id='+sel_student_id,
+			contentType: 'application/x-www-form-urlencoded',
+			success: function(data) {
+				location.reload();
+			},
+			error: function(xhr) {
+				$('#helper').html(xhr.responseText);
+			}
+    	});
+    	return false;
+    });
+
+    // adds name to modal for confirming remove student registration
+    $('#remove-student-modal').on('show.bs.modal', function (event) {
+  		var button = $(event.relatedTarget) ;
+  		var student_name = button.data('student-name');
+  		var student_id = button.data('student-id');
+		var modal = $(this);
+		modal.find('.modal-body > span').html(student_name);
+		modal.find('.modal-body > input').val(student_id);
+	})
+
+    // send request to remove student from class
+	$('#remove-student-form').submit(function() {
+    	$.ajax({
+			type: "POST",
+			url: "{%url 'school:classremovereg' class.id %}", 
+			data: $(this).serialize(),
+			contentType: 'application/x-www-form-urlencoded',
+			success: function(data) {
+				location.reload();
+			},
+			error: function(xhr) {
+				$('#helper').html(xhr.responseText);
+			}
+    	});
+    	return false;
+    });
+
+    {% endif %}
 
 </script>
 {% endblock %}

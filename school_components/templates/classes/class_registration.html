@@ -41,20 +41,26 @@
 </div>
 
 <div class="col-md-8">
+	<div id="helper"></div>
+
 	{% if class %}
 	<div id="search-student-div">
 		<h4> Register Students  in {{ class.course }} {{ class.section }}</h4>
-
+		<form id="class-registration-form" method="post">
+		{% csrf_token %}
 	    <div class="input-group pull-left" >
 	      <span class="input-group-btn" >
-	        <button class="btn btn-default" id="add-student-btn" type="button">Add Student</button>
+	        <button class="btn btn-primary" id="add-student-btn" type="submit" value="submit">
+	        	Add Student
+	        </button>
 	      </span>
-	      <input type="text" id='search-student-input' class="form-control" placeholder="Search for student...">
+	      {{ form.student }}
 	    </div>
+	    </form>
 	</div>
 
 	<div class="col-md-12">
-		<h5>Number of students: 3</h5>
+		<h5>Number of students: {{ class.enrolled_class.all|length }}</h5>
 		<br>
 		<h4>Registered Students:</h4>
 			
@@ -72,8 +78,11 @@
 			  	<tr>
 				    <td><a href="{% url 'school:studentlist' reg.student.id%}">{{ reg.student }}</a></td>
 				    <td>
-				    	<button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" data-target="#delete">
-				    	<span class="glyphicon glyphicon-trash"></span></button>
+				    	<button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" 
+				    	data-target="#remove-student-modal" data-student-name="{{ reg.student }}"
+				    	data-student-id="{{ reg.student.id }}">
+				    	<span class="glyphicon glyphicon-trash"></span>
+				    	</button>
 				    </td>
 			  	</tr>
 			  	{% endfor %}
@@ -88,16 +97,20 @@
 	{% endif %}
 </div> <!--  content div -->
 
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
+<div class="modal fade" id="remove-student-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
     <div class="modal-content">
+    <form id="remove-student-form" method="delete">
+    	{% csrf_token %}
       <div class="modal-body">
-       	Remove John Doe from class?
+       	Remove <span></span> from {{ class }}?
+       	{{ remove_form }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm">Remove</button>
+        <button type="submit" value="submit" class="btn btn-primary btn-sm">Remove</button>
       </div>
+      </form>
     </div>
   </div>
 </div>

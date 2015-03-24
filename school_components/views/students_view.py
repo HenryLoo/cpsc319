@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response, redirect
 from django.forms.models import model_to_dict
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core.servers.basehttp import FileWrapper
@@ -39,15 +40,27 @@ def class_history_helper(class_reg):
 	m['class_name'] = class_reg.reg_class
 	return m
 
-
+# returns student info, used on the registration page
 def student_get(request):
 	if request.method == 'GET':
 		student_id = request.GET['student_id']
 		student = Student.objects.get(pk=student_id)
 		student_json = serializers.serialize("json", [student])
-		# extract the fields we want
-		student_json = json.dumps(json.loads(student_json)[0]['fields'])
-		return HttpResponse(student_json, content_type="application/json")
+
+		# get class history for student
+		class_list = [class_reg.reg_class for class_reg in 
+			student.enrolled_student.all().order_by('reg_class')]
+		context_dictionary = {'class_list': class_list }
+
+		render_string = render_to_string(
+			'registration/course_registration_classhistory.html',
+			context_dictionary)
+
+		student_json = json.loads(student_json)[0]['fields']
+		student_json['class_history_html'] = render_string
+		student_json_str = json.dumps(student_json)
+
+		return HttpResponse(student_json_str, content_type="application/json")
 
 
 # create a new student with form data

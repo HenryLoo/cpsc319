@@ -12,9 +12,9 @@ from .models import SentMessage
 from aplusmessages.forms import EMailForm
 
 def clear_messages(request):
-        storage = get_messages(request)
-        for message in storage:
-            print message
+    storage = get_messages(request)
+    for message in storage:
+        print (message)
 
 
 

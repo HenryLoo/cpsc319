@@ -321,16 +321,6 @@
     {% endoptions %}
     {% graph "passFail_chart_div" "passFailData" "passFailOptions" %}
 
-    {% data customChartsTriplets.0.0.1 "1Data" %}
-        {% col "string" "" %}"{{ val }}"{% endcol %}
-        {% col "number" "" %}{{ val }}{% endcol %}
-    {% enddata %}
-
-    {% options "1Options" %}
-        kind: "{{ customChartsTriplets.0.0.2 }}"
-    {% endoptions %}
-    {% graph "1_chart_div" "1Data" "1Options" %}
-
 {% endgooglecharts %}
 
 {%endblock%}

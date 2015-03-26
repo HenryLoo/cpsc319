@@ -270,7 +270,7 @@
                         <div class="col-lg-4">
                             <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-bars"></i> {{ chart.title }}</h3>
+                                    <h3 class="panel-title"><i class="fa fa-bars"></i> {{ chart.0.title }}</h3>
                                     <div class="text-right">
                                         <div class="row" style="margin-right: 1px;">
                                             <a href="#">View &nbsp</a>
@@ -278,8 +278,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{ chart.1 }}
                                 <div class="panel-body">
-                                    <div id="{{ chart.id }}_chart_div" style="width: 299px; height: 299px;"></div>
+                                    <div id="{{forloop.counter}}_chart_div" style="width: 299px; height: 299px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -319,6 +320,17 @@
         kind: "PieChart"
     {% endoptions %}
     {% graph "passFail_chart_div" "passFailData" "passFailOptions" %}
+
+    {% data customChartsTriplets.0.0.1 "1Data" %}
+        {% col "string" "" %}"{{ val }}"{% endcol %}
+        {% col "number" "" %}{{ val }}{% endcol %}
+    {% enddata %}
+
+    {% options "1Options" %}
+        kind: "{{ customChartsTriplets.0.0.2 }}"
+    {% endoptions %}
+    {% graph "1_chart_div" "1Data" "1Options" %}
+
 {% endgooglecharts %}
 
 {%endblock%}

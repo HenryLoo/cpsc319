@@ -6,7 +6,7 @@ from dashboard.models import Chart, Notification, NotificationType
 
 from accounts.models import UserProfile
 
-from school_components.models import Class, ClassSchedule, ClassRegistration, ClassTeacher, Course, Grading, Parent, Payment, Period, School, Student
+from school_components.models import Class, ClassAttendance, ClassSchedule, ClassRegistration, ClassTeacher, Course, Grading, Parent, Payment, Period, School, Student
 
 from django.db.models import Q
 
@@ -118,11 +118,25 @@ def statistics_page(request):
             xFilter = 'course_id'
 
         yAxis = []
-        if chart.y_axis == 'NSTUDENTS':
-            classes = Class.objects
-            for x in xIDs:
-                filteredClassIDs = classes.filter(**{xFilter: x}).values_list('id', flat=True)
-                yAxis.append(ClassRegistration.objects.filter(reg_class_id=filteredClassIDs).all().values('student_id').distinct().count())
+        classes = Class.objects
+        for x in xIDs:
+            filteredClassIDs = classes.filter(**{xFilter: x}).values_list('id', flat=True)
+            if chart.y_axis == 'NSTUDENTS':
+                yAxis.append(ClassRegistration.objects.filter(reg_class_id__in=filteredClassIDs).all().values('student_id').distinct().count())
+            elif chart.y_axis == 'NCLASSES':
+                yAxis.append(len(filteredClassIDs))
+            elif chart.y_axis == 'NTEACHERS':
+                yAxis.append(ClassTeacher.objects.filter(taught_class_id__in=filteredClassIDs).all().values('teacher_id').distinct().count())
+            elif chart.y_axis == 'ATTENDANCE':
+                allAttendance = ClassAttendance.objects.filter(reg_class_id__in=filteredClassIDs)
+                numAttended = allAttendance.exclude(attendance='A').all().count()
+                numTotal = allAttendance.all().count()
+                if numTotal == 0:
+                    numTotal = 1
+                yAxis.append(round(sumAttended/numTotal))
+            elif chart.y_axis == 'PERFORMANCE':
+                averages = Grading.objects.filter(reg_class_id__in=filteredClassIDs).annotate(avg_grades=Avg('performance')).values_list('avg_grades', flat=True)
+                yAxis.append(round(sum(averages)/len(averages)))
 
         chartData = []
         for x in zip(xAxis, yAxis):

@@ -90,13 +90,12 @@ class ClassRegistration(models.Model):
 		unique_together = ('reg_class', 'student')
 
 
-#change name after
 class ClassAttendance(models.Model):
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
-	attendance = models.CharField(max_length=5, blank=True)
+	attendance = models.CharField(max_length=5, blank=True, null=True)
 	date = models.TimeField(null=True, blank=True)
-	comments = models.CharField(max_length=500)
+	comments = models.CharField(max_length=500,blank=True, null=True)
 
 	class Meta:
 		app_label = 'school_components'
@@ -110,7 +109,7 @@ class Assignment(models.Model):
 	content = models.FileField(upload_to='aplus/media/assignments', blank = True, null = True)
 	grade_weight = models.IntegerField(blank = True, null = True)
 	total_weight = models.IntegerField(blank = True, null = True)
-	comments = models.CharField(max_length=500)
+	comments = models.CharField(max_length=500,blank=True, null=True)
 
 	class Meta:
 		app_label = 'school_components'
@@ -122,7 +121,7 @@ class Grading(models.Model):
 	student = models.ForeignKey('Student')
 	grade = models.IntegerField(blank=True, null=True)
 	assignment = models.ForeignKey('Assignment')
-	comments = models.CharField(max_length=500)
+	comments = models.CharField(max_length=500, blank=True, null=True)
 
 	class Meta:
 		app_label = 'school_components'

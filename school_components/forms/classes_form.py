@@ -66,10 +66,10 @@ class ClassAssignmentForm(ModelForm):
 class ClassGradingForm(ModelForm):
 
 	student = forms.ModelChoiceField(queryset=Student.objects.all(),required=False)
-
+	reg_class = forms.ModelChoiceField(queryset=Class.objects.all(), required=False)
 	class Meta:
 		model = Grading
-		fields = ['student', 'grade', 'comments']
+		fields = ['student', 'grade', 'comments', 'reg_class']
 
 class ClassAttendanceForm(ModelForm):
     attendance = ChoiceField(label='', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)

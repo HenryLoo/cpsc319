@@ -8,8 +8,7 @@ from django.template import RequestContext
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
-from django.forms.formsets import formset_factory
-from django.forms.models import modelformset_factory
+from django.forms.models import inlineformset_factory
 
 def class_list(request, class_id=None):
 	class_list = Class.objects.filter(
@@ -170,23 +169,31 @@ def class_performance(request, class_id=None, assignment_id=None):
 					Grading.objects.create(student =cl.student, reg_class=c, assignment=a)
 			context_dictionary['assignment'] = a
 
-			GradingFormSetFactory = modelformset_factory(Grading, form=ClassGradingForm, extra=0)
-				
+			GradingFormSetFactory = inlineformset_factory(Assignment, Grading, extra=0, can_delete=True)
+			assignment = Assignment.objects.get(pk=assignment_id)
+
 			if request.method == "POST":
 
-				formset = GradingFormSetFactory(request.POST, queryset=Grading.objects.filter(assignment=a))
+				formset = GradingFormSetFactory(request.POST, instance=assignment)
 
 				if formset.is_valid():
-					instances = formset.save()
+
+					instances = formset.save(commit=False)
+					for instance in instances:
+						instance.assignment = a
+						instance.reg_class = c
+						instance.save()
 
 				else:
+					print('Error')
 					context_dictionary['errors'] = formset.errors
+					print(formset.errors)
 
 				return HttpResponseRedirect(
 						reverse('school:classperformance', args=(class_id, assignment_id)))
 
 			else:
-				formset = GradingFormSetFactory(queryset=Grading.objects.filter(assignment=a))
+				formset = GradingFormSetFactory(instance=assignment)
 				
 			context_dictionary['formset'] = formset
 

@@ -113,8 +113,8 @@ class Assignment(models.Model):
 	date = models.DateField(null=True, blank=True)
 	#saves pdf at file assignments inside media at aplus file
 	content = models.FileField(upload_to='aplus/media/assignments', blank = True, null = True)
-	grade_weight = models.IntegerField(blank = True, null = True)
-	total_weight = models.IntegerField(blank = True, null = True)
+	grade_weight = models.IntegerField(blank = False, null = False)
+	total_weight = models.IntegerField(blank = False, null = False)
 	comments = models.CharField(max_length=500,blank=True, null=True)
 
 	class Meta:
@@ -125,8 +125,9 @@ class Grading(models.Model):
 
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
-	grade = models.IntegerField(blank=True, null=True)
+	grade = models.DecimalField(blank=True, null=True,max_digits=5, decimal_places=2)
 	assignment = models.ForeignKey('Assignment')
+	performance = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=2)
 	comments = models.CharField(max_length=500, blank=True, null=True)
 
 	class Meta:

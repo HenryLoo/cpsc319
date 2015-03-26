@@ -260,6 +260,18 @@ def class_performance(request, class_id=None, assignment_id=None):
 						instance.reg_class = c
 						instance.save()
 
+					#performance
+					for cl in class_reg_list:
+						current = Grading.objects.get(student=cl.student, reg_class=c, assignment=a)
+						grade = current.grade
+
+						if grade == None:
+							grade = 0.0
+						total = a.total_weight
+						current.performance = (grade/total) * 100
+						current.save()
+
+
 				else:
 					print('Error')
 					context_dictionary['errors'] = formset.errors
@@ -323,6 +335,13 @@ def class_reportcard(request, class_id=None, student_id=None):
 
 		grading_list = Grading.objects.filter(student=s, reg_class=c).order_by('-assignment__date').reverse()
 		context_dictionary['gradinglist'] = grading_list
+
+		cont=0
+		for g in grading_list:
+			cont = cont + g.performance
+		total = len(grading_list)
+		average = cont/total
+		context_dictionary['overall'] = average
 
 	return render_to_response('classes/class_reportcard.html', context_dictionary,
 		RequestContext(request))

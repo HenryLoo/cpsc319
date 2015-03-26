@@ -83,7 +83,10 @@
                    <thead>
                    
                    <th>Assignment</th>
-                   <th>Grading</th>
+                   <th>Maximum</th>
+                    <th>Weight</th>
+                   <th>Grade</th>
+                   <th>Performance</th>
                    <th>Comments</th>
                    </thead>
     <tbody>
@@ -91,7 +94,10 @@
     {% for grading in gradinglist%}
     <tr>
     <td>{{grading.assignment.title}}</td>
+    <td>{{grading.assignment.total_weight}}</td>
+    <td>{{grading.assignment.grade_weight}}</td>
     <td>{{grading.grade}}</td>
+    <td>{{grading.performance}}</td>
     <td>{{grading.comments}}</td>
     </tr>
     {%endfor%}
@@ -100,7 +106,7 @@
         
 </table>
 
-<h4>Overall Performance:</h4>            
+<h4>Overall Performance: {{overall}}</h4>            
 
 </div>
 </div>

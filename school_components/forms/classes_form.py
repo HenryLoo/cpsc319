@@ -71,9 +71,18 @@ class ClassGradingForm(ModelForm):
 		model = Grading
 		fields = ['student', 'grade', 'comments', 'reg_class']
 
-class ClassAttendanceForm(ModelForm):
-    attendance = ChoiceField(label='', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
+class ClassAttendanceDateForm(ModelForm):
     
+    class Meta:
+        model = ClassAttendance
+        fields = ['date']
+        widgets = {
+        	'date': DateInput(attrs={'class':'datepicker'}),
+        }
+
+class ClassAttendanceForm(ModelForm):
+    attendance = ChoiceField(label='Attendance', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
+
     class Meta:
         model = ClassAttendance
         fields = ['comments', 'attendance']

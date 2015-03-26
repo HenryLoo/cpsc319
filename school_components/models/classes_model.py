@@ -93,8 +93,14 @@ class ClassRegistration(models.Model):
 class ClassAttendance(models.Model):
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
-	attendance = models.CharField(max_length=5, blank=True, null=True)
-	date = models.TimeField(null=True, blank=True)
+	attendance = models.CharField(max_length = 12, blank=True, null=True, choices =
+                            (
+                             ('A', 'A'),
+                             ('P', 'P'),
+                             ('L', 'L')
+                             ))
+
+	date = models.DateField(null=True, blank=True)
 	comments = models.CharField(max_length=500,blank=True, null=True)
 
 	class Meta:

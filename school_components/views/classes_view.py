@@ -10,6 +10,8 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadReque
 from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
 
+from django.forms.models import modelformset_factory
+
 def class_list(request, class_id=None):
 	class_list = Class.objects.filter(
 		school = request.user.userprofile.school, 
@@ -140,9 +142,83 @@ def class_attendance(request, class_id=None):
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
-		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).values()
+
+		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).order_by('student__first_name')
 		context_dictionary['classregistration'] = class_reg_list
-	
+
+		AttendanceFormSetFactory = modelformset_factory(ClassAttendance, extra=0, can_delete=True)
+		date_form = ClassAttendanceDateForm()
+		context_dictionary['dateform'] = date_form
+
+		if request.method == "POST":
+
+				if '_date' in request.POST:
+
+					date_form = ClassAttendanceDateForm(request.POST)
+					inter = date_form['date'].value()
+					if '/' in inter:
+						x,y,z = inter.split('/')
+						date_value = z + "-" + x + "-" + y
+					else:
+						date_value = inter	
+
+					context_dictionary['date_value'] = date_value
+
+					for cl in class_reg_list:
+						verify = ClassAttendance.objects.filter(student=cl.student, reg_class=c, date=date_value)
+						if len(verify) == 0:
+							ClassAttendance.objects.create(student =cl.student, reg_class=c, date=date_value)
+
+					formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+					context_dictionary['formset'] = formset
+
+					date_form = ClassAttendanceDateForm(initial={'date': date_value})
+					context_dictionary['dateform'] = date_form
+
+					return render_to_response('classes/class_attendance.html', context_dictionary,
+						RequestContext(request))
+
+				elif '_attendance' in request.POST:
+
+					date_form = ClassAttendanceDateForm(request.POST)
+					date_value = date_form['date'].value()
+					formset = AttendanceFormSetFactory(request.POST, queryset=ClassAttendance.objects.filter(date=date_value))
+
+					if formset.is_valid():
+
+						instances = formset.save(commit=False)
+						for instance in instances:
+							instance.reg_class = c
+							instance.date = date_value
+							instance.save()
+
+					else:
+						context_dictionary['errors'] = formset.errors
+
+					context_dictionary['date_value'] = date_value
+
+					formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+					context_dictionary['formset'] = formset
+
+					date_form = ClassAttendanceDateForm(initial={'date': date_value})
+					context_dictionary['dateform'] = date_form
+
+					return render_to_response('classes/class_attendance.html', context_dictionary,
+						RequestContext(request))
+
+		else:
+				date_form = ClassAttendanceDateForm()
+				inter = date_form['date'].value()
+				if inter and '/' in inter:
+					x,y,z = inter.split('/')
+					date_value = z + "-" + x + "-" + y
+				else:
+					date_value = inter	
+				formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+		
+		context_dictionary['dateform'] = date_form
+		context_dictionary['formset'] = formset
+
 	return render_to_response('classes/class_attendance.html', context_dictionary,
 		RequestContext(request))
 

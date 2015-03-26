@@ -15,11 +15,18 @@ def course_list(request, course_id=None):
 	context_dictionary = {'course_list': course_list}
 
 	if course_id:
-		c = Course.objects.get(pk=course_id)
-		context_dictionary['course'] = c
-		p = Prerequisite.objects.filter(course=course_id)
-		if len(p) == 1:
-			context_dictionary['prereq'] = p[0].prereq
+                try:
+                        c = Course.objects.get(pk=course_id)
+                        if c.school != request.user.userprofile.school or c.period != request.user.userprofile.period:
+                                raise ObjectDoesNotExist
+
+                        p = Prerequisite.objects.filter(course=course_id)
+                        context_dictionary['course'] = c
+                        if len(p) == 1:
+                                context_dictionary['prereq'] = p[0].prereq
+                except ObjectDoesNotExist:
+                        context_dictionary['error'] = 'There is no course with that id in this school and period.'
+                        
 	return render_to_response("courses/course_list.html",
 		context_dictionary,
 		RequestContext(request))
@@ -49,6 +56,38 @@ def course_create(request):
 		RequestContext(request))
 
 
+def course_edit(request, course_id):
+        course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name')
+	context_dictionary = {'course_list': course_list}
+
+        try:
+                c = Course.objects.get(pk=course_id)
+                if c.school != request.user.userprofile.school or c.period != request.user.userprofile.period:
+                        raise ObjectDoesNotExist
+
+                p = Prerequisite.objects.filter(course=course_id)
+		if len(p) == 1:
+			context_dictionary['prereq'] = p[0].prereq
+			
+                context_dictionary['course_id'] = course_id
+
+                course_form = CourseForm(instance = c)
+                
+                if request.method == 'POST':
+                        course_form = CourseForm(request.POST, instance = c)
+                        if course_form.is_valid():
+                                course_form.save()
+                                context_dictionary['succ']=True
+                                
+                context_dictionary['course_form'] = course_form
+                
+        except ObjectDoesNotExist:
+                context_dictionary['error'] = 'There is no course in this school and period with that id.'
+                        
+	return render_to_response("courses/course_edit.html",
+		context_dictionary,
+		RequestContext(request))
+
 def dept_create(request):
 	context_dictionary = {'dept_form': DepartmentForm()}
 	if request.method == 'POST':
@@ -68,7 +107,7 @@ def dept_create(request):
 #create department view
 
 def dept_list(request, dept_id = None):
-	dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
+        dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
 	context_dictionary = {'dept_list': dept_list}
 
 	if dept_id:
@@ -85,10 +124,10 @@ def dept_list(request, dept_id = None):
 		RequestContext(request))
 
 def dept_edit(request, dept_id):
-	dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
+        dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
 	context_dictionary = {'dept_list': dept_list}
 
-	try:
+        try:
                 d = Department.objects.get(pk=dept_id)
                 if d.school != request.user.userprofile.school:
                         raise ObjectDoesNotExist
@@ -104,7 +143,7 @@ def dept_edit(request, dept_id):
                                 
                 context_dictionary['dept_form'] = dept_form
                 
-	except ObjectDoesNotExist:
+        except ObjectDoesNotExist:
                 context_dictionary['error'] = 'There is no department in this school and period with that id.'
                         
 	return render_to_response("courses/dept_edit.html",

@@ -1,0 +1,106 @@
+{% extends "classes/base_class.html" %}
+
+{% block hacky_script %}
+$('#edit-class-btn').click(function() {
+	var fields = $('td:nth-child(2)')
+	$.each(fields, function(i,elm) { 
+		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
+	})
+});
+{% endblock hacky_script %}
+
+{% block current_tab %}
+	"Select"                
+{% endblock %}
+
+{% block class_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{%url 'school:classlist' %}">View Classes</a></li>
+    <li role="presentation"><a href="{%url 'school:classcreate' %}">Add Class</a></li>
+    <li role="presentation"><a href="{%url 'school:classregistration' %}">Class Registration</a></li>
+    <li role="presentation"><a href="{%url 'school:classassignment' %}">Assignments</a></li>
+    <li role="presentation"><a href="{%url 'school:classattendance' %}">Attendance</a></li>
+    <li role="presentation"><a href="{%url 'school:classperformance' %}">Grading</a></li>
+    <li role="presentation"><a href="{%url 'school:classreportcard' %}">Report Card</a></li>
+</ul>
+
+  <div class="row">  
+ <div class="col-lg-12">
+        <h1 class="page-header">
+            Classes<small> List</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Classes > List</a>
+            </li>
+        </ol>
+
+    </div>
+
+<div class="col-md-3 school-list">
+
+	<div class="filters-holder">
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
+		aria-expanded="false" aria-controls="collapseExample">
+	  	Filters
+		</a>
+		<div class="collapse" id="filters">
+		  <div>
+		    <input type="checkbox"> <label>Year</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Name</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Course</label> <input>
+		  </div>
+		</div>
+	</div>
+<br><br>
+	{% if class_list %}
+	<ul class="list-unstyled school-list">
+		{% for class in class_list %}
+	  		<li>
+	  		<a href="{% url 'school:classlist' class.id %}">
+	  			 {{ class.course }} {{ class.section }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No classes have been added.</div>
+	{% endif %}
+
+</div>
+
+<div class="col-md-9 school-info">
+	{% if class_errors or teacher_errors or schedule_errors or error%}
+	<div class="panel panel-danger">
+		{{ class_errors }}
+        {{ teacher_errors }}
+        {{ schedule_errors }}
+		{{error}}
+		{{here}}
+		{{ha}}
+	</div>
+	{% else %}
+	{%if succ%} <div class="alert alert-info" role="alert">Class was edited successfully!</div> {%endif%}
+
+	<form role="form" action="{%url 'school:classedit' class_id%}" method="post">
+		{% csrf_token %}
+		<table class="table table-hover school-form">
+			{{ class_form.as_table }}
+			{{ classteacher_form.as_table }}
+		</table>
+
+		<h4>Class Schedule</h4>
+		<table class="table table-hover">
+			{{ classday_form.as_table }}
+		</table>
+		<input type="submit" class="btn btn-primary center-block" value="Submit" />
+	</form> 
+	{%endif%}
+</div>
+
+	
+
+{% endblock class_content %}

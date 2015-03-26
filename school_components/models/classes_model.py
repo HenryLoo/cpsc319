@@ -118,7 +118,6 @@ class Assignment(models.Model):
 class Grading(models.Model):
 	use_for_related_fields = True  
 
-	g_id = models.IntegerField(blank=True, null=True)
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
 	grade = models.IntegerField(blank=True, null=True)

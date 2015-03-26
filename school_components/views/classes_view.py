@@ -156,7 +156,7 @@ def class_performance(request, class_id=None, assignment_id=None):
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
 		
-		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).values('student')
+		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).order_by('student__first_name')
 		context_dictionary['classregistration'] = class_reg_list
 	
 		assigments_list = Assignment.objects.filter(reg_class=c).order_by('-date')
@@ -164,39 +164,31 @@ def class_performance(request, class_id=None, assignment_id=None):
 
 		if assignment_id:
 			a = Assignment.objects.get(pk=assignment_id)
+			for cl in class_reg_list:
+				verify = Grading.objects.filter(student=cl.student, reg_class=c, assignment=a)
+				if len(verify) == 0:
+					Grading.objects.create(student =cl.student, reg_class=c, assignment=a)
 			context_dictionary['assignment'] = a
 
-	GradingFormSetFactory = modelformset_factory(Grading, fields=('student', 'grade', 'comments'), form=ClassGradingForm, extra=0)
-		
-	if request.method == "POST":
+			GradingFormSetFactory = modelformset_factory(Grading, form=ClassGradingForm, extra=0)
+				
+			if request.method == "POST":
 
-		formset = GradingFormSetFactory(request.POST, queryset=ClassRegistration.objects.filter(reg_class__id = class_id))
+				formset = GradingFormSetFactory(request.POST, queryset=Grading.objects.filter(assignment=a))
 
-		if formset.is_valid():
+				if formset.is_valid():
+					instances = formset.save()
 
-			instances = formset.save(commit=False)
+				else:
+					context_dictionary['errors'] = formset.errors
 
-			for instance in instances:
-				#newinstance = instance.save(commit=False)
-				instance.reg_class = c
-				instance.assignment = a
-				instance.save()
+				return HttpResponseRedirect(
+						reverse('school:classperformance', args=(class_id, assignment_id)))
 
-			# for form in forms:
-			#  	new = form.save(commit=False)
-			#  	new.reg_class = c
-			#  	new.assignment = a
-			#  	new.save()
-				#form.save()
-		else:
-			context_dictionary['errors'] = formset.errors
-
-		return render_to_response('classes/class_grading.html', context_dictionary,RequestContext(request))
-
-	else:
-		formset = GradingFormSetFactory(queryset=ClassRegistration.objects.filter(reg_class__id = class_id))
-		
-	context_dictionary['formset'] = formset
+			else:
+				formset = GradingFormSetFactory(queryset=Grading.objects.filter(assignment=a))
+				
+			context_dictionary['formset'] = formset
 
 	return render_to_response('classes/class_grading.html', context_dictionary,
 		RequestContext(request))

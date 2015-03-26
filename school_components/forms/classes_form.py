@@ -33,7 +33,7 @@ class ClassTeacherForm(ModelForm):
 		fields = ['teacher']
 
 
-class ClassRegistrationForm(ModelForm):
+class ClassRegistrationForm(Form):
 	class Meta:
 		model = ClassRegistration
 		fields = ['student']
@@ -65,6 +65,7 @@ class ClassAssignmentForm(ModelForm):
 
 class ClassGradingForm(ModelForm):
 
+	student = forms.ModelChoiceField(queryset=Student.objects.all(),required=False)
 
 	class Meta:
 		model = Grading

@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from django.core.servers.basehttp import FileWrapper
 from aplus.settings import SAMPLE_CSV_PATH
 from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
 import json
 import csv
 
@@ -29,6 +30,33 @@ def student_list(request, student_id=None):
 		context_dictionary['class_history_list'] = class_list
 
 	return render_to_response("students/student_list.html",
+		context_dictionary,
+		RequestContext(request))
+
+def student_edit(request, student_id):
+	student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
+	context_dictionary = {'student_list': student_list}
+        
+	try:
+		student = Student.objects.get(pk=student_id)
+		if student.school != request.user.userprofile.school or student.period != request.user.userprofile.period:
+                        raise ObjectDoesNotExist
+                
+		context_dictionary['student_id'] = student_id
+		s = StudentForm(instance=student)
+		
+		if request.method == 'POST':
+                        s = StudentForm(request.POST, instance=student)
+                        if s.is_valid():
+                                s.save()
+                                context_dictionary['succ']=True
+                        
+		context_dictionary['student_form'] = s
+		
+        except ObjectDoesNotExist:
+                context_dictionary['error'] = 'There is no student with that id in this school and period.'
+                
+	return render_to_response("students/student_edit.html",
 		context_dictionary,
 		RequestContext(request))
 

@@ -1,14 +1,5 @@
 {% extends "classes/base_class.html" %}
 
-{% block hacky_script %}
-$('#edit-class-btn').click(function() {
-	var fields = $('td:nth-child(2)')
-	$.each(fields, function(i,elm) { 
-		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
-	})
-});
-{% endblock hacky_script %}
-
 {% block current_tab %}
 	"Select"                
 {% endblock %}
@@ -76,7 +67,7 @@ $('#edit-class-btn').click(function() {
 	{% if class %}
 	<span>
 		<h3> Class Info </h3>
-		<a href="#" id="edit-class-btn" class="pull-right"> Edit </a>
+		<a href="{%url 'school:classedit' class.id%}" id="edit-class-btn" class="pull-right"> Edit </a>
 	</span>
 	<table class="table table-hover">
 		<tr> 
@@ -184,7 +175,11 @@ $('#edit-class-btn').click(function() {
 	
 
 
-	{% else %}
+	{% elif error %}
+		<div class="content alert alert-info" role="alert">
+			{{error}}
+		</div>
+	{%else%}
 		<div class="content alert alert-info" role="alert">
 			Select a class to view details.
 		</div>

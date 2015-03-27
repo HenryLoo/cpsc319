@@ -1,0 +1,87 @@
+{% extends "students/base_student.html" %}
+
+{% block current_tab %}
+	"View"
+{% endblock %}
+
+
+{% block student_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+    <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
+    <li role="presentation"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
+    <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
+</ul>
+
+<!-- Page Heading -->
+<div class="row">
+
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Students <small>List</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a> Students > Students List</a>
+            </li>
+        </ol>
+    </div>
+
+
+<div class="col-md-3 student-list">
+
+	<div class="filters-holder">
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
+		aria-expanded="false" aria-controls="collapseExample">
+	  	Filters
+		</a>
+		<div class="collapse" id="filters">
+		  <div>
+		    <input type="checkbox"> <label>First Name</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Last Name</label> <input>
+		    <br>
+		    <input type="checkbox"> <label>Phone Number</label> <input>
+		    <br>
+		  </div>
+		</div>
+	</div>
+<br><br>
+
+	{% if student_list %}
+	<ul class="list-unstyled student-list">
+		{% for student in student_list %}
+	  		<li>
+	  		<a href="{% url 'school:studentlist' student.id %}">
+	  			 {{ student.first_name }} {{ student.last_name }}
+	  		</a>
+	  		</li>
+	  	{% endfor %}
+	</ul>
+
+	{% else %}
+		<div class="alert alert-info" role="alert">No students have been added.</div>
+	{% endif %}
+
+</div>
+
+<div class="col-md-9 student-info">
+
+	{% if error %}
+		<div class="panel panel-danger">
+			{{ error }}
+		</div>
+	{% else %}
+	{% if succ %} <div class="alert alert-info" role="alert">Student was edited successfully!</div> {%endif%}
+	<form role="form" action="{%url 'school:studentedit' student_id%}" method="post">
+		{% csrf_token %}
+		<table class="table table-hover student-form">
+	    	{{ student_form.as_table }}
+	    </table>
+	    <input type="submit" class="btn btn-primary center-block" value="Submit" />
+	</form> 
+
+	{% endif %}
+</div>
+
+{% endblock student_content %}

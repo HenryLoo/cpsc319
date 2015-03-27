@@ -35,6 +35,7 @@
 		{% csrf_token %}
 		<table class="table table-hover school-form">
 	    {{ period_form.as_table }}
+		{{ period_transfer_form.as_table }}
 	    </table>
 	    <input class="btn btn-primary center-block" type="submit" value="Submit" />
 	</form> 

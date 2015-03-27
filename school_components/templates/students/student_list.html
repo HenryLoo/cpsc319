@@ -4,15 +4,6 @@
 	"View"
 {% endblock %}
 
-{% block hacky_script %}
-$('#edit-student-btn').click(function() {
-	var fields = $('td:nth-child(2)')
-	$.each(fields, function(i,elm) { 
-		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
-	})
-});
-{% endblock hacky_script %}
-
 {% block student_content %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
@@ -65,7 +56,7 @@ $('#edit-student-btn').click(function() {
 	{% if student %}
 	<span>
 		<h3> Student Info </h3>
-		<a href="#" id="edit-student-btn" class="pull-right"> Edit </a>
+		<a href="{%url 'school:studentedit' student.id%}" id="edit-student-btn" class="pull-right"> Edit </a>
 	</span>
 	<table class="table table-hover">
 		<tr> 

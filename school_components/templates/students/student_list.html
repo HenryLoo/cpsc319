@@ -34,44 +34,32 @@ $('#edit-student-btn').click(function() {
             </li>
         </ol>
     </div>
-
-
-<div class="col-md-3 student-list">
-
-	<div class="filters-holder">
-		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
-		aria-expanded="false" aria-controls="collapseExample">
-	  	Filters
-		</a>
-		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>First Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Last Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Phone Number</label> <input>
-		    <br>
-		  </div>
+	<div class="col-md-3 student-list">
+		<div class="filters-holder">
+			<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" aria-expanded="false">
+			Filters
+			</a>
+			<div class="collapse" id="filters">
+			 <form action="" method="get">
+	        	{{ student_filter.form.as_p }}
+	        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
+	    	</form>
+	    	</div>
+	    
+		</div>
+		<div>
+		<ul class="list-unstyled student-list">
+	        {% for student in student_filter %}
+		  		<li>
+		  		<a href="{% url 'school:studentlist' student.id %}">
+		  			 {{ student.first_name }} {{ student.last_name }}
+		  		</a>
+		  		</li>
+		  	{% endfor %}
+		</ul>
 		</div>
 	</div>
-<br><br>
 
-	{% if student_list %}
-	<ul class="list-unstyled student-list">
-		{% for student in student_list %}
-	  		<li>
-	  		<a href="{% url 'school:studentlist' student.id %}">
-	  			 {{ student.first_name }} {{ student.last_name }}
-	  		</a>
-	  		</li>
-	  	{% endfor %}
-	</ul>
-
-	{% else %}
-		<div class="alert alert-info" role="alert">No students have been added.</div>
-	{% endif %}
-
-</div>
 
 <div class="col-md-9 student-info">
 	{% if student %}
@@ -90,10 +78,6 @@ $('#edit-student-btn').click(function() {
 				{{ student.first_name}} 
 				{{ student.last_name }}
 			</td>
-		</tr>
-		<tr> 
-			<td> Overall Performance: </td>
-			<td> 80% </td>
 		</tr>
 		<tr> 
 			<td> Gender: </td>
@@ -163,7 +147,9 @@ $('#edit-student-btn').click(function() {
 		<div class="alert alert-info" role="alert">
 			Select a student to view details.
 		</div>
+		
 	{% endif %}
+</div>
 </div>
 
 {% endblock student_content %}

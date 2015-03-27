@@ -78,7 +78,7 @@
 				{% for reg in class.enrolled_class.all %}
 					{% if reg.registration_status %}
 				  	<tr>
-					    <td><a href="{% url 'school:studentlist' reg.student.id%}">{{ reg.student }}</a></td>
+					    <td><a href="{% url 'school:studentlist' reg.student.id %}">{{ reg.student }}</a></td>
 					    <td>
 					    	<button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal" 
 					    	data-target="#remove-student-modal" data-student-name="{{ reg.student }}"

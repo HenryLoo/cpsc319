@@ -1,18 +1,5 @@
 {% extends "teachers/base_teacher.html" %}
 
-{% block current_tab %}
-	"View"
-{% endblock %}
-
-<!--{% block hacky_script %}
-$('#edit-teacher-btn').click(function() {
-	var fields = $('td:nth-child(2)')
-	$.each(fields, function(i,elm) { 
-		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
-	})
-});
-{% endblock hacky_script %}-->
-
 {% block teacher_content %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{% url 'account:view_teachers' %}">View Teachers</a></li>
@@ -20,35 +7,29 @@ $('#edit-teacher-btn').click(function() {
     <li role="presentation"><a href="{% url 'account:upload_teachers' %}">Upload CSV</a></li>
 </ul>
 
-                 <div class="row">   
-                 	<div class="col-lg-12">
-                        <h1 class="page-header">
-                            Teachers<small> List</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Teachers > List</a>
-                            </li>
-                        </ol>
-
-                    </div>
+<div class="row">   
+	<div class="col-lg-12">
+    <h1 class="page-header">
+        Teachers<small> List</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li class="active">
+            <i class="fa fa-sitemap"></i> <a> Teachers > List</a>
+        </li>
+    </ol>
+</div>
 
 <div class="col-md-3 school-list">
 
 	<div class="filters-holder">
-		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
-		aria-expanded="false" aria-controls="collapseExample">
-	  	Filters
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" aria-expanded="false">
+		Filters
 		</a>
 		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Class</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Year</label> <input>
-		    <br>
-		  </div>
+		 <form action="{%url 'account:view_teachers' %}" method="get">
+        	{{ teacher_filter.as_p }}
+        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
+    	</form>
 		</div>
 	</div>
 <br><br>
@@ -66,7 +47,6 @@ $('#edit-teacher-btn').click(function() {
 	{% else %}
 		<div class="alert alert-info" role="alert">No teachers have been added.</div>
 	{% endif %}
-
 </div>
 
 <div class="col-md-9 teacher-info">

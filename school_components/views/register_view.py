@@ -46,10 +46,14 @@ class CourseRegisterWizard(SessionWizardView):
 		context_dictionary = self.get_context_data(form=form, **kwargs)
 		#  get parent/students for autocomplete
 		if self.steps.current == 'parent_form':
-			context_dictionary['parent_list'] = Parent.objects.all().values('id', 'first_name', 'last_name')
+			context_dictionary['parent_list'] = Parent.objects.filter(
+				school = self.request.user.userprofile.school
+			).values('id', 'first_name', 'last_name')
 		
 		elif self.steps.current == 'student_form':
-			context_dictionary['student_list'] = Student.objects.all().values('id', 'first_name', 'last_name')
+			context_dictionary['student_list'] = Student.objects.filter(
+				school = self.request.user.userprofile.school
+			).values('id', 'first_name', 'last_name')
 		
 		elif self.steps.current == 'summary_form':
 			#  save parent/student before rendering summary form
@@ -93,14 +97,14 @@ class CourseRegisterWizard(SessionWizardView):
 			defaults = {
 				'cell_phone': form_data['cell_phone'],
 				'email' : form_data['email'],
-				'school' : school,
-				'period': period, 
-				'comments': form_data['parent_comments']
+				'comments': form_data['parent_comments'],
+				'period': period
 			}
 
 			parent, created = Parent.objects.get_or_create(
 				first_name=form_data['first_name'], 
 				last_name=form_data['last_name'],
+				school=school,
 				defaults=defaults)
 
 			if not created:
@@ -139,13 +143,13 @@ class CourseRegisterWizard(SessionWizardView):
 				'emergency_contact_phone' : parent_data['emergency_cell_phone'],
 				'relation' : parent_data['emergency_relation'],
 				'parent': parent,
-				'school': school,
 				'period': period
 			}
 
 			student, created = Student.objects.get_or_create(
 				first_name=form_data['first_name'], 
-				last_name=form_data['last_name'],
+				last_name=form_data['last_name'],	
+				school=school,
 				defaults=defaults)
 
 			if not created:

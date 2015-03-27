@@ -97,6 +97,11 @@ class AvailabilityForm(ModelForm):
     class Meta():
         model = TeachingAvailability
         fields = '__all__'
+
+class TeacherFilterForm(forms.Form):
+    name = forms.CharField(required=False)
+    course  = forms.CharField(required=False)
+    class_section = forms.CharField(required=False, label="Class Section")
         
    
 

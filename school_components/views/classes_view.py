@@ -15,7 +15,8 @@ from django.forms.models import modelformset_factory
 def class_list(request, class_id=None):
 	class_list = Class.objects.filter(
 		school = request.user.userprofile.school, 
-		period = request.user.userprofile.period).order_by('course')
+		period = request.user.userprofile.period
+	).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -27,11 +28,25 @@ def class_list(request, class_id=None):
 		RequestContext(request))
 
 def class_create(request):
+	class_form = ClassForm(prefix='info')
+	class_form.fields['course'].queryset = Course.objects.filter(
+		school = request.user.userprofile.school, 
+		period = request.user.userprofile.period
+	)
+
+	# TODO: teacher will have period field
+	teacher_form = ClassTeacherForm(prefix='te')
+	teacher_form.fields['teacher'].queryset = TeacherUser.objects.filter(
+		user__period = request.user.userprofile.period, 
+		user__school = request.user.userprofile.school
+	)
+   
 	context_dictionary = {
-		'class_form': ClassForm(prefix='info'), 
+		'class_form': class_form, 
 		'classday_form': ClassScheduleForm(prefix='sch'),
-		'classteacher_form': ClassTeacherForm(prefix='te')
+		'classteacher_form': teacher_form
 	}
+
 	if request.method == 'POST':
 		cf = ClassForm(request.POST, prefix='info')
 		sf = ClassScheduleForm(request.POST, prefix='sch')
@@ -83,7 +98,9 @@ def class_registration(request, class_id=None):
 		if class_id:
 			cl = Class.objects.get(pk=class_id)
 			context_dictionary['class'] = cl 
-			context_dictionary['student_list'] = Student.objects.all()
+			context_dictionary['student_list'] = Student.objects.filter(
+				school = request.user.userprofile.school
+			)
 			context_dictionary['form'] = ClassRegistrationForm()
 			context_dictionary['remove_form'] = RemoveClassRegistrationForm()
 		
@@ -94,7 +111,7 @@ def class_registration(request, class_id=None):
 # register student to class
 def class_registration_helper(request, class_id):
 	student_id = request.POST['student_id']
-	student = Student.objects.get(pk=student_id)
+	student = Student.objects.get(pk=student_idq)
 	
 	# check if on waiting list
 	reg = student.enrolled_student.filter(reg_class__id=class_id)

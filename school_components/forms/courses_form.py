@@ -2,7 +2,8 @@ from django import forms
 from school_components.models import Course, Prerequisite, Department 
 
 class CourseForm(forms.ModelForm):
-	prerequisite = forms.ModelChoiceField(queryset=Course.objects.all(), 
+	prerequisite = forms.ModelChoiceField(
+		queryset=Course.objects.all(), 
 		required=False)
 
 	class Meta:

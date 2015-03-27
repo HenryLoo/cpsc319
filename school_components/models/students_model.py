@@ -33,6 +33,7 @@ class StudentManager(models.Manager):
 		student_defaults = {
 			'home_phone': home_phone,
 			'birthdate': birthdate,
+			'gender' : gender,
 			'address': address,
 			'email': email,
 			'allergies': allergies,

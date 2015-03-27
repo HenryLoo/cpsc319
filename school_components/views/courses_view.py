@@ -11,7 +11,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 def course_list(request, course_id=None):
-	course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name')
+	course_list = Course.objects.filter(
+		school = request.user.userprofile.school, 
+		period = request.user.userprofile.period
+	).order_by('name')
 	context_dictionary = {'course_list': course_list}
 
 	if course_id:

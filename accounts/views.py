@@ -94,7 +94,31 @@ def create_teacher_view(request):
 def view_teachers_view (request, teacher_id=None):
     teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
     #teacher_list = TeacherUser.objects.all()
-    context_dictionary = {'teacher_list': teacher_list}
+    
+     # check if searching 
+    if 'name' in request.GET:
+        search_name = request.GET.get('name', None)
+        search_section = request.GET.get('class_section', None)
+        search_course = request.GET.get('course', None)
+
+        if search_name:
+            print search_name
+            teacher_list = teacher_list.filter(
+                user__user__first_name__icontains=search_name,
+                user__user__last_name__icontains=search_name)
+        if search_course:
+            print search_course
+            teacher_list = teacher_list.filter(
+                teacher__taught_class__course__name__icontains=search_course
+            )
+        if search_section:
+            print search_section
+            teacher_list = teacher_list.filter(
+                teacher__taught_class__section__icontains=search_section
+            )
+
+    context_dictionary = {'teacher_list': teacher_list,
+                        'teacher_filter': TeacherFilterForm() }
 
     if teacher_id:
         try:

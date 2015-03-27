@@ -1,7 +1,7 @@
 from django.views import generic
 from school_components.models import Student, Parent, School, Period
 from school_components.models.courses_model import *
-from school_components.forms.students_form import StudentForm, StudentCSVForm, StudentFormSet
+from school_components.forms.students_form import *
 from school_components.utils import SchoolUtils
 from django.shortcuts import render_to_response, redirect
 from django.forms.models import model_to_dict
@@ -18,8 +18,14 @@ import csv
 
 
 def student_list(request, student_id=None):
-	student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
-	context_dictionary = {'student_list': student_list}
+	student_list = Student.objects.filter(
+		school = request.user.userprofile.school
+	).order_by('last_name')
+
+	context_dictionary = {
+		'student_list': student_list,
+		'student_filter': StudentFilter(request.GET, queryset=student_list)
+	}
 
 	if student_id:
 		student = Student.objects.get(pk=student_id)

@@ -90,9 +90,9 @@ def class_edit(request, class_id):
                 context_dictionary['class_id'] = class_id
 
                 s = c.schedule
-                context_dictionary['here'] = 'here'
-                t = c.taught_class
-                context_dictionary['ha'] = 'ha'
+                #context_dictionary['here'] = 'here' for testing 
+                t = c.taught_class.all()[0] #assume 1 teacher
+                #context_dictionary['ha'] = 'ha' for testing
                 class_form = ClassForm(prefix='info', instance = c)
 		classday_form = ClassScheduleForm(prefix='sch', instance = s)
 		classteacher_form = ClassTeacherForm(prefix='te', instance = t)

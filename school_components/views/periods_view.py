@@ -1,10 +1,11 @@
 from school_components.models.period_model import Period
-from school_components.forms.periods_form import PeriodForm
+from school_components.forms.periods_form import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
+from school_components.utils import *
 
 def period_list(request, period_id=None):
 	period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
@@ -26,14 +27,26 @@ def period_list(request, period_id=None):
 def period_create(request):
 	period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
 	context_dictionary = {'period_list': period_list,
-							 'period_form': PeriodForm()}
+							 'period_form': PeriodForm(), 'period_transfer_form': PeriodTransferForm(cur_school=request.user.userprofile.school,
+                                                                                                                          cur_period=request.user.userprofile.period)}
 	if request.method == 'POST':
 		cf = PeriodForm(request.POST)
-		if cf.is_valid():
+		tf = PeriodTransferForm(request.POST, cur_school=request.user.userprofile.school,
+                                 cur_period=request.user.userprofile.period)
+
+		context_dictionary['period_form'] = cf
+		context_dictionary['period_transfer_form'] = tf
+		
+		if cf.is_valid() and tf.is_valid():
 			new = cf.save(commit=False)
 			new.school = request.user.userprofile.school
 			print (request.user.userprofile.school)
 			new.save()
+			if tf.fields['transfer_teachers']:
+                                SchoolUtils.duplicate_teachers(request.user.userprofile.school, request.user.userprofile.period, new)
+        
+                        selected_courses = tf.courses  
+			duplicate_courses(selected_courses, new)
 
 			return HttpResponseRedirect(
 				reverse('school:periodlist', args=(new.id,)))

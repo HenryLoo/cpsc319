@@ -48,7 +48,21 @@
 <div class="col-md-8">
   <div class='col-md-4'>
 
-
+{% if assignment %}
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    {{assignment.title}}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    {% for a in assignment_list %}
+    {% if a != assignment%}
+    <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'school:classperformance' class.id a.id %}">{{a.title}}</a></li>
+    {%endif%}
+    {% endfor %}
+  </ul>
+</div>
+{%else%}
 <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
     Assignment
@@ -60,6 +74,7 @@
     {% endfor %}
   </ul>
 </div>
+{% endif %}
 
 </div>
 
@@ -90,8 +105,8 @@
      {% for form in formset.forms %}
 
     <tr>
-<!-- {{form.as_p}} -->
-{{form.id}}
+    {{form.id}}
+
     <td> {{ form.student }}</td>
     <td>{{assignment.total_weight}}</td>
     <td>{{assignment.grade_weight}}</td>
@@ -105,13 +120,14 @@
     {{ form.comments }}
     </div>
     </td>
+    <td>{{form.reg_class.as_hidden}}</td>
     </tr>
        
     {% endfor %}
 
 </table>
 
-    <input type="submit" class="btn btn-primary pull-right" value="Upload" />
+    <input type="submit" class="btn btn-primary pull-right" value="Save" />
  
 </form>
 

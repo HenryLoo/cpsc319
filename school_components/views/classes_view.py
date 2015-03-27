@@ -8,7 +8,8 @@ from django.template import RequestContext
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
-from django.forms.formsets import formset_factory
+from django.forms.models import inlineformset_factory
+
 from django.forms.models import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -191,9 +192,83 @@ def class_attendance(request, class_id=None):
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
-		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).values()
+
+		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).order_by('student__first_name')
 		context_dictionary['classregistration'] = class_reg_list
-	
+
+		AttendanceFormSetFactory = modelformset_factory(ClassAttendance, extra=0, can_delete=True)
+		date_form = ClassAttendanceDateForm()
+		context_dictionary['dateform'] = date_form
+
+		if request.method == "POST":
+
+				if '_date' in request.POST:
+
+					date_form = ClassAttendanceDateForm(request.POST)
+					inter = date_form['date'].value()
+					if '/' in inter:
+						x,y,z = inter.split('/')
+						date_value = z + "-" + x + "-" + y
+					else:
+						date_value = inter	
+
+					context_dictionary['date_value'] = date_value
+
+					for cl in class_reg_list:
+						verify = ClassAttendance.objects.filter(student=cl.student, reg_class=c, date=date_value)
+						if len(verify) == 0:
+							ClassAttendance.objects.create(student =cl.student, reg_class=c, date=date_value)
+
+					formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+					context_dictionary['formset'] = formset
+
+					date_form = ClassAttendanceDateForm(initial={'date': date_value})
+					context_dictionary['dateform'] = date_form
+
+					return render_to_response('classes/class_attendance.html', context_dictionary,
+						RequestContext(request))
+
+				elif '_attendance' in request.POST:
+
+					date_form = ClassAttendanceDateForm(request.POST)
+					date_value = date_form['date'].value()
+					formset = AttendanceFormSetFactory(request.POST, queryset=ClassAttendance.objects.filter(date=date_value))
+
+					if formset.is_valid():
+
+						instances = formset.save(commit=False)
+						for instance in instances:
+							instance.reg_class = c
+							instance.date = date_value
+							instance.save()
+
+					else:
+						context_dictionary['errors'] = formset.errors
+
+					context_dictionary['date_value'] = date_value
+
+					formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+					context_dictionary['formset'] = formset
+
+					date_form = ClassAttendanceDateForm(initial={'date': date_value})
+					context_dictionary['dateform'] = date_form
+
+					return render_to_response('classes/class_attendance.html', context_dictionary,
+						RequestContext(request))
+
+		else:
+				date_form = ClassAttendanceDateForm()
+				inter = date_form['date'].value()
+				if inter and '/' in inter:
+					x,y,z = inter.split('/')
+					date_value = z + "-" + x + "-" + y
+				else:
+					date_value = inter	
+				formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+		
+		context_dictionary['dateform'] = date_form
+		context_dictionary['formset'] = formset
+
 	return render_to_response('classes/class_attendance.html', context_dictionary,
 		RequestContext(request))
 
@@ -206,7 +281,7 @@ def class_performance(request, class_id=None, assignment_id=None):
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
 		
-		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).values('student')
+		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).order_by('student__first_name')
 		context_dictionary['classregistration'] = class_reg_list
 	
 		assigments_list = Assignment.objects.filter(reg_class=c).order_by('-date')
@@ -214,39 +289,51 @@ def class_performance(request, class_id=None, assignment_id=None):
 
 		if assignment_id:
 			a = Assignment.objects.get(pk=assignment_id)
+			for cl in class_reg_list:
+				verify = Grading.objects.filter(student=cl.student, reg_class=c, assignment=a)
+				if len(verify) == 0:
+					Grading.objects.create(student =cl.student, reg_class=c, assignment=a)
 			context_dictionary['assignment'] = a
 
-	GradingFormSetFactory = modelformset_factory(Grading, fields=('student', 'grade', 'comments'), form=ClassGradingForm, extra=0)
-		
-	if request.method == "POST":
+			GradingFormSetFactory = inlineformset_factory(Assignment, Grading, extra=0, can_delete=True)
+			assignment = Assignment.objects.get(pk=assignment_id)
 
-		formset = GradingFormSetFactory(request.POST, queryset=ClassRegistration.objects.filter(reg_class__id = class_id))
+			if request.method == "POST":
 
-		if formset.is_valid():
+				formset = GradingFormSetFactory(request.POST, instance=assignment)
 
-			instances = formset.save(commit=False)
+				if formset.is_valid():
 
-			for instance in instances:
-				#newinstance = instance.save(commit=False)
-				instance.reg_class = c
-				instance.assignment = a
-				instance.save()
+					instances = formset.save(commit=False)
+					for instance in instances:
+						instance.assignment = a
+						instance.reg_class = c
+						instance.save()
 
-			# for form in forms:
-			#  	new = form.save(commit=False)
-			#  	new.reg_class = c
-			#  	new.assignment = a
-			#  	new.save()
-				#form.save()
-		else:
-			context_dictionary['errors'] = formset.errors
+					#performance
+					for cl in class_reg_list:
+						current = Grading.objects.get(student=cl.student, reg_class=c, assignment=a)
+						grade = current.grade
 
-		return render_to_response('classes/class_grading.html', context_dictionary,RequestContext(request))
+						if grade == None:
+							grade = 0.0
+						total = a.total_weight
+						current.performance = (grade/total) * 100
+						current.save()
 
-	else:
-		formset = GradingFormSetFactory(queryset=ClassRegistration.objects.filter(reg_class__id = class_id))
-		
-	context_dictionary['formset'] = formset
+
+				else:
+					print('Error')
+					context_dictionary['errors'] = formset.errors
+					print(formset.errors)
+
+				return HttpResponseRedirect(
+						reverse('school:classperformance', args=(class_id, assignment_id)))
+
+			else:
+				formset = GradingFormSetFactory(instance=assignment)
+				
+			context_dictionary['formset'] = formset
 
 	return render_to_response('classes/class_grading.html', context_dictionary,
 		RequestContext(request))
@@ -298,6 +385,13 @@ def class_reportcard(request, class_id=None, student_id=None):
 
 		grading_list = Grading.objects.filter(student=s, reg_class=c).order_by('-assignment__date').reverse()
 		context_dictionary['gradinglist'] = grading_list
+
+		cont=0
+		for g in grading_list:
+			cont = cont + g.performance
+		total = len(grading_list)
+		average = cont/total
+		context_dictionary['overall'] = average
 
 	return render_to_response('classes/class_reportcard.html', context_dictionary,
 		RequestContext(request))

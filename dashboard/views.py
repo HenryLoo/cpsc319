@@ -6,7 +6,7 @@ from dashboard.models import Chart, Notification, NotificationType
 
 from accounts.models import UserProfile
 
-from school_components.models import Class, ClassSchedule, ClassRegistration, ClassTeacher, Course, Grading, Parent, Payment, Period, School, Student
+from school_components.models import Class, ClassAttendance, ClassSchedule, ClassRegistration, ClassTeacher, Course, Grading, Parent, Payment, Period, School, Student
 
 from django.db.models import Q
 
@@ -15,18 +15,18 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
-from django.db.models import Sum, Count
+from django.db.models import Avg, Sum, Count
 
 import datetime
 
 from operator import attrgetter
-from itertools import chain
+from itertools import groupby
 
 from django.contrib.auth import authenticate, login
 
 def statistics_page(request):
     
-    return_dict = {}
+    context_dictionary = {}
 
     currentSchool = request.user.userprofile.school
     currentPeriod = request.user.userprofile.period
@@ -41,7 +41,7 @@ def statistics_page(request):
         period = currentPeriod
         chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
         chart.save()
-        return_dict['createdCustom'] = 1
+        context_dictionary['createdCustom'] = 1
 
     students = Student.objects.count()
     admins = UserProfile.objects.exclude(role='TEACHER').count()
@@ -62,70 +62,104 @@ def statistics_page(request):
         paymentTotal = "0.00"
     receipts = Payment.objects.all().order_by('-date')
 
-    return_dict['usage'] = [students, admins, teachers, classes, courses, periods, schools]
-    return_dict['payments'] = [unregisteredPaidStudents, paymentTotal, receipts]
+    context_dictionary['usage'] = [students, admins, teachers, classes, courses, periods, schools]
+    context_dictionary['payments'] = [unregisteredPaidStudents, paymentTotal, receipts]
 
     regXAxis = Period.objects.filter(school_id=currentSchool).all().order_by('start_date').values_list('description', flat=True)
     regYAxis = ClassRegistration.objects.filter(school_id=currentSchool).values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
-    return_dict['registrationChart'] = []
+    context_dictionary['registrationChart'] = []
     for x in zip(regXAxis, regYAxis):
-        return_dict['registrationChart'].append([x[0], x[1]])
+        context_dictionary['registrationChart'].append([x[0], x[1]])
 
     
-    performance = Grading.objects.filter(reg_class__school=currentSchool, reg_class__period=currentPeriod).values('grade').order_by('grade').annotate(num_students=Count('grade'))   
-    performXAxis = performance.values_list('grade', flat=True)
-    performYAxis = performance.values_list('num_students', flat=True)
-    return_dict['performanceChart'] = []
+    performance = Grading.objects.filter(reg_class__school=currentSchool, reg_class__period=currentPeriod).values('student_id').annotate(avg_grades=Avg('performance'))
+    gradeList = [round(grade) for grade in performance.order_by('avg_grades').values_list('avg_grades', flat=True)]
+    performXAxis = list(set(gradeList))
+    performYAxis = [len(list(group)) for key, group in groupby(gradeList)]
+    context_dictionary['performXAxis'] = performXAxis
+    context_dictionary['performYAxis'] = performYAxis
+    context_dictionary['performanceChart'] = []
     for x in zip(performXAxis, performYAxis):
-        return_dict['performanceChart'].append([x[0], x[1]])
+        context_dictionary['performanceChart'].append([x[0], x[1]])
 
-    numPass = sum(performance.exclude(grade__range=[5, 10]).values_list('num_students', flat=True))
-    try:
-        numFail = performance.filter(grade__range=[0, 5]).values_list('num_students', flat=True).get()
-    except:
-        numFail = ''
-    return_dict['passFailChart'] = [['Pass', numPass], ['Fail', numFail]]
+    numPass = sum(grade >= 50 for grade in gradeList)
+    numFail = sum(grade < 50 for grade in gradeList)
+    context_dictionary['passFailChart'] = [['Pass', numPass], ['Fail', numFail]]
 
-
-    return_dict['chartTypeOptions'] = Chart._meta.get_field('chart_type').choices
-    return_dict['xAxisOptions'] = Chart._meta.get_field('x_axis').choices
-    return_dict['yAxisOptions'] = Chart._meta.get_field('y_axis').choices
-    return_dict['visibilityOptions'] = Chart._meta.get_field('visibility').choices
+    context_dictionary['chartTypeOptions'] = Chart._meta.get_field('chart_type').choices
+    context_dictionary['xAxisOptions'] = Chart._meta.get_field('x_axis').choices
+    context_dictionary['yAxisOptions'] = Chart._meta.get_field('y_axis').choices
+    context_dictionary['visibilityOptions'] = Chart._meta.get_field('visibility').choices
 
     charts = Chart.objects.filter(school_id=currentSchool, period_id=currentPeriod)
     if request.user.userprofile == 'TEACHER':
         charts = charts.filter(visibility='ALL')
-    charts = charts.all()
+    charts = charts.all().order_by('id')
 
-    # return_dict['customCharts'] = Student.objects.filter()
-    return_dict['customChartsTriplets'] = []
-    for i in range(0, len(charts), 3):
-        return_dict['customChartsTriplets'].append(charts[i:i+3])
+    allChartData = []
+    for chart in charts:
+        xAxis = ''
+        xIDs = ''
+        xFilter = ''
+        if chart.x_axis == 'SCHOOL':
+            schools = School.objects.all()
+            xAxis = schools.values_list('title', flat=True)
+            xIDs = schools.values_list('id', flat=True)
+            xFilter = 'school_id'
+        elif chart.x_axis == 'PERIOD':
+            periods = Period.objects.filter(school=currentSchool).all()
+            xAxis = periods.values_list('description', flat=True)
+            xIDs = periods.values_list('id', flat=True)
+            xFilter = 'period_id'
+        elif chart.x_axis == 'COURSE':
+            courses = Course.objects.filter(school=currentSchool, period=currentPeriod)
+            xAxis = courses.values_list('name', flat=True)
+            xIDs = courses.values_list('id', flat=True)
+            xFilter = 'course_id'
 
-    # for chart in charts:
-    #     xVar = ''
-    #     if chart.x_axis == 'SCHOOL':
-    #         xVar = 'school'
-    #     elif chart.x_axis == 'PERIOD':
-    #         xVar = 'period'
-    #     elif chart.x_axis == 'CLASS':
-    #         xVar = 'class'
+        yAxis = []
+        classes = Class.objects
+        for x in xIDs:
+            filteredClassIDs = classes.filter(**{xFilter: x}).values_list('id', flat=True)
+            if chart.y_axis == 'NSTUDENTS':
+                yAxis.append(ClassRegistration.objects.filter(reg_class_id__in=filteredClassIDs).all().values('student_id').distinct().count())
+            elif chart.y_axis == 'NCLASSES':
+                yAxis.append(len(filteredClassIDs))
+            elif chart.y_axis == 'NTEACHERS':
+                yAxis.append(ClassTeacher.objects.filter(taught_class_id__in=filteredClassIDs).all().values('teacher_id').distinct().count())
+            elif chart.y_axis == 'ATTENDANCE':
+                allAttendance = ClassAttendance.objects.filter(reg_class_id__in=filteredClassIDs)
+                numAttended = allAttendance.exclude(attendance='A').all().count()
+                numTotal = allAttendance.all().count()
+                if numTotal == 0:
+                    numTotal = 1
+                yAxis.append(round(sumAttended/numTotal))
+            elif chart.y_axis == 'PERFORMANCE':
+                averages = Grading.objects.filter(reg_class_id__in=filteredClassIDs).annotate(avg_grades=Avg('performance')).values_list('avg_grades', flat=True)
+                yAxis.append(round(sum(averages)/len(averages)))
 
-    #     chartData = ''
-    #     if chart.y_axis == 'NSTUDENTS':
-    #         chartData = Student.objects.select_related(xVar)
-    #     elif chart.y_axis == 'NCLASSES':
-    #         #
-    #     elif chart.y_axis == 'NTEACHERS':
-    #         #
-    #     elif chart.y_axis == 'ATTENDANCE':
-    #         #
-    #     elif chart.y_axis == 'PERFORMANCE':
-    #         #
+        chartData = []
+        for x in zip(xAxis, yAxis):
+            chartData.append([x[0], x[1]])
+        allChartData.append(chartData)
 
-    #     return_dict['customCharts'].append([])
+    chartsWithData = []
+    for x in zip(charts, allChartData):
+        chartTypeField = x[0].chart_type
+        chartTypeValue = ''
+        if chartTypeField == 'BAR':
+            chartTypeValue = 'BarChart'
+        elif chartTypeField == 'PIE':
+            chartTypeValue = 'PieChart'
+        elif chartTypeField == 'LINE':
+            chartTypeValue = 'LineChart'
+        chartsWithData.append([x[0], x[1], chartTypeValue])
 
-    return render_to_response("dashboard/statistics_page.html",return_dict,RequestContext(request))
+    context_dictionary['customChartsTriplets'] = []
+    for i in range(0, len(chartsWithData), 3):
+        context_dictionary['customChartsTriplets'].append(chartsWithData[i:i+3])
+
+    return render_to_response("dashboard/statistics_page.html",context_dictionary,RequestContext(request))
 
 # def demostatistics_page(request):
     
@@ -135,7 +169,7 @@ def statistics_page(request):
 
 def notifications_page(request):
     
-    return_dict = {}
+    context_dictionary = {}
 
     currentSchool = request.user.userprofile.school
     currentPeriod = request.user.userprofile.period
@@ -151,10 +185,10 @@ def notifications_page(request):
 
     allNotifications = Notification.objects.filter(school_id=currentSchool, period_id=currentPeriod).all().order_by('-date')
     notifications = allNotifications
-    return_dict['filter'] = request.GET.get("filter")
-    if return_dict['filter'] == '1':
+    context_dictionary['filter'] = request.GET.get("filter")
+    if context_dictionary['filter'] == '1':
         notifications = allNotifications.filter(status=False)
-    elif return_dict['filter'] == '2':
+    elif context_dictionary['filter'] == '2':
         notifications = allNotifications.filter(status=True)
     else:
         notifications = allNotifications
@@ -163,15 +197,15 @@ def notifications_page(request):
     for notification in notifications:
         notificationTypes.append(NotificationType.objects.get(id=notification.notification_type_id))
         studentNames.append(Student.objects.get(id=notification.student_id))
-    return_dict['numNew'] = allNotifications.filter(status=False).count()
-    return_dict['numOld'] = allNotifications.filter(status=True).count()
-    return_dict['numAll'] = return_dict['numNew'] + return_dict['numOld']
+    context_dictionary['numNew'] = allNotifications.filter(status=False).count()
+    context_dictionary['numOld'] = allNotifications.filter(status=True).count()
+    context_dictionary['numAll'] = context_dictionary['numNew'] + context_dictionary['numOld']
 
-    return_dict['notifications'] = []
+    context_dictionary['notifications'] = []
     for x in zip(notifications, notificationTypes, studentNames):
-        return_dict['notifications'].append([x[0], x[1], x[2]])
+        context_dictionary['notifications'].append([x[0], x[1], x[2]])
 
-    # pages = len(return_dict['notifications'])
+    # pages = len(context_dictionary['notifications'])
     # currentPage = 1
     # pageRange = [currentPage, currentPage + 7]
     # 
@@ -179,13 +213,13 @@ def notifications_page(request):
     # if currentPage + 7 > pages:
     #   pageRange = [pages - 7, pages]
 
-    # return_dict['pages'] = [i for i in range(pageRange[0], pageRange[1])]
+    # context_dictionary['pages'] = [i for i in range(pageRange[0], pageRange[1])]
         
-    return render_to_response("dashboard/notifications_page.html",return_dict,RequestContext(request))
+    return render_to_response("dashboard/notifications_page.html",context_dictionary,RequestContext(request))
 
 def notifications_settings_page(request):
     
-    return_dict = {}
+    context_dictionary = {}
     
     if request.method == 'POST':
         attendanceCond = request.POST.get("attendanceCond")
@@ -220,42 +254,42 @@ def notifications_settings_page(request):
             assignment.update(condition=assignmentCond)
             assignment.update(content=assignmentText)
 
-        return_dict['applied'] = 1
+        context_dictionary['applied'] = 1
 
     preAttendance = NotificationType.objects.filter(notification_type='Attendance').get()
     prePerformance = NotificationType.objects.filter(notification_type='Performance').get()
     preAssignment = NotificationType.objects.filter(notification_type='Assignment').get()
 
-    return_dict['settings'] = [preAttendance, prePerformance, preAssignment]
+    context_dictionary['settings'] = [preAttendance, prePerformance, preAssignment]
 
-    return render_to_response("dashboard/notifications_settings_page.html",return_dict,RequestContext(request))
+    return render_to_response("dashboard/notifications_settings_page.html",context_dictionary,RequestContext(request))
 
 def classes_schedule_page(request):
     
-    return_dict = {}
+    context_dictionary = {}
 
     currentSchool = request.user.userprofile.school
     currentPeriod = request.user.userprofile.period
 
-    return_dict['weekday'] = request.GET.get("weekday")
-    if return_dict['weekday'] not in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']:
-        return_dict['weekday'] = datetime.datetime.today().strftime('%a')
+    context_dictionary['weekday'] = request.GET.get("weekday")
+    if context_dictionary['weekday'] not in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']:
+        context_dictionary['weekday'] = datetime.datetime.today().strftime('%a')
 
     filteredClassIDs = Class.objects.filter(school_id=currentSchool, period_id=currentPeriod).values_list('id', flat=True)
     classSchedule = ClassSchedule.objects.filter(sch_class_id__in=filteredClassIDs)
-    if return_dict['weekday'] == 'Mon':
+    if context_dictionary['weekday'] == 'Mon':
         classSchedule = classSchedule.filter(monday=True)
-    elif return_dict['weekday'] == 'Tue':
+    elif context_dictionary['weekday'] == 'Tue':
         classSchedule = classSchedule.filter(tuesday=True)
-    elif return_dict['weekday'] == 'Wed':
+    elif context_dictionary['weekday'] == 'Wed':
         classSchedule = classSchedule.filter(wednesday=True)
-    elif return_dict['weekday'] == 'Thu':
+    elif context_dictionary['weekday'] == 'Thu':
         classSchedule = classSchedule.filter(thursday=True)
-    elif return_dict['weekday'] == 'Fri':
+    elif context_dictionary['weekday'] == 'Fri':
         classSchedule = classSchedule.filter(friday=True)
-    elif return_dict['weekday'] == 'Sat':
+    elif context_dictionary['weekday'] == 'Sat':
         classSchedule = classSchedule.filter(saturday=True)
-    elif return_dict['weekday'] == 'Sun':
+    elif context_dictionary['weekday'] == 'Sun':
         classSchedule = classSchedule.filter(sunday=True)
     classSchedule = classSchedule.order_by('start_time')
 
@@ -278,11 +312,11 @@ def classes_schedule_page(request):
     for x in courseIDs:
         courseNames.append(Course.objects.get(pk=x).name)
 
-    return_dict['schedule'] = []
+    context_dictionary['schedule'] = []
     for i in range(0, len(classTimes)):
-        return_dict['schedule'].append([classTimes[i][0].strftime('%H:%M'), classTimes[i][1].strftime('%H:%M'), courseNames[i], numStudents[i], numTeachers[i], classIDs[i]])
+        context_dictionary['schedule'].append([classTimes[i][0].strftime('%H:%M'), classTimes[i][1].strftime('%H:%M'), courseNames[i], numStudents[i], numTeachers[i], classIDs[i]])
 
-    return render_to_response("dashboard/classes_schedule_page.html",return_dict,RequestContext(request))
+    return render_to_response("dashboard/classes_schedule_page.html",context_dictionary,RequestContext(request))
 
 def view_reports(request):
     
@@ -299,13 +333,13 @@ def assignment(request):
 
 #def statistics_page(request):
 #    
-#    return_dict = {}
+#    context_dictionary = {}
 #    
 #    classes = Attendance.objects.values_list('classID', flat=True).distinct().order_by('classID')
 #    
-#    return_dict['statistics'] = classes
+#    context_dictionary['statistics'] = classes
 #    
-#    return render_to_response("dashboard/statistics_page.html",return_dict,RequestContext(request))
+#    return render_to_response("dashboard/statistics_page.html",context_dictionary,RequestContext(request))
 #
 #def notifications_page(request):
 #    
@@ -321,7 +355,7 @@ def assignment(request):
 
 
 # def attendance_page(request):
-#     return_dict = {}
+#     context_dictionary = {}
 
 #     viewFilter = request.GET.get("viewFilter")
 #     presentStudents = 0
@@ -333,12 +367,12 @@ def assignment(request):
 #       presentStudents = Attendance.objects.filter(classID=viewFilter).filter(status=1).count()
 #       absentStudents = Attendance.objects.filter(classID=viewFilter).filter(status=0).count()
         
-#     return_dict['attendance'] = [['Present', presentStudents], ['Absent', absentStudents]]
+#     context_dictionary['attendance'] = [['Present', presentStudents], ['Absent', absentStudents]]
         
-#     return render_to_response("dashboard/attendance_page.html",return_dict,RequestContext(request))
+#     return render_to_response("dashboard/attendance_page.html",context_dictionary,RequestContext(request))
 
 # def grades_page(request):
-#     return_dict = {}
+#     context_dictionary = {}
         
 #     fStudents = Grade.objects.filter(grade__range=(0,49)).count()
 #     dStudents = Grade.objects.filter(grade__range=(50,54)).count()
@@ -346,12 +380,12 @@ def assignment(request):
 #     bStudents = Grade.objects.filter(grade__range=(68,79)).count()
 #     aStudents = Grade.objects.filter(grade__range=(80,100)).count()
 
-#     return_dict['grades'] = [['A', aStudents], ['B', bStudents], ['C', cStudents], ['D', dStudents], ['F', fStudents]]
+#     context_dictionary['grades'] = [['A', aStudents], ['B', bStudents], ['C', cStudents], ['D', dStudents], ['F', fStudents]]
         
-#     return render_to_response("dashboard/grades_page.html",return_dict,RequestContext(request))
+#     return render_to_response("dashboard/grades_page.html",context_dictionary,RequestContext(request))
 
 # def custom_statistic_page(request):
-#     return_dict = {}
+#     context_dictionary = {}
 
 #     if request.method == 'POST':
 #         chartId = request.POST.get("customChart")
@@ -382,12 +416,12 @@ def assignment(request):
 #         elif yAxis == "PERFORMANCE":
 #             yAxisValues = Grade.objects.filter(grade__range=(0,100))
             
-#         return_dict['customStat'] = [[[xAxis, xAxisValues], [yAxis, yAxisValues]], title, chartType]
+#         context_dictionary['customStat'] = [[[xAxis, xAxisValues], [yAxis, yAxisValues]], title, chartType]
         
-#     return render_to_response("dashboard/custom_statistic_page.html",return_dict,RequestContext(request))
+#     return render_to_response("dashboard/custom_statistic_page.html",context_dictionary,RequestContext(request))
 
 # def custom_statistic_created_page(request):
-#     return_dict = {}
+#     context_dictionary = {}
 
 #     if request.method == 'POST':
 #         title = request.POST.get("title")
@@ -401,4 +435,4 @@ def assignment(request):
 #         chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
 #         chart.save()
 
-#     return render_to_response("dashboard/custom_statistic_created_page.html",return_dict,RequestContext(request))
+#     return render_to_response("dashboard/custom_statistic_created_page.html",context_dictionary,RequestContext(request))

@@ -131,6 +131,7 @@ urlpatterns = patterns('',
 		'school_components.views.classes_view.class_attendance', 
 		name='classattendance'),
 
+
     url(r'^classes/performance/$',
         'school_components.views.classes_view.class_performance',
         name='classperformance'),

@@ -26,7 +26,7 @@ urlpatterns = patterns('',
    
                    
     #messages
-    url(r'^messages/', include('messages.urls', namespace='messages', app_name='messages')),
+    url(r'^messages/', include('aplusmessages.urls', namespace='messages', app_name='messages')),
                
     #reports
     url(r'^reports/', include('reports.urls', namespace='reports', app_name='reports')),

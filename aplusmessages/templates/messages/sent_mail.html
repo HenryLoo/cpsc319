@@ -1,0 +1,139 @@
+{% extends 'basetemplate.html' %}
+
+
+{% block body %}
+<ul class="nav nav-tabs nav-justified">
+  <li role="presentation"><a href="{% url 'messages:send_email' %}">Send Email</a></li>
+  <li role="presentation" class="active"><a href="{% url 'messages:sent_mail' %}">Sent Mail</a></li>
+ </li>
+</ul>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                Email
+                <small> Sent Mail</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <i class="fa fa-sitemap"></i> <a> Email > Sent Mail</a>
+                </li>
+            </ol>
+
+        </div>
+    </div>
+
+    <div class="row">
+
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- Split button -->
+            <button type="button" class="btn btn-default" data-toggle="tooltip" title="Refresh">
+                &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;&nbsp;</button>
+            <!-- Single button -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    More <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Mark all as read</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-12 sent-pane">
+                    <div class="list-group">
+                        {% for message in sent_messages %}
+                        <a href="#message{{ message.id }}" class="list-group-item" data-toggle="modal" data-target="#message{{ message.id }}">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox">
+                                </label>
+                            </div>
+
+                            <div class="details">
+                                <span class="title">To:
+                                    {% if message.recipient_type == SEND_IND %}
+                                        <span class="">{{ message.to_list }}</span>
+                                    {% else %}
+                                        <span class="">{{ message.get_formatted_to_list|truncatechars:32 }}</span>
+                                    {% endif %}
+                                </span>
+                                <span class="subject"><span class="label label-default">{{ message.recipient_type }}</span> {{ message.subject|truncatechars:50 }}</span>
+                                <span class="text-muted body-text">- {{ message.subject|truncatechars:20 }}</span>
+                                <span class="time">{{ message.created|date:'M-d H:i' }}</span>
+                           </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <nav>
+        <ul class="pager">
+            {% if sent_messages.has_previous %}
+                <li class="previous"><a href="?page={{ sent_messages.previous_page_number }}">Newer <span aria-hidden="true">&rarr;</a></li>
+            {% endif %}
+
+            {% if sent_messages.has_next %}
+                <li class="next"><a href="?page={{ sent_messages.next_page_number }}"><span aria-hidden="true">&larr;</span> Older</span></a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+
+
+    {% for message in sent_messages %}
+    <!-- Modal -->
+    <div class="modal fade" id="message{{ message.id }}" tabindex="-1" role="dialog" aria-labelledby="message{{ message.id }}Label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h4 class="modal-title" id="message{{ message.id }}Label">{{ message.subject }}</h4>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                            <span class="pull-right model-date">{{ message.created|date:'M-d H:i' }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <span class="title">
+                        <strong>To:</strong>
+                        <p>
+                        {% if message.recipient_type == SEND_IND %}
+                            <span class="">{{ message.to_list }}</span>
+                        {% else %}
+                            <span class="">{{ message.get_formatted_to_list_detail }}</span>
+                        {% endif %}
+                        </p>
+                    </span>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            {{ message.body }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

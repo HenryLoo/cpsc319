@@ -90,13 +90,18 @@ class ClassRegistration(models.Model):
 		unique_together = ('reg_class', 'student')
 
 
-#change name after
 class ClassAttendance(models.Model):
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
-	attendance = models.CharField(max_length=5, blank=True)
-	date = models.TimeField(null=True, blank=True)
-	comments = models.CharField(max_length=500)
+	attendance = models.CharField(max_length = 12, blank=True, null=True, choices =
+                            (
+                             ('A', 'A'),
+                             ('P', 'P'),
+                             ('L', 'L')
+                             ))
+
+	date = models.DateField(null=True, blank=True)
+	comments = models.CharField(max_length=500,blank=True, null=True)
 
 	class Meta:
 		app_label = 'school_components'
@@ -108,9 +113,9 @@ class Assignment(models.Model):
 	date = models.DateField(null=True, blank=True)
 	#saves pdf at file assignments inside media at aplus file
 	content = models.FileField(upload_to='aplus/media/assignments', blank = True, null = True)
-	grade_weight = models.IntegerField(blank = True, null = True)
-	total_weight = models.IntegerField(blank = True, null = True)
-	comments = models.CharField(max_length=500)
+	grade_weight = models.IntegerField(blank = False, null = False)
+	total_weight = models.IntegerField(blank = False, null = False)
+	comments = models.CharField(max_length=500,blank=True, null=True)
 
 	class Meta:
 		app_label = 'school_components'
@@ -118,12 +123,12 @@ class Assignment(models.Model):
 class Grading(models.Model):
 	use_for_related_fields = True  
 
-	g_id = models.IntegerField(blank=True, null=True)
 	reg_class = models.ForeignKey('Class')
 	student = models.ForeignKey('Student')
-	grade = models.IntegerField(blank=True, null=True)
+	grade = models.DecimalField(blank=True, null=True,max_digits=5, decimal_places=2)
 	assignment = models.ForeignKey('Assignment')
-	comments = models.CharField(max_length=500)
+	performance = models.DecimalField(blank=True, null=True, max_digits=5, decimal_places=2)
+	comments = models.CharField(max_length=500, blank=True, null=True)
 
 	class Meta:
 		app_label = 'school_components'

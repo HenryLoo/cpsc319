@@ -33,7 +33,7 @@ class ClassTeacherForm(ModelForm):
 		fields = ['teacher']
 
 
-class ClassRegistrationForm(ModelForm):
+class ClassRegistrationForm(Form):
 	class Meta:
 		model = ClassRegistration
 		fields = ['student']
@@ -65,14 +65,24 @@ class ClassAssignmentForm(ModelForm):
 
 class ClassGradingForm(ModelForm):
 
-
+	student = forms.ModelChoiceField(queryset=Student.objects.all(),required=False)
+	reg_class = forms.ModelChoiceField(queryset=Class.objects.all(), required=False)
 	class Meta:
 		model = Grading
-		fields = ['student', 'grade', 'comments']
+		fields = ['student', 'grade', 'comments', 'reg_class']
+
+class ClassAttendanceDateForm(ModelForm):
+    
+    class Meta:
+        model = ClassAttendance
+        fields = ['date']
+        widgets = {
+        	'date': DateInput(attrs={'class':'datepicker'}),
+        }
 
 class ClassAttendanceForm(ModelForm):
-    attendance = ChoiceField(label='', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
-    
+    attendance = ChoiceField(label='Attendance', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
+
     class Meta:
         model = ClassAttendance
         fields = ['comments', 'attendance']

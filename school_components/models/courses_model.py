@@ -13,7 +13,6 @@ class Course(models.Model):
 
 	class Meta:
 		app_label = 'school_components'
-		unique_together = ('course', 'period')
 
 
 class Prerequisite(models.Model):

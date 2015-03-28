@@ -32,23 +32,26 @@
 			</a>
 			<div class="collapse" id="filters">
 			 <form action="" method="get">
-	        	{{ student_filter.form.as_p }}
+	        	{{ student_filter.as_p }}
 	        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
 	    	</form>
-	    	</div>
-	    
-		</div>
-		<div>
-		<ul class="list-unstyled student-list">
-	        {% for student in student_filter %}
+	    </div>    
+	</div>
+	<br><br>
+		{% if student_list %}
+		<ul class="list-unstyled school-list">
+			{% for student in student_list %}
 		  		<li>
 		  		<a href="{% url 'school:studentlist' student.id %}">
-		  			 {{ student.first_name }} {{ student.last_name }}
+		  			 {{ student }}
 		  		</a>
 		  		</li>
 		  	{% endfor %}
 		</ul>
-		</div>
+
+		{% else %}
+			<div class="alert alert-info" role="alert">No students have been added.</div>
+		{% endif %}
 	</div>
 
 

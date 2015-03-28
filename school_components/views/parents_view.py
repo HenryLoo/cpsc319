@@ -1,6 +1,6 @@
 from django.views import generic
 from school_components.models import Parent, Payment, Student, School, Period
-from school_components.forms.parents_form import ParentForm, PaymentForm
+from school_components.forms.parents_form import *
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
@@ -8,12 +8,32 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core import serializers
+from django.db.models import Q
 import json
 
 
 def parent_list(request, parent_id=None):
-	parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
-	context_dictionary = {'parent_list': parent_list}
+	parent_list = Parent.objects.filter(
+		school = request.user.userprofile.school, 
+		period = request.user.userprofile.period
+	).order_by('last_name')
+
+	search_name = request.GET.get('name', None)
+	search_receipt = request.GET.get('receipt_no', None)    
+
+	if search_name:
+			parent_list = parent_list.filter(
+        		Q(first_name__icontains=search_name) | 
+        		Q(last_name__icontains=search_name))
+
+	if search_receipt:
+		parent_list = parent_list.filter(
+		payment__receipt_no__icontains=search_receipt)
+
+   	context_dictionary = {
+		'parent_list': parent_list,
+		'parent_filter': ParentFilter()
+	}
 
 	if parent_id:
 		context_dictionary['parent'] = Parent.objects.get(pk=parent_id)

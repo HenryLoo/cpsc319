@@ -37,19 +37,14 @@ $('#edit-parent-btn').click(function() {
 
 	<div class="filters-holder">
 		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
-		aria-expanded="false" aria-controls="collapseExample">
+		aria-expanded="false">
 	  	Filters
 		</a>
 		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>First Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Last Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Payment Status</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Receipt No.</label> <input>
-		  </div>
+		  	<form action="{%url 'school:parentlist' %}" method="get">
+	        	{{ parent_filter.as_p }}
+	        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
+	    	</form>
 		</div>
 	</div>
 

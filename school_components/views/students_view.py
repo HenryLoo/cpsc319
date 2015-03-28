@@ -14,18 +14,32 @@ from django.core.servers.basehttp import FileWrapper
 from aplus.settings import SAMPLE_CSV_PATH
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 import json
 import csv
 
 
 def student_list(request, student_id=None):
 	student_list = Student.objects.filter(
-		school = request.user.userprofile.school
+		school = request.user.userprofile.school,
+		period = request.user.userprofile.period
 	).order_by('last_name')
+
+	search_name = request.GET.get('name', None)
+	search_phone = request.GET.get('phone_number', None)    
+
+	if search_name:
+		student_list = student_list.filter(
+    		Q(first_name__icontains=search_name) | 
+    		Q(last_name__icontains=search_name))
+
+	if search_phone:
+		student_list = student_list.filter(
+			home_phone__icontains=search_phone)
 
 	context_dictionary = {
 		'student_list': student_list,
-		'student_filter': StudentFilter(request.GET, queryset=student_list)
+		'student_filter': StudentFilter()
 	}
 
 	if student_id:

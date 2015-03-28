@@ -36,13 +36,11 @@
 	  	Filters
 		</a>
 		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>Year</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Course</label> <input>
-		  </div>
+			<form action="{%url 'school:classlist' %}" method="get">
+		  	{{ class_filter.as_p }}
+		  	<button class="btn btn-xs btn-default" type="submit" value="submit">
+		  	Submit</button>
+		  	</form>
 		</div>
 	</div>
 <br><br>

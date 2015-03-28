@@ -86,3 +86,8 @@ class ClassAttendanceForm(ModelForm):
     class Meta:
         model = ClassAttendance
         fields = ['comments', 'attendance']
+
+class ClassFilter(Form):
+	course = CharField(required=False)
+	section = CharField(required=False)
+	department = CharField(required=False)

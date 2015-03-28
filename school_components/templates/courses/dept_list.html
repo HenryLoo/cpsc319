@@ -21,18 +21,17 @@
     </li>
 </ul>
 
-  <div class="row">   
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Departments<small> List</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a>Departments > List</a>
-                            </li>
-                        </ol>
-
-                    </div>
+<div class="row">   
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Departments<small> List</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li class="active">
+                <i class="fa fa-sitemap"></i> <a>Departments > List</a>
+            </li>
+        </ol>
+    </div>
 
 <div class="col-md-3 school-list">
 
@@ -42,11 +41,10 @@
 	  	Filters
 		</a>
 		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Department</label> <input>
-		  </div>
+		  	<form action="{%url 'school:deptlist' %}" method="get">
+	        	{{ dept_filter.as_p }}
+	        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
+	    	</form>
 		</div>
 	</div>
 <br><br>

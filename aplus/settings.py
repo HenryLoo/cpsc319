@@ -53,7 +53,6 @@ INSTALLED_APPS = (
     'dashboard',
     'googlecharts',
     'reports',
-    'django_filters',
     #'sendgrid',
 
 )

@@ -4,15 +4,6 @@
 	"View"
 {% endblock %}
 
-{% block hacky_script %}
-$('#edit-parent-btn').click(function() {
-	var fields = $('td:nth-child(2)')
-	$.each(fields, function(i,elm) { 
-		$(elm).html("<input value=\"" + $(elm).text().trim() + "\"></input>") 
-	})
-});
-{% endblock hacky_script %}
-
 {% block parent_content %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{% url 'school:parentlist' %}">View Parents</a></li>
@@ -75,7 +66,7 @@ $('#edit-parent-btn').click(function() {
 	{% if parent %}
 	<span>
 		<h3> Parent Info </h3>
-		<a href="#" id="edit-parent-btn" class="pull-right"> Edit </a>
+		<a href="{%url 'school:parentedit' parent.id %}" id="edit-parent-btn" class="pull-right"> Edit </a>
 	</span>
 	<table class="table table-hover">
 		<tr> 
@@ -132,6 +123,7 @@ $('#edit-parent-btn').click(function() {
 				Receipt {{ payment.receipt_no }}: 
 				<strong>${{ payment.amount }}</strong>
 			</td>
+			<td><a class="btn btn-primary" data-toggle="collapse" href="#" aria-expanded="false" aria-controls="payment-form"> Edit </a></td>
 		</tr>
 		{% endfor%}
 
@@ -157,10 +149,14 @@ $('#edit-parent-btn').click(function() {
 		</form> 
 	</div>
 
-	{% else %}
+
+{% else %}
 		<div class="content alert alert-info" role="alert">
 			Select a parent to view details.
 		</div>
-	{% endif %}
+{% endif %}
+	
+
+
 </div>
 {% endblock parent_content %}

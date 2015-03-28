@@ -8,6 +8,7 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
 import json
 
 
@@ -20,6 +21,32 @@ def parent_list(request, parent_id=None):
 		context_dictionary['payment_form'] = PaymentForm()
 
 	return render_to_response("parents/parent_list.html",
+		context_dictionary,
+		RequestContext(request))
+
+def parent_edit(request, parent_id):
+	parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
+	context_dictionary = {'parent_list': parent_list}
+
+	try:
+                p = Parent.objects.get(pk=parent_id)
+                if p.school != request.user.userprofile.school or p.period != request.user.userprofile.period:
+                        raise ObjectDoesNotExist
+                
+		context_dictionary['parent_id'] = parent_id
+		context_dictionary['payment_form'] = PaymentForm() #ig
+		parent_form = ParentForm(instance=p)
+		if request.method == 'POST':
+                        parent_form = ParentForm(request.POST, instance = p)
+                        if parent_form.is_valid():
+                                parent_form.save()
+                                context_dictionary['succ']=True
+                context_dictionary['parent_form']=parent_form
+
+        except ObjectDoesNotExist:
+                context_dictionary['error'] = 'There is no parent with this id in this school and period.'
+                
+	return render_to_response("parents/parent_edit.html",
 		context_dictionary,
 		RequestContext(request))
 
@@ -80,6 +107,26 @@ def payment_create(request, parent_id):
 		else:
 			if request.is_ajax():
 				return HttpResponse("An error occurred. Payment was not made.")
-			return render_to_response('parents/parent_form.html',
+			return render_to_response('parents/parent_list.html',
+				{'errors': pf.errors },
+				RequestContext(request))
+
+def payment_edit(request, parent_id, payment_id):
+	if request.method == 'POST':
+		pay = Payment.objects.get(pk=payment_id)
+		pf = PaymentForm(request.POST, instance=pay)
+		
+		if pf.is_valid():
+			pf.save()
+			
+			if request.is_ajax():
+				return HttpResponse("Payment added successfully.")
+			else:
+				return HttpResponseRedirect(
+					reverse('school:parentlist', args=(parent_id,)))
+		else:
+			if request.is_ajax():
+				return HttpResponse("An error occurred. Payment was not made.")
+			return render_to_response('parents/parent_list.html',
 				{'errors': pf.errors },
 				RequestContext(request))

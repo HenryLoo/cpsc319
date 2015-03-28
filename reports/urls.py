@@ -32,6 +32,7 @@ urlpatterns = patterns('',
 		'reports.views.attendancelist', 
 		name='attendancelist'),
 
+    url(r'^export/','reports.views.export_data',name='export'),
     # url(r'^pdf/(?P<class_id>\d+)/$','reports.views.pdf_view',name='download'),
 
 )

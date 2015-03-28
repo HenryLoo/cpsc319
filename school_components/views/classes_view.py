@@ -16,7 +16,8 @@ from django.core.exceptions import ObjectDoesNotExist
 def class_list(request, class_id=None):
 	class_list = Class.objects.filter(
 		school = request.user.userprofile.school, 
-		period = request.user.userprofile.period).order_by('course')
+		period = request.user.userprofile.period
+	).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -33,11 +34,25 @@ def class_list(request, class_id=None):
 		RequestContext(request))
 
 def class_create(request):
+	class_form = ClassForm(prefix='info')
+	class_form.fields['course'].queryset = Course.objects.filter(
+		school = request.user.userprofile.school, 
+		period = request.user.userprofile.period
+	)
+
+	# TODO: teacher will have period field
+	teacher_form = ClassTeacherForm(prefix='te')
+	teacher_form.fields['teacher'].queryset = TeacherUser.objects.filter(
+		user__period = request.user.userprofile.period, 
+		user__school = request.user.userprofile.school
+	)
+   
 	context_dictionary = {
-		'class_form': ClassForm(prefix='info'), 
+		'class_form': class_form, 
 		'classday_form': ClassScheduleForm(prefix='sch'),
-		'classteacher_form': ClassTeacherForm(prefix='te')
+		'classteacher_form': teacher_form
 	}
+
 	if request.method == 'POST':
 		cf = ClassForm(request.POST, prefix='info')
 		sf = ClassScheduleForm(request.POST, prefix='sch')
@@ -77,48 +92,47 @@ def class_create(request):
 		RequestContext(request))
 
 def class_edit(request, class_id):
-        class_list = Class.objects.filter(
+		class_list = Class.objects.filter(
 		school = request.user.userprofile.school, 
 		period = request.user.userprofile.period).order_by('course')
-        
-	context_dictionary = { 'class_list': class_list }
 
-        try:
-                c = Class.objects.get(pk=class_id)
-                if c.school != request.user.userprofile.school or c.period != request.user.userprofile.period:
-                       raise ObjectDoesNotExist
+		context_dictionary = {'class_list': class_list}
+
+		try:
+				c = Class.objects.get(pk=class_id)
+				if c.school != request.user.userprofile.school or c.period != request.user.userprofile.period:
+					raise ObjectDoesNotExist
 			
-                context_dictionary['class_id'] = class_id
+				context_dictionary['class_id'] = class_id
 
-                s = c.schedule
+				s = c.schedule
                 #context_dictionary['here'] = 'here' for testing 
-                t = c.taught_class.all()[0] #assume 1 teacher
+				t = c.taught_class.all()[0] #assume 1 teacher
                 #context_dictionary['ha'] = 'ha' for testing
-                class_form = ClassForm(prefix='info', instance = c)
-		classday_form = ClassScheduleForm(prefix='sch', instance = s)
-		classteacher_form = ClassTeacherForm(prefix='te', instance = t)
+				class_form = ClassForm(prefix='info', instance = c)
+
+				classday_form = ClassScheduleForm(prefix='sch', instance = s)
+				classteacher_form = ClassTeacherForm(prefix='te', instance = t)
 	
-                if request.method == 'POST':
-                        class_form = ClassForm(request.POST, prefix='info', instance = c)
-                        classday_form = ClassScheduleForm(request.POST, prefix='sch', instance = s)
-                        classteacher_form = ClassTeacherForm(request.POST, prefix='te', instance = t)
+				if request.method == 'POST':
+						class_form = ClassForm(request.POST, prefix='info', instance = c)
+						classday_form = ClassScheduleForm(request.POST, prefix='sch', instance = s)
+						classteacher_form = ClassTeacherForm(request.POST, prefix='te', instance = t)
                         
-                        if class_form.is_valid() and classday_form.is_valid() and classteacher_form.is_valid():
-                                class_form.save()
-                                classday_form.save()
-                                classteacher_form.save()
-                                context_dictionary['succ']=True
+						if class_form.is_valid() and classday_form.is_valid() and classteacher_form.is_valid():
+								class_form.save()
+								classday_form.save()
+								classteacher_form.save()
+								context_dictionary['succ']=True
                                 
-                context_dictionary['class_form'] = class_form
-                context_dictionary['classday_form'] = classday_form
-                context_dictionary['classteacher_form'] = classteacher_form
+				context_dictionary['class_form'] = class_form
+				context_dictionary['classday_form'] = classday_form
+				context_dictionary['classteacher_form'] = classteacher_form
                 
-        except ObjectDoesNotExist:
-                context_dictionary['error'] = 'There is no class in this school and period with that id.'
+		except ObjectDoesNotExist:
+				context_dictionary['error'] = 'There is no class in this school and period with that id.'
                         
-	return render_to_response("classes/class_edit.html",
-		context_dictionary,
-		RequestContext(request))
+		return render_to_response("classes/class_edit.html",context_dictionary,RequestContext(request))
 
 def class_registration(request, class_id=None):
 	if request.POST:
@@ -133,7 +147,9 @@ def class_registration(request, class_id=None):
 		if class_id:
 			cl = Class.objects.get(pk=class_id)
 			context_dictionary['class'] = cl 
-			context_dictionary['student_list'] = Student.objects.all()
+			context_dictionary['student_list'] = Student.objects.filter(
+				school = request.user.userprofile.school
+			)
 			context_dictionary['form'] = ClassRegistrationForm()
 			context_dictionary['remove_form'] = RemoveClassRegistrationForm()
 		
@@ -144,7 +160,7 @@ def class_registration(request, class_id=None):
 # register student to class
 def class_registration_helper(request, class_id):
 	student_id = request.POST['student_id']
-	student = Student.objects.get(pk=student_id)
+	student = Student.objects.get(pk=student_idq)
 	
 	# check if on waiting list
 	reg = student.enrolled_student.filter(reg_class__id=class_id)
@@ -390,7 +406,10 @@ def class_reportcard(request, class_id=None, student_id=None):
 		for g in grading_list:
 			cont = cont + g.performance
 		total = len(grading_list)
-		average = cont/total
+		if total!= 0:
+			average = cont/total
+		else:
+			average = 0
 		context_dictionary['overall'] = average
 
 	return render_to_response('classes/class_reportcard.html', context_dictionary,

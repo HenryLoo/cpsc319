@@ -137,13 +137,15 @@ urlpatterns = patterns('',
 		'school_components.views.classes_view.class_attendance', 
 		name='classattendance'),
 
-
     url(r'^classes/performance/$',
         'school_components.views.classes_view.class_performance',
         name='classperformance'),
     url(r'^classes/performance/(?P<class_id>\d+)/$', 
 		'school_components.views.classes_view.class_performance', 
 		name='classperformance'),
+     url(r'^classes/performance/(?P<class_id>\d+)/(?P<assignment_id>\d+)/$', 
+		'school_components.views.classes_view.class_performance', 
+		name='classperformance'),   
 
     url(r'^classes/assignment/$',
         'school_components.views.classes_view.class_assignment',

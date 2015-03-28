@@ -2,68 +2,106 @@
 
 {% block body %}
   <div class="row">  
-                <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Reports<small> View</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Reports</a>
-                            </li>
-                        </ol>
+				<div class="col-lg-12">
+						<h1 class="page-header">
+							Reports<small> View</small>
+						</h1>
+						<ol class="breadcrumb">
+							<li class="active">
+								<i class="fa fa-sitemap"></i> <a> Reports</a>
+							</li>
+						</ol>
 
-                    </div>
-                </div>
+					</div>
+				</div>
 
 <div class="row">
 
-             <div class="col-lg-4">
-                       <a class="btn btn-default" href="#" role="button" style="width: 280px; height: 200px;">
-                        
-                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Student-Phone</i>
-                        </a>
-            </div>
-            
-             <div class="col-lg-4">
-                        <form role="form" action="{%url 'account:create_teacher' %}" method="post">
-                         <button class="btn btn-default" type="button" style="width: 280px; height: 200px;">
-                        
-                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Attendance</i>
-                        </button>
-            </div>
+			 <div class="col-lg-4">
+					   <a class="btn btn-default" href="#" role="button" style="width: 280px; height: 200px;">
+						
+								<i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
+								<i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Student-Phone</i>
+						</a>
+			</div>
+			
+			 <div class="col-lg-4">
+						<form role="form" action="{%url 'account:create_teacher' %}" method="post">
+						 <button class="btn btn-default" type="button" style="width: 280px; height: 200px;">
+						
+								<i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
+								<i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Attendance</i>
+						</button>
+						</form>
+			</div>
 
-             <div class="col-lg-4">
-                         <a class="btn btn-default" href="{%url 'reports:reportcard_teacher' %}" role="button" style="width: 280px; height: 200px;">
-                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Report Card</i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Teacher</i>
-                        </a>
-            </div>
+			 <div class="col-lg-4">
+						 <a class="btn btn-default" href="{%url 'reports:reportcard_teacher' %}" role="button" style="width: 280px; height: 200px;">
+								<i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
+								<i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Report Card</i><br>
+								<i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Teacher</i>
+						</a>
+			</div>
 </div>
 <br><br>
 <div class="row">
 
-             <div class="col-lg-4">
-                         <a class="btn btn-default" href="#" role="button" style="width: 280px; height: 200px;">
-                        
-                                <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Report Card</i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Administrator</i>
-                        </a>
-            </div>
+			 <div class="col-lg-4">
+						 <a class="btn btn-default" href="#" role="button" style="width: 280px; height: 200px;">
+						
+								<i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
+								<i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Report Card</i><br>
+								<i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Administrator</i>
+						</a>
+			</div>
 
-            <div class="col-lg-4">
-                        <a class="btn btn-default" href="#" role="button" style="width: 280px; height: 200px;">
+			<div class="col-lg-4">
+						<a class="btn btn-default" href="#" role="button" style="width: 280px; height: 200px;" data-toggle="modal" data-target="#export-modal">
 
-                                <i class="glyphicon glyphicon-export" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Export from database</i>
-                        </a>
-            </div>
-              
+								<i class="glyphicon glyphicon-export" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
+								<i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Export from Database</i>
+						</a>
+			</div>
+			  
 </div>
+<!-- EXport From Database Modal -->
+<div class="modal fade" id="export-modal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <form role="form" id="export-form" method="get">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Export from School Database:</h4>
+      </div>
+      <div class="modal-body">
+      	<h5>Select a dataset:</h5>
+      	<select name="dataset" class="form-control">
+		  <option value="student">Students</option>
+		  <option value="parent">Parents</option>
+		  <option value="teacher">Teachers</option>
+		  <option value="class">Classes</option>
+		  <option value="course">Courses</option>
+		</select>
 
+      </div>
+      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="submit" class="btn btn-primary" value="submit">Export</button>
+	   </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-
+  <!-- <iframe src=""></iframe> -->
 {% endblock %}
+
+{% block javascript_block %}
+	<script>
+	$('#export-form').submit(function(e) {
+		e.preventDefault();
+		var download_url = "{% url 'reports:export' %}?" + $(this).serialize();
+		$("body").append("<iframe src='" + download_url + "' style='display: none;'></iframe>");
+	})
+	</script>
+{% endblock javascript_block %}

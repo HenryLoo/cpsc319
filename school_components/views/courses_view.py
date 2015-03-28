@@ -48,7 +48,13 @@ def course_list(request, course_id=None):
 		RequestContext(request))
 
 def course_create(request):
-	context_dictionary = { 'course_form': CourseForm() }
+	course_form = CourseForm()
+	course_form.fields['prerequisite'].queryset = Course.objects.filter(
+		school = request.user.userprofile.school, 
+		period = request.user.userprofile.period
+	)
+	context_dictionary = { 'course_form': course_form }
+
 	if request.method == 'POST':
 		cf = CourseForm(request.POST)
 		if cf.is_valid():

@@ -14,6 +14,15 @@ $('#edit-class-btn').click(function() {
 {% endblock %}
 
 {% block class_content %}
+{% if user.userprofile.role == 'TEACHER' %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{%url 'school:classlist' %}">View Classes</a></li>
+    <li role="presentation"><a href="{%url 'school:classassignment' %}">Assignments</a></li>
+    <li role="presentation"><a href="{%url 'school:classattendance' %}">Attendance</a></li>
+    <li role="presentation"><a href="{%url 'school:classperformance' %}">Grading</a></li>
+    <li role="presentation"><a href="{%url 'school:classreportcard' %}">Report Card</a></li>
+</ul>
+{%else%}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{%url 'school:classlist' %}">View Classes</a></li>
     <li role="presentation"><a href="{%url 'school:classcreate' %}">Add Class</a></li>
@@ -101,6 +110,6 @@ $('#edit-class-btn').click(function() {
 	{%endif%}
 </div>
 
-	
+{%endif%}	
 
 {% endblock class_content %}

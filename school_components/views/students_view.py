@@ -1,5 +1,6 @@
 from django.views import generic
-from school_components.models import Student, Parent, School, Period
+from school_components.models import Student, Parent, School, Period, ClassTeacher
+from accounts.models import TeacherUser
 from school_components.models.courses_model import *
 from school_components.forms.students_form import *
 from school_components.utils import SchoolUtils
@@ -20,10 +21,23 @@ import csv
 
 
 def student_list(request, student_id=None):
-	student_list = Student.objects.filter(
-		school = request.user.userprofile.school,
-		enrolled_student__reg_class__period = request.user.userprofile.period
-	).annotate().order_by('last_name')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+		student_list=[]
+		for cl in class_list:
+			class_reg_list = ClassRegistration.objects.filter(reg_class=cl).order_by('student__last_name')
+			for item in class_reg_list:
+				student_list.append(item.student)
+
+	else:
+		student_list = Student.objects.filter(
+			school = request.user.userprofile.school,
+			enrolled_student__reg_class__period = request.user.userprofile.period
+		).annotate().order_by('last_name')
 
 	search_name = request.GET.get('name', None)
 	search_phone = request.GET.get('phone_number', None)    

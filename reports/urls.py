@@ -26,4 +26,10 @@ urlpatterns = patterns('',
 		'reports.views.studentphone', 
 		name='studentphone'),
 
+    url(r'^attendancelist_page/$','reports.views.attendancelist',name='attendancelist'),
+    url(r'^attendancelist_page/(?P<class_id>\d+)/$', 
+		'reports.views.attendancelist', 
+		name='attendancelist'),
+
+    # url(r'^pdf/(?P<class_id>\d+)/$','reports.views.pdf_view',name='download'),
 )

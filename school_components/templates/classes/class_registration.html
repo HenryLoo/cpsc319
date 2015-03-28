@@ -1,6 +1,15 @@
 {% extends "classes/base_class.html" %}
 
 {% block class_content %}
+{% if user.userprofile.role == 'TEACHER' %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><a href="{%url 'school:classlist' %}">View Classes</a></li>
+    <li role="presentation"><a href="{%url 'school:classassignment' %}">Assignments</a></li>
+    <li role="presentation"><a href="{%url 'school:classattendance' %}">Attendance</a></li>
+    <li role="presentation"><a href="{%url 'school:classperformance' %}">Grading</a></li>
+    <li role="presentation"><a href="{%url 'school:classreportcard' %}">Report Card</a></li>
+</ul>
+{%else%}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation"><a href="{%url 'school:classlist' %}">View Classes</a></li>
     <li role="presentation"><a href="{%url 'school:classcreate' %}">Add Class</a></li>
@@ -10,6 +19,7 @@
     <li role="presentation"><a href="{%url 'school:classperformance' %}">Grading</a></li>
     <li role="presentation"><a href="{%url 'school:classreportcard' %}">Report Card</a></li>
 </ul>
+
 
 <div class="row">  
 	<div class="col-lg-12">
@@ -156,5 +166,5 @@
   </div>
 </div>
 </div>
-
+{%endif%}
 {% endblock class_content %}

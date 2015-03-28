@@ -431,7 +431,10 @@ def login_view(request):
                     login(request, user) 
                     print (user.userprofile.school)
                     if user.userprofile.school != None:
-                        return HttpResponseRedirect('/dashboard/statistics')
+                        if user.userprofile.role == 'TEACHER':
+                            return HttpResponseRedirect('/dashboard/classes_schedule')
+                        else:
+                            return HttpResponseRedirect('/dashboard/statistics')
                     else:
                         return HttpResponseRedirect('/school/schools')
                     

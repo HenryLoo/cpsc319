@@ -26,33 +26,34 @@
             </div>
             
              <div class="col-lg-4">
-                        <form role="form" action="{%url 'account:create_teacher' %}" method="post">
-                         <button class="btn btn-default" type="button" style="width: 280px; height: 200px;">
+                        <a class="btn btn-default" href="{%url 'reports:attendancelist' %}" role="button" style="width: 280px; height: 200px;">
                         
                                 <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 40px; margin-left: 10px"></i><br>
                                 <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Attendance</i>
-                        </button>
+                        </a>
             </div>
 
+            {% if user.userprofile.role == 'TEACHER' %}
              <div class="col-lg-4">
                          <a class="btn btn-default" href="{%url 'reports:reportcardteacher' %}" role="button" style="width: 280px; height: 200px;">
                                 <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
                                 <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Report Card</i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Teacher</i>
                         </a>
             </div>
-</div>
-<br><br>
-<div class="row">
-
-             <div class="col-lg-4">
+            {%else%}
+            <div class="col-lg-4">
                          <a class="btn btn-default" href="{%url 'reports:reportcardadm' %}" role="button" style="width: 280px; height: 200px;">
                         
                                 <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
                                 <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Print Report Card</i><br>
-                                <i class="text-right" style="font-size: 25px ; margin-top: 10px; margin-left: 10px">Administrator</i>
                         </a>
             </div>
+            {%endif%}
+</div>
+<br><br>
+{% if not user.userprofile.role == 'TEACHER' %}
+<div class="row">
+
 
             <div class="col-lg-4">
                         <a class="btn btn-default" href="#" role="button" style="width: 280px; height: 200px;">
@@ -63,6 +64,7 @@
             </div>
               
 </div>
+{%endif%}
 
 
 

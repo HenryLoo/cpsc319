@@ -5,13 +5,18 @@
 {% endblock %}
 
 {% block student_content %}
+{% if user.userprofile.role == 'TEACHER'%}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+</ul>
+{%else%}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
     <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
     <li role="presentation"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
     <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
 </ul>
-
+{%endif%}
 <!-- Page Heading -->
 <div class="row">
 
@@ -59,7 +64,9 @@
 	{% if student %}
 	<span>
 		<h3> Student Info </h3>
+		{% if not user.userprofile.role == 'TEACHER' %}
 		<a href="{%url 'school:studentedit' student.id%}" id="edit-student-btn" class="pull-right"> Edit </a>
+		{%endif%}
 	</span>
 	<table class="table table-hover">
 		<tr> 

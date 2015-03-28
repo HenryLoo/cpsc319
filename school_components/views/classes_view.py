@@ -2,6 +2,7 @@
 from school_components.models.classes_model import *
 from school_components.models.students_model import Student
 from school_components.forms.classes_form import *
+from accounts.models import TeacherUser
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import RequestContext
@@ -14,10 +15,19 @@ from django.forms.models import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 
 def class_list(request, class_id=None):
-	class_list = Class.objects.filter(
-		school = request.user.userprofile.school, 
-		period = request.user.userprofile.period
-	).order_by('course')
+
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
 
 	search_course = request.GET.get('course', None)
 	search_section = request.GET.get('section', None)  
@@ -219,7 +229,19 @@ def class_remove_registration(request, class_id):
 
 
 def class_attendance(request, class_id=None):
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -307,7 +329,19 @@ def class_attendance(request, class_id=None):
 
 def class_performance(request, class_id=None, assignment_id=None):
 
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -374,7 +408,19 @@ def class_performance(request, class_id=None, assignment_id=None):
 
 def class_assignment(request, class_id=None):
 	
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -405,7 +451,19 @@ def class_assignment(request, class_id=None):
 		RequestContext(request))
 
 def class_reportcard(request, class_id=None, student_id=None):
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:

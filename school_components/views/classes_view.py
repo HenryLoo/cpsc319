@@ -14,6 +14,9 @@ from django.forms.models import inlineformset_factory
 from django.forms.models import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def class_list(request, class_id=None):
 
 	if request.user.userprofile.role == 'TEACHER':
@@ -60,6 +63,7 @@ def class_list(request, class_id=None):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def class_create(request):
 	class_form = ClassForm(prefix='info')
 	class_form.fields['course'].queryset = Course.objects.filter(
@@ -118,6 +122,7 @@ def class_create(request):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def class_edit(request, class_id):
 		class_list = Class.objects.filter(
 		school = request.user.userprofile.school, 
@@ -161,6 +166,7 @@ def class_edit(request, class_id):
 						
 		return render_to_response("classes/class_edit.html",context_dictionary,RequestContext(request))
 
+@login_required
 def class_registration(request, class_id=None):
 	if request.POST:
 		return class_registration_helper(request, class_id)
@@ -185,6 +191,7 @@ def class_registration(request, class_id=None):
 			RequestContext(request))
 
 # register student to class
+@login_required
 def class_registration_helper(request, class_id):
 	student_id = request.POST['student_id']
 	student = Student.objects.get(pk=student_id)
@@ -214,6 +221,7 @@ def class_registration_helper(request, class_id):
 		return HttpResponseBadRequest(e)
 
 # delete student from class
+@login_required
 def class_remove_registration(request, class_id):
 	try:
 		student_id = request.POST['student_id']
@@ -227,7 +235,7 @@ def class_remove_registration(request, class_id):
 	except Exception as e:
 		return HttpResponseBadRequest(e)
 
-
+@login_required
 def class_attendance(request, class_id=None):
 	if request.user.userprofile.role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
@@ -327,6 +335,7 @@ def class_attendance(request, class_id=None):
 	return render_to_response('classes/class_attendance.html', context_dictionary,
 		RequestContext(request))
 
+@login_required
 def class_performance(request, class_id=None, assignment_id=None):
 
 	if request.user.userprofile.role == 'TEACHER':
@@ -405,7 +414,7 @@ def class_performance(request, class_id=None, assignment_id=None):
 	return render_to_response('classes/class_grading.html', context_dictionary,
 		RequestContext(request))
 
-
+@login_required
 def class_assignment(request, class_id=None):
 	
 	if request.user.userprofile.role == 'TEACHER':
@@ -450,6 +459,7 @@ def class_assignment(request, class_id=None):
 	return render_to_response('classes/class_assignment.html', context_dictionary,
 		RequestContext(request))
 
+@login_required
 def class_reportcard(request, class_id=None, student_id=None):
 	if request.user.userprofile.role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)

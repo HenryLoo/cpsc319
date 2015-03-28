@@ -10,6 +10,8 @@ from school_components.models import *
 from accounts.models import UserProfile, TeacherUser
 from .models import SentMessage
 from aplusmessages.forms import EMailForm
+from django.contrib.auth.decorators import login_required
+
 
 def clear_messages(request):
     storage = get_messages(request)
@@ -27,7 +29,6 @@ def save_email(request, to_type, to_emails, cc_emails, bcc_emails, from_email, s
                                       status=status, status_message=status_message)
 
 
-
 def get_send_choices(request):
     user_choices = SentMessage.SEND_CHOICES
     
@@ -43,6 +44,7 @@ def get_send_choices(request):
 '''
 sends email to selected group of people or to individual
 '''
+@login_required
 def send_email(request):
     clear_messages(request)
     if request.method == 'POST':
@@ -135,6 +137,7 @@ def send_email(request):
         'form': form,
     })
 
+@login_required
 def sent_mail(request):
     #getting sent mail for logged in user
     #Once authentication is implemented, you can use below instead getting all

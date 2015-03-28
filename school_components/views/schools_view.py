@@ -5,7 +5,8 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.contrib.auth.decorators import login_required
+@login_required
 def school_list(request, school_id=None):
 	school_list = School.objects.all().order_by('title')
 	context_dictionary = {'school_list': school_list}
@@ -17,6 +18,7 @@ def school_list(request, school_id=None):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def school_create(request):
 	school_list = School.objects.all()
 	context_dictionary = {'school_list': school_list,
@@ -35,6 +37,7 @@ def school_create(request):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def school_change(request, school_id=None):
 	if school_id:
 
@@ -46,6 +49,7 @@ def school_change(request, school_id=None):
 	return render_to_response('schools/school_list.html',
 		RequestContext(request))
 
+@login_required
 def school_edit(request, school_id): #there should always be an school_id here
     #!!! probably block off this view entirely for anybody but system admin !!!
     

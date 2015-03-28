@@ -24,6 +24,9 @@ from itertools import groupby
 
 from django.contrib.auth import authenticate, login
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def statistics_page(request):
     
     context_dictionary = {}
@@ -167,6 +170,7 @@ def statistics_page(request):
         
 #     return render_to_response("dashboard/demostatistics_page.html",context_dictionary,RequestContext(request))
 
+@login_required
 def notifications_page(request):
     
     context_dictionary = {}
@@ -217,6 +221,7 @@ def notifications_page(request):
         
     return render_to_response("dashboard/notifications_page.html",context_dictionary,RequestContext(request))
 
+@login_required
 def notifications_settings_page(request):
     
     context_dictionary = {}
@@ -264,6 +269,7 @@ def notifications_settings_page(request):
 
     return render_to_response("dashboard/notifications_settings_page.html",context_dictionary,RequestContext(request))
 
+@login_required
 def classes_schedule_page(request):
     
     context_dictionary = {}
@@ -318,12 +324,14 @@ def classes_schedule_page(request):
 
     return render_to_response("dashboard/classes_schedule_page.html",context_dictionary,RequestContext(request))
 
+@login_required
 def view_reports(request):
     
     context_dictionary = {}
         
     return render_to_response("reports/view_reports.html",context_dictionary,RequestContext(request))
 
+@login_required
 def assignment(request):
     
     context_dictionary = {}

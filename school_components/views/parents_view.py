@@ -10,8 +10,9 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.db.models import Q
 import json
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def parent_list(request, parent_id=None):
 	parent_list = Parent.objects.filter(
 		school = request.user.userprofile.school,
@@ -43,7 +44,7 @@ def parent_list(request, parent_id=None):
 		context_dictionary,
 		RequestContext(request))
 
-
+@login_required
 def parent_get(request):
 	if request.method == 'GET':
 		parent_id = request.GET['parent_id']
@@ -53,7 +54,7 @@ def parent_get(request):
 		parent_json = json.dumps(json.loads(parent_json)[0]['fields'])
 		return HttpResponse(parent_json, content_type="application/json")
 
-
+@login_required
 def parent_create(request):
 	p = ParentForm(request.POST)
 	context_dictionary = { 'parent_form': ParentForm() }
@@ -74,7 +75,7 @@ def parent_create(request):
 		context_dictionary,
 		RequestContext(request))
 
-
+@login_required
 def parent_form(request):
 	parent_list = Parent.objects.all()
 	context_dictionary = {'parent_list': parent_list,
@@ -84,6 +85,7 @@ def parent_form(request):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def payment_create(request, parent_id):
 	if request.method == 'POST':
 		pay = Payment(parent=Parent.objects.get(pk=parent_id))

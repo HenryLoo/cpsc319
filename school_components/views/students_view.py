@@ -18,8 +18,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 import json
 import csv
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def student_list(request, student_id=None):
 	if request.user.userprofile.role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
@@ -67,6 +68,7 @@ def student_list(request, student_id=None):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def student_edit(request, student_id):
 	student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
 	context_dictionary = {'student_list': student_list}
@@ -95,6 +97,7 @@ def student_edit(request, student_id):
 		RequestContext(request))
 
 # turn into a dict to help with sorting in UI
+@login_required
 def class_history_helper(class_reg):
 	m = model_to_dict(class_reg)
 	m['period'] = class_reg.reg_class.period.description
@@ -103,6 +106,7 @@ def class_history_helper(class_reg):
 	return m
 
 # returns student info, used on the registration page
+@login_required
 def student_get(request):
 	if request.method == 'GET':
 		student_id = request.GET['student_id']
@@ -126,6 +130,7 @@ def student_get(request):
 
 
 # create a new student with form data
+@login_required
 def student_create(request):
 	s = StudentForm(request.POST)
 	context_dictionary = { 'student_form': StudentForm() }
@@ -146,6 +151,7 @@ def student_create(request):
 		RequestContext(request))
 
 
+@login_required
 def student_form(request):
 	context_dictionary = {'student_form': StudentForm() }
 
@@ -156,6 +162,7 @@ def student_form(request):
 
 # TODO: if file is too big, save to disk instead
 # if time figure out a way to confirm
+@login_required
 def student_upload(request):
 	context_dictionary = {'form': StudentCSVForm()}
 	form = StudentCSVForm(request.POST, request.FILES)
@@ -176,6 +183,7 @@ def student_upload(request):
 	return render_to_response('students/student_upload.html',
 		context_dictionary, RequestContext(request))
 
+@login_required
 def student_export(request):
 	context_dictionary = {}
 
@@ -197,6 +205,7 @@ def student_export(request):
 			context_dictionary,
 			RequestContext(request))
 
+@login_required
 def student_sample_csv(request):
 	response = HttpResponse(content_type='text/csv')
 	response['Content-Disposition'] = 'attachment; filename="sample_students.csv"'

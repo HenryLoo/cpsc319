@@ -17,6 +17,8 @@ from reports.forms import *
 import datetime 
 from datetime import date, timedelta
 
+from django.contrib.auth.decorators import login_required
+
 # import weasyprint
 # from weasyprint import HTML
 # from django.template.loader import get_template
@@ -51,10 +53,11 @@ from datetime import date, timedelta
     # weasyprint.HTML(string=html).write_pdf(response)
     # return response
 
-
+@login_required
 def view_reports(request):
     return render(request, "reports/view_reports.html")
 
+@login_required
 def reportcard_teacher(request, class_id=None, student_id=None):
 	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
@@ -82,6 +85,7 @@ def reportcard_teacher(request, class_id=None, student_id=None):
 
 	return render_to_response('reports/reportcard_teacher.html', context_dictionary, RequestContext(request))
 
+@login_required
 def reportcard_adm(request, student_id=None):
 	#add filter after
 	perf_list = []
@@ -121,6 +125,7 @@ def reportcard_adm(request, student_id=None):
 
 	return render_to_response('reports/reportcard_adm.html', context_dictionary, RequestContext(request))
 
+@login_required
 def studentphone(request, class_id=None):
 	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
@@ -131,7 +136,7 @@ def studentphone(request, class_id=None):
 
 	return render_to_response('reports/student_phone.html', context_dictionary, RequestContext(request))
 
-
+@login_required
 def attendancelist(request, class_id=None):
 	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
@@ -211,9 +216,11 @@ def attendancelist(request, class_id=None):
 
 	return render_to_response('reports/attendance.html', context_dictionary, RequestContext(request))
 
+@login_required
 def create_new_report_page(request):
     return render(request, "reports/create_new_report_page.html")
 
+@login_required
 def student_pdf(c):
     c.drawString(100, 100, "Hello World")
     c = canvas.Canvas("student.pdf")
@@ -221,6 +228,7 @@ def student_pdf(c):
     c.showPage()
     c.save()
 
+@login_required
 def export_data(request):
 	dataset = request.GET.get('dataset', None)
 	response = HttpResponse(content_type='text/csv')

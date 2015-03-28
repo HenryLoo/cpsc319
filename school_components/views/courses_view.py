@@ -9,7 +9,9 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def course_list(request, course_id=None):
 	course_list = Course.objects.filter(
 		school = request.user.userprofile.school, 
@@ -47,6 +49,7 @@ def course_list(request, course_id=None):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def course_create(request):
 	course_form = CourseForm()
 	course_form.fields['prerequisite'].queryset = Course.objects.filter(
@@ -77,7 +80,7 @@ def course_create(request):
 		context_dictionary,
 		RequestContext(request))
 
-
+@login_required
 def course_edit(request, course_id):
 		course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name')
 		context_dictionary = {'course_list': course_list}
@@ -109,6 +112,7 @@ def course_edit(request, course_id):
 						
 		return render_to_response("courses/course_edit.html", context_dictionary, RequestContext(request))
 
+@login_required
 def dept_create(request):
 	context_dictionary = {'dept_form': DepartmentForm()}
 	if request.method == 'POST':
@@ -126,7 +130,7 @@ def dept_create(request):
 		RequestContext(request))
 
 #create department view
-
+@login_required
 def dept_list(request, dept_id = None):
 	dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
 
@@ -150,6 +154,7 @@ def dept_list(request, dept_id = None):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def dept_edit(request, dept_id):
 	dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
 	context_dictionary = {'dept_list': dept_list}
@@ -175,7 +180,7 @@ def dept_edit(request, dept_id):
 						
 	return render_to_response("courses/dept_edit.html", context_dictionary, RequestContext(request))
 
-
+@login_required
 def course_assignment(request, course_id=None):
 
 	course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('-id')

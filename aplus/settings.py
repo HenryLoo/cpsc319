@@ -116,6 +116,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_ROOT = ''
 STATIC_URL = '/static/'
+
+from django.core.urlresolvers import reverse_lazy
+LOGIN_URL = reverse_lazy('accounts.views.login_view')
+
 STATICFILES_DIRS = (
     #can also be the path in string
     STATIC_PATH,

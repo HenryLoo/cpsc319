@@ -1,19 +1,111 @@
-{% extends 'basetemplate.html' %}
+{% extends "reports/base_reports.html" %}
 
-{% block body %}
-  <div class="row">  
-                <div class="col-lg-12">
+{% block reports_content %}
+
+ <div class="row">  
+                 <div class="col-lg-12">
                         <h1 class="page-header">
-                            Reports<small> View</small>
+                            Reports<small> Report Card</small>
                         </h1>
                         <ol class="breadcrumb">
                             <li class="active">
-                                <i class="fa fa-sitemap"></i> <a> Courses > Reports</a>
+                                <i class="fa fa-sitemap"></i> <a> Reports > Report Card</a>
                             </li>
                         </ol>
 
                     </div>
-                </div>
+
+<div class="col-md-3">
+{% if class_list %}
+<div class="list-group">
+    {% for class in class_list %}
+        <a href="{% url 'reports:reportcardteacher' class.id %}" class="list-group-item">
+           {{ class.course }} {{ class.section }}
+        </a>
+      {% endfor %}
+</div>
+{% else %}
+    <div class="alert alert-info" role="alert">No classes have been added.</div>
+{% endif %}
+</div>
 
 
-{% endblock %}
+{% if class %}
+
+<div class="col-md-8">
+  <div class='col-md-4'>
+
+{% if student %}
+
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    {{ student.first_name }} {{ student.last_name }}
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    {% for reg in class.enrolled_class.all %}
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'reports:reportcardteacher' class.id reg.student.id %}" >{{ reg.student.first_name }} {{ reg.student.last_name }} </a></li>
+    {% endfor%}
+  </ul>
+</div>
+{% else %}
+
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+    Student
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+    {% for reg in class.enrolled_class.all %}
+      <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'reports:reportcardteacher' class.id reg.student.id %}" >{{ reg.student.first_name }} {{ reg.student.last_name }} </a></li>
+    {% endfor%}
+  </ul>
+</div>
+{% endif %}
+
+</div>
+
+{% if student %}
+<div class="col-md-12">
+        <h4>Report Card - {{student.first_name}} {{student.last_name}}</h4>
+        <div class="table-responsive">
+
+                
+              <table id="mytable" class="table table-bordred table-striped">
+                   
+                   <thead>
+                   
+                   <th>Assignment</th>
+                   <th>Maximum</th>
+                    <th>Weight</th>
+                   <th>Grade</th>
+                   <th>Performance</th>
+                   <th>Comments</th>
+                   </thead>
+    <tbody>
+    
+    {% for grading in gradinglist%}
+    <tr>
+    <td>{{grading.assignment.title}}</td>
+    <td>{{grading.assignment.total_weight}}</td>
+    <td>{{grading.assignment.grade_weight}}</td>
+    <td>{{grading.grade}}</td>
+    <td>{{grading.performance}}%</td>
+    <td>{{grading.comments}}</td>
+    </tr>
+    {%endfor%}
+
+    </tbody>
+        
+</table>
+
+<h4>Overall Performance: {{overall}}</h4>            
+
+</div>
+</div>
+
+{% endif %}
+{% endif %}
+
+
+{% endblock reports_content %}

@@ -1,0 +1,70 @@
+{% extends "reports/base_reports.html" %}
+
+{% block reports_content %}
+
+ <div class="row">  
+                 <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Reports<small> Report Card</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> Reports > Report Card</a>
+                            </li>
+                        </ol>
+
+                    </div>
+
+<div class="col-md-3">
+{% if student_list %}
+    <ul class="list-unstyled student-list">
+          {% for s in student_list %}
+          <li>
+          <a href="{% url 'reports:reportcardadm' s.id %}">
+             {{ s.first_name }} {{ s.last_name }}
+          </a>
+          </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="col-md-8">
+
+
+{% if student %}
+<div class="col-md-12">
+        <h4>Report Card - {{student.first_name}} {{student.last_name}}</h4>
+        <div class="table-responsive">
+
+                
+              <table id="mytable" class="table table-bordred table-striped">
+                   
+                   <thead>
+                   
+                   {% for cl in class_list %}
+                     <th>{{ cl.reg_class.course }} {{ cl.reg_class.section }}</th>
+                   {% endfor %}
+                   
+                   </thead>
+    <tbody>
+    
+    <tr>
+    {% for p in performance_list%}
+    <td>{{p}}%</td>
+    {%endfor%}
+    </tr>
+
+    </tbody>
+        
+</table>
+
+<h4>Overall Performance: {{overall}}</h4>            
+
+</div>
+</div>
+
+{% endif %}
+{% endif %}
+
+
+{% endblock reports_content %}

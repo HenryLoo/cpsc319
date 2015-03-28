@@ -1,0 +1,101 @@
+{% extends "basetemplate.html" %}
+
+{% block javascript_block %}
+<script>
+    // date picker for the form 
+    $(".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1980:" + new Date().getFullYear(),
+    });
+
+    // autocomplete for add student
+    var studentTags = [
+    	{% for student in student_list %}
+    		{'label': '{{ student.first_name }} {{ student.last_name }}',
+    		'id': '{{ student.id }}' },
+    	{% endfor %}
+    ]; 
+
+    var sel_student_id; // updated each time selected
+    $('#search-student-input').autocomplete({
+    	source: studentTags,
+    	select: function(event, ui) {
+    		sel_student_id = ui.item.id;
+    		console.log(sel_student_id);
+    	}
+    });
+
+    {% if class %}
+
+    // send request to register the student in class with class.id
+    $('.class-registration-form').submit(function() {
+    	// check if it's the waiting list or the input box
+    	var student_id;
+    	var wait_btn = $(this).find('button');
+    	student_id = $(wait_btn).data('student-id');
+
+    	if (student_id == undefined) {
+    		student_id = sel_student_id;
+    	}
+
+    	var send_data = $(this).serialize() + '&student_id=' + student_id;
+    	$.ajax({
+			type: "POST",
+			url: "{%url 'school:classregistration' class.id %}", 
+			data: send_data,
+			contentType: 'application/x-www-form-urlencoded',
+			success: function(data) {
+				location.reload();
+			},
+			error: function(xhr) {
+				$('#helper').html(xhr.responseText);
+			}
+    	});
+    	return false;
+    });
+
+    // adds name to modal for confirming remove student registration
+    $('#remove-student-modal').on('show.bs.modal', function (event) {
+  		var button = $(event.relatedTarget) ;
+  		var student_name = button.data('student-name');
+  		var student_id = button.data('student-id');
+		var modal = $(this);
+		modal.find('.modal-body > span').html(student_name);
+		modal.find('.modal-body > input').val(student_id);
+	})
+
+    // send request to remove student from class
+	$('#remove-student-form').submit(function() {
+    	$.ajax({
+			type: "POST",
+			url: "{%url 'school:classremovereg' class.id %}", 
+			data: $(this).serialize(),
+			contentType: 'application/x-www-form-urlencoded',
+			success: function(data) {
+				location.reload();
+			},
+			error: function(xhr) {
+				$('#helper').html(xhr.responseText);
+			}
+    	});
+    	return false;
+    });
+
+    {% endif %}
+
+</script>
+{% endblock %}
+
+{%block head%}
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'main-style.css' %}" />
+{% endblock %}
+
+
+{% block body %}
+
+{% block reports_content %}
+{% endblock reports_content %}
+
+{% endblock %}

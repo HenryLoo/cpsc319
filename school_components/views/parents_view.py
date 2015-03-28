@@ -30,7 +30,7 @@ def parent_list(request, parent_id=None):
 		parent_list = parent_list.filter(
 		payment__receipt_no__icontains=search_receipt)
 
-   	context_dictionary = {
+	context_dictionary = {
 		'parent_list': parent_list,
 		'parent_filter': ParentFilter()
 	}

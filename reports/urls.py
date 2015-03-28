@@ -20,4 +20,10 @@ urlpatterns = patterns('',
     url(r'^reportcard_adm_page/(?P<student_id>\d+)/$', 
 		'reports.views.reportcard_adm', 
 		name='reportcardadm'),
+
+    url(r'^student_phone_page/$','reports.views.studentphone',name='studentphone'),
+    url(r'^student_phone_page/(?P<class_id>\d+)/$', 
+		'reports.views.studentphone', 
+		name='studentphone'),
+
 )

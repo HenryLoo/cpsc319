@@ -80,6 +80,17 @@ def reportcard_adm(request, student_id=None):
 
 	return render_to_response('reports/reportcard_adm.html', context_dictionary, RequestContext(request))
 
+def studentphone(request, class_id=None):
+	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	context_dictionary = { 'class_list': class_list }
+
+	if class_id:
+		c = Class.objects.get(pk=class_id)
+		context_dictionary['class'] = c
+
+
+	return render_to_response('reports/student_phone.html', context_dictionary, RequestContext(request))
+
 
 def create_new_report_page(request):
     return render(request, "reports/create_new_report_page.html")

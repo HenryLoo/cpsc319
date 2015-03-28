@@ -72,6 +72,9 @@ urlpatterns = patterns('',
 	url(r'^paymentone/(?P<parent_id>\d+)/$', 
 		'school_components.views.parents_view.payment_create', 
 		name='paymentcreateone'),
+        url(r'^paymentedit/(?P<parent_id>\d+)/(?P<payment_id>\d+)/$', 
+		'school_components.views.parents_view.payment_edit', 
+		name='paymentedit'),
 
 	# courses
 	url(r'^courses/$', 

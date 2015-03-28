@@ -30,7 +30,7 @@ class Parent(models.Model):
 
 
 class Payment(models.Model):
-	receipt_no = models.CharField(max_length=50)
+	receipt_no = models.CharField(max_length=50, blank=False, null=False)
 	amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 	date = models.DateField(null=True, blank=True, default=datetime.now())
 	parent = models.ForeignKey('Parent', related_name='payment')

@@ -17,12 +17,58 @@ def parent_list(request, parent_id=None):
 	context_dictionary = {'parent_list': parent_list}
 
 	if parent_id:
-		context_dictionary['parent'] = Parent.objects.get(pk=parent_id)
-		context_dictionary['payment_form'] = PaymentForm()
+                try:
+                        p = Parent.objects.get(pk=parent_id)
+                        if p.school != request.user.userprofile.school or p.period != request.user.userprofile.period:
+                                raise ObjectDoesNotExist
+                        
+                        context_dictionary['parent'] = p
+                        context_dictionary['payment_form'] = PaymentForm()
+
+                except ObjectDoesNotExist:
+                        context_dictionary['error'] = 'There is no parent with that id in this school and period.'
+
+                #post = request.POST
+                #payment_id = request.POST['payment_id']
+        try:
+                post = request.POST
+                payment_id = request.POST['payment_id']
+                try:
+                        pay = Payment.objects.get(pk=payment_id)
+                        epf = PaymentForm(instance=pay)
+                        context_dictionary['edit_payment_form'] = epf
+                        context_dictionary['payment_id'] = payment_id
+                        
+                except ObjectDoesNotExist:
+                        pass
+                
+        except Exception: #exception thrown if no payment id
+                pass
+        
 
 	return render_to_response("parents/parent_list.html",
 		context_dictionary,
 		RequestContext(request))
+
+def payment_edit(request, parent_id, payment_id):
+	if request.method == 'POST':
+		pay = Payment(pk=payment_id)
+		pf = PaymentForm(request.POST, instance=pay)
+		
+		if pf.is_valid():
+			pf.save()
+			
+			if request.is_ajax():
+				return HttpResponse("Payment edited successfully.")
+			else:
+                                return HttpResponseRedirect(
+					reverse('school:parentlist', args=(parent_id,)))
+		else:
+			if request.is_ajax():
+				return HttpResponse("An error occurred. Payment was not made.")
+			return render_to_response('parents/parent_list.html',
+				{'errors': pf.errors },
+				RequestContext(request))
 
 def parent_edit(request, parent_id):
 	parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')

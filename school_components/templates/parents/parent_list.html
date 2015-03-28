@@ -63,7 +63,17 @@
 </div>
 
 <div class="col-md-9 school-info">
-	{% if parent %}
+	{% if errors %}
+		<div class="panel panel-danger">
+			{{ errors }}
+		</div>
+	{% endif %}
+	
+	{% if error %}
+		<div class="panel panel-danger">
+			{{ error }}
+		</div>
+	{% elif parent %}
 	<span>
 		<h3> Parent Info </h3>
 		<a href="{%url 'school:parentedit' parent.id %}" id="edit-parent-btn" class="pull-right"> Edit </a>
@@ -123,7 +133,13 @@
 				Receipt {{ payment.receipt_no }}: 
 				<strong>${{ payment.amount }}</strong>
 			</td>
-			<td><a class="btn btn-primary" data-toggle="collapse" href="#" aria-expanded="false" aria-controls="payment-form"> Edit </a></td>
+			<td>
+			<form role="form" action="{%url 'school:parentlist' parent.id %}" method="post"> 
+				{% csrf_token %}
+				<input type="hidden" name="payment_id" value="{{ payment.id }}" />
+				<input type="submit" class="btn btn-primary btn-sm" value="Edit" />
+			</form>
+			</td>
 		</tr>
 		{% endfor%}
 
@@ -148,6 +164,19 @@
 			<input type="submit" class="btn btn-primary btn-sm" value="Submit" />
 		</form> 
 	</div>
+	
+	{% if payment_id %}
+	<div id="edit-payment-form">
+		<br>
+		<form role="form" action="{%url 'school:paymentedit' parent.id payment_id %}" method="post">
+			{% csrf_token %}
+			<table class="table table-bordered">
+				{{ edit_payment_form.as_table }}
+			</table>
+			<input type="submit" class="btn btn-primary btn-sm" value="Save" />
+		</form> 
+	</div>
+	{% endif %}
 
 
 {% else %}

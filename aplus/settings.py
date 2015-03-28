@@ -51,7 +51,7 @@ INSTALLED_APPS = (
     'aplusmessages',
     'school_components',
     'dashboard',
-    'googlecharts',
+    'graphos',
     'reports',
     #'sendgrid',
 

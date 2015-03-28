@@ -31,8 +31,7 @@ def period_create(request):
                                                                                                                           cur_period=request.user.userprofile.period)}
 	if request.method == 'POST':
 		cf = PeriodForm(request.POST)
-		tf = PeriodTransferForm(request.POST, cur_school=request.user.userprofile.school,
-                                 cur_period=request.user.userprofile.period)
+		tf = PeriodTransferForm(request.POST, cur_school=request.user.userprofile.school,cur_period=request.user.userprofile.period)
 
 		context_dictionary['period_form'] = cf
 		context_dictionary['period_transfer_form'] = tf
@@ -43,9 +42,8 @@ def period_create(request):
 			print (request.user.userprofile.school)
 			new.save()
 			if tf.fields['transfer_teachers']:
-                                SchoolUtils.duplicate_teachers(request.user.userprofile.school, request.user.userprofile.period, new)
-        
-                        selected_courses = tf.courses  
+						SchoolUtils.duplicate_teachers(request.user.userprofile.school, request.user.userprofile.period, new)
+						selected_courses = tf.courses  
 			duplicate_courses(selected_courses, new)
 
 			return HttpResponseRedirect(

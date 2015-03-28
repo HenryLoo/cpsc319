@@ -102,17 +102,17 @@ def view_teachers_view (request, teacher_id=None):
         search_course = request.GET.get('course', None)
 
         if search_name:
-            print search_name
+            print (search_name)
             teacher_list = teacher_list.filter(
                 user__user__first_name__icontains=search_name,
                 user__user__last_name__icontains=search_name)
         if search_course:
-            print search_course
+            print (search_course)
             teacher_list = teacher_list.filter(
                 teacher__taught_class__course__name__icontains=search_course
             )
         if search_section:
-            print search_section
+            print (search_section)
             teacher_list = teacher_list.filter(
                 teacher__taught_class__section__icontains=search_section
             )

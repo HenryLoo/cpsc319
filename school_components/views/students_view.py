@@ -59,7 +59,7 @@ def student_edit(request, student_id):
                         
 		context_dictionary['student_form'] = s
 		
-        except ObjectDoesNotExist:
+	except ObjectDoesNotExist:
                 context_dictionary['error'] = 'There is no student with that id in this school and period.'
                 
 	return render_to_response("students/student_edit.html",

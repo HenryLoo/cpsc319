@@ -6,9 +6,9 @@ from school_components.models.courses_model import *
 
 
 class SchoolUtils:
-
-        @staticmethod
-        def duplicate_teachers(school, old_period, new_period):
+	
+	@staticmethod
+	def duplicate_teachers(school, old_period, new_period):
                 old_teachers = TeacherUser.objects.filter(user__school=school, user__period=old_period)
                 for ot in old_teachers:
                     user = ot.user.user
@@ -25,8 +25,8 @@ class SchoolUtils:
                     nt = TeacherUser(user=np, teaching_availability=na, comments=ot.comments)
                     nt.save()
                         
-        @staticmethod
-        def duplicate_courses(courses, new_period):
+	@staticmethod
+	def duplicate_courses(courses, new_period):
                 for oc in courses:
                         nc = Course(school=oc.school, period=new_period, deparment=oc.department,
                                     name=oc.name, age_requirement=oc.age_requirement,

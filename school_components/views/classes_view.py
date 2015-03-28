@@ -406,7 +406,10 @@ def class_reportcard(request, class_id=None, student_id=None):
 		for g in grading_list:
 			cont = cont + g.performance
 		total = len(grading_list)
-		average = cont/total
+		if total!= 0:
+			average = cont/total
+		else:
+			average = 0
 		context_dictionary['overall'] = average
 
 	return render_to_response('classes/class_reportcard.html', context_dictionary,

@@ -11,7 +11,7 @@ from school_components.models import *
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 import json
-
+from django.contrib.auth.decorators import login_required
 
 FORMS = [	
 	('parent_form', ParentContactRegistrationForm),
@@ -42,6 +42,7 @@ class CourseRegisterWizard(SessionWizardView):
 			return [TEMPLATES[self.steps.current]]
  
  	# do fancy stuff in between forms
+
 	def render(self, form=None, **kwargs):
 		context_dictionary = self.get_context_data(form=form, **kwargs)
 		#  get parent/students for autocomplete
@@ -88,6 +89,7 @@ class CourseRegisterWizard(SessionWizardView):
 		return self.render_to_response(context_dictionary)
 
 	# based on parent first and last names
+
 	def create_parent(self, form):
 		school = self.request.user.userprofile.school
 		period = self.request.user.userprofile.period
@@ -116,6 +118,7 @@ class CourseRegisterWizard(SessionWizardView):
 			return parent, None
 		else:
 			return None, "Parent could not be updated. "
+
 
 	def create_student(self, parent, forms):
 		school = self.request.user.userprofile.school
@@ -163,6 +166,7 @@ class CourseRegisterWizard(SessionWizardView):
 			return None, "Student could not be updated."
 
 	# THINK OF SOMETHING BETTER 
+
 	def register_classes(self, student, form):
 		course_status = []
 		classes = []
@@ -195,6 +199,7 @@ class CourseRegisterWizard(SessionWizardView):
 
 
 	# process the data from the parent and student forms
+
 	def done(self, form_list, **kwargs):
 		del self.request.session['parent_id']
 		return render_to_response(
@@ -204,6 +209,7 @@ class CourseRegisterWizard(SessionWizardView):
 
 # TODO: School/Period
 #  should have some way to use the model form...
+@login_required
 def payment_create(request, parent_id):
 	message = {}
 	if request.method == 'POST':
@@ -219,6 +225,7 @@ def payment_create(request, parent_id):
 			message['errors'] =  pf.errors 
 			return HttpResponseBadRequest(json.dumps(message), content_type="application/json")
 
+@login_required
 def lkccourse_register(request, page_no=None):
 	if page_no is None or page_no == "1" :
 		html = "registration/lkc_course_registration_parent.html"

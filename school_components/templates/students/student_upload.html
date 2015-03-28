@@ -6,6 +6,11 @@
 
 
 {% block student_content %}
+{% if user.userprofile.role == 'TEACHER'%}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+</ul>
+{%else%}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation"><a href="{% url 'school:studentlist' %}">View Students</a></li>
     <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
@@ -95,6 +100,6 @@ Note that this will create new students and parents for each row in the CSV, not
 </form>
 {% endif %}
 
-
+{%endif%}
 {% endblock student_content %}
 

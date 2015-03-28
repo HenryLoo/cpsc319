@@ -2,6 +2,7 @@
 from school_components.models.classes_model import *
 from school_components.models.students_model import Student
 from school_components.forms.classes_form import *
+from accounts.models import TeacherUser
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import RequestContext
@@ -13,26 +14,56 @@ from django.forms.models import inlineformset_factory
 from django.forms.models import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
 
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def class_list(request, class_id=None):
-	class_list = Class.objects.filter(
-		school = request.user.userprofile.school, 
-		period = request.user.userprofile.period
-	).order_by('course')
-	context_dictionary = { 'class_list': class_list }
+
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
+	search_course = request.GET.get('course', None)
+	search_section = request.GET.get('section', None)  
+	search_dept = request.GET.get('department', None)  
+	
+	if search_course:
+		class_list = class_list.filter(
+			course__name__icontains=search_course)
+
+	if search_section:
+		class_list = class_list.filter(
+			section__icontains=search_section)
+
+	if search_dept:
+		class_list = class_list.filter(
+			course__department__name__icontains=search_dept)
+
+	context_dictionary = { 'class_list': class_list, 'class_filter': ClassFilter() }
 
 	if class_id:
-                try:
-                        c = Class.objects.get(pk=class_id)
-                        if c.school != request.user.userprofile.school or c.period != request.user.userprofile.period:
-                                raise ObjectDoesNotExist
-                        context_dictionary['class'] = c
-                except ObjectDoesNotExist:
-                        context_dictionary['error'] = 'There is no class in this school and period with that id.'
-                
+		try:
+			c = Class.objects.get(pk=class_id)
+			if c.school != request.user.userprofile.school or c.period != request.user.userprofile.period:
+				raise ObjectDoesNotExist
+			context_dictionary['class'] = c
+		except ObjectDoesNotExist:
+				context_dictionary['error'] = 'There is no class in this school and period with that id.'
+	 
 	return render_to_response("classes/class_list.html",
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def class_create(request):
 	class_form = ClassForm(prefix='info')
 	class_form.fields['course'].queryset = Course.objects.filter(
@@ -99,6 +130,7 @@ def class_create(request):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def class_edit(request, class_id):
 		class_list = Class.objects.filter(
 		school = request.user.userprofile.school, 
@@ -133,6 +165,7 @@ def class_edit(request, class_id):
 						class_form = ClassForm(request.POST, prefix='info', instance = c)
 						classday_form = ClassScheduleForm(request.POST, prefix='sch', instance = s)
 						classteacher_form = ClassTeacherForm(request.POST, prefix='te', instance = t)
+
 						teachers = TeacherUser.objects.filter(user__school=request.user.userprofile.school, user__period=request.user.userprofile.period)
                                                 classteacher_form.fields['primary_teacher'].queryset = teachers
                                                 classteacher_form.fields['secondary_teacher'].queryset = teachers
@@ -142,16 +175,17 @@ def class_edit(request, class_id):
 								classday_form.save()
 								classteacher_form.save()
 								context_dictionary['succ']=True
-                                
+								
 				context_dictionary['class_form'] = class_form
 				context_dictionary['classday_form'] = classday_form
 				context_dictionary['classteacher_form'] = classteacher_form
-                
+				
 		except ObjectDoesNotExist:
 				context_dictionary['error'] = 'There is no class in this school and period with that id.'
-                        
+						
 		return render_to_response("classes/class_edit.html",context_dictionary,RequestContext(request))
 
+@login_required
 def class_registration(request, class_id=None):
 	if request.POST:
 		return class_registration_helper(request, class_id)
@@ -176,9 +210,10 @@ def class_registration(request, class_id=None):
 			RequestContext(request))
 
 # register student to class
+@login_required
 def class_registration_helper(request, class_id):
 	student_id = request.POST['student_id']
-	student = Student.objects.get(pk=student_idq)
+	student = Student.objects.get(pk=student_id)
 	
 	# check if on waiting list
 	reg = student.enrolled_student.filter(reg_class__id=class_id)
@@ -205,6 +240,7 @@ def class_registration_helper(request, class_id):
 		return HttpResponseBadRequest(e)
 
 # delete student from class
+@login_required
 def class_remove_registration(request, class_id):
 	try:
 		student_id = request.POST['student_id']
@@ -218,9 +254,21 @@ def class_remove_registration(request, class_id):
 	except Exception as e:
 		return HttpResponseBadRequest(e)
 
-
+@login_required
 def class_attendance(request, class_id=None):
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -306,9 +354,22 @@ def class_attendance(request, class_id=None):
 	return render_to_response('classes/class_attendance.html', context_dictionary,
 		RequestContext(request))
 
+@login_required
 def class_performance(request, class_id=None, assignment_id=None):
 
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -372,10 +433,22 @@ def class_performance(request, class_id=None, assignment_id=None):
 	return render_to_response('classes/class_grading.html', context_dictionary,
 		RequestContext(request))
 
-
+@login_required
 def class_assignment(request, class_id=None):
 	
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -393,7 +466,7 @@ def class_assignment(request, class_id=None):
 			new.reg_class = c
 			new.content = request.FILES['content']
 			new.save()
-            # Redirect to the document list after POST
+			# Redirect to the document list after POST
 			return HttpResponseRedirect(
 				reverse('school:classassignment', args=(class_id,)))
 	else:
@@ -405,8 +478,21 @@ def class_assignment(request, class_id=None):
 	return render_to_response('classes/class_assignment.html', context_dictionary,
 		RequestContext(request))
 
+@login_required
 def class_reportcard(request, class_id=None, student_id=None):
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:

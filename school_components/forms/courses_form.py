@@ -27,3 +27,11 @@ class DepartmentForm(forms.ModelForm):
 		widgets = {
 			'description': forms.Textarea(attrs={'rows': 5}),
 		}
+
+class CourseFilter(forms.Form):
+	course = forms.CharField(required=False, label='Course Name')
+	department = forms.CharField(required=False)
+
+
+class DepartmentFilter(forms.Form):
+	department_name = forms.CharField(required=False)

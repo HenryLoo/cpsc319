@@ -1,5 +1,6 @@
 from django.views import generic
-from school_components.models import Student, Parent, School, Period
+from school_components.models import Student, Parent, School, Period, ClassTeacher
+from accounts.models import TeacherUser
 from school_components.models.courses_model import *
 from school_components.forms.students_form import *
 from school_components.utils import SchoolUtils
@@ -14,18 +15,46 @@ from django.core.servers.basehttp import FileWrapper
 from aplus.settings import SAMPLE_CSV_PATH
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 import json
 import csv
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def student_list(request, student_id=None):
-	student_list = Student.objects.filter(
-		school = request.user.userprofile.school
-	).order_by('last_name')
+	if request.user.userprofile.role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+		student_list=[]
+		for cl in class_list:
+			class_reg_list = ClassRegistration.objects.filter(reg_class=cl).order_by('student__last_name')
+			for item in class_reg_list:
+				student_list.append(item.student)
+
+	else:
+		student_list = Student.objects.filter(
+			school = request.user.userprofile.school,
+			enrolled_student__reg_class__period = request.user.userprofile.period
+		).annotate().order_by('last_name')
+
+	search_name = request.GET.get('name', None)
+	search_phone = request.GET.get('phone_number', None)    
+
+	if search_name:
+		student_list = student_list.filter(
+    		Q(first_name__icontains=search_name) | 
+    		Q(last_name__icontains=search_name))
+
+	if search_phone:
+		student_list = student_list.filter(
+			home_phone__icontains=search_phone)
 
 	context_dictionary = {
 		'student_list': student_list,
-		'student_filter': StudentFilter(request.GET, queryset=student_list)
+		'student_filter': StudentFilter()
 	}
 
 	if student_id:
@@ -39,6 +68,7 @@ def student_list(request, student_id=None):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def student_edit(request, student_id):
 	student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
 	context_dictionary = {'student_list': student_list}
@@ -67,6 +97,7 @@ def student_edit(request, student_id):
 		RequestContext(request))
 
 # turn into a dict to help with sorting in UI
+@login_required
 def class_history_helper(class_reg):
 	m = model_to_dict(class_reg)
 	m['period'] = class_reg.reg_class.period.description
@@ -75,6 +106,7 @@ def class_history_helper(class_reg):
 	return m
 
 # returns student info, used on the registration page
+@login_required
 def student_get(request):
 	if request.method == 'GET':
 		student_id = request.GET['student_id']
@@ -98,6 +130,7 @@ def student_get(request):
 
 
 # create a new student with form data
+@login_required
 def student_create(request):
 	s = StudentForm(request.POST)
 	context_dictionary = { 'student_form': StudentForm() }
@@ -118,6 +151,7 @@ def student_create(request):
 		RequestContext(request))
 
 
+@login_required
 def student_form(request):
 	context_dictionary = {'student_form': StudentForm() }
 
@@ -128,6 +162,7 @@ def student_form(request):
 
 # TODO: if file is too big, save to disk instead
 # if time figure out a way to confirm
+@login_required
 def student_upload(request):
 	context_dictionary = {'form': StudentCSVForm()}
 	form = StudentCSVForm(request.POST, request.FILES)
@@ -148,6 +183,7 @@ def student_upload(request):
 	return render_to_response('students/student_upload.html',
 		context_dictionary, RequestContext(request))
 
+@login_required
 def student_export(request):
 	context_dictionary = {}
 
@@ -169,6 +205,7 @@ def student_export(request):
 			context_dictionary,
 			RequestContext(request))
 
+@login_required
 def student_sample_csv(request):
 	response = HttpResponse(content_type='text/csv')
 	response['Content-Disposition'] = 'attachment; filename="sample_students.csv"'

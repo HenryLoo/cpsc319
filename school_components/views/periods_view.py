@@ -6,7 +6,9 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from school_components.utils import *
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def period_list(request, period_id=None):
 	period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
 	context_dictionary = {'period_list': period_list}
@@ -24,6 +26,7 @@ def period_list(request, period_id=None):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def period_create(request):
 	period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
 	context_dictionary = {'period_list': period_list,
@@ -56,6 +59,7 @@ def period_create(request):
 		RequestContext(request))
 
 
+@login_required
 def period_change(request, period_id=None):
 	if period_id:
 		new_period = Period.objects.get(pk = period_id)

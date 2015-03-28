@@ -10,7 +10,8 @@ urlpatterns = patterns('',
 	#	'accounts.views.teachers_view.teacher_list', 
 	#	name='teacherlist'),
 
-    url(r'^login/$', 'accounts.views.login_view', name='login_page'),             
+    url(r'^login/$', 'accounts.views.login_view', name='login_page'),        
+    url(r'^logout/$', 'accounts.views.logout_view', name='logout_page'),             
 	
 	url(r'^teachers/create/$', 'accounts.views.create_teacher_view', name='create_teacher'),
     

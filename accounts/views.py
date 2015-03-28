@@ -12,8 +12,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.forms import ChoiceField
 
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 
 #===================                  ======================= TEACHER
+@login_required
 def create_teacher_view(request):
 
     user_ret = None
@@ -90,32 +93,28 @@ def create_teacher_view(request):
     }
     return render(request, 'teachers/create_teacher.html', return_dict)
 
-
+@login_required
 def view_teachers_view (request, teacher_id=None):
     teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
     #teacher_list = TeacherUser.objects.all()
     
      # check if searching 
-    if 'name' in request.GET:
-        search_name = request.GET.get('name', None)
-        search_section = request.GET.get('class_section', None)
-        search_course = request.GET.get('course', None)
+    search_name = request.GET.get('name', None)
+    search_section = request.GET.get('class_section', None)
+    search_course = request.GET.get('course', None)
 
-        if search_name:
-            print (search_name)
-            teacher_list = teacher_list.filter(
-                user__user__first_name__icontains=search_name,
-                user__user__last_name__icontains=search_name)
-        if search_course:
-            print (search_course)
-            teacher_list = teacher_list.filter(
-                teacher__taught_class__course__name__icontains=search_course
-            )
-        if search_section:
-            print (search_section)
-            teacher_list = teacher_list.filter(
-                teacher__taught_class__section__icontains=search_section
-            )
+    if search_name:
+        teacher_list = teacher_list.filter(
+            Q(user__user__first_name__icontains=search_name) |
+            Q(user__user__last_name__icontains=search_name))
+    if search_course:
+        teacher_list = teacher_list.filter(
+            teacher__taught_class__course__name__icontains=search_course
+        )
+    if search_section:
+        teacher_list = teacher_list.filter(
+            teacher__taught_class__section__icontains=search_section
+        )
 
     context_dictionary = {'teacher_list': teacher_list,
                         'teacher_filter': TeacherFilterForm() }
@@ -132,7 +131,7 @@ def view_teachers_view (request, teacher_id=None):
     return render(request, "teachers/teacher_list.html",
         context_dictionary)
 
-
+@login_required
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
         teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
         context_dictionary = {'teacher_list': teacher_list}
@@ -200,7 +199,7 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
         return render(request, "teachers/edit_teacher.html",
                    context_dictionary)
 
-
+@login_required
 def upload_teachers_view(request):
 
     condict = {'upload_form' : TeacherCSVForm()}
@@ -242,11 +241,13 @@ def upload_teachers_view(request):
         
     return render(request, "teachers/teacher_upload.html", condict)
 
+@login_required
 def export_teachers_view (request):
     return render(request, "teachers/teacher_export.html")
 
 #==============================================================    ADMIN
 
+@login_required
 def create_admin_view(request):
     
     user_ret = None
@@ -316,7 +317,7 @@ def create_admin_view(request):
         'user_ret' : user_ret
     })
 
-
+@login_required
 def view_admins_view (request, admin_id=None):
 
     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
@@ -340,6 +341,7 @@ def view_admins_view (request, admin_id=None):
     return render(request, "admins/admin_list.html",
         context_dictionary)
 
+@login_required
 def edit_admin_view (request, admin_id): #there should always be an admin_id here
     #!!! probably block off this view entirely for teachers !!!
     
@@ -420,6 +422,7 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
 
 ##============================================================  LOGIN
     
+    
 def login_view(request):
     
     if request.method == 'POST':
@@ -435,7 +438,10 @@ def login_view(request):
                     login(request, user) 
                     print (user.userprofile.school)
                     if user.userprofile.school != None:
-                        return HttpResponseRedirect('/dashboard/statistics')
+                        if user.userprofile.role == 'TEACHER':
+                            return HttpResponseRedirect('/dashboard/classes_schedule')
+                        else:
+                            return HttpResponseRedirect('/dashboard/statistics')
                     else:
                         return HttpResponseRedirect('/school/schools')
                     
@@ -451,5 +457,9 @@ def login_view(request):
     else:
         login_form = LoginForm()
         return render(request, 'login/login.html', {'login_form' : login_form})
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/account/login/')
         
         

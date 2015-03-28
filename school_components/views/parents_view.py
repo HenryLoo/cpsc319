@@ -1,6 +1,6 @@
 from django.views import generic
 from school_components.models import Parent, Payment, Student, School, Period
-from school_components.forms.parents_form import ParentForm, PaymentForm
+from school_components.forms.parents_form import *
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
@@ -9,12 +9,33 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 import json
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def parent_list(request, parent_id=None):
-	parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
-	context_dictionary = {'parent_list': parent_list}
+	parent_list = Parent.objects.filter(
+		school = request.user.userprofile.school,
+		student__enrolled_student__period = request.user.userprofile.period
+	).annotate().order_by('last_name')
+
+	search_name = request.GET.get('name', None)
+	search_receipt = request.GET.get('receipt_no', None)    
+
+	if search_name:
+			parent_list = parent_list.filter(
+        		Q(first_name__icontains=search_name) | 
+        		Q(last_name__icontains=search_name))
+
+	if search_receipt:
+		parent_list = parent_list.filter(
+		payment__receipt_no__icontains=search_receipt)
+
+	context_dictionary = {
+		'parent_list': parent_list,
+		'parent_filter': ParentFilter()
+	}
 
 	if parent_id:
                 try:
@@ -50,9 +71,10 @@ def parent_list(request, parent_id=None):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def payment_edit(request, parent_id, payment_id):
 	if request.method == 'POST':
-		pay = Payment(pk=payment_id)
+		pay = Payment.objects.get(pk=payment_id)
 		pf = PaymentForm(request.POST, instance=pay)
 		
 		if pf.is_valid():
@@ -61,15 +83,16 @@ def payment_edit(request, parent_id, payment_id):
 			if request.is_ajax():
 				return HttpResponse("Payment edited successfully.")
 			else:
-                                return HttpResponseRedirect(
+				return HttpResponseRedirect(
 					reverse('school:parentlist', args=(parent_id,)))
 		else:
 			if request.is_ajax():
-				return HttpResponse("An error occurred. Payment was not made.")
+				return HttpResponse("An error occurred. Payment was not edited.")
 			return render_to_response('parents/parent_list.html',
 				{'errors': pf.errors },
 				RequestContext(request))
 
+@login_required
 def parent_edit(request, parent_id):
 	parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
 	context_dictionary = {'parent_list': parent_list}
@@ -97,6 +120,7 @@ def parent_edit(request, parent_id):
 		RequestContext(request))
 
 
+@login_required
 def parent_get(request):
 	if request.method == 'GET':
 		parent_id = request.GET['parent_id']
@@ -106,7 +130,7 @@ def parent_get(request):
 		parent_json = json.dumps(json.loads(parent_json)[0]['fields'])
 		return HttpResponse(parent_json, content_type="application/json")
 
-
+@login_required
 def parent_create(request):
 	p = ParentForm(request.POST)
 	context_dictionary = { 'parent_form': ParentForm() }
@@ -127,7 +151,7 @@ def parent_create(request):
 		context_dictionary,
 		RequestContext(request))
 
-
+@login_required
 def parent_form(request):
 	parent_list = Parent.objects.all()
 	context_dictionary = {'parent_list': parent_list,
@@ -137,6 +161,7 @@ def parent_form(request):
 		context_dictionary,
 		RequestContext(request))
 
+@login_required
 def payment_create(request, parent_id):
 	if request.method == 'POST':
 		pay = Payment(parent=Parent.objects.get(pk=parent_id))
@@ -157,22 +182,3 @@ def payment_create(request, parent_id):
 				{'errors': pf.errors },
 				RequestContext(request))
 
-def payment_edit(request, parent_id, payment_id):
-	if request.method == 'POST':
-		pay = Payment.objects.get(pk=payment_id)
-		pf = PaymentForm(request.POST, instance=pay)
-		
-		if pf.is_valid():
-			pf.save()
-			
-			if request.is_ajax():
-				return HttpResponse("Payment added successfully.")
-			else:
-				return HttpResponseRedirect(
-					reverse('school:parentlist', args=(parent_id,)))
-		else:
-			if request.is_ajax():
-				return HttpResponse("An error occurred. Payment was not made.")
-			return render_to_response('parents/parent_list.html',
-				{'errors': pf.errors },
-				RequestContext(request))

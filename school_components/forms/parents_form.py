@@ -1,5 +1,6 @@
-from django.forms import ModelForm, HiddenInput, DateInput
+from django.forms import ModelForm, HiddenInput, DateInput, CharField, Form
 from school_components.models import Parent, Payment
+import django_filters
 
 class ParentForm(ModelForm):
 	class Meta:
@@ -15,3 +16,7 @@ class PaymentForm(ModelForm):
 		widgets = {
             'date': DateInput(attrs={'class':'datepicker'}),
         }
+
+class ParentFilter(Form):
+	name = CharField(required=False)
+	receipt_no = CharField(required=False)

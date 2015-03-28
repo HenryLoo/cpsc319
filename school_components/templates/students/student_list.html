@@ -5,13 +5,18 @@
 {% endblock %}
 
 {% block student_content %}
+{% if user.userprofile.role == 'TEACHER'%}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
+</ul>
+{%else%}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
     <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
     <li role="presentation"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
     <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
 </ul>
-
+{%endif%}
 <!-- Page Heading -->
 <div class="row">
 
@@ -32,23 +37,26 @@
 			</a>
 			<div class="collapse" id="filters">
 			 <form action="" method="get">
-	        	{{ student_filter.form.as_p }}
+	        	{{ student_filter.as_p }}
 	        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
 	    	</form>
-	    	</div>
-	    
-		</div>
-		<div>
-		<ul class="list-unstyled student-list">
-	        {% for student in student_filter %}
+	    </div>    
+	</div>
+	<br><br>
+		{% if student_list %}
+		<ul class="list-unstyled school-list">
+			{% for student in student_list %}
 		  		<li>
 		  		<a href="{% url 'school:studentlist' student.id %}">
-		  			 {{ student.first_name }} {{ student.last_name }}
+		  			 {{ student }}
 		  		</a>
 		  		</li>
 		  	{% endfor %}
 		</ul>
-		</div>
+
+		{% else %}
+			<div class="alert alert-info" role="alert">No students have been added.</div>
+		{% endif %}
 	</div>
 
 
@@ -56,7 +64,9 @@
 	{% if student %}
 	<span>
 		<h3> Student Info </h3>
+		{% if not user.userprofile.role == 'TEACHER' %}
 		<a href="{%url 'school:studentedit' student.id%}" id="edit-student-btn" class="pull-right"> Edit </a>
+		{%endif%}
 	</span>
 	<table class="table table-hover">
 		<tr> 

@@ -22,8 +22,8 @@ import csv
 def student_list(request, student_id=None):
 	student_list = Student.objects.filter(
 		school = request.user.userprofile.school,
-		period = request.user.userprofile.period
-	).order_by('last_name')
+		enrolled_student__reg_class__period = request.user.userprofile.period
+	).annotate().order_by('last_name')
 
 	search_name = request.GET.get('name', None)
 	search_phone = request.GET.get('phone_number', None)    

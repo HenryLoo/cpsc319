@@ -14,9 +14,9 @@ import json
 
 def parent_list(request, parent_id=None):
 	parent_list = Parent.objects.filter(
-		school = request.user.userprofile.school, 
-		period = request.user.userprofile.period
-	).order_by('last_name')
+		school = request.user.userprofile.school,
+		student__enrolled_student__period = request.user.userprofile.period
+	).annotate().order_by('last_name')
 
 	search_name = request.GET.get('name', None)
 	search_receipt = request.GET.get('receipt_no', None)    

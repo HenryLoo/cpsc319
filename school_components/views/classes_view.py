@@ -177,7 +177,7 @@ def class_registration(request, class_id=None):
 # register student to class
 def class_registration_helper(request, class_id):
 	student_id = request.POST['student_id']
-	student = Student.objects.get(pk=student_idq)
+	student = Student.objects.get(pk=student_id)
 	
 	# check if on waiting list
 	reg = student.enrolled_student.filter(reg_class__id=class_id)

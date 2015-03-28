@@ -30,9 +30,9 @@ class ClassSchedule(models.Model):
 	saturday = models.BooleanField(default=False)
 	sunday = models.BooleanField(default=False)
 	start_time = models.TimeField(
-		default=datetime(2008, 1, 31, 9, 00, 00), blank=True)
+		default=datetime(2008, 1, 31, 9, 00, 00), blank=False, null=False)
 	end_time = models.TimeField(
-		default=datetime(2008, 1, 31, 10, 00, 00), blank=True)
+		default=datetime(2008, 1, 31, 10, 00, 00), blank=False, null=False)
 
 	def __unicode__(self):
 		result = []
@@ -62,12 +62,13 @@ class ClassSchedule(models.Model):
 
 class ClassTeacher(models.Model):
 	# needs to be null to allow class to be created 
-	teacher = models.ForeignKey('accounts.TeacherUser', related_name='teacher')
-	taught_class = models.ForeignKey('Class', related_name='taught_class', null=True)
+	primary_teacher = models.ForeignKey('accounts.TeacherUser', related_name='primary_classteacher', blank=False, null=False)
+	secondary_teacher = models.ForeignKey('accounts.TeacherUser', related_name='secondary_classteacher', blank=True, null=True)
+	taught_class = models.OneToOneField('Class', related_name='classteacher', null=True)
 
 	class Meta:
 		app_label = 'school_components'
-		unique_together = ('teacher', 'taught_class')
+		#unique_together = ('primary_teacher', 'secondary_teacher', 'taught_class')
 
 
 class ClassRegistration(models.Model):

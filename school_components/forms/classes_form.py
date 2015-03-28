@@ -30,7 +30,7 @@ class ClassScheduleForm(ModelForm):
 class ClassTeacherForm(ModelForm):
 	class Meta:
 		model = ClassTeacher
-		fields = ['teacher']
+		fields = ['primary_teacher', 'secondary_teacher']
 
 
 class ClassRegistrationForm(Form):

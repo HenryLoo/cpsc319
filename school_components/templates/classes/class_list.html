@@ -116,9 +116,8 @@
 		<tr>
 			<td> Teachers: </td>
 			<td> 
-			{% for classteacher in class.taught_class.all %}
-				{{ classteacher.teacher }}
-			{% endfor %}
+				{{ class.classteacher.primary_teacher }}
+				{%if class.classteacher.secondary_teacher != None %}, {{ class.classteacher.secondary_teacher }} {%endif%}
 			</td>
 		</tr>
 		<tr> 

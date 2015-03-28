@@ -42,10 +42,12 @@ def class_create(request):
 
 	# TODO: teacher will have period field
 	teacher_form = ClassTeacherForm(prefix='te')
-	teacher_form.fields['teacher'].queryset = TeacherUser.objects.filter(
+	teachers = TeacherUser.objects.filter(
 		user__period = request.user.userprofile.period, 
 		user__school = request.user.userprofile.school
 	)
+	teacher_form.fields['primary_teacher'].queryset = teachers
+	teacher_form.fields['secondary_teacher'].queryset = teachers
    
 	context_dictionary = {
 		'class_form': class_form, 
@@ -56,8 +58,11 @@ def class_create(request):
 	if request.method == 'POST':
 		cf = ClassForm(request.POST, prefix='info')
 		sf = ClassScheduleForm(request.POST, prefix='sch')
-
-		if cf.is_valid() and sf.is_valid():
+		te = ClassTeacherForm(request.POST, prefix='te')
+                te.fields['primary_teacher'].queryset = teachers
+                te.fields['secondary_teacher'].queryset = teachers
+	
+		if cf.is_valid() and sf.is_valid() and te.is_valid():
 			# save class
 			new = cf.save(commit=False)
 			new.school = request.user.userprofile.school
@@ -70,15 +75,14 @@ def class_create(request):
 			schedule.save()
 
 			# save class teacher
-			try:
-				te = ClassTeacherForm(request.POST, prefix='te')
-				if te.is_valid():
-					teacher = te.save(commit=False)
-					teacher.taught_class = new
-					teacher.save()
-			except Exception as e:
+			#try:
+			
+			teacher = te.save(commit=False)
+			teacher.taught_class = new
+			teacher.save()
+			#except Exception as e:
 				# no teacher in request, don't create ClassTeacher object
-				pass
+			#	pass
 
 			return HttpResponseRedirect(
 				reverse('school:classlist', args=(new.id,)))
@@ -87,6 +91,10 @@ def class_create(request):
 			context_dictionary['schedule_errors'] = sf.errors
 			context_dictionary['teacher_errors'] = te.errors
 
+                        context_dictionary['class_form']=cf
+                        context_dictionary['classday_form']=sf
+                        context_dictionary['classteacher_form']=te
+                        
 	return render_to_response('classes/class_form.html',
 		context_dictionary,
 		RequestContext(request))
@@ -104,21 +112,31 @@ def class_edit(request, class_id):
 					raise ObjectDoesNotExist
 			
 				context_dictionary['class_id'] = class_id
+				
+                                        #context_dictionary['shalala'] = 'shalala'
 
-				s = c.schedule
-                #context_dictionary['here'] = 'here' for testing 
-				t = c.taught_class.all()[0] #assume 1 teacher
-                #context_dictionary['ha'] = 'ha' for testing
+                                s = c.schedule #all classes created normally (through the form) should have this...
+                         
+                                        #context_dictionary['here'] = 'here' #for testing
+
+                                t = c.classteacher #class can only have one classteacher
+                                       # context_dictionary['ha'] = 'ha'# for testing
+
 				class_form = ClassForm(prefix='info', instance = c)
-
 				classday_form = ClassScheduleForm(prefix='sch', instance = s)
 				classteacher_form = ClassTeacherForm(prefix='te', instance = t)
+				teachers = TeacherUser.objects.filter(user__school=request.user.userprofile.school, user__period=request.user.userprofile.period)
+				classteacher_form.fields['primary_teacher'].queryset = teachers
+				classteacher_form.fields['secondary_teacher'].queryset = teachers
 	
 				if request.method == 'POST':
 						class_form = ClassForm(request.POST, prefix='info', instance = c)
 						classday_form = ClassScheduleForm(request.POST, prefix='sch', instance = s)
 						classteacher_form = ClassTeacherForm(request.POST, prefix='te', instance = t)
-                        
+						teachers = TeacherUser.objects.filter(user__school=request.user.userprofile.school, user__period=request.user.userprofile.period)
+                                                classteacher_form.fields['primary_teacher'].queryset = teachers
+                                                classteacher_form.fields['secondary_teacher'].queryset = teachers
+                                
 						if class_form.is_valid() and classday_form.is_valid() and classteacher_form.is_valid():
 								class_form.save()
 								classday_form.save()

@@ -28,7 +28,7 @@ def populate():
    
     class1 = Class.objects.create(course=course1,school=school1, period=period1, section='1', description='description here', class_size=20, waiting_list_size=10, room='X')
 
-    class_teacher = ClassTeacher.objects.create(teacher=teacher1, taught_class=class1)
+    class_teacher = ClassTeacher.objects.create(primary_teacher=teacher1, secondary_teacher=None,  taught_class=class1)
 
     parent1 = Parent.objects.create(
         first_name="Julie", 

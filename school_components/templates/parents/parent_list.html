@@ -63,6 +63,12 @@
 			{{ errors }}
 		</div>
 	{% endif %}
+
+	{% if payment_error %}
+		<div class="alert alert-danger">
+			Payment was invalid. Please try again.
+		</div>
+	{% endif %}
 	
 	{% if error %}
 		<div class="panel panel-danger">

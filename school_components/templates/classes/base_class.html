@@ -22,7 +22,6 @@
     	source: studentTags,
     	select: function(event, ui) {
     		sel_student_id = ui.item.id;
-    		console.log(sel_student_id);
     	}
     });
 
@@ -30,23 +29,31 @@
 
     // send request to register the student in class with class.id
     $('.class-registration-form').submit(function() {
-    	// check if it's the waiting list or the input box
     	var student_id;
+        var send_data;
     	var wait_btn = $(this).find('button');
     	student_id = $(wait_btn).data('student-id');
 
     	if (student_id == undefined) {
+            // from input box
     		student_id = sel_student_id;
 
-            // don't end if no student was selected or nothing is in input
+            // don't send if no student was selected input is empty
             if (sel_student_id == undefined || 
                 $('#search-student-input').val().length  == 0) {
                 alert("Please select a valid student.")
                 return false;
-            }
-    	}
+            } 
 
-    	var send_data = $(this).serialize() + '&student_id=' + student_id;
+            // extra check to make sure name matches student id, in case of edit
+            send_data = $(this).serialize() + '&student_id=' + student_id + 
+                    '&student_name=' + $('#search-student-input').val();
+
+    	} else {
+            // from waiting list
+            send_data = $(this).serialize() + '&student_id=' + student_id;
+        }
+
     	$.ajax({
 			type: "POST",
 			url: "{%url 'school:classregistration' class.id %}", 

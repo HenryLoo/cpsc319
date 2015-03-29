@@ -1,7 +1,7 @@
 from django.views import generic
 from school_components.models import Parent, Payment, Student, School, Period
 from school_components.forms.parents_form import *
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.forms.models import model_to_dict
@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from urllib import urlencode
 import json
 from django.contrib.auth.decorators import login_required
 
@@ -25,8 +26,8 @@ def parent_list(request, parent_id=None):
 
 	if search_name:
 			parent_list = parent_list.filter(
-        		Q(first_name__icontains=search_name) | 
-        		Q(last_name__icontains=search_name))
+				Q(first_name__icontains=search_name) | 
+				Q(last_name__icontains=search_name))
 
 	if search_receipt:
 		parent_list = parent_list.filter(
@@ -38,34 +39,39 @@ def parent_list(request, parent_id=None):
 	}
 
 	if parent_id:
-                try:
-                        p = Parent.objects.get(pk=parent_id)
-                        if p.school != request.user.userprofile.school or p.period != request.user.userprofile.period:
-                                raise ObjectDoesNotExist
-                        
-                        context_dictionary['parent'] = p
-                        context_dictionary['payment_form'] = PaymentForm()
+		# hack for errors returned from payment create
+		errors = request.GET.get('error', None)
+		if errors:
+			context_dictionary['payment_error'] = errors
 
-                except ObjectDoesNotExist:
-                        context_dictionary['error'] = 'There is no parent with that id in this school and period.'
+		try:
+			p = Parent.objects.get(pk=parent_id)
+			if p.school != request.user.userprofile.school:
+					raise ObjectDoesNotExist
+			
+			context_dictionary['parent'] = p
+			context_dictionary['payment_form'] = PaymentForm()
 
-                #post = request.POST
-                #payment_id = request.POST['payment_id']
-        try:
-                post = request.POST
-                payment_id = request.POST['payment_id']
-                try:
-                        pay = Payment.objects.get(pk=payment_id)
-                        epf = PaymentForm(instance=pay)
-                        context_dictionary['edit_payment_form'] = epf
-                        context_dictionary['payment_id'] = payment_id
-                        
-                except ObjectDoesNotExist:
-                        pass
-                
-        except Exception: #exception thrown if no payment id
-                pass
-        
+		except ObjectDoesNotExist:
+				context_dictionary['error'] = 'There is no parent with that id in this school.'
+
+				#post = request.POST
+				#payment_id = request.POST['payment_id']
+		try:
+			post = request.POST
+			payment_id = request.POST['payment_id']
+			try:
+					pay = Payment.objects.get(pk=payment_id)
+					epf = PaymentForm(instance=pay)
+					context_dictionary['edit_payment_form'] = epf
+					context_dictionary['payment_id'] = payment_id
+					
+			except ObjectDoesNotExist:
+					pass
+				
+		except Exception: #exception thrown if no payment id
+			pass
+		
 
 	return render_to_response("parents/parent_list.html",
 		context_dictionary,
@@ -88,9 +94,10 @@ def payment_edit(request, parent_id, payment_id):
 		else:
 			if request.is_ajax():
 				return HttpResponse("An error occurred. Payment was not edited.")
-			return render_to_response('parents/parent_list.html',
-				{'errors': pf.errors },
-				RequestContext(request))
+			else:
+				url = "%s?%s" % (reverse('school:parentlist', args=(parent_id,)), 
+					urlencode({'error':1}))
+				return redirect(url)
 
 @login_required
 def parent_edit(request, parent_id):
@@ -98,23 +105,24 @@ def parent_edit(request, parent_id):
 	context_dictionary = {'parent_list': parent_list}
 
 	try:
-                p = Parent.objects.get(pk=parent_id)
-                if p.school != request.user.userprofile.school or p.period != request.user.userprofile.period:
-                        raise ObjectDoesNotExist
-                
+		p = Parent.objects.get(pk=parent_id)
+		if p.school != request.user.userprofile.school or p.period != request.user.userprofile.period:
+				raise ObjectDoesNotExist
+				
 		context_dictionary['parent_id'] = parent_id
 		context_dictionary['payment_form'] = PaymentForm() #ig
 		parent_form = ParentForm(instance=p)
 		if request.method == 'POST':
-                        parent_form = ParentForm(request.POST, instance = p)
-                        if parent_form.is_valid():
-                                parent_form.save()
-                                context_dictionary['succ']=True
-                context_dictionary['parent_form']=parent_form
+			parent_form = ParentForm(request.POST, instance = p)
+			if parent_form.is_valid():
+					parent_form.save()
+					context_dictionary['succ']=True
+			
+			context_dictionary['parent_form']=parent_form
 
-        except ObjectDoesNotExist:
-                context_dictionary['error'] = 'There is no parent with this id in this school and period.'
-                
+	except ObjectDoesNotExist:
+		context_dictionary['error'] = 'There is no parent with this id in this school and period.'
+			
 	return render_to_response("parents/parent_edit.html",
 		context_dictionary,
 		RequestContext(request))
@@ -178,7 +186,9 @@ def payment_create(request, parent_id):
 		else:
 			if request.is_ajax():
 				return HttpResponse("An error occurred. Payment was not made.")
-			return render_to_response('parents/parent_list.html',
-				{'errors': pf.errors },
-				RequestContext(request))
+	
+			else: 
+				url = "%s?%s" % (reverse('school:parentlist', args=(parent_id,)), 
+					urlencode({'error':1}))
+				return redirect(url)
 

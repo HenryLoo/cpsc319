@@ -252,6 +252,19 @@ def class_registration(request, class_id=None):
 def class_registration_helper(request, class_id):
 	student_id = request.POST['student_id']
 	student = Student.objects.get(pk=student_id)
+
+	student_name =  request.POST.get('student_name', None)
+	if student_name:
+		try:
+			student_name = student_name.strip()
+			assert(len(student_name.split(' ')) == 2)
+			first_name, last_name = student_name.split(' ')
+			assert(first_name == student.first_name)
+			assert(last_name == student.last_name)
+
+		except AssertionError:
+			return HttpResponseBadRequest("Please select a valid student.")
+
 	
 	# check if on waiting list
 	reg = student.enrolled_student.filter(reg_class__id=class_id)

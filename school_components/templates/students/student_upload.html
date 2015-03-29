@@ -1,10 +1,5 @@
 {% extends "students/base_student.html" %}
 
-{% block current_tab %}
-	"Upload"
-{% endblock %}
-
-
 {% block student_content %}
 {% if user_role == 'TEACHER'%}
 <ul class="nav nav-tabs nav-justified">
@@ -15,7 +10,6 @@
     <li role="presentation"><a href="{% url 'school:studentlist' %}">View Students</a></li>
     <li role="presentation"><a href="{% url 'school:studentcreate' %}">Add Student</a></li>
     <li role="presentation" class="active"><a href="{% url 'school:studentupload' %}">Upload CSV</a></li>
-    <li role="presentation"><a href="{% url 'school:studentexport' %}">Export Student Data</a></li>
 </ul>
 
 <!-- Page Heading -->

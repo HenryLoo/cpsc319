@@ -8,15 +8,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from school_components.utils import *
 from django.contrib.auth.decorators import login_required
 
+from accounts.utils import *
+
 @login_required
 def period_list(request, period_id=None):
-	period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
+        request = process_user_info(request)
+	period_list = Period.objects.filter(school = request.user_school).order_by('description')
 	context_dictionary = {'period_list': period_list}
 
 	if period_id:
                 try:
                         c = Period.objects.get(pk=period_id)
-                        if request.user.userprofile.role == 'SCHOOL_ADMIN' and c.school != request.user.userprofile.school:
+                        if request.user_role == 'SCHOOL_ADMIN' and c.school != request.user_school:
                                 raise ObjectDoesNotExist
                         context_dictionary['period'] = c
                 except ObjectDoesNotExist:
@@ -28,26 +31,27 @@ def period_list(request, period_id=None):
 
 @login_required
 def period_create(request):
-	period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
+        request = process_user_info(request)
+	period_list = Period.objects.filter(school = request.user_school).order_by('description')
 	context_dictionary = {'period_list': period_list,
-							 'period_form': PeriodForm(), 'period_transfer_form': PeriodTransferForm(cur_school=request.user.userprofile.school,
-                                                                                                                          cur_period=request.user.userprofile.period)}
+							 'period_form': PeriodForm(), 'period_transfer_form': PeriodTransferForm(cur_school=request.user_school,
+                                                                                                                          cur_period=request.user_period)}
 	if request.method == 'POST':
 		cf = PeriodForm(request.POST)
-		tf = PeriodTransferForm(request.POST, cur_school=request.user.userprofile.school,cur_period=request.user.userprofile.period)
+		tf = PeriodTransferForm(request.POST, cur_school=request.user_school,cur_period=request.user_period)
 
 		context_dictionary['period_form'] = cf
 		context_dictionary['period_transfer_form'] = tf
 		
 		if cf.is_valid() and tf.is_valid():
 			new = cf.save(commit=False)
-			new.school = request.user.userprofile.school
-			print (request.user.userprofile.school)
+			new.school = request.user_school
+			print (request.user_school)
 			new.save()
-			if tf.fields['transfer_teachers']:
-						SchoolUtils.duplicate_teachers(request.user.userprofile.school, request.user.userprofile.period, new)
-						selected_courses = tf.courses  
-			duplicate_courses(selected_courses, new)
+			if tf.cleaned_data['transfer_teachers'] == True:
+						SchoolUtils.duplicate_teachers(request.user_school, request.user_period, new)
+			selected_courses = tf.cleaned_data['courses']  
+			SchoolUtils.duplicate_courses(selected_courses, new)
 
 			return HttpResponseRedirect(
 				reverse('school:periodlist', args=(new.id,)))
@@ -61,17 +65,21 @@ def period_create(request):
 
 @login_required
 def period_change(request, period_id=None):
+        request = process_user_info(request)
 	if period_id:
 		new_period = Period.objects.get(pk = period_id)
-		request.user.userprofile.period = new_period
-		request.user.userprofile.save()
+		#user will only have one userprofile b/c only admins can change periods
+                profile = request.user.userprofiles.all()[0]
+		profile.period = new_period
+		profile.save()
 
 	return render_to_response('periods/period_list.html',
 		RequestContext(request))
 
 def period_edit(request, period_id): #there should always be a period_id here
     #!!! probably block off this view entirely for anybody but system admin !!!
-		period_list = Period.objects.filter(school = request.user.userprofile.school).order_by('description')
+                request = process_user_info(request)
+		period_list = Period.objects.filter(school = request.user_school).order_by('description')
 		context_dictionary = {'period_list': period_list}
 
 		try:
@@ -79,7 +87,7 @@ def period_edit(request, period_id): #there should always be a period_id here
 				c = Period.objects.get(pk=period_id)
 
                 #make sure that school admins can only access by url the periods in their school
-				if request.user.userprofile.role == 'SCHOOL_ADMIN' and c.school != request.user.userprofile.school:
+				if request.user_role == 'SCHOOL_ADMIN' and c.school != request.user_school:
 					raise ObjectDoesNotExist
                 
 				context_dictionary['period_id']=period_id

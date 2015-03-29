@@ -20,6 +20,7 @@ from django.db.models import Q
 
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def class_list(request, class_id=None):
 
@@ -160,8 +161,8 @@ def class_registration(request, class_id=None):
 
 	else:
 		class_list = Class.objects.filter(
-			school = request.user.userprofile.school, 
-			period = request.user.userprofile.period).order_by('course')
+			school = request.user_school, 
+			period = request.user_period).order_by('course')
 		context_dictionary = {'class_list': class_list }
 
 		if class_id:
@@ -470,8 +471,8 @@ def create_attendance_notifications(request, class_):
 				notification = Notification(
 					notification_type=attendance_notification, 
 					student=curr_student,
-					school=request.user.userprofile.school,
-					period=request.user.userprofile.period,
+					school=request.user_school,
+					period=request.user_period,
 					date=first_absence,
 					status=False)
 				notification.save()
@@ -584,8 +585,8 @@ def create_performance_notifications(request, c):
 			notif = Notification(
 				notification_type = performance_notification,
 				student = student,
-				school = request.user.userprofile.school, 
-				period = request.user.userprofile.period,
+				school = request.user_school, 
+				period = request.user_period,
 				status=False)
 			notif.save()
 

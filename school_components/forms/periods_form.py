@@ -18,7 +18,7 @@ class PeriodForm(forms.ModelForm):
 
 class PeriodTransferForm(forms.Form):
 
-        transfer_teachers = BooleanField(initial=True, label='Copy Teachers to New Period')
+        transfer_teachers = BooleanField(initial=True, required=False, label='Copy Teachers to New Period')
 
         def __init__(self, *args, **kwargs):
             super(PeriodTransferForm, self).__init__(*args)

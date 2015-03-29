@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block class_content %}
-{% if user.userprofile.role == 'TEACHER' %}
+{% if user_role == 'TEACHER' %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{%url 'school:classlist' %}">View Classes</a></li>
     <li role="presentation"><a href="{%url 'school:classassignment' %}">Assignments</a></li>

@@ -11,6 +11,7 @@ from accounts.models import UserProfile, TeacherUser
 from .models import SentMessage
 from aplusmessages.forms import EMailForm
 from django.contrib.auth.decorators import login_required
+from accounts.utils import *
 
 def clear_messages(request):
         storage = get_messages(request)
@@ -30,12 +31,13 @@ def save_email(request, to_type, to_emails, cc_emails, bcc_emails, from_email, s
 
 
 def get_send_choices(request):
+    request = process_user_info(request)
     user_choices = SentMessage.SEND_CHOICES
 
     '''
     adding departments
     '''
-    for dep in Department.objects.filter(school = request.user.userprofile.school).order_by('name'):
+    for dep in Department.objects.filter(school = request.user_school).order_by('name'):
         dep = ("DEP#"+str(dep.id), dep.name, )
         user_choices = user_choices + (dep,)
 
@@ -43,7 +45,7 @@ def get_send_choices(request):
     adding courses
     '''
 
-    for course in Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name'):
+    for course in Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name'):
         course = ("COURSE#"+str(course.id), course.name, )
         user_choices = user_choices + (course,)
 
@@ -51,7 +53,7 @@ def get_send_choices(request):
     adding classes
     '''
 
-    for sc_class in Class.objects.filter(school = request.user.userprofile.school,  period = request.user.userprofile.period).order_by('course'):
+    for sc_class in Class.objects.filter(school = request.user_school,  period = request.user_period).order_by('course'):
         sc_class = ("CLASS#"+str(sc_class.id), sc_class.section, )
         user_choices = user_choices + (sc_class,)
 
@@ -64,6 +66,7 @@ sends email to selected group of people or to individual
 '''
 @login_required
 def send_email(request):
+    request = process_user_info(request)
     clear_messages(request)
     if request.method == 'POST':
         form = EMailForm(request.POST, choices=get_send_choices(request))
@@ -87,18 +90,18 @@ def send_email(request):
                     '''
                     students are selected
                     '''
-                    email_lists = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name').values_list('email', flat=True)
+                    email_lists = Student.objects.filter(school = request.user_school, period = request.user_period).order_by('last_name').values_list('email', flat=True)
                 elif to_group == SentMessage.SEND_TEACHERS:
                     '''
                     teachers are selected
                     '''
-                    email_lists = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school).values_list('user__user__email', flat=True)
+                    email_lists = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).values_list('user__user__email', flat=True)
                 elif to_group == SentMessage.SEND_ADMINS:
                     '''
                     admins are selected
                     '''
                     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").values_list('user__email', flat=True)
-                    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school).values_list('user__email', flat=True)
+                    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).values_list('user__email', flat=True)
 
                     for sysemail in system_admin_list:
                         email_lists.append(sysemail)
@@ -110,14 +113,14 @@ def send_email(request):
                     #TODO Add additional filters here if required
                     email_lists = []
 
-                    for semail in Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name').values_list('email', flat=True):
+                    for semail in Student.objects.filter(school = request.user_school, period = request.user_period).order_by('last_name').values_list('email', flat=True):
                         email_lists.append(semail)
 
-                    for temail in TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school).values_list('user__user__email', flat=True):
+                    for temail in TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).values_list('user__user__email', flat=True):
                         email_lists.append(temail)
 
                     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").values_list('user__email', flat=True)
-                    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school).values_list('user__email', flat=True)
+                    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).values_list('user__email', flat=True)
 
                     for sysemail in system_admin_list:
                         email_lists.append(sysemail)
@@ -208,6 +211,7 @@ def send_email(request):
 
 @login_required
 def sent_mail(request):
+    request = process_user_info(request)
     #getting sent mail for logged in user
     #Once authentication is implemented, you can use below instead getting all
     #sent_messages = SentMessage.objects.filter(sender=UserProfile.objects.get(user=request.user))

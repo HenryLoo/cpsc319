@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.shortcuts import RequestContext
-
+from accounts.utils import *
 from dashboard.models import Chart, Notification, NotificationType
 
 from accounts.models import UserProfile
@@ -31,11 +31,11 @@ from graphos.renderers import gchart
 
 @login_required
 def statistics_page(request):
-    
+    request = process_user_info(request)
     context_dictionary = {}
 
-    currentSchool = request.user.userprofile.school
-    currentPeriod = request.user.userprofile.period
+    currentSchool = request.user_school
+    currentPeriod = request.user_period
 
     if request.method == 'POST':
         title = request.POST.get("title")
@@ -101,7 +101,7 @@ def statistics_page(request):
     context_dictionary['visibilityOptions'] = Chart._meta.get_field('visibility').choices
 
     charts = Chart.objects.filter(school_id=currentSchool, period_id=currentPeriod)
-    if request.user.userprofile == 'TEACHER':
+    if request.user_role == 'TEACHER':
         charts = charts.filter(visibility='ALL')
     charts = charts.all().order_by('id')
 
@@ -189,11 +189,12 @@ def statistics_page(request):
 
 @login_required
 def notifications_page(request):
+    request = process_user_info(request)
     
     context_dictionary = {}
 
-    currentSchool = request.user.userprofile.school
-    currentPeriod = request.user.userprofile.period
+    currentSchool = request.user_school
+    currentPeriod = request.user_period
 
     if request.method == 'POST':
         for key in request.POST:
@@ -230,6 +231,7 @@ def notifications_page(request):
 
 @login_required
 def notifications_settings_page(request):
+    request = process_user_info(request)
     
     context_dictionary = {}
     
@@ -278,11 +280,12 @@ def notifications_settings_page(request):
 
 @login_required
 def classes_schedule_page(request):
+    request = process_user_info(request)
     
     context_dictionary = {}
 
-    currentSchool = request.user.userprofile.school
-    currentPeriod = request.user.userprofile.period
+    currentSchool = request.user_school
+    currentPeriod = request.user_period
 
     context_dictionary['weekday'] = request.GET.get("weekday")
     if context_dictionary['weekday'] not in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']:
@@ -306,8 +309,8 @@ def classes_schedule_page(request):
         classSchedule = classSchedule.filter(sunday=True)
     classSchedule = classSchedule.order_by('start_time')
 
-    if request.user.userprofile == 'TEACHER':
-        teacherID = TeacherUser.filter(user_id=request.user.userprofile.user_id).get().teacher_id
+    if request.user_role == 'TEACHER':
+        teacherID = TeacherUser.filter(user__period=user).get().teacher_id
         taughtClasses = ClassTeacher.filter(teacher_id=teacherID).values_list('taught_class_id', flat=True)
         classSchedule = classSchedule.filter(sch_class_id__in=taughtClasses)
     
@@ -333,6 +336,7 @@ def classes_schedule_page(request):
 
 @login_required
 def view_reports(request):
+    request = process_user_info(request)
     
     context_dictionary = {}
         
@@ -340,6 +344,7 @@ def view_reports(request):
 
 @login_required
 def assignment(request):
+    request = process_user_info(request)
     
     context_dictionary = {}
         

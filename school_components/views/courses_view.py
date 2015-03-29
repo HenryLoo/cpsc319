@@ -3,6 +3,7 @@ from school_components.forms.courses_form import *
 from school_components.models.classes_model import Assignment, Class
 from school_components.forms.classes_form import ClassAssignmentForm
 
+from accounts.utils import *
 from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -13,9 +14,10 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def course_list(request, course_id=None):
+        request = process_user_info(request)
 	course_list = Course.objects.filter(
-		school = request.user.userprofile.school, 
-		period = request.user.userprofile.period
+		school = request.user_school, 
+		period = request.user_period
 	).order_by('name')
 
 	search_course = request.GET.get('course', None) 
@@ -35,7 +37,7 @@ def course_list(request, course_id=None):
 	if course_id:
 		try:
 			c = Course.objects.get(pk=course_id)
-			if c.school != request.user.userprofile.school or c.period != request.user.userprofile.period:
+			if c.school != request.user_school or c.period != request.user_period:
 					raise ObjectDoesNotExist
 
 			p = Prerequisite.objects.filter(course=course_id)
@@ -51,10 +53,11 @@ def course_list(request, course_id=None):
 
 @login_required
 def course_create(request):
+        request = process_user_info(request)
 	course_form = CourseForm()
 	course_form.fields['prerequisite'].queryset = Course.objects.filter(
-		school = request.user.userprofile.school, 
-		period = request.user.userprofile.period
+		school = request.user_school, 
+		period = request.user_period
 	)
 	context_dictionary = { 'course_form': course_form }
 
@@ -62,8 +65,8 @@ def course_create(request):
 		cf = CourseForm(request.POST)
 		if cf.is_valid():
 			new = cf.save(commit=False)
-			new.school = request.user.userprofile.school
-			new.period = request.user.userprofile.period
+			new.school = request.user_school
+			new.period = request.user_period
 			new.save()
 
 			if cf['prerequisite'].value() != '':
@@ -85,6 +88,7 @@ Delete Course
 '''
 @login_required
 def course_delete(request, course_id):
+    request = process_user_info(request)
     course = Course.objects.get(pk=course_id)
     Prerequisite.objects.filter(Q(course=course) | Q(prereq=course)).delete()
     course.delete()
@@ -94,12 +98,13 @@ def course_delete(request, course_id):
 
 @login_required
 def course_edit(request, course_id):
-		course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name')
+                request = process_user_info(request)
+		course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name')
 		context_dictionary = {'course_list': course_list}
 
 		try:
 				c = Course.objects.get(pk=course_id)
-				if c.school != request.user.userprofile.school or c.period != request.user.userprofile.period:
+				if c.school != request.user_school or c.period != request.user_period:
 						raise ObjectDoesNotExist
 
 				p = Prerequisite.objects.filter(course=course_id)
@@ -126,12 +131,13 @@ def course_edit(request, course_id):
 
 @login_required
 def dept_create(request):
+        request = process_user_info(request)
 	context_dictionary = {'dept_form': DepartmentForm()}
 	if request.method == 'POST':
 		d = DepartmentForm(request.POST)
 		if d.is_valid():
 			new = d.save(commit=False)
-			new.school = request.user.userprofile.school
+			new.school = request.user_school
 			new.save()
 			return HttpResponseRedirect(reverse('school:courselist'))
 		else:
@@ -144,7 +150,8 @@ def dept_create(request):
 #create department view
 @login_required
 def dept_list(request, dept_id = None):
-	dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
+        request = process_user_info(request)
+	dept_list = Department.objects.filter(school = request.user_school).order_by('name')
 
 	search_dept = request.GET.get('department_name', None)  
 	
@@ -156,7 +163,7 @@ def dept_list(request, dept_id = None):
 	if dept_id:
 				try:
 						d = Department.objects.get(pk=dept_id)
-						if d.school != request.user.userprofile.school:
+						if d.school != request.user_school:
 								raise ObjectDoesNotExist
 						context_dictionary['department'] = d
 				except ObjectDoesNotExist:
@@ -168,12 +175,13 @@ def dept_list(request, dept_id = None):
 
 @login_required
 def dept_edit(request, dept_id):
-	dept_list = Department.objects.filter(school = request.user.userprofile.school).order_by('name')
+        request = process_user_info(request)
+	dept_list = Department.objects.filter(school = request.user_school).order_by('name')
 	context_dictionary = {'dept_list': dept_list}
 
 	try:
 				d = Department.objects.get(pk=dept_id)
-				if d.school != request.user.userprofile.school:
+				if d.school != request.user_school:
 						raise ObjectDoesNotExist
 				context_dictionary['dept_id'] = dept_id
 
@@ -208,8 +216,9 @@ def dept_delete(request, dept_id):
 
 @login_required
 def course_assignment(request, course_id=None):
+        request = process_user_info(request)
 
-	course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('-id')
+	course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('-id')
 	context_dictionary = { 'course_list': course_list }
 
 	if course_id:

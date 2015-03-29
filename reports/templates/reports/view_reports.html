@@ -35,7 +35,7 @@
 
             </div>
 
-            {% if user.userprofile.role == 'TEACHER' %}
+            {% if user_role == 'TEACHER' %}
              <div class="col-lg-4">
                          <a class="btn btn-default" href="{%url 'reports:reportcardteacher' %}" role="button" style="width: 280px; height: 200px;">
                                 <i class="glyphicon glyphicon-print" style="font-size: 75px; margin-top: 20px; margin-left: 10px"></i><br>
@@ -54,7 +54,7 @@
             {%endif%}
 </div>
 <br><br>
-{% if not user.userprofile.role == 'TEACHER' %}
+{% if not user_role == 'TEACHER' %}
 <div class="row">
 
 

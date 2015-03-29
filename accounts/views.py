@@ -20,7 +20,8 @@ from datetime import datetime
 #===================                  ======================= TEACHER
 @login_required
 def create_teacher_view(request):
-
+    
+    request = process_user_info(request)
     user_ret = None
     if request.method == 'POST':
 
@@ -55,8 +56,8 @@ def create_teacher_view(request):
 
                 profile = teacher_phone.save(commit=False)
                 profile.role = 'TEACHER'
-                profile.school = request.user.userprofile.school
-                profile.period = request.user.userprofile.period
+                profile.school = request.user_school
+                profile.period = request.user_period
                 profile.user = user
                 
                 profile.save()
@@ -97,7 +98,8 @@ def create_teacher_view(request):
 
 @login_required
 def view_teachers_view (request, teacher_id=None):
-    teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
+    request = process_user_info(request)
+    teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
     #teacher_list = TeacherUser.objects.all()
     
      # check if searching 
@@ -124,7 +126,7 @@ def view_teachers_view (request, teacher_id=None):
     if teacher_id:
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
-            if not (request.user.userprofile.school == teacher.user.school and request.user.userprofile.period == teacher.user.period):
+            if not (request.user_school == teacher.user.school and request.user_period == teacher.user.period):
                 raise ObjectDoesNotExist
             context_dictionary['teacher'] = teacher
         except ObjectDoesNotExist:
@@ -135,12 +137,13 @@ def view_teachers_view (request, teacher_id=None):
 
 @login_required
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
-        teacher_list = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school)
+        request = process_user_info(request)
+        teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
         context_dictionary = {'teacher_list': teacher_list}
 
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
-            if not (request.user.userprofile.school == teacher.user.school and request.user.userprofile.period == teacher.user.period):
+            if not (request.user_school == teacher.user.school and request.user_period == teacher.user.period):
                 raise ObjectDoesNotExist
             
             if request.method == 'POST': #assume if it was a post then the teacher exists, because otherwise a form wouldn't have appeared
@@ -207,6 +210,7 @@ Delete Teacher
 '''
 @login_required
 def delete_teacher_view (request, teacher_id):
+    request = process_user_info(request)
     teacher = TeacherUser.objects.get(pk=teacher_id)
     #deleting user profile
     profile = UserProfile.objects.get(id=teacher.user.id)
@@ -219,6 +223,7 @@ def delete_teacher_view (request, teacher_id):
 
 @login_required
 def upload_teachers_view(request):
+    request = process_user_info(request)
 
     condict = {'upload_form' : TeacherCSVForm()}
 
@@ -228,8 +233,8 @@ def upload_teachers_view(request):
         if not upload_form.is_valid():
             return render(request, "teachers/teacher_upload.html", {'upload_form' : upload_form })
 
-        school = request.user.userprofile.school
-        period = request.user.userprofile.period
+        school = request.user_school
+        period = request.user_period
         tlist, errors = validate_teachers_csv(request.FILES['file'], school, period)
 
         if errors:
@@ -267,6 +272,7 @@ def export_teachers_view (request):
 
 @login_required
 def create_admin_view(request):
+    request = process_user_info(request)
     
     user_ret = None
     
@@ -274,9 +280,9 @@ def create_admin_view(request):
 
         user_form = MyUserCreationForm(request.POST)
         admin_form = None
-        if request.user.userprofile.role =='SCHOOL_ADMIN':
+        if request.user_role =='SCHOOL_ADMIN':
             admin_form = NoRoleAdminProfileForm(request.POST)
-        elif request.user.userprofile.role =='SYSTEM_ADMIN':
+        elif request.user_role =='SYSTEM_ADMIN':
             admin_form = AdminProfileForm(request.POST)
 
         if user_form.is_valid() and admin_form.is_valid():
@@ -291,9 +297,9 @@ def create_admin_view(request):
                     
                 profile = admin_form.save(commit=False)
                 profile.user = user
-                profile.school = request.user.userprofile.school
-                profile.period = request.user.userprofile.period
-                if request.user.userprofile.role == 'SCHOOL_ADMIN':
+                profile.school = request.user_school
+                profile.period = request.user_period
+                if request.user_role == 'SCHOOL_ADMIN':
                     profile.role = 'SCHOOL_ADMIN'
                 profile.save()
             
@@ -322,9 +328,9 @@ def create_admin_view(request):
     password = User.objects.make_random_password()
     user_form = MyUserCreationForm(initial={'password': password})
     admin_form = None
-    if request.user.userprofile.role =='SCHOOL_ADMIN':
+    if request.user_role =='SCHOOL_ADMIN':
         admin_form = NoRoleAdminProfileForm()
-    elif request.user.userprofile.role =='SYSTEM_ADMIN':
+    elif request.user_role =='SYSTEM_ADMIN':
         admin_form = AdminProfileForm()
     
     
@@ -337,9 +343,9 @@ def create_admin_view(request):
 
 @login_required
 def view_admins_view (request, admin_id=None):
-
+    request = process_user_info(request)
     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school)
+    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
     context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
@@ -347,7 +353,7 @@ def view_admins_view (request, admin_id=None):
         try:
             admin = UserProfile.objects.get(pk=admin_id)
             if admin.role == 'SCHOOL_ADMIN' or admin.role == 'SYSTEM_ADMIN':   #so as to not display teachers, if a teacher's userprofile id was entered in the url
-                if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.school)):
+                if admin.role == 'SCHOOL_ADMIN' and (not (request.user_school == admin.school)):
                     raise ObjectDoesNotExist #school admin is from another school
                 
                 context_dictionary['admin'] = admin
@@ -362,9 +368,9 @@ def view_admins_view (request, admin_id=None):
 @login_required
 def edit_admin_view (request, admin_id): #there should always be an admin_id here
     #!!! probably block off this view entirely for teachers !!!
-    
+        request = process_user_info(request)
         system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school)
+        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
         context_dictionary = {'system_admin_list': system_admin_list,
                               'school_admin_list': school_admin_list}
 
@@ -379,12 +385,12 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
                 raise ObjectDoesNotExist
 
             #to prevent editing school admins that aren't in the current school
-            if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.school)):
+            if admin.role == 'SCHOOL_ADMIN' and (not (request.user_school == admin.school)):
                 context_dictionary['error']='You are not authorized to edit this admin.'
                 raise ObjectDoesNotExist
 
             #to prevent school admins from editing system admins
-            if admin.role == 'SYSTEM_ADMIN' and request.user.userprofile.role == 'SCHOOL_ADMIN':
+            if admin.role == 'SYSTEM_ADMIN' and request.user_role == 'SCHOOL_ADMIN':
                 context_dictionary['error']='You are not authorized to edit this admin.'
                 raise ObjectDoesNotExist
 

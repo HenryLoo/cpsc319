@@ -28,7 +28,7 @@ class SchoolUtils:
 	@staticmethod
 	def duplicate_courses(courses, new_period): #courses contains the current period's courses
                 for oc in courses:
-                        nc = Course(school=oc.school, period=new_period, deparment=oc.department,
+                        nc = Course(school=oc.school, period=new_period, department=oc.department,
                                     name=oc.name, age_requirement=oc.age_requirement,
                                     description=oc.description)
                         nc.save()

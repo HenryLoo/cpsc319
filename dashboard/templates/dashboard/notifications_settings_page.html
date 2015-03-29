@@ -1,7 +1,7 @@
 {%extends 'basetemplate.html'%}
 
 {%block body%}
- {% if user.userprofile.role == 'TEACHER' %}
+ {% if user_role == 'TEACHER' %}
  <ul class="nav nav-tabs nav-justified">
   <li role="presentation" class="active"><a href="{% url 'dashboard:classes_schedule_page' %}">Classes Schedule</a></li>
   <li role="presentation"><a href="{% url 'dashboard:notifications_page' %}">Notifications</a></li>

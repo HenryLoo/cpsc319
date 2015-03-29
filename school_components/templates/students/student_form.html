@@ -6,7 +6,7 @@
 
 
 {% block student_content %}
-{% if user.userprofile.role == 'TEACHER'%}
+{% if user_role == 'TEACHER'%}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
 </ul>

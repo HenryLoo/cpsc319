@@ -12,6 +12,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 import json
 from django.contrib.auth.decorators import login_required
+from accounts.utils import *
 
 FORMS = [	
 	('parent_form', ParentContactRegistrationForm),
@@ -33,8 +34,8 @@ class CourseRegisterWizard(SessionWizardView):
 		kwargs = {}
 		if step == 'student_form':
 			kwargs = {
-				'school_id': self.request.user.userprofile.school,
-				'period_id': self.request.user.userprofile.period,
+				'school_id': self.request.user_school,
+				'period_id': self.request.user_period,
 			}
 		return kwargs
 
@@ -48,12 +49,12 @@ class CourseRegisterWizard(SessionWizardView):
 		#  get parent/students for autocomplete
 		if self.steps.current == 'parent_form':
 			context_dictionary['parent_list'] = Parent.objects.filter(
-				school = self.request.user.userprofile.school
+				school = self.request.user_school
 			).values('id', 'first_name', 'last_name')
 		
 		elif self.steps.current == 'student_form':
 			context_dictionary['student_list'] = Student.objects.filter(
-				school = self.request.user.userprofile.school
+				school = self.request.user_school
 			).values('id', 'first_name', 'last_name')
 		
 		elif self.steps.current == 'summary_form':
@@ -91,8 +92,8 @@ class CourseRegisterWizard(SessionWizardView):
 	# based on parent first and last names
 
 	def create_parent(self, form):
-		school = self.request.user.userprofile.school
-		period = self.request.user.userprofile.period
+		school = self.request.user_school
+		period = self.request.user_period
 
 		if form.is_valid():
 			form_data = form.cleaned_data
@@ -121,8 +122,8 @@ class CourseRegisterWizard(SessionWizardView):
 
 
 	def create_student(self, parent, forms):
-		school = self.request.user.userprofile.school
-		period = self.request.user.userprofile.period
+		school = self.request.user_school
+		period = self.request.user_period
 
 		parent_form = forms['parent_form']
 		student_form = forms['student_form']
@@ -211,6 +212,7 @@ class CourseRegisterWizard(SessionWizardView):
 #  should have some way to use the model form...
 @login_required
 def payment_create(request, parent_id):
+        request = process_user_info(request)
 	message = {}
 	if request.method == 'POST':
 		pay = Payment(parent=Parent.objects.get(pk=parent_id))
@@ -227,6 +229,7 @@ def payment_create(request, parent_id):
 
 @login_required
 def lkccourse_register(request, page_no=None):
+        request = process_user_info(request)
 	if page_no is None or page_no == "1" :
 		html = "registration/lkc_course_registration_parent.html"
 	elif page_no == "2":

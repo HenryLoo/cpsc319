@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block student_content %}
-{% if user.userprofile.role == 'TEACHER'%}
+{% if user_role == 'TEACHER'%}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{% url 'school:studentlist' %}">View Students</a></li>
 </ul>
@@ -74,7 +74,7 @@
 	{% if student %}
 	<span>
 		<h3> Student Info </h3>
-		{% if not user.userprofile.role == 'TEACHER' %}
+		{% if not user_role == 'TEACHER' %}
 		<a href="" target-url="{% url 'school:delete_student' student.id %}" id="btn-delete" class="pull-right text-danger delete-link" data-toggle="modal" data-target="#delete-modal"> Delete </a>
 		<a href="{%url 'school:studentedit' student.id%}" id="edit-student-btn" class="pull-right"> Edit </a>
 		{%endif%}

@@ -1,6 +1,7 @@
 from django.views import generic
 from school_components.models import Student, Parent, School, Period, ClassTeacher
 from accounts.models import TeacherUser
+from accounts.utils import *
 from school_components.models.courses_model import *
 from school_components.forms.students_form import *
 from school_components.utils import SchoolUtils
@@ -22,7 +23,8 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def student_list(request, student_id=None):
-	if request.user.userprofile.role == 'TEACHER':
+        request = process_user_info(request)
+	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
 		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
 		class_list = []
@@ -36,8 +38,8 @@ def student_list(request, student_id=None):
 
 	else:
 		student_list = Student.objects.filter(
-			school = request.user.userprofile.school,
-			enrolled_student__reg_class__period = request.user.userprofile.period
+			school = request.user_school,
+			enrolled_student__reg_class__period = request.user_period
 		).annotate().order_by('last_name')
 
 	search_name = request.GET.get('name', None)
@@ -73,6 +75,7 @@ Delete Student
 '''
 @login_required
 def delete_student_view (request, student_id):
+    request = process_user_info(request)
     student = Student.objects.get(pk=student_id)
     #deleting its parent info if not parent of other student
     if Student.objects.filter(parent=student.parent).count() == 1:
@@ -85,12 +88,13 @@ def delete_student_view (request, student_id):
 
 @login_required
 def student_edit(request, student_id):
-	student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
+        request = process_user_info(request)
+	student_list = Student.objects.filter(school = request.user_school, period = request.user_period).order_by('last_name')
 	context_dictionary = {'student_list': student_list}
         
 	try:
 		student = Student.objects.get(pk=student_id)
-		if student.school != request.user.userprofile.school or student.period != request.user.userprofile.period:
+		if student.school != request.user_school or student.period != request.user_period:
                         raise ObjectDoesNotExist
                 
 		context_dictionary['student_id'] = student_id
@@ -122,6 +126,7 @@ def class_history_helper(class_reg):
 # returns student info, used on the registration page
 @login_required
 def student_get(request):
+        request = process_user_info(request)
 	if request.method == 'GET':
 		student_id = request.GET['student_id']
 		student = Student.objects.get(pk=student_id)
@@ -146,14 +151,15 @@ def student_get(request):
 # create a new student with form data
 @login_required
 def student_create(request):
+        request = process_user_info(request)
 	s = StudentForm(request.POST)
 	context_dictionary = { 'student_form': StudentForm() }
 
 	if request.method == 'POST':
 		if s.is_valid():
 			student = s.save(commit=False)
-			student.school = request.user.userprofile.school
-			student.period = request.user.userprofile.period
+			student.school = request.user_school
+			student.period = request.user_period
 			student.save()
 			return HttpResponseRedirect(
 					reverse('school:studentlist', args=(student.id,)))
@@ -167,6 +173,7 @@ def student_create(request):
 
 @login_required
 def student_form(request):
+        
 	context_dictionary = {'student_form': StudentForm() }
 
 	return render_to_response('students/student_form.html',
@@ -178,6 +185,7 @@ def student_form(request):
 # if time figure out a way to confirm
 @login_required
 def student_upload(request):
+        request = process_user_info(request)
 	context_dictionary = {'form': StudentCSVForm()}
 	form = StudentCSVForm(request.POST, request.FILES)
 	
@@ -189,8 +197,8 @@ def student_upload(request):
 			context_dictionary['errors'] = errors
 		else:
 			# actually save
-			s = request.user.userprofile.school
-			per = request.user.userprofile.period
+			s = request.user_school
+			per = request.user_period
 			student_list = SchoolUtils.parse_csv(request.FILES['file'], school=s, period=per)
 			context_dictionary['student_list'] = student_list
 
@@ -199,6 +207,7 @@ def student_upload(request):
 
 @login_required
 def student_export(request):
+        request = process_user_info(request)
 	context_dictionary = {}
 
 	if request.method == 'POST':

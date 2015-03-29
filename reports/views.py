@@ -14,6 +14,7 @@ from school_components.models.students_model import Student
 from school_components.views.classes_view import find_overall_performance, find_class_performance
 from school_components.forms.classes_form import *
 from reports.forms import *
+from accounts.utils import *
 
 import datetime 
 from datetime import date, timedelta
@@ -38,7 +39,7 @@ from django.contrib.auth.decorators import login_required
 	# pdf = main_doc.write_pdf()
 	# return HttpResponse(pdf, content_type='application/pdf')
 
-    # class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+    # class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
     # context_dictionary = { 'class_list': class_list }
 
     # if class_id:
@@ -60,7 +61,8 @@ def view_reports(request):
 
 @login_required
 def reportcard_teacher(request, class_id=None, student_id=None):
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+        request = process_user_info(request)
+	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -89,11 +91,12 @@ def reportcard_teacher(request, class_id=None, student_id=None):
 
 @login_required
 def reportcard_adm(request, student_id=None):
+        request = process_user_info(request)
 	#add filter after
 	perf_list = []
 	over=0
 	overall_value = 0
-	student_list = Student.objects.filter(school = request.user.userprofile.school).order_by('last_name')
+	student_list = Student.objects.filter(school = request.user_school).order_by('last_name')
 
 	context_dictionary = {
 		'student_list': student_list,
@@ -130,7 +133,8 @@ def reportcard_adm(request, student_id=None):
 
 @login_required
 def studentphone(request, class_id=None):
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+        request = process_user_info(request)
+	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -141,7 +145,8 @@ def studentphone(request, class_id=None):
 
 @login_required
 def attendancelist(request, class_id=None):
-	class_list = Class.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('course')
+        request = process_user_info(request)
+	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -160,7 +165,7 @@ def attendancelist(request, class_id=None):
 				sat= -1
 				sun= -1
 
-				schedule = ClassSchedule.objects.get(sch_class=c, sch_class__school = request.user.userprofile.school, sch_class__period = request.user.userprofile.period)
+				schedule = ClassSchedule.objects.get(sch_class=c, sch_class__school = request.user_school, sch_class__period = request.user_period)
 				
 				if schedule.monday == True:
 					mon = 0
@@ -233,12 +238,13 @@ def student_pdf(c):
 
 @login_required
 def export_data(request):
+        request = process_user_info(request)
 	dataset = request.GET.get('dataset', None)
 	response = HttpResponse(content_type='text/csv')
 	writer = csv.writer(response)
 
-	school = request.user.userprofile.school
-	period = request.user.userprofile.period
+	school = request.user_school
+	period = request.user_period
 
 	if dataset == 'student':
 		students = Student.objects.all().filter(

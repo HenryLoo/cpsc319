@@ -36,7 +36,7 @@
 	               			<div class="row">
 
 	               				<div class="col-lg-4" style="width:450px;">
-		               				{% if applied == 1 %}
+		               				{% if status == 1 %}
 		               					<div class="alert alert-success" role="alert">Notification settings updated.</div>
 		               				{% endif %}
 		               				<br>
@@ -63,7 +63,8 @@
 											<div class="row">
 												<div class="col-lg-4">
 													<div class="list-group" style="width: 600px;">
-													 
+														{{ formset.management_form }}
+
 													  <div class="list-group-item list-group-item-info form-group">
 													    <h4 class="list-group-item-heading">
 													    		<div style="width:550px;">
@@ -74,15 +75,18 @@
 													    	<div class="col-lg-4">
 													    		<div class="form-group">
 													          <div class="input-group" style="width: 150px;">
-													           	<span class="input-group-addon">&#x3C;</span>
-												   	          <input type="text" class="form-control" name="attendanceCond" placeholder="#" value="{{ settings.0.condition }}">
-												   	          <span class="input-group-addon">day(s)</span>
+													           	<span class="input-group-addon">Missed</span>
+												   	          {{ formset.0.condition }}
+												   	          <span class="input-group-addon"> day(s) in a row</span>
 													          </div>
 																  </div>
 																</div>
 													    	<div class="input-group" style="width: 550px;">
-																	<input type="text" class="form-control" name="attendanceText" placeholder="Missed 5 classes in a row." value="{{ settings.0.content }}">
+																	{{ formset.0.content }}
 																</div>
+																{% for hidden in formset.0.hidden_fields %}
+														    	{{ hidden }}
+														    {% endfor %}
 															</p>
 													  </div>
 													  <br>
@@ -97,15 +101,18 @@
 													    	<div class="col-lg-4">
 													    		<div class="form-group">
 													          <div class="input-group" style="width: 120px;">
-													           	<span class="input-group-addon">&#x3C;</span>
-												   	          <input type="text" class="form-control" name="performanceCond" placeholder="#" value="{{ settings.1.condition }}">
-												   	          <span class="input-group-addon">%</span>
+													           	<span class="input-group-addon">Average grade less than </span>
+												   	          {{ formset.1.condition }}
+												   	          <span class="input-group-addon"> %</span>
 													          </div>
 																  </div>
 																</div>
 													    	<div class="input-group" style="width: 550px;">
-																	<input type="text" class="form-control" name="performanceText" placeholder="Performance lower than 50%" value="{{ settings.1.content }}">
+																	{{ formset.1.content }}
 																</div>
+																{% for hidden in formset.1.hidden_fields %}
+														    	{{ hidden }}
+														    {% endfor %}
 															</p>
 													  </div>
 													  <br>
@@ -120,15 +127,18 @@
 													    	<div class="col-lg-4">
 													    		<div class="form-group">
 													          <div class="input-group" style="width: 130px;">
-													           	<span class="input-group-addon">&#x3C;</span>
-												   	          <input type="text" class="form-control" name="assignmentCond" placeholder="#" value="{{ settings.2.condition }}">
-												   	          <span class="input-group-addon">qtd</span>
+													           	<span class="input-group-addon">Missed </span>
+												   	          {{ formset.2.condition }}
+												   	          <span class="input-group-addon"> assignments</span>
 													          </div>
 																  </div>
 																</div>
 													    	<div class="input-group" style="width: 550px;">
-																	<input type="text" class="form-control" name="assignmentText" placeholder="Missed 2 assignments" value="{{ settings.2.content }}">
+																	{{ formset.2.content }}
 																</div>
+																{% for hidden in formset.2.hidden_fields %}
+														    	{{ hidden }}
+														    {% endfor %}
 															</p>
 													  </div>
 													  <br>

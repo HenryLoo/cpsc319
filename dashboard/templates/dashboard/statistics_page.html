@@ -1,7 +1,11 @@
 {%extends 'basetemplate.html'%}
-{% load googlecharts %}  
-          
+
 {%block body%}
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load('visualization', '1.0', {'packages':['corechart']});
+</script>
 
  {% if user.userprofile.role == 'TEACHER' %}
  <ul class="nav nav-tabs nav-justified">
@@ -227,7 +231,7 @@
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div id="reg_chart_div" style="width: 299px; height: 299px;"></div>
+                                <div id="reg_chart_div" style="width: 299px; height: 299px;">{{ registrationChart.as_html }}</div>
                             </div>
                         </div>
                     </div>
@@ -244,7 +248,7 @@
                                 </div>
                             </div>
                             <div class="panel-body" style="max-height: 2; min-height: 2;" >
-                                <div id="performance_chart_div" style="width: 299px; height: 299px;"></div>
+                                <div id="performance_chart_div" style="width: 299px; height: 299px;">{{ performanceChart.as_html }}</div>
                             </div>
                         </div>
                     </div>
@@ -262,7 +266,7 @@
                                 </div>
                             </div> 
                             <div class="panel-body" >
-                                <div id="passFail_chart_div" style="width: 299px; height: 299px;"></div>
+                                <div id="passFail_chart_div" style="width: 299px; height: 299px;">{{ passFailChart.as_html }}</div>
                             </div>
                         </div>
                     </div>
@@ -277,7 +281,7 @@
                         <div class="col-lg-4">
                             <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-bars"></i> {{ chart.0.title }}</h3>
+                                    <h3 class="panel-title"><i class="fa fa-bars"></i> {{ chart.0 }}</h3>
                                     <div class="text-right">
                                         <div class="row" style="margin-right: 1px;">
                                             <a href="#">View &nbsp</a>
@@ -285,9 +289,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                {{ chart.1 }}
                                 <div class="panel-body">
-                                    <div id="{{forloop.counter}}_chart_div" style="width: 299px; height: 299px;"></div>
+                                    <div id="{{forloop.counter}}_chart_div" style="width: 299px; height: 299px;">{{ chart.1.as_html }}</div>
                                 </div>
                             </div>
                         </div>
@@ -296,39 +299,6 @@
                 </div>
                 <!-- /.row -->
                 {% endfor %}
-
-{% googlecharts %}
-    {% data registrationChart "regData" %}
-        {% col "string" "Period" %}"{{ val }}"{% endcol %}
-        {% col "number" "Students" %}{{ val }}{% endcol %}
-    {% enddata %}
-
-    {% options "regOptions" %}
-        kind: "LineChart"
-    {% endoptions %}
-    {% graph "reg_chart_div" "regData" "regOptions" %}
-
-    {% data performanceChart "performanceData" %}
-        {% col "string" "Grade (%)" %}"{{ val }}"{% endcol %}
-        {% col "number" "Students" %}{{ val }}{% endcol %}
-    {% enddata %}
-
-    {% options "performanceOptions" %}
-        kind: "LineChart"
-    {% endoptions %}
-    {% graph "performance_chart_div" "performanceData" "performanceOptions" %}
-
-    {% data passFailChart "passFailData" %}
-        {% col "string" "Pass/Fail" %}"{{ val }}"{% endcol %}
-        {% col "number" "Students" %}{{ val }}{% endcol %}
-    {% enddata %}
-
-    {% options "passFailOptions" %}
-        kind: "PieChart"
-    {% endoptions %}
-    {% graph "passFail_chart_div" "passFailData" "passFailOptions" %}
-
-{% endgooglecharts %}
 
 {%endif%}
 

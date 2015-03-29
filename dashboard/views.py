@@ -20,11 +20,14 @@ from django.db.models import Avg, Sum, Count
 import datetime
 
 from operator import attrgetter
-from itertools import groupby
+from itertools import chain, groupby
 
 from django.contrib.auth import authenticate, login
 
 from django.contrib.auth.decorators import login_required
+
+from graphos.sources.model import SimpleDataSource
+from graphos.renderers import gchart
 
 @login_required
 def statistics_page(request):
@@ -70,24 +73,27 @@ def statistics_page(request):
 
     regXAxis = Period.objects.filter(school_id=currentSchool).all().order_by('start_date').values_list('description', flat=True)
     regYAxis = ClassRegistration.objects.filter(school_id=currentSchool).values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
-    context_dictionary['registrationChart'] = []
+    regData = [['School', 'Students']]
     for x in zip(regXAxis, regYAxis):
-        context_dictionary['registrationChart'].append([x[0], x[1]])
+        regData.append([x[0], x[1]])
+    regDataSource = SimpleDataSource(regData)
+    context_dictionary['registrationChart'] = gchart.LineChart(regDataSource, options={'title': "Student Registration", 'width': 299, 'height': 299})
 
     
     performance = Grading.objects.filter(reg_class__school=currentSchool, reg_class__period=currentPeriod).values('student_id').annotate(avg_grades=Avg('performance'))
     gradeList = [round(grade) for grade in performance.order_by('avg_grades').values_list('avg_grades', flat=True)]
     performXAxis = list(set(gradeList))
     performYAxis = [len(list(group)) for key, group in groupby(gradeList)]
-    context_dictionary['performXAxis'] = performXAxis
-    context_dictionary['performYAxis'] = performYAxis
-    context_dictionary['performanceChart'] = []
+    performData = [['Grades', 'Students']]
     for x in zip(performXAxis, performYAxis):
-        context_dictionary['performanceChart'].append([x[0], x[1]])
+        performData.append([x[0], x[1]])
+    performDataSource = SimpleDataSource(performData)
+    context_dictionary['performanceChart'] = gchart.LineChart(performDataSource, options={'title': "Student Performance", 'width': 299, 'height': 299})
 
     numPass = sum(grade >= 50 for grade in gradeList)
     numFail = sum(grade < 50 for grade in gradeList)
-    context_dictionary['passFailChart'] = [['Pass', numPass], ['Fail', numFail]]
+    passFailDataSource = SimpleDataSource([['Status', 'Students'], ['Pass', numPass], ['Fail', numFail]])
+    context_dictionary['passFailChart'] = gchart.PieChart(passFailDataSource, options={'title': "Passing/Failing Students", 'width': 299, 'height': 299})
 
     context_dictionary['chartTypeOptions'] = Chart._meta.get_field('chart_type').choices
     context_dictionary['xAxisOptions'] = Chart._meta.get_field('x_axis').choices
@@ -104,44 +110,60 @@ def statistics_page(request):
         xAxis = ''
         xIDs = ''
         xFilter = ''
+        xLabel = ''
         if chart.x_axis == 'SCHOOL':
             schools = School.objects.all()
             xAxis = schools.values_list('title', flat=True)
             xIDs = schools.values_list('id', flat=True)
             xFilter = 'school_id'
+            xLabel = 'Schools'
         elif chart.x_axis == 'PERIOD':
             periods = Period.objects.filter(school=currentSchool).all()
             xAxis = periods.values_list('description', flat=True)
             xIDs = periods.values_list('id', flat=True)
             xFilter = 'period_id'
+            xLabel = 'Periods'
         elif chart.x_axis == 'COURSE':
             courses = Course.objects.filter(school=currentSchool, period=currentPeriod)
             xAxis = courses.values_list('name', flat=True)
             xIDs = courses.values_list('id', flat=True)
             xFilter = 'course_id'
+            xLabel = 'Courses'
 
         yAxis = []
+        yLabel = ''
         classes = Class.objects
         for x in xIDs:
             filteredClassIDs = classes.filter(**{xFilter: x}).values_list('id', flat=True)
             if chart.y_axis == 'NSTUDENTS':
                 yAxis.append(ClassRegistration.objects.filter(reg_class_id__in=filteredClassIDs).all().values('student_id').distinct().count())
+                yLabel = 'Students'
             elif chart.y_axis == 'NCLASSES':
                 yAxis.append(len(filteredClassIDs))
+                yLabel = 'Classes'
             elif chart.y_axis == 'NTEACHERS':
-                yAxis.append(ClassTeacher.objects.filter(taught_class_id__in=filteredClassIDs).all().values('teacher_id').distinct().count())
+                primaryTeachers = ClassTeacher.objects.filter(primary_teacher_id__in=filteredClassIDs).all().values('primary_teacher_id').distinct()
+                secondaryTeachers = ClassTeacher.objects.filter(secondary_teacher_id__in=filteredClassIDs).all().values('secondary_teacher_id').distinct()
+                numTeachers = len(list(set(list(chain(primaryTeachers, secondaryTeachers)))))
+                yAxis.append(numTeachers)
+                yLabel = 'Teachers'
             elif chart.y_axis == 'ATTENDANCE':
                 allAttendance = ClassAttendance.objects.filter(reg_class_id__in=filteredClassIDs)
                 numAttended = allAttendance.exclude(attendance='A').all().count()
                 numTotal = allAttendance.all().count()
                 if numTotal == 0:
                     numTotal = 1
-                yAxis.append(round(sumAttended/numTotal))
+                yAxis.append(round(numAttended/numTotal))
+                yLabel = 'Attendance Rates (%)'
             elif chart.y_axis == 'PERFORMANCE':
                 averages = Grading.objects.filter(reg_class_id__in=filteredClassIDs).annotate(avg_grades=Avg('performance')).values_list('avg_grades', flat=True)
-                yAxis.append(round(sum(averages)/len(averages)))
+                numGrades = len(averages)
+                if numGrades == 0:
+                    numGrades = 1;
+                yAxis.append(round(sum(averages)/numGrades))
+                yLabel = 'Average Grades (%)'
 
-        chartData = []
+        chartData = [[xLabel, yLabel]]
         for x in zip(xAxis, yAxis):
             chartData.append([x[0], x[1]])
         allChartData.append(chartData)
@@ -149,26 +171,21 @@ def statistics_page(request):
     chartsWithData = []
     for x in zip(charts, allChartData):
         chartTypeField = x[0].chart_type
-        chartTypeValue = ''
+        chart = ''
+        chartDataSource = SimpleDataSource(x[1])
         if chartTypeField == 'BAR':
-            chartTypeValue = 'BarChart'
+            chart = gchart.BarChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
         elif chartTypeField == 'PIE':
-            chartTypeValue = 'PieChart'
+            chart = gchart.PieChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
         elif chartTypeField == 'LINE':
-            chartTypeValue = 'LineChart'
-        chartsWithData.append([x[0], x[1], chartTypeValue])
+            chart = gchart.LineChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
+        chartsWithData.append([x[0].title, chart])
 
     context_dictionary['customChartsTriplets'] = []
     for i in range(0, len(chartsWithData), 3):
         context_dictionary['customChartsTriplets'].append(chartsWithData[i:i+3])
 
     return render_to_response("dashboard/statistics_page.html",context_dictionary,RequestContext(request))
-
-# def demostatistics_page(request):
-    
-#     context_dictionary = {}
-        
-#     return render_to_response("dashboard/demostatistics_page.html",context_dictionary,RequestContext(request))
 
 @login_required
 def notifications_page(request):
@@ -208,16 +225,6 @@ def notifications_page(request):
     context_dictionary['notifications'] = []
     for x in zip(notifications, notificationTypes, studentNames):
         context_dictionary['notifications'].append([x[0], x[1], x[2]])
-
-    # pages = len(context_dictionary['notifications'])
-    # currentPage = 1
-    # pageRange = [currentPage, currentPage + 7]
-    # 
-    # currentPage = int(request.GET.get("currentPage"))
-    # if currentPage + 7 > pages:
-    #   pageRange = [pages - 7, pages]
-
-    # context_dictionary['pages'] = [i for i in range(pageRange[0], pageRange[1])]
         
     return render_to_response("dashboard/notifications_page.html",context_dictionary,RequestContext(request))
 
@@ -337,110 +344,3 @@ def assignment(request):
     context_dictionary = {}
         
     return render_to_response("school_components/assignment.html",context_dictionary,RequestContext(request))
-
-
-#def statistics_page(request):
-#    
-#    context_dictionary = {}
-#    
-#    classes = Attendance.objects.values_list('classID', flat=True).distinct().order_by('classID')
-#    
-#    context_dictionary['statistics'] = classes
-#    
-#    return render_to_response("dashboard/statistics_page.html",context_dictionary,RequestContext(request))
-#
-#def notifications_page(request):
-#    
-#    context_dictionary = {}
-#        
-#    return render_to_response("dashboard/notifications_page.html",context_dictionary,RequestContext(request))
-#
-#def classes_schedule_page(request):
-#    
-#    context_dictionary = {}
-#        
-#    return render_to_response("dashboard/classes_schedule_page.html",context_dictionary,RequestContext(request))
-
-
-# def attendance_page(request):
-#     context_dictionary = {}
-
-#     viewFilter = request.GET.get("viewFilter")
-#     presentStudents = 0
-#     absentStudents = 0
-#     if viewFilter == "all":
-#       presentStudents = Attendance.objects.filter(status=1).count()
-#       absentStudents = Attendance.objects.filter(status=0).count()
-#     else:
-#       presentStudents = Attendance.objects.filter(classID=viewFilter).filter(status=1).count()
-#       absentStudents = Attendance.objects.filter(classID=viewFilter).filter(status=0).count()
-        
-#     context_dictionary['attendance'] = [['Present', presentStudents], ['Absent', absentStudents]]
-        
-#     return render_to_response("dashboard/attendance_page.html",context_dictionary,RequestContext(request))
-
-# def grades_page(request):
-#     context_dictionary = {}
-        
-#     fStudents = Grade.objects.filter(grade__range=(0,49)).count()
-#     dStudents = Grade.objects.filter(grade__range=(50,54)).count()
-#     cStudents = Grade.objects.filter(grade__range=(55,67)).count()
-#     bStudents = Grade.objects.filter(grade__range=(68,79)).count()
-#     aStudents = Grade.objects.filter(grade__range=(80,100)).count()
-
-#     context_dictionary['grades'] = [['A', aStudents], ['B', bStudents], ['C', cStudents], ['D', dStudents], ['F', fStudents]]
-        
-#     return render_to_response("dashboard/grades_page.html",context_dictionary,RequestContext(request))
-
-# def custom_statistic_page(request):
-#     context_dictionary = {}
-
-#     if request.method == 'POST':
-#         chartId = request.POST.get("customChart")
-
-#         chart = Chart.objects.filter(id=chartId)
-#         title = chart.values('title')
-#         chartType = chart.values('chart_type')
-#         xAxis = chart.values('x_axis')
-#         yAxis = chart.values('y_axis')
-
-#         xAxisValues = 0
-#         yAxisValues = 0
-#         if xAxis == "DATE":
-#         	xAxisValues = Period.objects.filter(id=1).values('start_date')
-#         elif xAxis == "CLASSES":
-#         	xAxisValues = Attendance.objects.filter(status=0).count()
-#         elif xAxis == "STUDENTS":
-#         	xAxisValues = Grade.objects.filter(grade__range=(0,100))
-
-#         if yAxis == "NSTUDENTS":
-#         	yAxisValues = Attendance.objects.filter(status=1).count()
-#         elif yAxis == "NCLASSES":
-#         	yAxisValues = Attendance.objects.filter(status=0).count()
-#         elif yAxis == "NTEACHERS":
-#             yAxisValues = Grade.objects.filter(grade__range=(0,100))
-#         elif yAxis == "ATTENDANCE":
-#             yAxisValues = Grade.objects.filter(grade__range=(0,100))
-#         elif yAxis == "PERFORMANCE":
-#             yAxisValues = Grade.objects.filter(grade__range=(0,100))
-            
-#         context_dictionary['customStat'] = [[[xAxis, xAxisValues], [yAxis, yAxisValues]], title, chartType]
-        
-#     return render_to_response("dashboard/custom_statistic_page.html",context_dictionary,RequestContext(request))
-
-# def custom_statistic_created_page(request):
-#     context_dictionary = {}
-
-#     if request.method == 'POST':
-#         title = request.POST.get("title")
-#         xAxis = request.POST.get("xAxis")
-#         yAxis = request.POST.get("yAxis")
-#         chartType = request.POST.get("chartType")
-#         visibility = request.POST.get("visibility")
-#         # Need to replace this with actual school and periods
-#         school = School.objects.filter(id=1).get()
-#         period = Period.objects.filter(id=1).get()
-#         chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
-#         chart.save()
-
-#     return render_to_response("dashboard/custom_statistic_created_page.html",context_dictionary,RequestContext(request))

@@ -35,6 +35,9 @@
     <link href="{% static '/static/css/jquery-ui.structure.min.css' %}" rel="stylesheet">
     <link href="{% static '/static/css/jquery-ui.theme.min.css' %}" rel="stylesheet">
 
+        <!-- select 2 -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css" rel="stylesheet"/>
+
     {%block head%}
     {%endblock%}
 
@@ -323,6 +326,28 @@
     <!-- /#wrapper -->
 
 
+<!-- delete modal -->
+<div class="modal fade in" id="delete-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Are you sure you want to delete?</h4>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
+                <a href="" class="btn btn-warning btn-sm delete-icon">Delete</a>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
     <!-- jQuery -->
     <script src="{% static '/static/js/jquery/dist/jquery.min.js' %}"></script>
 
@@ -341,6 +366,9 @@
     <!-- jQuery UI -->
     <script src="{% static '/static/js/jquery-ui.min.js'%}"></script>
 
+    <!-- select 2 -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/js/select2.min.js"></script>
+
     <!-- TODO: remove, used for debugging only -->
     <script>
         $( ".datepicker" ).datepicker({
@@ -349,6 +377,15 @@
           yearRange: "1980:" + new Date().getFullYear(),
         });
     </script>
+
+<script type="text/javascript">
+    $(".delete-link").on("click", function() {
+        if($(".delete-icon").length > 0) {
+            $(".delete-icon").attr("href", $(this).attr('target-url'));
+        }
+    });
+
+</script>
 
 
 

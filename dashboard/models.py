@@ -16,7 +16,7 @@ class Notification(models.Model):
     status = models.BooleanField()
 
 class Chart(models.Model):
-    title = models.CharField(max_length = 12)
+    title = models.CharField(max_length = 18)
     school = models.ForeignKey('school_components.School')
     period = models.ForeignKey('school_components.Period')
     chart_type = models.CharField(max_length = 12, choices =
@@ -30,7 +30,7 @@ class Chart(models.Model):
                             (
                                ('SCHOOL', 'School'),
                                ('PERIOD', 'Period'),
-                               ('CLASS', 'Classes'),
+                               ('COURSE', 'Courses'),
                             ))
 
     y_axis = models.CharField(max_length = 20, choices =

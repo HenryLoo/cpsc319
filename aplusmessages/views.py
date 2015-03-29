@@ -12,11 +12,10 @@ from .models import SentMessage
 from aplusmessages.forms import EMailForm
 from django.contrib.auth.decorators import login_required
 
-
 def clear_messages(request):
-    storage = get_messages(request)
-    for message in storage:
-        print (message)
+        storage = get_messages(request)
+        for message in storage:
+            print message
 
 
 
@@ -29,14 +28,33 @@ def save_email(request, to_type, to_emails, cc_emails, bcc_emails, from_email, s
                                       status=status, status_message=status_message)
 
 
+
 def get_send_choices(request):
     user_choices = SentMessage.SEND_CHOICES
-    
+
     '''
-    for dep in Department.objects.all():
-        dep = (dep.name, "DEP-"+str(dep.id),)
+    adding departments
+    '''
+    for dep in Department.objects.filter(school = request.user.userprofile.school).order_by('name'):
+        dep = ("DEP#"+str(dep.id), dep.name, )
         user_choices = user_choices + (dep,)
+
     '''
+    adding courses
+    '''
+
+    for course in Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name'):
+        course = ("COURSE#"+str(course.id), course.name, )
+        user_choices = user_choices + (course,)
+
+    '''
+    adding classes
+    '''
+
+    for sc_class in Class.objects.filter(school = request.user.userprofile.school,  period = request.user.userprofile.period).order_by('course'):
+        sc_class = ("CLASS#"+str(sc_class.id), sc_class.section, )
+        user_choices = user_choices + (sc_class,)
+
     return user_choices
 
 
@@ -69,33 +87,82 @@ def send_email(request):
                     '''
                     students are selected
                     '''
-                    #TODO Add additional filters here if required e.g. students belongs to logged in user
-                    email_lists = Student.objects.all().values_list('email', flat=True)
+                    email_lists = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name').values_list('email', flat=True)
                 elif to_group == SentMessage.SEND_TEACHERS:
                     '''
                     teachers are selected
                     '''
-                    #TODO Add additional filters here if required  e.g. teachers belongs to logged in user
-                    email_lists = TeacherUser.objects.all().values_list('user__user__email', flat=True)
+                    email_lists = TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school).values_list('user__user__email', flat=True)
                 elif to_group == SentMessage.SEND_ADMINS:
                     '''
                     admins are selected
                     '''
-                    #TODO Add additional filters here if required  e.g. admins belongs to logged in user
-                    email_lists =  UserProfile.objects.filter(role__in=UserProfile.ADMIN_ROLES).values_list('user__email', flat=True)
+                    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").values_list('user__email', flat=True)
+                    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school).values_list('user__email', flat=True)
+
+                    for sysemail in system_admin_list:
+                        email_lists.append(sysemail)
+
+                    for scemail in school_admin_list:
+                        email_lists.append(scemail)
+
                 elif to_group == SentMessage.SEND_EVERYONE:
                     #TODO Add additional filters here if required
                     email_lists = []
 
-                    for semail in Student.objects.all().values_list('email', flat=True):
+                    for semail in Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name').values_list('email', flat=True):
                         email_lists.append(semail)
 
-                    for temail in TeacherUser.objects.all().values_list('user__user__email', flat=True):
+                    for temail in TeacherUser.objects.filter(user__period=request.user.userprofile.period, user__school=request.user.userprofile.school).values_list('user__user__email', flat=True):
                         email_lists.append(temail)
 
-                    for aemail in UserProfile.objects.filter(role__in=UserProfile.ADMIN_ROLES).values_list('user__email', flat=True):
-                        email_lists.append(aemail)
+                    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").values_list('user__email', flat=True)
+                    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user.userprofile.school).values_list('user__email', flat=True)
 
+                    for sysemail in system_admin_list:
+                        email_lists.append(sysemail)
+
+                    for scemail in school_admin_list:
+                        email_lists.append(scemail)
+
+                #if departement
+                elif to_group.startswith('DEP'):
+                   #getting department id
+                    dep_id = to_group.split("#")
+                    dep_id = dep_id[1]
+
+                    #getting all students from departments
+                    dep = Department.objects.get(pk=dep_id)
+                    # getting eveything individually in order to avoid join, which in turn improve performance
+                    courses = Course.objects.filter(department=dep).values_list('id', flat=True)
+                    classes = Class.objects.filter(course__in=courses).values_list('id', flat=True)
+                    registrations = ClassRegistration.objects.filter(reg_class__in=classes).values_list('student__id', flat=True)
+                    email_lists = Student.objects.filter(id__in=registrations).values_list('email', flat=True)
+
+                #if course
+                elif to_group.startswith('COURSE'):
+                   #getting course id
+                    course_id = to_group.split("#")
+                    course_id = course_id[1]
+
+                    #getting all students for course
+                    courses = Course.objects.get(id=course_id)
+                    #getting eveything individually in order to avoid join, which in turn improve performance
+                    classes = Class.objects.filter(course=courses).values_list('id', flat=True)
+                    registrations = ClassRegistration.objects.filter(reg_class__in=classes).values_list('student__id', flat=True)
+                    email_lists = Student.objects.filter(id__in=registrations).values_list('email', flat=True)
+
+                #if class
+                elif to_group.startswith('CLASS'):
+                   #getting course id
+                    class_id = to_group.split("#")
+                    class_id = class_id[1]
+
+                    #getting all students for class
+                    classes = Class.objects.get(pk=class_id)
+                    #getting eveything individually in order to avoid join, which in turn improve performance
+                    registrations = ClassRegistration.objects.filter(reg_class=classes).values_list('student__id', flat=True)
+                    email_lists = Student.objects.filter(id__in=registrations).values_list('email', flat=True)
 
 
                 if email_lists:
@@ -113,20 +180,22 @@ def send_email(request):
             message.set_html(content_mail)
             message.set_text(content_mail)
 
-            #TODO logged in user here - once you implement the authentication, you can enable following like
-            #from_email = request.user.email
-            from_email = 'sashaseifollahi@gmail.com'
+            from_email = request.user.email
+            #from_email = 'sashaseifollahi@gmail.com'
             message.set_from(from_email)
 
             if message.bcc or message.to:
                 status, msg = sg.send(message)
+
                 if to_group != SentMessage.SEND_IND:
                     email_lists = ','.join(map(str, email_lists))
+
+                to_st = dict(get_send_choices(request)).get(to_group, to_group)
                 if status == 200:
-                    save_email(request, to_group, email_lists, email_lists, email_lists, from_email, subject_mail, content_mail, content_mail, SentMessage.STATUS_SENT, msg)
+                    save_email(request, to_st, email_lists, email_lists, email_lists, from_email, subject_mail, content_mail, content_mail, SentMessage.STATUS_SENT, msg)
                     messages.success(request, 'Your email was successfully sent.')
                 else:
-                    save_email(request, to_group, email_lists, email_lists, email_lists, from_email, subject_mail, content_mail, content_mail, SentMessage.STATUS_FAILED, msg)
+                    save_email(request, to_st, email_lists, email_lists, email_lists, from_email, subject_mail, content_mail, content_mail, SentMessage.STATUS_FAILED, msg)
                     messages.error(request, msg)
             else:
                 messages.error(request, 'No emails are present')

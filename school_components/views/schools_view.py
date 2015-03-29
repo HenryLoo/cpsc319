@@ -76,3 +76,11 @@ def school_edit(request, school_id): #there should always be an school_id here
                         context_dictionary,
                         RequestContext(request))
 
+'''
+Delete School
+'''
+@login_required
+def school_delete(request, school_id):
+    School.objects.get(pk=school_id).delete()
+    messages.success(request, "School has been deleted!")
+    return redirect('school:schoollist')

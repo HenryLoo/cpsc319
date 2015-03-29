@@ -80,6 +80,18 @@ def course_create(request):
 		context_dictionary,
 		RequestContext(request))
 
+'''
+Delete Course
+'''
+@login_required
+def course_delete(request, course_id):
+    course = Course.objects.get(pk=course_id)
+    Prerequisite.objects.filter(Q(course=course) | Q(prereq=course)).delete()
+    course.delete()
+
+    messages.success(request, "Course has been deleted!")
+    return redirect('school:courselist')
+
 @login_required
 def course_edit(request, course_id):
 		course_list = Course.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('name')
@@ -179,6 +191,20 @@ def dept_edit(request, dept_id):
 				context_dictionary['error'] = 'There is no department in this school and period with that id.'
 						
 	return render_to_response("courses/dept_edit.html", context_dictionary, RequestContext(request))
+
+'''
+Delete Department
+'''
+@login_required
+def dept_delete(request, dept_id):
+    dep = Department.objects.get(pk=dept_id)
+    #courses = Course.objects.filter(department=dep)
+    #Prerequisite.objects.filter(Q(course__in=courses) | Q(prereq__in=courses)).delete()
+    #courses.delete()
+
+    dep.delete()
+    messages.success(request, "Department has been deleted!")
+    return redirect('school:deptlist')
 
 @login_required
 def course_assignment(request, course_id=None):

@@ -68,6 +68,21 @@ def student_list(request, student_id=None):
 		context_dictionary,
 		RequestContext(request))
 
+'''
+Delete Student
+'''
+@login_required
+def delete_student_view (request, student_id):
+    student = Student.objects.get(pk=student_id)
+    #deleting its parent info if not parent of other student
+    if Student.objects.filter(parent=student.parent).count() == 1:
+        Payment.objects.filter(parent=student.parent).delete()
+        student.parent.delete()
+
+    student.delete()
+    messages.success(request, "Student has been deleted!")
+    return redirect('school:studentlist')
+
 @login_required
 def student_edit(request, student_id):
 	student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
@@ -97,7 +112,6 @@ def student_edit(request, student_id):
 		RequestContext(request))
 
 # turn into a dict to help with sorting in UI
-@login_required
 def class_history_helper(class_reg):
 	m = model_to_dict(class_reg)
 	m['period'] = class_reg.reg_class.period.description

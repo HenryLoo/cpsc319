@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.template import RequestContext
 from school_components.models.classes_model import *
 from school_components.models.students_model import Student
+from school_components.views.classes_view import find_overall_performance, find_class_performance
 from school_components.forms.classes_form import *
 from reports.forms import *
 
@@ -81,7 +82,8 @@ def reportcard_teacher(request, class_id=None, student_id=None):
 			average = cont/total
 		else:
 			average = 0
-		context_dictionary['overall'] = average
+		# context_dictionary['overall'] = average
+		context_dictionary['overall'] = find_class_performance(student_id, class_id)
 
 	return render_to_response('reports/reportcard_teacher.html', context_dictionary, RequestContext(request))
 
@@ -107,21 +109,22 @@ def reportcard_adm(request, student_id=None):
 
 		#for each class, take all assignments
 		for c in class_reg:
-			assignments_list = Grading.objects.filter(reg_class=c, student=s)
-			if len(assignments_list) != 0:
-				cont = 0
-				for a in assignments_list:
-					cont = cont + a.performance
-				p = cont/len(assignments_list)
-				over = over + p
-				perf_list.append(p)
+			perf_list.append(find_class_performance(s.id, c.reg_class.id))
+			# assignments_list = Grading.objects.filter(reg_class=c, student=s)
+			# if len(assignments_list) != 0:
+			# 	cont = 0
+			# 	for a in assignments_list:
+			# 		cont = cont + a.performance
+			# 	p = cont/len(assignments_list)
+			# 	over = over + p
+			# 	perf_list.append(p)
 		
-		if len(class_reg) != 0:
-			overall_value = over/len(class_reg)
+		# if len(class_reg) != 0:
+		# 	overall_value = over/len(class_reg)
 			
 		context_dictionary['class_list'] = class_reg
 		context_dictionary['performance_list'] = perf_list
-		context_dictionary['overall'] = overall_value
+		context_dictionary['overall'] = find_overall_performance(s.id)
 
 	return render_to_response('reports/reportcard_adm.html', context_dictionary, RequestContext(request))
 

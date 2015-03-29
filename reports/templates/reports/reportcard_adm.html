@@ -50,7 +50,7 @@
     
     <tr>
     {% for p in performance_list%}
-    <td>{{p}}%</td>
+    <td>{{p|floatformat}}%</td>
     {%endfor%}
     </tr>
 
@@ -58,7 +58,7 @@
         
 </table>
 
-<h4>Overall Performance: {{overall}}</h4>            
+<h4>Overall Performance: {{overall|floatformat}}% </h4>            
 
 </div>
 </div>

@@ -101,3 +101,11 @@ def period_edit(request, period_id): #there should always be a period_id here
                         RequestContext(request))
 
 
+'''
+Delete Period
+'''
+@login_required
+def period_delete(request, period_id):
+    Period.objects.get(pk=period_id).delete()
+    messages.success(request, "Period has been deleted!")
+    return redirect('school:periodlist')

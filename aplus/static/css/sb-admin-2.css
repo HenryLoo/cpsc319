@@ -352,3 +352,106 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+
+.alert-error {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+.alert-error hr {
+  border-top-color: #e4b9c0;
+}
+.alert-error .alert-link {
+  color: #843534;
+}
+
+
+/* ---- sent email -------------*/
+.sent-pane .list-group-item:first-child {
+    border-top-right-radius: 0px;
+    border-top-left-radius: 0px;
+}
+
+.sent-pane .list-group-item:last-child {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.sent-pane .list-group .glyphicon {
+    margin-right: 5px;
+}
+
+.sent-pane .list-group .glyphicon:hover {
+    color: #FFBC00;
+}
+
+.sent-pane a.list-group-item.read {
+    color: #222;
+    background-color: #F3F3F3;
+}
+
+.sent-pane a.list-group-item:focus {
+    box-shadow: none;
+    outline: none;
+    border: 1px so;
+}
+.sent-pane .list-group .checkbox {
+    display: inline-block;
+    margin: 0px;
+    vertical-align: -webkit-baseline-middle;
+    width: 2%;
+}
+
+.sent-pane .list-group input[type="checkbox"] {
+    margin-top: 2px;
+}
+
+.sent-pane .details {
+    display: inline-block;
+    padding-left: 10px;
+    width: 97%;
+}
+
+.sent-pane .title {
+    padding-right: 10px;
+}
+
+.sent-pane .subject {
+    font-size: 15px;
+    font-weight: 600;
+    margin-left: 15px;
+}
+
+.sent-pane .label {
+    font-size: 9px;
+    letter-spacing: 1px;
+    padding-top: 3px;
+    margin-right: 6px;
+    font-weight: 100;
+}
+
+.sent-pane .body-text {
+    font-size: 11px;
+}
+
+.sent-pane .time {
+    margin-right: 20px;
+    float: right;
+}
+
+.model-date {
+    margin-right: 10px;
+}
+
+.delete-link, .delete-link:focus, .delete-link:hover {
+    margin-left: 10px;
+    font-weight: 600;
+    text-decoration: none !important;
+    outline: none;
+}
+
+#delete-modal .modal-content {
+    border-radius: 0px;
+    margin-top: 30%;
+}

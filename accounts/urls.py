@@ -19,6 +19,9 @@ urlpatterns = patterns('',
 	
 	url(r'^teachers/view/(?P<teacher_id>\d+)/$', 'accounts.views.view_teachers_view', name='view_teachers'),
         url(r'^teachers/view/(?P<teacher_id>\d+)/edit/$', 'accounts.views.edit_teacher_view', name='edit_teacher'),
+    
+    # delete teacher
+    url(r'^teachers/view/(?P<teacher_id>\d+)/delete/$','accounts.views.delete_teacher_view',name='delete_teacher'),
                        
 	url(r'^teachers/upload/$', 'accounts.views.upload_teachers_view', name='upload_teachers'),
 
@@ -28,6 +31,9 @@ urlpatterns = patterns('',
 
 	url(r'^admins/view/(?P<admin_id>\d+)/$', 'accounts.views.view_admins_view', name='view_admins'),
         url(r'^admins/view/(?P<admin_id>\d+)/edit/$', 'accounts.views.edit_admin_view', name='edit_admin'),
+    
+    # delete admin
+    url(r'^admins/view/(?P<admin_id>\d+)/delete/$','accounts.views.delete_admin_view',name='delete_admin'),
              
     url(r'^teachers/export/$', 'accounts.views.export_teachers_view', name='export_teachers'),
               

@@ -67,9 +67,20 @@
 </div>
 
 <div class="col-md-9 school-info">
+	{% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
 	{% if department %}
 	<span>
 		<h3> Department Info </h3>
+        <a href="" target-url="{% url 'school:deptdelete' department.id %}" id="btn-delete" class="pull-right text-danger delete-link" data-toggle="modal" data-target="#delete-modal"> Delete </a>
 		<a href="{%url 'school:deptedit' department.id %}" id="edit-course-btn" class="pull-right"> Edit </a>
 	</span>
 	<table class="table table-hover">

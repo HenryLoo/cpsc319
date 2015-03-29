@@ -199,6 +199,22 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
         return render(request, "teachers/edit_teacher.html",
                    context_dictionary)
 
+
+'''
+Delete Teacher
+'''
+@login_required
+def delete_teacher_view (request, teacher_id):
+    teacher = TeacherUser.objects.get(pk=teacher_id)
+    #deleting user profile
+    profile = UserProfile.objects.get(id=teacher.user.id)
+    profile.user.delete()
+    profile.delete()
+    teacher.delete()
+    messages.success(request, "Teacher has been deleted!")
+    return redirect('account:view_teachers')
+
+
 @login_required
 def upload_teachers_view(request):
 
@@ -420,9 +436,21 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
                    context_dictionary)
 
 
+
+
+'''
+Delete Admin
+'''
+@login_required
+def delete_admin_view (request, admin_id):
+    admin = UserProfile.objects.get(pk=admin_id)
+    admin.user.delete()
+    admin.delete()
+    messages.success(request, "Admin has been deleted!")
+    return redirect('account:view_admins')
+
 ##============================================================  LOGIN
-    
-    
+        
 def login_view(request):
     
     if request.method == 'POST':

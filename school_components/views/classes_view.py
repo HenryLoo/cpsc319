@@ -130,6 +130,42 @@ def class_create(request):
 		context_dictionary,
 		RequestContext(request))
 
+'''
+Delete Class
+'''
+@login_required
+def class_delete(request, class_id):
+    sc_class = Class.objects.get(pk=class_id)
+    #ClassSchedule.objects.filter(sch_class=sc_class).delete()
+    #ClassRegistration.objects.filter(reg_class=sc_class).delete()
+    #ClassAttendance.objects.filter(reg_class=sc_class).delete()
+    #Grading.objects.filter(reg_class=sc_class).delete()
+    #Assignment.objects.filter(reg_class=sc_class).delete()
+    sc_class.delete()
+    messages.success(request, "Class has been deleted!")
+    return redirect('school:classlist')
+
+def class_registration(request, class_id=None):
+	if request.POST:
+		return class_registration_helper(request, class_id)
+
+	else:
+		class_list = Class.objects.filter(
+			school = request.user.userprofile.school, 
+			period = request.user.userprofile.period).order_by('course')
+		context_dictionary = {'class_list': class_list }
+
+		if class_id:
+			cl = Class.objects.get(pk=class_id)
+			context_dictionary['class'] = cl 
+			context_dictionary['student_list'] = Student.objects.all()
+			context_dictionary['form'] = ClassRegistrationForm()
+			context_dictionary['remove_form'] = RemoveClassRegistrationForm()
+		
+		return render_to_response("classes/class_registration.html",
+			context_dictionary,
+			RequestContext(request))
+
 @login_required
 def class_edit(request, class_id):
 		class_list = Class.objects.filter(

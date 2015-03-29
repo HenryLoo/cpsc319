@@ -1,9 +1,12 @@
 from school_components.models import School, Period
+from accounts.utils import *
 # The context processor function
 def school_period(request):
 
+        request = process_user_info(request)
+        
 	if request.user.is_authenticated():
-		user_school = request.user.userprofile.school
+		user_school = request.user_school
 	else:
 		user_school = None
 
@@ -12,5 +15,8 @@ def school_period(request):
 
 	return {
         'school_list': schoollist, 'period_list': periodlist,
+        'user_role': request.user_role,
+        'user_school': request.user_school,
+        'user_period':request.user_period
     }
 

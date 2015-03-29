@@ -15,6 +15,8 @@ from django.forms import ChoiceField
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 
+from datetime import datetime
+
 #===================                  ======================= TEACHER
 @login_required
 def create_teacher_view(request):
@@ -361,7 +363,7 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
                 raise ObjectDoesNotExist
 
             #to prevent editing school admins that aren't in the current school
-            if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.user.userprofile.school)):
+            if admin.role == 'SCHOOL_ADMIN' and (not (request.user.userprofile.school == admin.school)):
                 context_dictionary['error']='You are not authorized to edit this admin.'
                 raise ObjectDoesNotExist
 
@@ -435,10 +437,28 @@ def login_view(request):
             #if user.exists():
                 #the_user = user[0]
                 if user.is_active:
-                    login(request, user) 
-                    print (user.userprofile.school)
-                    if user.userprofile.school != None:
-                        if user.userprofile.role == 'TEACHER':
+                    profile = user.userprofiles.all()[0] #assuming all users have at least 1 userprofile (teachers >=1, admins = 1)
+                    role = profile.role
+                    user_school = profile.school
+                    print (user_school)
+                    user_period = profile.period
+                    if role == 'TEACHER':
+                        today = datetime.now().date()
+                        period_found = False
+                        for profile in user.userprofiles.all():
+                            period = profile.period
+                            if period.start_date <= today and today <= period.end_date:
+                                user_period = period
+                                period_found = True
+                                login(request, user)
+                        if not period_found:
+                            return render(request, 'login/login.html', {'login_form' : login_form, 'error' : 'Your account is not part of an active period.' })
+                        
+                    else:                  
+                        login(request, user)
+                        
+                    if user_school != None:
+                        if role == 'TEACHER':
                             return HttpResponseRedirect('/dashboard/classes_schedule')
                         else:
                             return HttpResponseRedirect('/dashboard/statistics')

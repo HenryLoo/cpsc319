@@ -68,12 +68,12 @@
            <ul class="nav navbar-top-links navbar-right">
 
             
-            {% if user.userprofile.role == 'SYSTEM_ADMIN' %}
+            {% if user_role == 'SYSTEM_ADMIN' %}
             <li class="dropdown">
-                    <a href="#" id="current-school" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-university"></i> {{user.userprofile.school.title}} <b class="caret"></b></a>
+                    <a href="#" id="current-school" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-university"></i> {{user_school.title}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         {% for school in school_list %}
-                        {% if school != user.userprofile.school %}
+                        {% if school != user_school %}
                         <li>
                             <a href="{% url 'school:changeschool' school.id %}"> {{school.title}} </a>
                         </li>
@@ -89,15 +89,15 @@
             {%endif%}
 
 
-            {% if user.userprofile.role != 'TEACHER' %}
+            {% if user_role != 'TEACHER' %}
 
-            {% if user.userprofile.school %}
+            {% if user_school %}
 
                 <li class="dropdown">
-                    <a href="#" id="current-period" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> {{user.userprofile.period.description}} <b class="caret"></b></a>
+                    <a href="#" id="current-period" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-calendar"></i> {{user_period.description}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         {% for period in period_list %}
-                        {% if period != user.userprofile.period %}
+                        {% if period != user_period %}
                         <li>
                             <a href="{% url 'school:changeperiod' period.id %}"> {{period.description}} </a>
                         </li>
@@ -127,7 +127,7 @@
 
             </ul>
 
-{% if user.userprofile.role == 'TEACHER'%}
+{% if user_role == 'TEACHER'%}
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     
@@ -161,8 +161,8 @@
                 <div class="sidebar-nav navbar-collapse">
                     
                 <ul class="nav" id="side-menu">
-            {% if user.userprofile.school %}
-                {% if user.userprofile.period %}
+            {% if user_school %}
+                {% if user_period %}
                     <li>
                         <a href="{% url 'dashboard:statistics_page' %}"><i class="fa fa-fw fa-bar-chart"></i>  Dashboard</a>
                     </li>
@@ -190,7 +190,7 @@
                     <li>
                         <a href="{% url 'school:courselist' %}"><i class="fa fa-book"></i>  Courses</a>
                     </li>
-                    {% if user.userprofile.role == 'SYSTEM_ADMIN' %}
+                    {% if user_role == 'SYSTEM_ADMIN' %}
                     <li>
                         <a href="{% url 'school:schoollist' %}"><i class="fa fa-university"></i>  Schools</a>
                     </li>
@@ -234,7 +234,7 @@
                     <li class="disabled">
                         <a href=""><i class="fa fa-book"></i>  Courses</a>
                     </li>
-                    {% if user.userprofile.role == 'SYSTEM_ADMIN' %}
+                    {% if user_role == 'SYSTEM_ADMIN' %}
                     <li>
                         <a href="{% url 'school:schoollist' %}"><i class="fa fa-university"></i>  Schools</a>
                     </li>

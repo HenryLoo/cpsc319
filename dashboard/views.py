@@ -46,11 +46,13 @@ def statistics_page(request):
     context_dictionary['chartForm'] = ChartForm()
     if request.method == 'POST':        
         if chartForm.is_valid():
-            chartEntry = chartForm.save(commit=False)
-            chartEntry.school = currentSchool
-            chartEntry.period = currentPeriod
-            chartEntry.save()
-            context_dictionary['status'] = 1
+          chartEntry = chartForm.save(commit=False)
+          chartEntry.school = currentSchool
+          chartEntry.period = currentPeriod
+          chartEntry.save()
+          context_dictionary['success'] = 'New custom statistic successfully added.'
+        else:
+        	context_dictionary['error'] = 'Error: Please check the form field values.'
 
     students = Student.objects.count()
     admins = UserProfile.objects.exclude(role='TEACHER').count()
@@ -97,11 +99,6 @@ def statistics_page(request):
     numFail = sum(grade < 50 for grade in gradeList)
     passFailDataSource = SimpleDataSource([['Status', 'Students'], ['Pass', numPass], ['Fail', numFail]])
     context_dictionary['passFailChart'] = gchart.PieChart(passFailDataSource, options={'title': "Passing/Failing Students", 'width': 299, 'height': 299})
-
-    context_dictionary['chartTypeOptions'] = Chart._meta.get_field('chart_type').choices
-    context_dictionary['xAxisOptions'] = Chart._meta.get_field('x_axis').choices
-    context_dictionary['yAxisOptions'] = Chart._meta.get_field('y_axis').choices
-    context_dictionary['visibilityOptions'] = Chart._meta.get_field('visibility').choices
 
     charts = Chart.objects.filter(school_id=currentSchool, period_id=currentPeriod)
     if request.user_role == 'TEACHER':
@@ -182,13 +179,46 @@ def statistics_page(request):
             chart = gchart.PieChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
         elif chartTypeField == 'LINE':
             chart = gchart.LineChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
-        chartsWithData.append([x[0].title, chart])
+        chartsWithData.append([x[0], chart])
 
     context_dictionary['customChartsTriplets'] = []
     for i in range(0, len(chartsWithData), 3):
         context_dictionary['customChartsTriplets'].append(chartsWithData[i:i+3])
 
     return render_to_response("dashboard/statistics_page.html",context_dictionary,RequestContext(request))
+
+@login_required
+def statistics_edit_page(request):
+    request = process_user_info(request)
+    context_dictionary = {}
+
+    currentSchool = request.user_school
+    currentPeriod = request.user_period
+
+    chartID = request.GET.get("chart")
+    if chartID == '':
+    	context_dictionary['error'] = 'Error: This chart does not exist.'
+    else:
+	    try:
+	    	chart = Chart.objects.get(pk=chartID)
+	    	context_dictionary['chart'] = chart
+	    	chartForm = ChartForm(request.POST, instance=chart)
+
+	    	context_dictionary['chartForm'] = ChartForm(instance=chart)
+	    	if request.method == 'POST':
+		      if chartForm.is_valid():
+		      	chartEntry = chartForm.save(commit=False)
+		        chartEntry.school = currentSchool
+		        chartEntry.period = currentPeriod
+		        chartEntry.save()
+		        context_dictionary['success'] = 'Changes have been successfully saved.'
+		        context_dictionary['chartForm'] = ChartForm(instance=chart)
+		      else:
+		      	context_dictionary['error'] = 'Error: Please check the form field values.'
+	    except ObjectDoesNotExist:
+	    	context_dictionary['error'] = 'Error: This chart does not exist.'
+
+    return render_to_response("dashboard/statistics_edit_page.html",context_dictionary,RequestContext(request))
 
 @login_required
 def notifications_page(request):
@@ -263,10 +293,12 @@ def notifications_settings_page(request):
 		)
     formset = NotifFormSet(queryset = queryset)
     if request.method == 'POST':
-        formset = NotifFormSet(request.POST)
-        if formset.is_valid():
-            formset.save()
-            context_dictionary['status'] = 1
+      formset = NotifFormSet(request.POST)
+      if formset.is_valid():
+        formset.save()
+        context_dictionary['success'] = 'Notification settings updated.'
+      else:
+      	context_dictionary['error'] = 'Error: Please check the form field values.'
 
     context_dictionary['formset'] = formset
 

@@ -1,0 +1,85 @@
+{%extends 'basetemplate.html'%}
+
+{%block body%}
+
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load('visualization', '1.0', {'packages':['corechart']});
+</script>
+
+ {% if user_role == 'TEACHER' %}
+ <ul class="nav nav-tabs nav-justified">
+  <li role="presentation"><a href="{% url 'dashboard:classes_schedule_page' %}">Classes Schedule</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:notifications_page' %}">Notifications</a></li>
+</ul>
+ {%else%}
+<ul class="nav nav-tabs nav-justified">
+  <li role="presentation" class="active"><a href="{% url 'dashboard:statistics_page' %}">Statistics</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:notifications_settings_page' %}">Notifications Settings</a></li>
+  <li role="presentation"><a href="{% url 'dashboard:classes_schedule_page' %}">Classes Schedule</a></li>
+</ul>
+
+
+                <!-- Page Heading -->
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Dashboard <small>Statistics</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a>Dashboard > Statistics > Edit {{ chart.title }}</a>
+                            </li>
+                        </ol>
+                        {% if success != NULL %}
+                            <div class="alert alert-success" role="alert">{{ success }}</div>
+                        {% endif %}
+                        {% if error != NULL %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- /.row -->
+
+                {% if chart %}
+                <div class="row">
+
+                    <div class="col-lg-4">
+                        <div class="panel panel-default" style="max-height: 330px; min-height: 330px;">
+                            <div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-plus-circle"></i> Edit statistic</h3>
+                            </div>
+                            <div class="panel-body">
+
+                                <form class="form-horizontal" role="form" action="{% url 'dashboard:statistics_edit_page' %}?chart={{ chart.id }}" method="post">
+                                {% csrf_token %}
+
+                                    <table class="table table-hover">
+                                        {{ chartForm }}
+                                    </table>
+
+                                    <div class="form-group">
+                                        <div class="row" style="margin-right: 16px;">
+                                            <div class="col-sm-offset-4 col-sm-10">
+                                                <input type="submit" class="btn btn-primary" style="width: 100px; height: 35px;" value="Save">
+                                                <a href="{% url 'dashboard:statistics_page' %}" class="btn btn-primary" style="width: 100px; height: 35px;">Back</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.row -->
+                {% else %}
+                    <a href="{% url 'dashboard:statistics_page' %}" class="btn btn-primary" style="width: 100px; height: 35px;">Back</a>
+                {% endif %}
+
+{%endif%}
+
+{%endblock%}

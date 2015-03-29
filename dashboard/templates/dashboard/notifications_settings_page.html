@@ -36,9 +36,12 @@
 	               			<div class="row">
 
 	               				<div class="col-lg-4" style="width:450px;">
-		               				{% if status == 1 %}
-		               					<div class="alert alert-success" role="alert">Notification settings updated.</div>
-		               				{% endif %}
+		               				{% if success != NULL %}
+                            <div class="alert alert-success" role="alert">{{ success }}</div>
+	                        {% endif %}
+	                        {% if error != NULL %}
+	                            <div class="alert alert-danger" role="alert">{{ error }}</div>
+	                        {% endif %}
 		               				<br>
 		               				Automatically send these alerts if the conditions are met:
 												</div>

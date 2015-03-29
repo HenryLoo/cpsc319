@@ -32,7 +32,7 @@
                                 <i class="fa fa-sitemap"></i> <a>Dashboard > Statistics</a>
                             </li>
                         </ol>
-                        {% if createdCustom == 1 %}
+                        {% if status == 1 %}
                             <div class="alert alert-success" role="alert">New custom statistic added.</div>
                         {% endif %}
                     </div>
@@ -137,68 +137,9 @@
                                 <form class="form-horizontal" role="form" action="{% url 'dashboard:statistics_page' %}" method="post">
                                 {% csrf_token %}
 
-                                    <div class="form-group form-group-sm">
-                                        <label class="control-label col-sm-5" for="title">Title:</label>
-                                        <div class="col-sm-7">
-                                            <input type="title" class="form-control" id="title" name="title" placeholder="Enter statistics title">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group form-group-sm">
-                                        <label class="control-label col-sm-5" for="xAxis" style="height: 30px;">Independent Variable:</label>
-                                        <div class="col-sm-7"> 
-
-                                            <div class="dropdown">
-                                                <select class="btn btn-default dropdown-toggle" id="xAxis" name="xAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
-                                                    {% for option in xAxisOptions %}
-                                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                          
-                                    <div class="form-group form-group-sm">
-                                        <label class="control-label col-sm-5" for="yAxis" style="height: 30px;">Dependent Variable:</label>
-                                        <div class="col-sm-7"> 
-
-                                            <div class="dropdown">
-                                                <select class="btn btn-default dropdown-toggle" id="yAxis" name="yAxis" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px"> 
-                                                    {% for option in yAxisOptions %}
-                                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group form-group-sm">
-                                        <label class="control-label col-sm-5" for="chartType">Chart Type:</label>
-                                        <div class="col-sm-7"> 
-
-                                            <div class="dropdown">
-                                                <select class="btn btn-default dropdown-toggle" id="chartType" name="chartType" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
-                                                    {% for option in chartTypeOptions %}
-                                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="control-label col-sm-5" for="visibility">Visibility:</label>
-                                        <div class="col-sm-7"> 
-
-                                            <div class="dropdown">
-                                                <select class="btn btn-default dropdown-toggle" id="visibility" name="visibility" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px; height: 30px">
-                                                    {% for option in visibilityOptions %}
-                                                        <option value="{{ option.0 }}">{{ option.1 }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <table class="table table-hover">
+                                        {{ chartForm }}
+                                    </table>
 
                                     <div class="form-group"> 
                                         <div class="col-sm-offset-4 col-sm-10">

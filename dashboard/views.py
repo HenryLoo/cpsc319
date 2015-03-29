@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.shortcuts import RequestContext
 from accounts.utils import *
+
 from dashboard.models import Chart, Notification, NotificationType
+from dashboard.forms import ChartForm, NotificationsSettingsForm
 
 from accounts.models import UserProfile
 
@@ -16,6 +18,8 @@ from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 from django.template import RequestContext
 from django.db.models import Avg, Sum, Count
+from django.forms.models import model_to_dict
+from django.forms.models import modelformset_factory
 
 import datetime
 
@@ -37,17 +41,15 @@ def statistics_page(request):
     currentSchool = request.user_school
     currentPeriod = request.user_period
 
-    if request.method == 'POST':
-        title = request.POST.get("title")
-        xAxis = request.POST.get("xAxis")
-        yAxis = request.POST.get("yAxis")
-        chartType = request.POST.get("chartType")
-        visibility = request.POST.get("visibility")
-        school = currentSchool
-        period = currentPeriod
-        chart = Chart(title=title, school=school, period=period, chart_type=chartType, x_axis=xAxis, y_axis=yAxis, visibility=visibility)
-        chart.save()
-        context_dictionary['createdCustom'] = 1
+    chartForm = ChartForm(request.POST)
+    context_dictionary['chartForm'] = ChartForm()
+    if request.method == 'POST':        
+        if chartForm.is_valid():
+            chartEntry = chartForm.save(commit=False)
+            chartEntry.school = currentSchool
+            chartEntry.period = currentPeriod
+            chartEntry.save()
+            context_dictionary['status'] = 1
 
     students = Student.objects.count()
     admins = UserProfile.objects.exclude(role='TEACHER').count()
@@ -235,46 +237,19 @@ def notifications_settings_page(request):
     
     context_dictionary = {}
     
+    NotifFormSet = modelformset_factory(NotificationType, form=NotificationsSettingsForm)
+    queryset = NotificationType.objects.all() #or however your getting your Points to modify
+    formset = NotifFormSet(queryset = queryset)
     if request.method == 'POST':
-        attendanceCond = request.POST.get("attendanceCond")
-        attendanceText = request.POST.get("attendanceText")
-        performanceCond = request.POST.get("performanceCond")
-        performanceText = request.POST.get("performanceText")
-        assignmentCond = request.POST.get("assignmentCond")
-        assignmentText = request.POST.get("assignmentText")
+        formset = NotifFormSet(request.POST)
+        if formset.is_valid():
+            formset.save()
+            context_dictionary['status'] = 1
 
-        attendance = NotificationType.objects.filter(notification_type='Attendance')
-        if attendance.count() == 0:
-            attendance = NotificationType(notification_type='Attendance', condition=attendanceCond, content=attendanceText)
-            attendance.save()
-        else:
-            attendance.update(condition=attendanceCond)
-            attendance.update(content=attendanceText)
-
-        performance = NotificationType.objects.filter(notification_type='Performance')
-        if performance.count() == 0:
-            performance = NotificationType(notification_type='Performance', condition=performanceCond, content=performanceText)
-            performance.save()
-        else:
-            performance.update(condition=performanceCond)
-            performance.update(content=performanceText)
-            
-
-        assignment = NotificationType.objects.filter(notification_type='Assignment')
-        if assignment.count() == 0:
-            assignment = NotificationType(notification_type='Assignment', condition=assignmentCond, content=assignmentText)
-            assignment.save()
-        else:
-            assignment.update(condition=assignmentCond)
-            assignment.update(content=assignmentText)
-
-        context_dictionary['applied'] = 1
-
-    preAttendance = NotificationType.objects.filter(notification_type='Attendance').get()
-    prePerformance = NotificationType.objects.filter(notification_type='Performance').get()
-    preAssignment = NotificationType.objects.filter(notification_type='Assignment').get()
-
-    context_dictionary['settings'] = [preAttendance, prePerformance, preAssignment]
+    context_dictionary['attendanceForm'] = formset[0]
+    context_dictionary['performanceForm'] = formset[1]
+    context_dictionary['assignmentForm'] = formset[2]
+    context_dictionary['formset'] = formset
 
     return render_to_response("dashboard/notifications_settings_page.html",context_dictionary,RequestContext(request))
 
@@ -310,8 +285,10 @@ def classes_schedule_page(request):
     classSchedule = classSchedule.order_by('start_time')
 
     if request.user_role == 'TEACHER':
-        teacherID = TeacherUser.filter(user__period=user).get().teacher_id
-        taughtClasses = ClassTeacher.filter(teacher_id=teacherID).values_list('taught_class_id', flat=True)
+        teacherID = TeacherUser.filter(user_id=request.user.userprofile.user_id).get().teacher_id
+        taughtClassesPrimary = ClassTeacher.filter(primary_teacher_id=teacherID).values_list('taught_class_id', flat=True)
+        taughtClassesSecondary = ClassTeacher.filter(secondary_teacher_id=teacherID).values_list('taught_class_id', flat=True)
+        taughtClasses = list(set(list(chain(taughtClassesPrimary, taughtClassesSecondary))))
         classSchedule = classSchedule.filter(sch_class_id__in=taughtClasses)
     
     classTimes = classSchedule.values_list('start_time', 'end_time')
@@ -322,7 +299,7 @@ def classes_schedule_page(request):
     for x in classIDs:
         courseIDs.append(Class.objects.get(pk=x).course_id)
         numStudents.append(ClassRegistration.objects.filter(reg_class_id=x).count())
-        numTeachers.append(ClassTeacher.objects.filter(taught_class_id=x).count())
+        numTeachers.append(ClassTeacher.objects.filter(taught_class_id=x).count() + ClassTeacher.objects.filter(taught_class_id=x, secondary_teacher_id__isnull=False).count())
 
     courseNames = []
     for x in courseIDs:

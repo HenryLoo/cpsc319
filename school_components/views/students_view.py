@@ -97,7 +97,6 @@ def student_edit(request, student_id):
 		RequestContext(request))
 
 # turn into a dict to help with sorting in UI
-@login_required
 def class_history_helper(class_reg):
 	m = model_to_dict(class_reg)
 	m['period'] = class_reg.reg_class.period.description

@@ -10,6 +10,8 @@ from django.db import IntegrityError
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
+from datetime import datetime
+from dashboard.models import *
 
 from django.forms.models import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
@@ -279,7 +281,7 @@ def class_attendance(request, class_id=None):
 		context_dictionary['classregistration'] = class_reg_list
 
 		AttendanceFormSetFactory = modelformset_factory(ClassAttendance, extra=0, can_delete=True)
-		date_form = ClassAttendanceDateForm()
+		date_form = ClassAttendanceDateForm(initial={'date': datetime.now()})
 		context_dictionary['dateform'] = date_form
 
 		if request.method == "POST":
@@ -324,6 +326,10 @@ def class_attendance(request, class_id=None):
 							instance.date = date_value
 							instance.save()
 
+							context_dictionary['success'] = "Attendance was saved successfully."
+						
+						create_attendance_notifications(request, c)
+
 					else:
 						context_dictionary['errors'] = formset.errors
 
@@ -353,6 +359,56 @@ def class_attendance(request, class_id=None):
 
 	return render_to_response('classes/class_attendance.html', context_dictionary,
 		RequestContext(request))
+
+def create_attendance_notifications(request, class_):
+	attendance_notification = NotificationType.objects.get(notification_type='Attendance')
+	max_absences = attendance_notification.condition
+
+	#  get all absences in the class
+	absences = ClassAttendance.objects.filter(
+		reg_class=class_, attendance='A'
+	).order_by('student', 'date')
+
+	curr_student = None
+	last_absence = 0
+	first_absence = 0
+	absent_streak = 0
+
+	for absence in absences:
+
+		# if not the same student, check streak and reset
+		if curr_student is None or curr_student.id != absence.student.id: 		
+			absent_streak = 1
+			first_absence = absence.date
+			last_absence = absence.date.toordinal()
+			curr_student = absence.student
+
+		# if consecutive, increase streak and store date
+		elif absence.date.toordinal() - last_absence == 1:
+			absent_streak += 1
+			last_absence = absence.date.toordinal()
+
+		if absent_streak >= max_absences:
+			# check if attendance notification already exists for this student
+			# creates another notification only if start of absence is different
+			notif_list = Notification.objects.filter(
+				notification_type=attendance_notification,
+				student=curr_student,
+				date=first_absence
+				)
+			if len(notif_list) == 0:
+				notification = Notification(
+					notification_type=attendance_notification, 
+					student=curr_student,
+					school=request.user.userprofile.school,
+					period=request.user.userprofile.period,
+					date=first_absence,
+					status=False)
+				notification.save()
+
+		 	
+
+
 
 @login_required
 def class_performance(request, class_id=None, assignment_id=None):
@@ -416,6 +472,7 @@ def class_performance(request, class_id=None, assignment_id=None):
 						current.performance = (grade/total) * 100
 						current.save()
 
+					create_performance_notifications(request, c)
 
 				else:
 					print('Error')
@@ -432,6 +489,70 @@ def class_performance(request, class_id=None, assignment_id=None):
 
 	return render_to_response('classes/class_grading.html', context_dictionary,
 		RequestContext(request))
+
+def create_performance_notifications(request, c):
+	performance_notification = NotificationType.objects.get(notification_type='Performance')
+	min_performance = performance_notification.condition
+
+	# go over each student in the class
+	students = [x.student for x in c.enrolled_class.all()]
+	for student in students:
+		per = find_overall_performance(student.id)
+
+		# check if unread notification already exists
+		notif_list = Notification.objects.filter(
+			notification_type=performance_notification,
+			student=student,
+			status=False
+		)
+
+		#  might return None if no assignments yet
+		if per and per < min_performance and len(notif_list) == 0:
+			print "Created notification for", student, per
+			notif = Notification(
+				notification_type = performance_notification,
+				student = student,
+				school = request.user.userprofile.school, 
+				period = request.user.userprofile.period,
+				status=False)
+			notif.save()
+
+# returns a percent
+def find_overall_performance(student_id):
+	#  find all the classes this student is registered in
+	s = Student.objects.get(pk=student_id)
+	classes = [x.reg_class for x in s.enrolled_student.all()]
+	grand_total = len(classes) * 100
+	class_total = sum(filter(None, 
+		[find_class_performance(student_id, c.id) for c in classes]))
+
+	if grand_total == 0:
+		return None
+
+	return class_total/grand_total * 100
+
+#  returns a percent
+def find_class_performance(student_id, class_id):
+	student = Student.objects.get(pk=student_id)
+	c = Class.objects.get(pk=class_id)
+	performances = Grading.objects.filter(student=student, reg_class=c)
+	total_performance = 0 # in percent, weighted by assignment weight
+
+	# for each performance, multiply by each weight 
+	for per in performances:
+		weight = per.assignment.grade_weight
+		total_performance += per.performance * weight
+
+	# at the end divide by total of all assignments for this class
+	total_weight = sum(Assignment.objects.filter(
+		reg_class=c).values_list('grade_weight', flat=True))
+
+	if (total_weight == 0):
+		return None
+
+	return total_performance/total_weight
+
+
 
 @login_required
 def class_assignment(request, class_id=None):
@@ -514,7 +635,8 @@ def class_reportcard(request, class_id=None, student_id=None):
 			average = cont/total
 		else:
 			average = 0
-		context_dictionary['overall'] = average
+		# context_dictionary['overall'] = average
+		context_dictionary['overall'] = find_class_performance(student_id, c.id)
 
 	return render_to_response('classes/class_reportcard.html', context_dictionary,
 		RequestContext(request))

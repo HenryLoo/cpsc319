@@ -101,12 +101,17 @@ def payment_edit(request, parent_id, payment_id):
 
 @login_required
 def parent_edit(request, parent_id):
-	parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
+	# parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
+	parent_list = Parent.objects.filter(
+		school = request.user.userprofile.school,
+		student__enrolled_student__period = request.user.userprofile.period
+	).annotate().order_by('last_name')
+
 	context_dictionary = {'parent_list': parent_list}
 
 	try:
 		p = Parent.objects.get(pk=parent_id)
-		if p.school != request.user.userprofile.school or p.period != request.user.userprofile.period:
+		if p.school != request.user.userprofile.school:
 				raise ObjectDoesNotExist
 				
 		context_dictionary['parent_id'] = parent_id
@@ -118,10 +123,10 @@ def parent_edit(request, parent_id):
 					parent_form.save()
 					context_dictionary['succ']=True
 			
-			context_dictionary['parent_form']=parent_form
+		context_dictionary['parent_form']=parent_form
 
 	except ObjectDoesNotExist:
-		context_dictionary['error'] = 'There is no parent with this id in this school and period.'
+		context_dictionary['error'] = 'There is no parent with this id in this school.'
 			
 	return render_to_response("parents/parent_edit.html",
 		context_dictionary,

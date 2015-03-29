@@ -85,12 +85,16 @@ def delete_student_view (request, student_id):
 
 @login_required
 def student_edit(request, student_id):
-	student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
+	student_list = Student.objects.filter(
+			school = request.user.userprofile.school,
+			enrolled_student__reg_class__period = request.user.userprofile.period
+		).annotate().order_by('last_name')
+	# student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
 	context_dictionary = {'student_list': student_list}
         
 	try:
 		student = Student.objects.get(pk=student_id)
-		if student.school != request.user.userprofile.school or student.period != request.user.userprofile.period:
+		if student.school != request.user.userprofile.school:
                         raise ObjectDoesNotExist
                 
 		context_dictionary['student_id'] = student_id
@@ -105,7 +109,7 @@ def student_edit(request, student_id):
 		context_dictionary['student_form'] = s
 		
 	except ObjectDoesNotExist:
-                context_dictionary['error'] = 'There is no student with that id in this school and period.'
+                context_dictionary['error'] = 'There is no student with that id in this school.'
                 
 	return render_to_response("students/student_edit.html",
 		context_dictionary,

@@ -333,7 +333,7 @@ def export_data(request):
 			row.append(teacher.teaching_availability.thursday_times)
 
 			row.append(teaching_availability_helper(teacher.teaching_availability.friday))
-			row.append(teacher.teaching_availability.friday_times)
+			row.append(teacher.teaching_availability.monday_times)
 
 			writer.writerow(row)
 			

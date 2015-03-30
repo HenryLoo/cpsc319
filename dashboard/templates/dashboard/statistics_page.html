@@ -32,8 +32,11 @@
                                 <i class="fa fa-sitemap"></i> <a>Dashboard > Statistics</a>
                             </li>
                         </ol>
-                        {% if status == 1 %}
-                            <div class="alert alert-success" role="alert">New custom statistic added.</div>
+                        {% if success != NULL %}
+                            <div class="alert alert-success" role="alert">{{ success }}</div>
+                        {% endif %}
+                        {% if error != NULL %}
+                            <div class="alert alert-danger" role="alert">{{ error }}</div>
                         {% endif %}
                     </div>
                 </div>
@@ -222,11 +225,11 @@
                         <div class="col-lg-4">
                             <div class="panel panel-default" style="max-height: 400px; min-height: 400px;">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><i class="fa fa-bars"></i> {{ chart.0 }}</h3>
+                                    <h3 class="panel-title"><i class="fa fa-bars"></i> {{ chart.0.title }}</h3>
                                     <div class="text-right">
                                         <div class="row" style="margin-right: 1px;">
                                             <a href="#">View &nbsp</a>
-                                            <a href="#">Edit</a>
+                                            <a href="{% url 'dashboard:statistics_edit_page' %}?chart={{ chart.0.id }}">Edit</a>
                                         </div>
                                     </div>
                                 </div>

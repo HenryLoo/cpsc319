@@ -200,24 +200,24 @@ def statistics_edit_page(request):
     if chartID == '':
     	context_dictionary['error'] = 'Error: This chart does not exist.'
     else:
-	    try:
-	    	chart = Chart.objects.get(pk=chartID)
-	    	context_dictionary['chart'] = chart
-	    	chartForm = ChartForm(request.POST, instance=chart)
+        try:
+            chart = Chart.objects.get(pk=chartID)
+            context_dictionary['chart'] = chart
+            chartForm = ChartForm(request.POST, instance=chart)
 
-	    	context_dictionary['chartForm'] = ChartForm(instance=chart)
-	    	if request.method == 'POST':
-		      if chartForm.is_valid():
-		      	chartEntry = chartForm.save(commit=False)
-		        chartEntry.school = currentSchool
-		        chartEntry.period = currentPeriod
-		        chartEntry.save()
-		        context_dictionary['success'] = 'Changes have been successfully saved.'
-		        context_dictionary['chartForm'] = ChartForm(instance=chart)
-		      else:
-		      	context_dictionary['error'] = 'Error: Please check the form field values.'
-	    except ObjectDoesNotExist:
-	    	context_dictionary['error'] = 'Error: This chart does not exist.'
+            context_dictionary['chartForm'] = ChartForm(instance=chart)
+            if request.method == 'POST':
+                if chartForm.is_valid():
+                    chartEntry = chartForm.save(commit=False)
+                    chartEntry.school = currentSchool
+                    chartEntry.period = currentPeriod
+                    chartEntry.save()
+                    context_dictionary['success'] = 'Changes have been successfully saved.'
+                    context_dictionary['chartForm'] = ChartForm(instance=chart)
+                else:
+                    context_dictionary['error'] = 'Error: Please check the form field values.'
+        except ObjectDoesNotExist:
+            context_dictionary['error'] = 'Error: This chart does not exist.'
 
     return render_to_response("dashboard/statistics_edit_page.html",context_dictionary,RequestContext(request))
 

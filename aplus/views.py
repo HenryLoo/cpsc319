@@ -9,9 +9,9 @@ from accounts.utils import *
 @login_required
 def settings_page(request):
         request = process_user_info(request)
-	context_dictionary = {}
+        context_dictionary = {}
 
-	return render_to_response("settings_page.html",context_dictionary,RequestContext(request))
+        return render_to_response("settings_page.html",context_dictionary,RequestContext(request))
 
 @login_required
 def settings_edit(request):

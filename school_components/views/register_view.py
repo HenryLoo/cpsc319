@@ -212,7 +212,7 @@ class CourseRegisterWizard(SessionWizardView):
 #  should have some way to use the model form...
 @login_required
 def payment_create(request, parent_id):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	message = {}
 	if request.method == 'POST':
 		pay = Payment(parent=Parent.objects.get(pk=parent_id))
@@ -229,7 +229,7 @@ def payment_create(request, parent_id):
 
 @login_required
 def lkccourse_register(request, page_no=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if page_no is None or page_no == "1" :
 		html = "registration/lkc_course_registration_parent.html"
 	elif page_no == "2":

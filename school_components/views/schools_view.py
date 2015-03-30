@@ -10,7 +10,7 @@ from accounts.utils import *
 
 @login_required
 def school_list(request, school_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	school_list = School.objects.all().order_by('title')
 	context_dictionary = {'school_list': school_list}
 
@@ -23,7 +23,7 @@ def school_list(request, school_id=None):
 
 @login_required
 def school_create(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	school_list = School.objects.all()
 	context_dictionary = {'school_list': school_list,
 							 'school_form': SchoolForm()}
@@ -43,7 +43,7 @@ def school_create(request):
 
 @login_required
 def school_change(request, school_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if school_id:
 
 		new_school = School.objects.get(pk = school_id)

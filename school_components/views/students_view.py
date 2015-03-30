@@ -23,7 +23,7 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def student_list(request, student_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
 		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
@@ -88,7 +88,7 @@ def delete_student_view (request, student_id):
 
 @login_required
 def student_edit(request, student_id):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	student_list = Student.objects.filter(
 			school = request.user_school,
 			enrolled_student__reg_class__period = request.user_period
@@ -132,7 +132,7 @@ def class_history_helper(class_reg):
 # returns student info, used on the registration page
 @login_required
 def student_get(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if request.method == 'GET':
 		student_id = request.GET['student_id']
 		student = Student.objects.get(pk=student_id)
@@ -157,7 +157,7 @@ def student_get(request):
 # create a new student with form data
 @login_required
 def student_create(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	s = StudentForm(request.POST)
 	context_dictionary = { 'student_form': StudentForm() }
 
@@ -191,7 +191,7 @@ def student_form(request):
 # if time figure out a way to confirm
 @login_required
 def student_upload(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	context_dictionary = {'form': StudentCSVForm()}
 	form = StudentCSVForm(request.POST, request.FILES)
 	
@@ -213,7 +213,7 @@ def student_upload(request):
 
 @login_required
 def student_export(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	context_dictionary = {}
 
 	if request.method == 'POST':

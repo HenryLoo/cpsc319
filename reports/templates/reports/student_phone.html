@@ -34,6 +34,7 @@
 
 <div class="col-md-8">
 
+<div class="print">
 <div class="col-md-12">
         <h4>Student Name and Phone Number - {{ class.course }} {{ class.section }}</h4>
         <br>
@@ -65,14 +66,19 @@
         
 </table>
   
-<a class="btn btn-default" href="#" target="_blank" role="button">
+ </div> 
+
+<a class="btn btn-default" href="#" id="print-btn" role="button">
                                Print
                         </a>
 
+<!-- <br>
+<a href="#" id="print-btn">Print</a> -->
+
 </div>
 </div>
+
 
 {% endif %}
-
 
 {% endblock reports_content %}

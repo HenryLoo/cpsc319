@@ -31,162 +31,162 @@ from django.contrib.auth import authenticate, login
 
 from django.contrib.auth.decorators import login_required
 
-from graphos.sources.model import SimpleDataSource
-from graphos.renderers import gchart
+# from graphos.sources.model import SimpleDataSource
+# from graphos.renderers import gchart
 
 @login_required
 def statistics_page(request):
     request = process_user_info(request)
     context_dictionary = {}
 
-    currentSchool = request.user_school
-    currentPeriod = request.user_period
+#     currentSchool = request.user_school
+#     currentPeriod = request.user_period
 
-    chartForm = ChartForm(request.POST)
-    context_dictionary['chartForm'] = ChartForm()
-    if request.method == 'POST':        
-        if chartForm.is_valid():
-            chartEntry = chartForm.save(commit=False)
-            chartEntry.school = currentSchool
-            chartEntry.period = currentPeriod
-            chartEntry.save()
-            context_dictionary['status'] = 1
+#     chartForm = ChartForm(request.POST)
+#     context_dictionary['chartForm'] = ChartForm()
+#     if request.method == 'POST':        
+#         if chartForm.is_valid():
+#             chartEntry = chartForm.save(commit=False)
+#             chartEntry.school = currentSchool
+#             chartEntry.period = currentPeriod
+#             chartEntry.save()
+#             context_dictionary['status'] = 1
 
-    students = Student.objects.count()
-    admins = UserProfile.objects.exclude(role='TEACHER').count()
-    teachers = UserProfile.objects.filter(role='TEACHER').count()
-    classes = Class.objects.count()
-    courses = Course.objects.count()
-    periods = Period.objects.count()
-    schools = School.objects.count()
+#     students = Student.objects.count()
+#     admins = UserProfile.objects.exclude(role='TEACHER').count()
+#     teachers = UserProfile.objects.filter(role='TEACHER').count()
+#     classes = Class.objects.count()
+#     courses = Course.objects.count()
+#     periods = Period.objects.count()
+#     schools = School.objects.count()
 
-    paidParentIDs = Payment.objects.values_list('parent_id', flat=True)
-    parentIDs = Parent.objects.filter(id__in=paidParentIDs, school_id=currentSchool, period_id=currentPeriod).values_list('id', flat=True)
-    paidStudents = Student.objects.filter(parent_id__in=parentIDs).values_list('id', flat=True)
-    registeredStudents = ClassRegistration.objects.values_list('student_id', flat=True).distinct()
-    unregisteredPaidStudents = paidStudents.exclude(pk__in = registeredStudents).count()
+#     paidParentIDs = Payment.objects.values_list('parent_id', flat=True)
+#     parentIDs = Parent.objects.filter(id__in=paidParentIDs, school_id=currentSchool, period_id=currentPeriod).values_list('id', flat=True)
+#     paidStudents = Student.objects.filter(parent_id__in=parentIDs).values_list('id', flat=True)
+#     registeredStudents = ClassRegistration.objects.values_list('student_id', flat=True).distinct()
+#     unregisteredPaidStudents = paidStudents.exclude(pk__in = registeredStudents).count()
 
-    paymentTotal = Payment.objects.aggregate(Sum('amount')).get('amount__sum')
-    if paymentTotal is None:
-        paymentTotal = "0.00"
-    receipts = Payment.objects.all().order_by('-date')
+#     paymentTotal = Payment.objects.aggregate(Sum('amount')).get('amount__sum')
+#     if paymentTotal is None:
+#         paymentTotal = "0.00"
+#     receipts = Payment.objects.all().order_by('-date')
 
-    context_dictionary['usage'] = [students, admins, teachers, classes, courses, periods, schools]
-    context_dictionary['payments'] = [unregisteredPaidStudents, paymentTotal, receipts]
+#     context_dictionary['usage'] = [students, admins, teachers, classes, courses, periods, schools]
+#     context_dictionary['payments'] = [unregisteredPaidStudents, paymentTotal, receipts]
 
-    regXAxis = Period.objects.filter(school_id=currentSchool).all().order_by('start_date').values_list('description', flat=True)
-    regYAxis = ClassRegistration.objects.filter(school_id=currentSchool).values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
-    regData = [['School', 'Students']]
-    for x in zip(regXAxis, regYAxis):
-        regData.append([x[0], x[1]])
-    regDataSource = SimpleDataSource(regData)
-    context_dictionary['registrationChart'] = gchart.LineChart(regDataSource, options={'title': "Student Registration", 'width': 299, 'height': 299})
+#     regXAxis = Period.objects.filter(school_id=currentSchool).all().order_by('start_date').values_list('description', flat=True)
+#     regYAxis = ClassRegistration.objects.filter(school_id=currentSchool).values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
+#     regData = [['School', 'Students']]
+#     for x in zip(regXAxis, regYAxis):
+#         regData.append([x[0], x[1]])
+#     regDataSource = SimpleDataSource(regData)
+#     context_dictionary['registrationChart'] = gchart.LineChart(regDataSource, options={'title': "Student Registration", 'width': 299, 'height': 299})
 
     
-    performance = Grading.objects.filter(reg_class__school=currentSchool, reg_class__period=currentPeriod).values('student_id').annotate(avg_grades=Avg('performance'))
-    gradeList = [round(grade) for grade in performance.order_by('avg_grades').values_list('avg_grades', flat=True)]
-    performXAxis = list(set(gradeList))
-    performYAxis = [len(list(group)) for key, group in groupby(gradeList)]
-    performData = [['Grades', 'Students']]
-    for x in zip(performXAxis, performYAxis):
-        performData.append([x[0], x[1]])
-    performDataSource = SimpleDataSource(performData)
-    context_dictionary['performanceChart'] = gchart.LineChart(performDataSource, options={'title': "Student Performance", 'width': 299, 'height': 299})
+#     performance = Grading.objects.filter(reg_class__school=currentSchool, reg_class__period=currentPeriod).values('student_id').annotate(avg_grades=Avg('performance'))
+#     gradeList = [round(grade) for grade in performance.order_by('avg_grades').values_list('avg_grades', flat=True)]
+#     performXAxis = list(set(gradeList))
+#     performYAxis = [len(list(group)) for key, group in groupby(gradeList)]
+#     performData = [['Grades', 'Students']]
+#     for x in zip(performXAxis, performYAxis):
+#         performData.append([x[0], x[1]])
+#     performDataSource = SimpleDataSource(performData)
+#     context_dictionary['performanceChart'] = gchart.LineChart(performDataSource, options={'title': "Student Performance", 'width': 299, 'height': 299})
 
-    numPass = sum(grade >= 50 for grade in gradeList)
-    numFail = sum(grade < 50 for grade in gradeList)
-    passFailDataSource = SimpleDataSource([['Status', 'Students'], ['Pass', numPass], ['Fail', numFail]])
-    context_dictionary['passFailChart'] = gchart.PieChart(passFailDataSource, options={'title': "Passing/Failing Students", 'width': 299, 'height': 299})
+#     numPass = sum(grade >= 50 for grade in gradeList)
+#     numFail = sum(grade < 50 for grade in gradeList)
+#     passFailDataSource = SimpleDataSource([['Status', 'Students'], ['Pass', numPass], ['Fail', numFail]])
+#     context_dictionary['passFailChart'] = gchart.PieChart(passFailDataSource, options={'title': "Passing/Failing Students", 'width': 299, 'height': 299})
 
-    context_dictionary['chartTypeOptions'] = Chart._meta.get_field('chart_type').choices
-    context_dictionary['xAxisOptions'] = Chart._meta.get_field('x_axis').choices
-    context_dictionary['yAxisOptions'] = Chart._meta.get_field('y_axis').choices
-    context_dictionary['visibilityOptions'] = Chart._meta.get_field('visibility').choices
+#     context_dictionary['chartTypeOptions'] = Chart._meta.get_field('chart_type').choices
+#     context_dictionary['xAxisOptions'] = Chart._meta.get_field('x_axis').choices
+#     context_dictionary['yAxisOptions'] = Chart._meta.get_field('y_axis').choices
+#     context_dictionary['visibilityOptions'] = Chart._meta.get_field('visibility').choices
 
-    charts = Chart.objects.filter(school_id=currentSchool, period_id=currentPeriod)
-    if request.user_role == 'TEACHER':
-        charts = charts.filter(visibility='ALL')
-    charts = charts.all().order_by('id')
+#     charts = Chart.objects.filter(school_id=currentSchool, period_id=currentPeriod)
+#     if request.user_role == 'TEACHER':
+#         charts = charts.filter(visibility='ALL')
+#     charts = charts.all().order_by('id')
 
-    allChartData = []
-    for chart in charts:
-        xAxis = ''
-        xIDs = ''
-        xFilter = ''
-        xLabel = ''
-        if chart.x_axis == 'SCHOOL':
-            schools = School.objects.all()
-            xAxis = schools.values_list('title', flat=True)
-            xIDs = schools.values_list('id', flat=True)
-            xFilter = 'school_id'
-            xLabel = 'Schools'
-        elif chart.x_axis == 'PERIOD':
-            periods = Period.objects.filter(school=currentSchool).all()
-            xAxis = periods.values_list('description', flat=True)
-            xIDs = periods.values_list('id', flat=True)
-            xFilter = 'period_id'
-            xLabel = 'Periods'
-        elif chart.x_axis == 'COURSE':
-            courses = Course.objects.filter(school=currentSchool, period=currentPeriod)
-            xAxis = courses.values_list('name', flat=True)
-            xIDs = courses.values_list('id', flat=True)
-            xFilter = 'course_id'
-            xLabel = 'Courses'
+#     allChartData = []
+#     for chart in charts:
+#         xAxis = ''
+#         xIDs = ''
+#         xFilter = ''
+#         xLabel = ''
+#         if chart.x_axis == 'SCHOOL':
+#             schools = School.objects.all()
+#             xAxis = schools.values_list('title', flat=True)
+#             xIDs = schools.values_list('id', flat=True)
+#             xFilter = 'school_id'
+#             xLabel = 'Schools'
+#         elif chart.x_axis == 'PERIOD':
+#             periods = Period.objects.filter(school=currentSchool).all()
+#             xAxis = periods.values_list('description', flat=True)
+#             xIDs = periods.values_list('id', flat=True)
+#             xFilter = 'period_id'
+#             xLabel = 'Periods'
+#         elif chart.x_axis == 'COURSE':
+#             courses = Course.objects.filter(school=currentSchool, period=currentPeriod)
+#             xAxis = courses.values_list('name', flat=True)
+#             xIDs = courses.values_list('id', flat=True)
+#             xFilter = 'course_id'
+#             xLabel = 'Courses'
 
-        yAxis = []
-        yLabel = ''
-        classes = Class.objects
-        for x in xIDs:
-            filteredClassIDs = classes.filter(**{xFilter: x}).values_list('id', flat=True)
-            if chart.y_axis == 'NSTUDENTS':
-                yAxis.append(ClassRegistration.objects.filter(reg_class_id__in=filteredClassIDs).all().values('student_id').distinct().count())
-                yLabel = 'Students'
-            elif chart.y_axis == 'NCLASSES':
-                yAxis.append(len(filteredClassIDs))
-                yLabel = 'Classes'
-            elif chart.y_axis == 'NTEACHERS':
-                primaryTeachers = ClassTeacher.objects.filter(primary_teacher_id__in=filteredClassIDs).all().values('primary_teacher_id').distinct()
-                secondaryTeachers = ClassTeacher.objects.filter(secondary_teacher_id__in=filteredClassIDs).all().values('secondary_teacher_id').distinct()
-                numTeachers = len(list(set(list(chain(primaryTeachers, secondaryTeachers)))))
-                yAxis.append(numTeachers)
-                yLabel = 'Teachers'
-            elif chart.y_axis == 'ATTENDANCE':
-                allAttendance = ClassAttendance.objects.filter(reg_class_id__in=filteredClassIDs)
-                numAttended = allAttendance.exclude(attendance='A').all().count()
-                numTotal = allAttendance.all().count()
-                if numTotal == 0:
-                    numTotal = 1
-                yAxis.append(round(numAttended/numTotal))
-                yLabel = 'Attendance Rates (%)'
-            elif chart.y_axis == 'PERFORMANCE':
-                averages = Grading.objects.filter(reg_class_id__in=filteredClassIDs).annotate(avg_grades=Avg('performance')).values_list('avg_grades', flat=True)
-                numGrades = len(averages)
-                if numGrades == 0:
-                    numGrades = 1;
-                yAxis.append(round(sum(averages)/numGrades))
-                yLabel = 'Average Grades (%)'
+#         yAxis = []
+#         yLabel = ''
+#         classes = Class.objects
+#         for x in xIDs:
+#             filteredClassIDs = classes.filter(**{xFilter: x}).values_list('id', flat=True)
+#             if chart.y_axis == 'NSTUDENTS':
+#                 yAxis.append(ClassRegistration.objects.filter(reg_class_id__in=filteredClassIDs).all().values('student_id').distinct().count())
+#                 yLabel = 'Students'
+#             elif chart.y_axis == 'NCLASSES':
+#                 yAxis.append(len(filteredClassIDs))
+#                 yLabel = 'Classes'
+#             elif chart.y_axis == 'NTEACHERS':
+#                 primaryTeachers = ClassTeacher.objects.filter(primary_teacher_id__in=filteredClassIDs).all().values('primary_teacher_id').distinct()
+#                 secondaryTeachers = ClassTeacher.objects.filter(secondary_teacher_id__in=filteredClassIDs).all().values('secondary_teacher_id').distinct()
+#                 numTeachers = len(list(set(list(chain(primaryTeachers, secondaryTeachers)))))
+#                 yAxis.append(numTeachers)
+#                 yLabel = 'Teachers'
+#             elif chart.y_axis == 'ATTENDANCE':
+#                 allAttendance = ClassAttendance.objects.filter(reg_class_id__in=filteredClassIDs)
+#                 numAttended = allAttendance.exclude(attendance='A').all().count()
+#                 numTotal = allAttendance.all().count()
+#                 if numTotal == 0:
+#                     numTotal = 1
+#                 yAxis.append(round(numAttended/numTotal))
+#                 yLabel = 'Attendance Rates (%)'
+#             elif chart.y_axis == 'PERFORMANCE':
+#                 averages = Grading.objects.filter(reg_class_id__in=filteredClassIDs).annotate(avg_grades=Avg('performance')).values_list('avg_grades', flat=True)
+#                 numGrades = len(averages)
+#                 if numGrades == 0:
+#                     numGrades = 1;
+#                 yAxis.append(round(sum(averages)/numGrades))
+#                 yLabel = 'Average Grades (%)'
 
-        chartData = [[xLabel, yLabel]]
-        for x in zip(xAxis, yAxis):
-            chartData.append([x[0], x[1]])
-        allChartData.append(chartData)
+#         chartData = [[xLabel, yLabel]]
+#         for x in zip(xAxis, yAxis):
+#             chartData.append([x[0], x[1]])
+#         allChartData.append(chartData)
 
-    chartsWithData = []
-    for x in zip(charts, allChartData):
-        chartTypeField = x[0].chart_type
-        chart = ''
-        chartDataSource = SimpleDataSource(x[1])
-        if chartTypeField == 'BAR':
-            chart = gchart.BarChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
-        elif chartTypeField == 'PIE':
-            chart = gchart.PieChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
-        elif chartTypeField == 'LINE':
-            chart = gchart.LineChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
-        chartsWithData.append([x[0].title, chart])
+#     chartsWithData = []
+#     for x in zip(charts, allChartData):
+#         chartTypeField = x[0].chart_type
+#         chart = ''
+#         chartDataSource = SimpleDataSource(x[1])
+#         if chartTypeField == 'BAR':
+#             chart = gchart.BarChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
+#         elif chartTypeField == 'PIE':
+#             chart = gchart.PieChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
+#         elif chartTypeField == 'LINE':
+#             chart = gchart.LineChart(chartDataSource, options={'title': x[0].title, 'width': 299, 'height': 299})
+#         chartsWithData.append([x[0].title, chart])
 
-    context_dictionary['customChartsTriplets'] = []
-    for i in range(0, len(chartsWithData), 3):
-        context_dictionary['customChartsTriplets'].append(chartsWithData[i:i+3])
+#     context_dictionary['customChartsTriplets'] = []
+#     for i in range(0, len(chartsWithData), 3):
+#         context_dictionary['customChartsTriplets'].append(chartsWithData[i:i+3])
 
     return render_to_response("dashboard/statistics_page.html",context_dictionary,RequestContext(request))
 

@@ -66,6 +66,7 @@
 </div>
 
 {% if student %}
+<div class="print">
 <div class="col-md-12">
         <h4>Report Card - {{student.first_name}} {{student.last_name}}</h4>
         <div class="table-responsive">
@@ -100,6 +101,14 @@
 </table>
 
 <h4>Overall Performance: {{overall|floatformat}}%</h4>            
+
+</div>
+</div>
+
+<br>
+<a class="btn btn-default" href="#" id="print-btn" role="button">
+                               Print
+                        </a>
 
 </div>
 </div>

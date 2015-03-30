@@ -51,13 +51,13 @@
 {% if start_date_value and end_date_value%}
 
 
-
 <div class="col-md-12">
         <h4>Attendance</h4>
         <br>
         <div class="table-responsive">
 
-                
+<div class="print">
+
               <table id="mytable" class="table table-bordered table-striped">
                    
                    <thead>
@@ -93,10 +93,13 @@
     
     {% for reg in class.enrolled_class.all %}
     <tr>
+
     <td> {{reg.student.first_name}} {{reg.student.last_name}} </td>
-    <td> la</td>
-    <td> la</td>
-    <td> la</td>
+    
+    {% for day, week in dayslist %}
+      <td> </td>
+    {%endfor%}
+    
     </tr>
     {%endfor%}
 
@@ -104,7 +107,13 @@
         
 </table>
   
+</div>
 
+<br>
+<a class="btn btn-default" href="#" id="print-btn" role="button">
+                               Print
+                        </a>
+</div>
 </div>
 </div>
 

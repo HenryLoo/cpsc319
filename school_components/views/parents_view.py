@@ -10,14 +10,19 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from urllib import urlencode
+import requests
+# from urllib import urlencode
+try:
+    from urllib import urlencode
+except ImportError:
+    from urllib.parse import urlencode
 import json
 from django.contrib.auth.decorators import login_required
 from accounts.utils import *
 
 @login_required
 def parent_list(request, parent_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	parent_list = Parent.objects.filter(
 		school = request.user_school,
 		student__enrolled_student__period = request.user_period
@@ -81,7 +86,7 @@ def parent_list(request, parent_id=None):
 
 @login_required
 def payment_edit(request, parent_id, payment_id):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if request.method == 'POST':
 		pay = Payment.objects.get(pk=payment_id)
 		pf = PaymentForm(request.POST, instance=pay)
@@ -105,7 +110,7 @@ def payment_edit(request, parent_id, payment_id):
 @login_required
 def parent_edit(request, parent_id):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
 
 	# parent_list = Parent.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
 	parent_list = Parent.objects.filter(
@@ -143,7 +148,7 @@ def parent_edit(request, parent_id):
 
 @login_required
 def parent_get(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if request.method == 'GET':
 		parent_id = request.GET['parent_id']
 		parent = Parent.objects.get(pk=parent_id)
@@ -154,7 +159,7 @@ def parent_get(request):
 
 @login_required
 def parent_create(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	p = ParentForm(request.POST)
 	context_dictionary = { 'parent_form': ParentForm() }
 	if request.method == 'POST':
@@ -186,7 +191,7 @@ def parent_form(request):
 
 @login_required
 def payment_create(request, parent_id):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if request.method == 'POST':
 		pay = Payment(parent=Parent.objects.get(pk=parent_id))
 		pf = PaymentForm(request.POST, instance=pay)

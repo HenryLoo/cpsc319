@@ -62,7 +62,7 @@ def view_reports(request):
 
 @login_required
 def reportcard_teacher(request, class_id=None, student_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
@@ -92,7 +92,7 @@ def reportcard_teacher(request, class_id=None, student_id=None):
 
 @login_required
 def reportcard_adm(request, student_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	#add filter after
 	perf_list = []
 	over=0
@@ -134,7 +134,7 @@ def reportcard_adm(request, student_id=None):
 
 @login_required
 def studentphone(request, class_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
@@ -146,7 +146,7 @@ def studentphone(request, class_id=None):
 
 @login_required
 def attendancelist(request, class_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
@@ -239,7 +239,7 @@ def student_pdf(c):
 
 @login_required
 def export_data(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	dataset = request.GET.get('dataset', None)
 	response = HttpResponse(content_type='text/csv')
 	writer = csv.writer(response)

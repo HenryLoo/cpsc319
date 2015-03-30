@@ -28,6 +28,10 @@
 
     {% if class %}
 
+    $("#print-btn").click(function() {
+        $(".print").printArea();
+    });
+
     // send request to register the student in class with class.id
     $('.class-registration-form').submit(function() {
     	// check if it's the waiting list or the input box

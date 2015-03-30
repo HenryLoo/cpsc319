@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 from accounts.utils import *
+from django.contrib import messages
+from django.shortcuts import redirect
 
 @login_required
 def school_list(request, school_id=None):

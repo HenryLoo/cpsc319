@@ -78,12 +78,12 @@ def class_create(request):
 	request = process_user_info(request)
         
 	class_form = ClassForm(prefix='info')
-	class_form.fields['course'].queryset = Course.objects.filter(
+	courses = Course.objects.filter(
 		school = request.user_school, 
 		period = request.user_period
 	)
 
-	# TODO: teacher will have period field
+	class_form.fields['course'].queryset = courses
 	teacher_form = ClassTeacherForm(prefix='te')
 	teachers = TeacherUser.objects.filter(
 		user__period = request.user_period, 
@@ -100,6 +100,7 @@ def class_create(request):
 
 	if request.method == 'POST':
 		cf = ClassForm(request.POST, prefix='info')
+		cf.fields['course'].queryset = courses
 		sf = ClassScheduleForm(request.POST, prefix='sch')
 		te = ClassTeacherForm(request.POST, prefix='te')
 		te.fields['primary_teacher'].queryset = teachers
@@ -205,10 +206,11 @@ def class_edit(request, class_id):
                                        # context_dictionary['ha'] = 'ha'# for testing
 
 				class_form = ClassForm(prefix='info', instance = c)
-				class_form.fields['course'].queryset = Course.objects.filter(
+				courses = Course.objects.filter(
 					school = request.user_school, 
 					period = request.user_period
 				)
+				class_form.fields['course'].queryset = courses
 				classday_form = ClassScheduleForm(prefix='sch', instance = s)
 				classteacher_form = ClassTeacherForm(prefix='te', instance = t)
 				teachers = TeacherUser.objects.filter(user__school=request.user_school, user__period=request.user_period)
@@ -223,6 +225,7 @@ def class_edit(request, class_id):
 						teachers = TeacherUser.objects.filter(user__school=request.user_school, user__period=request.user_period)
 						classteacher_form.fields['primary_teacher'].queryset = teachers
 						classteacher_form.fields['secondary_teacher'].queryset = teachers
+						class_form.fields['course'].queryset = courses
                                 
 						if class_form.is_valid() and classday_form.is_valid() and classteacher_form.is_valid():
 								class_form.save()

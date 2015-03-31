@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-import requests
+
 # from urllib import urlencode
 try:
     from urllib import urlencode

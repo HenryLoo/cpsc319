@@ -16,8 +16,11 @@ def process_user_info(request):
         period_found = False
         for profile in request.user.userprofiles.all():
             period = profile.period
+            if period.start_date == None or period.end_date == None:
+                continue
             if period.start_date <= today and today <= period.end_date:
                 user_period = period
+                user_profile = profile
                 period_found = True
         if not period_found:
             user_period = None
@@ -25,6 +28,7 @@ def process_user_info(request):
     request.user_school = user_school
     request.user_period = user_period
     request.user_role = user_role
+    request.user_profile = profile
 
     return request
     

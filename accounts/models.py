@@ -46,7 +46,7 @@ class TeachingAvailability(models.Model):
 
     
 class TeacherUser(models.Model):
-    user = models.ForeignKey(UserProfile, blank=True,null=True)
+    user = models.ForeignKey(UserProfile, blank=True,null=True, related_name='teachers')
     teaching_availability = models.ForeignKey(TeachingAvailability, blank=True,null=True)
     comments = models.CharField(max_length = 500, blank=True, null=True)
     #classes has a many-to-many relation with this

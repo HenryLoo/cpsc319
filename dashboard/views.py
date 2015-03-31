@@ -337,9 +337,9 @@ def classes_schedule_page(request):
     classSchedule = classSchedule.order_by('start_time')
 
     if request.user_role == 'TEACHER':
-        teacherID = TeacherUser.filter(user_id=request.user.userprofile.user_id).get().teacher_id
-        taughtClassesPrimary = ClassTeacher.filter(primary_teacher_id=teacherID).values_list('taught_class_id', flat=True)
-        taughtClassesSecondary = ClassTeacher.filter(secondary_teacher_id=teacherID).values_list('taught_class_id', flat=True)
+        teacherID = request.user_profile.teachers.all()[0].id
+        taughtClassesPrimary = ClassTeacher.objects.filter(primary_teacher_id=teacherID).values_list('taught_class_id', flat=True)
+        taughtClassesSecondary = ClassTeacher.objects.filter(secondary_teacher_id=teacherID).values_list('taught_class_id', flat=True)
         taughtClasses = list(set(list(chain(taughtClassesPrimary, taughtClassesSecondary))))
         classSchedule = classSchedule.filter(sch_class_id__in=taughtClasses)
     

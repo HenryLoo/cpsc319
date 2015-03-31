@@ -98,8 +98,8 @@ class StudentRegistrationForm(forms.Form):
 		))
 	gender = forms.ChoiceField(
 				widget=forms.RadioSelect,
-				choices=(('MALE', 'M'),
-						('FEMALE', 'F')))
+				choices=(('M', 'M'),
+						('F', 'F')))
 	birthdate = forms.DateField(
 		widget=forms.DateInput(
 			attrs={'class':'datepicker form-control'}

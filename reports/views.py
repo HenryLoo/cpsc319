@@ -6,6 +6,7 @@ from reports.models import Reports
 from school_components.models import *
 from accounts.models import TeacherUser
 from django.core.exceptions import ObjectDoesNotExist
+from django.forms.models import model_to_dict
 import csv
 from django.shortcuts import render
 from django.template import RequestContext
@@ -61,7 +62,7 @@ def view_reports(request):
 
 @login_required
 def reportcard_teacher(request, class_id=None, student_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
@@ -91,7 +92,7 @@ def reportcard_teacher(request, class_id=None, student_id=None):
 
 @login_required
 def reportcard_adm(request, student_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	#add filter after
 	perf_list = []
 	over=0
@@ -133,7 +134,7 @@ def reportcard_adm(request, student_id=None):
 
 @login_required
 def studentphone(request, class_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
@@ -145,7 +146,7 @@ def studentphone(request, class_id=None):
 
 @login_required
 def attendancelist(request, class_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
@@ -238,7 +239,7 @@ def student_pdf(c):
 
 @login_required
 def export_data(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	dataset = request.GET.get('dataset', None)
 	response = HttpResponse(content_type='text/csv')
 	writer = csv.writer(response)
@@ -269,7 +270,8 @@ def export_data(request):
 				parent.comments])
 
 	elif dataset == 'teacher':
-		teachers = TeacherUser.objects.all().filter(school=school, period=period)
+		teachers = TeacherUser.objects.all().filter(
+			user__period=request.user_period, user__school=request.user_school)
 		writer.writerow(['First Name', 'Last Name', 'Phone', 'Email', 'Comments'])
 		for teacher in teachers:
 			writer.writerow(
@@ -298,9 +300,53 @@ def export_data(request):
 
 			writer.writerow(
 				[course.name, course.department, prereq, course.description ])
+
+	elif dataset == 'student-upload':
+		students = Student.objects.all().filter(
+			school=school, 
+			enrolled_student__reg_class__period = period)
+		for student in students:
+			writer.writerow(
+				[student.first_name, student.last_name, student.gender, student.birthdate, 
+				student.home_phone, student.address, student.email, student.allergies, 
+				student.emergency_contact_name, student.emergency_contact_phone, student.relation,
+				student.parent.first_name, student.parent.last_name, student.parent.cell_phone, 
+				student.parent.email])
+
+	elif dataset == 'teacher-upload':
+		teachers = TeacherUser.objects.all().filter(
+			user__period=request.user_period, user__school=request.user_school)
+		for teacher in teachers:
+			row = [teacher.user.user.email, teacher.user.user.password, teacher.user.user.first_name, 
+				teacher.user.user.last_name, teacher.user.phone, teacher.comments]
+
+			row.append(teaching_availability_helper(teacher.teaching_availability.monday))
+			row.append(teacher.teaching_availability.monday_times)
+
+			row.append(teaching_availability_helper(teacher.teaching_availability.tuesday))
+			row.append(teacher.teaching_availability.tuesday_times)
+
+			row.append(teaching_availability_helper(teacher.teaching_availability.wednesday))
+			row.append(teacher.teaching_availability.wednesday_times)
+
+			row.append(teaching_availability_helper(teacher.teaching_availability.thursday))
+			row.append(teacher.teaching_availability.thursday_times)
+
+			row.append(teaching_availability_helper(teacher.teaching_availability.friday))
+			row.append(teacher.teaching_availability.monday_times)
+
+			writer.writerow(row)
 			
 	response['Content-Disposition'] = 'attachment; filename="' + dataset + '.csv"'
 	return response
 		
+
+def teaching_availability_helper(val):
+	if val is None:
+		return "unknown"
+	elif val is False:
+		return "no"
+	elif val:
+		return "yes"
 
 	

@@ -13,6 +13,8 @@ from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
 from datetime import datetime
 from dashboard.models import *
+from django.contrib import messages
+from django.shortcuts import redirect
 
 from django.forms.models import modelformset_factory
 from django.core.exceptions import ObjectDoesNotExist
@@ -24,7 +26,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def class_list(request, class_id=None):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
         
 	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
@@ -73,7 +75,7 @@ def class_list(request, class_id=None):
 @login_required
 def class_create(request):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
         
 	class_form = ClassForm(prefix='info')
 	class_form.fields['course'].queryset = Course.objects.filter(
@@ -100,8 +102,8 @@ def class_create(request):
 		cf = ClassForm(request.POST, prefix='info')
 		sf = ClassScheduleForm(request.POST, prefix='sch')
 		te = ClassTeacherForm(request.POST, prefix='te')
-                te.fields['primary_teacher'].queryset = teachers
-                te.fields['secondary_teacher'].queryset = teachers
+		te.fields['primary_teacher'].queryset = teachers
+		te.fields['secondary_teacher'].queryset = teachers
 	
 		if cf.is_valid() and sf.is_valid() and te.is_valid():
 			# save class
@@ -132,9 +134,9 @@ def class_create(request):
 			context_dictionary['schedule_errors'] = sf.errors
 			context_dictionary['teacher_errors'] = te.errors
 
-                        context_dictionary['class_form']=cf
-                        context_dictionary['classday_form']=sf
-                        context_dictionary['classteacher_form']=te
+			context_dictionary['class_form']=cf
+			context_dictionary['classday_form']=sf
+			context_dictionary['classteacher_form']=te
                         
 	return render_to_response('classes/class_form.html',
 		context_dictionary,
@@ -178,7 +180,7 @@ def class_registration(request, class_id=None):
 
 @login_required
 def class_edit(request, class_id):
-                request = process_user_info(request)
+		request = process_user_info(request)
                 
 		class_list = Class.objects.filter(
 		school = request.user_school, 
@@ -195,11 +197,11 @@ def class_edit(request, class_id):
 				
                                         #context_dictionary['shalala'] = 'shalala'
 
-                                s = c.schedule #all classes created normally (through the form) should have this...
+				s = c.schedule #all classes created normally (through the form) should have this...
                          
                                         #context_dictionary['here'] = 'here' #for testing
 
-                                t = c.classteacher #class can only have one classteacher
+				t = c.classteacher #class can only have one classteacher
                                        # context_dictionary['ha'] = 'ha'# for testing
 
 				class_form = ClassForm(prefix='info', instance = c)
@@ -215,8 +217,8 @@ def class_edit(request, class_id):
 						classteacher_form = ClassTeacherForm(request.POST, prefix='te', instance = t)
 
 						teachers = TeacherUser.objects.filter(user__school=request.user_school, user__period=request.user_period)
-                                                classteacher_form.fields['primary_teacher'].queryset = teachers
-                                                classteacher_form.fields['secondary_teacher'].queryset = teachers
+						classteacher_form.fields['primary_teacher'].queryset = teachers
+						classteacher_form.fields['secondary_teacher'].queryset = teachers
                                 
 						if class_form.is_valid() and classday_form.is_valid() and classteacher_form.is_valid():
 								class_form.save()
@@ -236,7 +238,7 @@ def class_edit(request, class_id):
 @login_required
 def class_registration(request, class_id=None):
         
-        request = process_user_info(request)
+	request = process_user_info(request)
         
 	if request.POST:
 		return class_registration_helper(request, class_id)
@@ -264,7 +266,7 @@ def class_registration(request, class_id=None):
 @login_required
 def class_registration_helper(request, class_id):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
         
 	student_id = request.POST['student_id']
 	student = Student.objects.get(pk=student_id)
@@ -310,7 +312,7 @@ def class_registration_helper(request, class_id):
 @login_required
 def class_remove_registration(request, class_id):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
         
 	try:
 		student_id = request.POST['student_id']
@@ -327,7 +329,7 @@ def class_remove_registration(request, class_id):
 @login_required
 def class_attendance(request, class_id=None):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
         
 	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
@@ -484,7 +486,7 @@ def create_attendance_notifications(request, class_):
 @login_required
 def class_performance(request, class_id=None, assignment_id=None):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
 
 	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
@@ -581,7 +583,7 @@ def create_performance_notifications(request, c):
 
 		#  might return None if no assignments yet
 		if per and per < min_performance and len(notif_list) == 0:
-			print "Created notification for", student, per
+			print ("Created notification for", student, per)
 			notif = Notification(
 				notification_type = performance_notification,
 				student = student,
@@ -630,7 +632,7 @@ def find_class_performance(student_id, class_id):
 @login_required
 def class_assignment(request, class_id=None):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
 	
 	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
@@ -677,7 +679,7 @@ def class_assignment(request, class_id=None):
 @login_required
 def class_reportcard(request, class_id=None, student_id=None):
 
-        request = process_user_info(request)
+	request = process_user_info(request)
         
 	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)

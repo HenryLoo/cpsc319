@@ -17,13 +17,15 @@ from aplus.settings import SAMPLE_CSV_PATH
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.contrib import messages
+from django.shortcuts import redirect
 import json
 import csv
 from django.contrib.auth.decorators import login_required
 
 @login_required
 def student_list(request, student_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
 		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
@@ -88,13 +90,19 @@ def delete_student_view (request, student_id):
 
 @login_required
 def student_edit(request, student_id):
-        request = process_user_info(request)
-	student_list = Student.objects.filter(school = request.user_school, period = request.user_period).order_by('last_name')
+	request = process_user_info(request)
+	student_list = Student.objects.filter(
+			school = request.user_school,
+			enrolled_student__reg_class__period = request.user_period
+		).annotate().order_by('last_name')
+	# student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
+
 	context_dictionary = {'student_list': student_list}
         
 	try:
 		student = Student.objects.get(pk=student_id)
-		if student.school != request.user_school or student.period != request.user_period:
+		
+		if student.school != request.user_school:
                         raise ObjectDoesNotExist
                 
 		context_dictionary['student_id'] = student_id
@@ -109,7 +117,7 @@ def student_edit(request, student_id):
 		context_dictionary['student_form'] = s
 		
 	except ObjectDoesNotExist:
-                context_dictionary['error'] = 'There is no student with that id in this school and period.'
+                context_dictionary['error'] = 'There is no student with that id in this school.'
                 
 	return render_to_response("students/student_edit.html",
 		context_dictionary,
@@ -126,7 +134,7 @@ def class_history_helper(class_reg):
 # returns student info, used on the registration page
 @login_required
 def student_get(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if request.method == 'GET':
 		student_id = request.GET['student_id']
 		student = Student.objects.get(pk=student_id)
@@ -151,7 +159,7 @@ def student_get(request):
 # create a new student with form data
 @login_required
 def student_create(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	s = StudentForm(request.POST)
 	context_dictionary = { 'student_form': StudentForm() }
 
@@ -185,7 +193,7 @@ def student_form(request):
 # if time figure out a way to confirm
 @login_required
 def student_upload(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	context_dictionary = {'form': StudentCSVForm()}
 	form = StudentCSVForm(request.POST, request.FILES)
 	
@@ -207,7 +215,7 @@ def student_upload(request):
 
 @login_required
 def student_export(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	context_dictionary = {}
 
 	if request.method == 'POST':

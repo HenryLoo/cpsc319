@@ -9,12 +9,13 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
-
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 
 @login_required
 def course_list(request, course_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	course_list = Course.objects.filter(
 		school = request.user_school, 
 		period = request.user_period
@@ -53,7 +54,7 @@ def course_list(request, course_id=None):
 
 @login_required
 def course_create(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	course_form = CourseForm()
 	course_form.fields['prerequisite'].queryset = Course.objects.filter(
 		school = request.user_school, 
@@ -98,7 +99,7 @@ def course_delete(request, course_id):
 
 @login_required
 def course_edit(request, course_id):
-                request = process_user_info(request)
+		request = process_user_info(request)
 		course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name')
 		context_dictionary = {'course_list': course_list}
 
@@ -131,7 +132,7 @@ def course_edit(request, course_id):
 
 @login_required
 def dept_create(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	context_dictionary = {'dept_form': DepartmentForm()}
 	if request.method == 'POST':
 		d = DepartmentForm(request.POST)
@@ -150,7 +151,7 @@ def dept_create(request):
 #create department view
 @login_required
 def dept_list(request, dept_id = None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	dept_list = Department.objects.filter(school = request.user_school).order_by('name')
 
 	search_dept = request.GET.get('department_name', None)  
@@ -175,7 +176,7 @@ def dept_list(request, dept_id = None):
 
 @login_required
 def dept_edit(request, dept_id):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	dept_list = Department.objects.filter(school = request.user_school).order_by('name')
 	context_dictionary = {'dept_list': dept_list}
 
@@ -216,7 +217,7 @@ def dept_delete(request, dept_id):
 
 @login_required
 def course_assignment(request, course_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 
 	course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('-id')
 	context_dictionary = { 'course_list': course_list }

@@ -16,7 +16,7 @@ from accounts.utils import *
 def clear_messages(request):
         storage = get_messages(request)
         for message in storage:
-            print message
+            print (message)
 
 
 

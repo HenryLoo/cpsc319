@@ -7,12 +7,13 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from school_components.utils import *
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
+from django.shortcuts import redirect
 from accounts.utils import *
 
 @login_required
 def period_list(request, period_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	period_list = Period.objects.filter(school = request.user_school).order_by('description')
 	context_dictionary = {'period_list': period_list}
 
@@ -31,7 +32,7 @@ def period_list(request, period_id=None):
 
 @login_required
 def period_create(request):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	period_list = Period.objects.filter(school = request.user_school).order_by('description')
 	context_dictionary = {'period_list': period_list,
 							 'period_form': PeriodForm(), 'period_transfer_form': PeriodTransferForm(cur_school=request.user_school,
@@ -65,11 +66,11 @@ def period_create(request):
 
 @login_required
 def period_change(request, period_id=None):
-        request = process_user_info(request)
+	request = process_user_info(request)
 	if period_id:
 		new_period = Period.objects.get(pk = period_id)
 		#user will only have one userprofile b/c only admins can change periods
-                profile = request.user.userprofiles.all()[0]
+		profile = request.user.userprofiles.all()[0]
 		profile.period = new_period
 		profile.save()
 
@@ -78,7 +79,7 @@ def period_change(request, period_id=None):
 
 def period_edit(request, period_id): #there should always be a period_id here
     #!!! probably block off this view entirely for anybody but system admin !!!
-                request = process_user_info(request)
+		request = process_user_info(request)
 		period_list = Period.objects.filter(school = request.user_school).order_by('description')
 		context_dictionary = {'period_list': period_list}
 

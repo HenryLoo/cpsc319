@@ -482,6 +482,8 @@ def login_view(request):
                         period_found = False
                         for profile in user.userprofiles.all():
                             period = profile.period
+                            if period.start_date == None or period.end_date == None:
+                                continue
                             if period.start_date <= today and today <= period.end_date:
                                 user_period = period
                                 period_found = True

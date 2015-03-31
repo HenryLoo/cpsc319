@@ -194,7 +194,7 @@ def class_edit(request, class_id):
 					raise ObjectDoesNotExist
 			
 				context_dictionary['class_id'] = class_id
-				
+			
                                         #context_dictionary['shalala'] = 'shalala'
 
 				s = c.schedule #all classes created normally (through the form) should have this...
@@ -205,6 +205,10 @@ def class_edit(request, class_id):
                                        # context_dictionary['ha'] = 'ha'# for testing
 
 				class_form = ClassForm(prefix='info', instance = c)
+				class_form.fields['course'].queryset = Course.objects.filter(
+					school = request.user_school, 
+					period = request.user_period
+				)
 				classday_form = ClassScheduleForm(prefix='sch', instance = s)
 				classteacher_form = ClassTeacherForm(prefix='te', instance = t)
 				teachers = TeacherUser.objects.filter(user__school=request.user_school, user__period=request.user_period)

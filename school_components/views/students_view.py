@@ -102,7 +102,7 @@ def student_edit(request, student_id):
 	try:
 		student = Student.objects.get(pk=student_id)
 		
-		if student.school != request.user_school or student.period != request.user_period:
+		if student.school != request.user_school:
                         raise ObjectDoesNotExist
                 
 		context_dictionary['student_id'] = student_id

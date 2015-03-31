@@ -123,7 +123,7 @@ def parent_edit(request, parent_id):
 	try:
 		p = Parent.objects.get(pk=parent_id)
 		
-		if p.school != request.user_school or p.period != request.user_period:
+		if p.school != request.user_school:
 
 				raise ObjectDoesNotExist
 				

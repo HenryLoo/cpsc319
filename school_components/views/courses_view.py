@@ -56,6 +56,9 @@ def course_list(request, course_id=None):
 def course_create(request):
 	request = process_user_info(request)
 	course_form = CourseForm()
+	course_form.fields['department'].queryset = Department.objects.filter(
+		school = request.user_school
+	)
 	course_form.fields['prerequisite'].queryset = Course.objects.filter(
 		school = request.user_school, 
 		period = request.user_period
@@ -64,6 +67,13 @@ def course_create(request):
 
 	if request.method == 'POST':
 		cf = CourseForm(request.POST)
+		course_form.fields['department'].queryset = Department.objects.filter(
+			school = request.user_school
+		)
+		course_form.fields['prerequisite'].queryset = Course.objects.filter(
+			school = request.user_school, 
+			period = request.user_period
+		)
 		if cf.is_valid():
 			new = cf.save(commit=False)
 			new.school = request.user_school
@@ -109,19 +119,40 @@ def course_edit(request, course_id):
 						raise ObjectDoesNotExist
 
 				p = Prerequisite.objects.filter(course=course_id)
-
-				if len(p) == 1:
-					context_dictionary['prereq'] = p[0].prereq
 			
 				context_dictionary['course_id'] = course_id
 
 				course_form = CourseForm(instance = c)
+				depts = Department.objects.filter(
+					school = request.user_school
+				)
+				courses = Course.objects.filter(
+					school = request.user_school, 
+					period = request.user_period
+				)
+				course_form.fields['department'].queryset = depts
+				course_form.fields['prerequisite'].queryset = courses
 				
 				if request.method == 'POST':
 						course_form = CourseForm(request.POST, instance = c)
+						course_form.fields['department'].queryset = depts
+						course_form.fields['prerequisite'].queryset = courses
+
 						if course_form.is_valid():
 								course_form.save()
 								context_dictionary['succ']=True
+
+								if course_form['prerequisite'].value() == '':
+									# delete prerequisite if it exists
+									p = Prerequisite.objects.filter(course=c)
+									if len(p) > 0:
+										p[0].delete()
+
+								else:
+									# create an prerequisite object
+									prq = Course.objects.get(pk=course_form['prerequisite'].value())
+									p = Prerequisite(course=c, prereq=prq)
+									p.save()
 								
 				context_dictionary['course_form'] = course_form
 				

@@ -147,6 +147,7 @@ class CourseRegisterWizard(SessionWizardView):
 				'home_phone': form_data['home_phone'],
 				'birthdate': form_data['birthdate'],
 				'address': form_data['address'],
+				'gender': form_data['gender'],
 				'email': form_data['email'],
 				'allergies': form_data['allergies'],
 				'comments': form_data['comments'],

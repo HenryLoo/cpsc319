@@ -113,7 +113,7 @@ class Assignment(models.Model):
 	title = models.CharField(max_length=100, blank=True)
 	date = models.DateField(null=True, blank=True)
 	#saves pdf at file assignments inside media at aplus file
-	content = models.FileField(upload_to='aplus/media/assignments', blank = True, null = True)
+	content = models.FileField(upload_to='assignments/', blank = True, null = True)
 	grade_weight = models.IntegerField(blank = False, null = False)
 	total_weight = models.IntegerField(blank = False, null = False)
 	comments = models.CharField(max_length=500,blank=True, null=True)

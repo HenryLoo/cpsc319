@@ -1,0 +1,49 @@
+/* teacher list */
+/*#teacher-list-header * {
+	display: inline-block;
+	margin: 5px auto 20px auto;
+}
+
+#teacher-list-header a {
+	float: right;
+}*/
+
+/* teacher list */
+ul.teacher-list {
+	overflow: auto;
+	height: 100vh;
+	width: 100%;
+}
+
+.teacher-list li {
+	padding: 2px;
+	font-size: 16px;
+}
+
+/* teacher content */
+.teacher-content {
+	height: 100vh;
+}
+
+/* teacher form */
+.teacher-form th, 
+.teacher-info tr>td:first-child {
+	width: 30%;
+}
+
+.teacher-info .alert {
+	margin-top: 10px;
+}
+
+.teacher-form input {
+	width: 60%;
+}
+
+.content {
+	margin: 10px 20px;
+}
+
+.filters-holder {
+	display: block;
+}
+

@@ -1,9 +1,5 @@
 {% extends "parents/base_parent.html" %}
 
-{% block current_tab %}
-	"View"
-{% endblock %}
-
 {% block parent_content %}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" class="active"><a href="{% url 'school:parentlist' %}">View Parents</a></li>
@@ -25,18 +21,23 @@
 
 
 <div class="col-md-3 school-list">
-
+	<form id='parent-view-input' class='form-inline' action="" method="get">
+		<span>View Parents:</span>
+		<div class="form-group">
+    		{% for radio in view_form.view %}
+			    {{ radio }}
+			{% endfor %}
+		</div>
 	<div class="filters-holder">
 		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
 		aria-expanded="false">
 	  	Filters
 		</a>
 		<div class="collapse" id="filters">
-		  	<form action="{%url 'school:parentlist' %}" method="get">
-	        	{{ parent_filter.as_p }}
-	        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
-	    	</form>
+        	{{ parent_filter.as_p }}
+        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
 		</div>
+		</form>
 	</div>
 
 <br><br>
@@ -44,7 +45,7 @@
 	<ul class="list-unstyled school-list">
 		{% for parent in parent_list %}
 	  		<li>
-	  		<a href="{% url 'school:parentlist' parent.id %}">
+	  		<a href="{% url 'school:parentlist' parent.id %}?{{request.GET.urlencode}}">
 	  			 {{ parent.first_name }} {{ parent.last_name }}
 	  		</a>
 	  		</li>
@@ -77,7 +78,9 @@
 	{% elif parent %}
 	<span>
 		<h3> Parent Info </h3>
-		<a href="{%url 'school:parentedit' parent.id %}" id="edit-parent-btn" class="pull-right"> Edit </a>
+		{% if user_role != 'TEACHER' %}
+		<a href="{%url 'school:parentedit' parent.id %}?{{request.GET.urlencode}}" id="edit-parent-btn" class="pull-right"> Edit </a>
+		{% endif %}
 	</span>
 	<table class="table table-hover">
 		<tr> 

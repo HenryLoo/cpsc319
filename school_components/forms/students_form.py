@@ -21,6 +21,6 @@ class StudentViewForm(forms.Form):
 					label="View Students:",
 					widget=forms.RadioSelect(),
 					choices=(('all', 'All'),
-							('period', 'Enrolled in Period')))
+							('period', 'Current Period')))
 
 StudentFormSet = forms.models.modelformset_factory(Student)

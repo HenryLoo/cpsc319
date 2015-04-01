@@ -77,7 +77,7 @@
 	{% if student %}
 	<span>
 		<h3> Student Info </h3>
-		{% if not user_role == 'TEACHER' %}
+		{% if user_role != 'TEACHER' %}
 		<a href="" target-url="{% url 'school:delete_student' student.id %}" id="btn-delete" class="pull-right text-danger delete-link" data-toggle="modal" data-target="#delete-modal"> Delete </a>
 		<a href="{%url 'school:studentedit' student.id%}?{{request.GET.urlencode}}" id="edit-student-btn" class="pull-right"> Edit </a>
 		{%endif%}

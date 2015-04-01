@@ -74,7 +74,7 @@ def statistics_page(request):
     receipts = Payment.objects.all().order_by('-date')
 
     context_dictionary['usage'] = [students, admins, teachers, classes, courses, periods, schools]
-    context_dictionary['payments'] = [unregisteredPaidStudents, paymentTotal, receipts]
+    context_dictionary['payments'] = [paymentTotal, receipts]
 
     regXAxis = Period.objects.filter(school_id=currentSchool).all().order_by('start_date').values_list('description', flat=True)
     regYAxis = ClassRegistration.objects.filter(school_id=currentSchool).values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)

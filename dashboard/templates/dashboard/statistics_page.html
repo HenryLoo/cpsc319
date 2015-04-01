@@ -92,12 +92,7 @@
                             </div>
                                 <div class="list-group">
                                     <a href="#" class="list-group-item">
-                                        <span class="badge">{{ payments.0 }}</span>
-                                        <i class="fa fa-fw fa-user"></i> Students with payment not registered
-                                    </a>
-
-                                    <a href="#" class="list-group-item">
-                                        <span class="badge">$ {{ payments.1 }}</span>
+                                        <span class="badge">$ {{ payments.0 }}</span>
                                         <i class="fa fa-calculator"></i> Total received
                                     </a>
                                 </div>
@@ -115,7 +110,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for receipt in payments.2 %}
+                                            {% for receipt in payments.1 %}
                                                 <tr>
                                                     <td><a href="{% url 'school:parentlist' receipt.parent_id %}">{{ receipt.receipt_no }}</a></td>
                                                     <td>{{ receipt.date }}</td>

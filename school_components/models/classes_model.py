@@ -56,7 +56,7 @@ class ClassSchedule(models.Model):
 		return '%s %s-%s' % ('/'.join(result), start, end)
 
 
-	class Meta:
+	class Meta:     
 		app_label = 'school_components'
 
 

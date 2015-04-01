@@ -140,11 +140,11 @@
 		<h4>{{ class_list.grouper }}</h4>
 		<ul>
 		{% for class in class_list.list %}
-			<li>
-			<a href="{% url 'school:classlist' class.reg_class %}">
-			{{ class.class_name}} 
+			
+			<a href="{% url 'school:classlist' class.id %}">
+			{{ class.class_name }} 
 			</a>
-			</li>
+		
 		{% endfor %}
 		</ul>
 	{% endfor %}

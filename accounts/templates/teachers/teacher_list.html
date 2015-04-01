@@ -135,16 +135,23 @@
 		</tr>
 	</table>
 
-	<h4>2015</h4>
-	<ul>
-		<li><a href="#">Music Level 1</a></li>
-		<li><a href="#">History Level 2</a></li>
-	</ul>
-
-	<h4>2013</h4>
-	<ul>
-		<li><a href="#">History Level 1</a></li>
-	</ul>
+	{% regroup taught_classes|dictsort:"period" by period as sorted_taught_classes %}
+	{% for class_list in sorted_taught_classes %}
+		<h4>{{ class_list.grouper }}</h4>
+		<ul>
+		{% for class in class_list.list %}
+			<li>
+			{% if user_period == class.period %}
+			<a href="{% url 'school:classlist' class.id %}">
+			{{ class }} 
+			</a>
+			{% else %}
+			{{class}}
+			{% endif %}
+			</li>
+		{% endfor %}
+		</ul>
+	{% endfor %}
 
 	{% else %}
 		{% if not_valid_teacher %}

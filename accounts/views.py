@@ -11,8 +11,7 @@ from django.contrib.auth import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.forms import ChoiceField
-from django.contrib import messages
-from django.shortcuts import redirect
+
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 
@@ -130,6 +129,25 @@ def view_teachers_view (request, teacher_id=None):
             if not (request.user_school == teacher.user.school and request.user_period == teacher.user.period):
                 raise ObjectDoesNotExist
             context_dictionary['teacher'] = teacher
+
+            #find and add past classes
+            profiles = teacher.user.user.userprofiles.all()
+            past_profiles = [profile for profile in profiles if profile.period.end_date != None and request.user_period.end_date != None and profile.period.end_date <= request.user_period.end_date]
+            past_teacherusers = [profile.teachers.all()[0] for profile in past_profiles] #each profile should have one teacher
+
+            taught_classes = []
+
+            #assume no teacher is both the primary and secondary teacher for a class
+            for pt in past_teacherusers:
+                prim = pt.primary_classteacher.all() #the classes in some period where the teacher was primary
+                for pct in prim:
+                    taught_classes.append(pct.taught_class)
+                sec = pt.secondary_classteacher.all() #the classes in some period where the teacher was secondary
+                for sct in sec:
+                    taught_classes.append(sct.taught_class)
+
+            context_dictionary['taught_classes'] = taught_classes       
+            
         except ObjectDoesNotExist:
             context_dictionary['not_valid_teacher'] = True
 

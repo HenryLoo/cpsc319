@@ -16,4 +16,11 @@ class StudentFilter(forms.Form):
 	name = forms.CharField(required=False)
 	phone_number = forms.CharField(required=False)
 
+class StudentViewForm(forms.Form):
+	view = forms.ChoiceField(
+					label="View Students:",
+					widget=forms.RadioSelect(),
+					choices=(('all', 'All'),
+							('period', 'Enrolled in Period')))
+
 StudentFormSet = forms.models.modelformset_factory(Student)

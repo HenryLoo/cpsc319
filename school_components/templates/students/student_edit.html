@@ -33,30 +33,32 @@
 
 
 <div class="col-md-3 student-list">
-
-	<div class="filters-holder">
-		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
-		aria-expanded="false" aria-controls="collapseExample">
-	  	Filters
-		</a>
-		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>First Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Last Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Phone Number</label> <input>
-		    <br>
-		  </div>
+	<form id='student-view-input' class='form-inline' action="" method="get">
+			{% if user_role != 'TEACHER'%}
+	    		<span>View Students:</span>
+	    		<div class="form-group">
+	    		{% for radio in view_form.view %}
+				    {{ radio }}
+				{% endfor %}
+				</div>
+				{% endif %}
+		<div class="filters-holder">
+			<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" aria-expanded="false">
+			Filters
+			</a>
+			<div class="collapse" id="filters">
+	        	{{ student_filter.as_p }}
+	        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
+	    	</form>
+	    	</div>    
 		</div>
-	</div>
 <br><br>
 
 	{% if student_list %}
 	<ul class="list-unstyled student-list">
 		{% for student in student_list %}
 	  		<li>
-	  		<a href="{% url 'school:studentlist' student.id %}">
+	  		<a href="{% url 'school:studentlist' student.id %}?{{request.GET.urlencode}}">
 	  			 {{ student.first_name }} {{ student.last_name }}
 	  		</a>
 	  		</li>
@@ -64,7 +66,7 @@
 	</ul>
 
 	{% else %}
-		<div class="alert alert-info" role="alert">No students have been added.</div>
+		<div class="alert alert-info" role="alert">No students are registered in this period.</div>
 	{% endif %}
 
 </div>

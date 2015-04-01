@@ -9,6 +9,12 @@
       yearRange: "1980:" + new Date().getFullYear(),
     });
 
+    // change to period view or full view on select
+    $('#student-view-input input[type="radio"]').click(function() {
+    	console.log($('#student-view-input').serialize());
+    	$('#student-view-input').submit();
+    })
+
 </script>
 {% endblock %}
 

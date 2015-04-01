@@ -26,6 +26,8 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def student_list(request, student_id=None):
 	request = process_user_info(request)
+	student_list = None
+
 	if request.user_role == 'TEACHER':
 		teacher_user = TeacherUser.objects.get(user= request.user)
 		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
@@ -39,26 +41,13 @@ def student_list(request, student_id=None):
 				student_list.append(item.student)
 
 	else:
-		student_list = Student.objects.filter(
-			school = request.user_school,
-			enrolled_student__reg_class__period = request.user_period
-		).annotate().order_by('last_name')
-
-	search_name = request.GET.get('name', None)
-	search_phone = request.GET.get('phone_number', None)    
-
-	if search_name:
-		student_list = student_list.filter(
-    		Q(first_name__icontains=search_name) | 
-    		Q(last_name__icontains=search_name))
-
-	if search_phone:
-		student_list = student_list.filter(
-			home_phone__icontains=search_phone)
+		form, student_list = student_list_helper(request)
+		
 
 	context_dictionary = {
 		'student_list': student_list,
-		'student_filter': StudentFilter()
+		'student_filter': form,
+		'view_form': StudentViewForm({'view': 'all' if request.GET.get('view', None) == 'all' else 'period'}),
 	}
 
 	if student_id:
@@ -71,6 +60,35 @@ def student_list(request, student_id=None):
 	return render_to_response("students/student_list.html",
 		context_dictionary,
 		RequestContext(request))
+
+# returns student list according to filters/period or total view
+# also returns the form with fields populated with last filter
+def student_list_helper(request):
+	student_list = None
+	view = request.GET.get('view', None)
+
+	if view is None or view == 'period':
+		student_list = Student.objects.filter(
+			school = request.user_school,
+			enrolled_student__reg_class__period = request.user_period
+		).annotate().order_by('last_name')
+	elif view == 'all':
+		student_list = Student.objects.all().order_by('last_name')
+
+	search_name = request.GET.get('name', None)
+	search_phone = request.GET.get('phone_number', None)   
+	form = StudentFilter({'name': search_name, 'phone_number': search_phone}) 
+
+	if search_name:
+		student_list = student_list.filter(
+    		Q(first_name__icontains=search_name) | 
+    		Q(last_name__icontains=search_name))
+
+	if search_phone:
+		student_list = student_list.filter(
+			home_phone__icontains=search_phone)
+
+	return form, student_list
 
 '''
 Delete Student
@@ -91,14 +109,30 @@ def delete_student_view (request, student_id):
 @login_required
 def student_edit(request, student_id):
 	request = process_user_info(request)
-	student_list = Student.objects.filter(
-			school = request.user_school,
-			enrolled_student__reg_class__period = request.user_period
-		).annotate().order_by('last_name')
-	# student_list = Student.objects.filter(school = request.user.userprofile.school, period = request.user.userprofile.period).order_by('last_name')
+	student_list = None
 
-	context_dictionary = {'student_list': student_list}
-        
+	if request.user_role == 'TEACHER':
+		teacher_user = TeacherUser.objects.get(user= request.user)
+		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		class_list = []
+		for c in class_teacher:
+			class_list.append(c.taught_class)
+		student_list=[]
+		for cl in class_list:
+			class_reg_list = ClassRegistration.objects.filter(reg_class=cl).order_by('student__last_name')
+			for item in class_reg_list:
+				student_list.append(item.student)
+
+	else:
+		form, student_list = student_list_helper(request)
+		
+
+	context_dictionary = {
+		'student_list': student_list,
+		'student_filter': form,
+		'view_form': StudentViewForm({'view': 'all' if request.GET.get('view', None) == 'all' else 'period'}),
+	}
+
 	try:
 		student = Student.objects.get(pk=student_id)
 		

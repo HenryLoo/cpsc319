@@ -8,6 +8,7 @@ from accounts.models import TeacherUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
 import csv
+from django.db.models import Q
 from django.shortcuts import render
 from django.template import RequestContext
 from school_components.models.classes_model import *
@@ -63,7 +64,12 @@ def view_reports(request):
 @login_required
 def reportcard_teacher(request, class_id=None, student_id=None):
 	request = process_user_info(request)
-	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
+	teacherID = request.user_profile.teachers.first().id
+	class_list = Class.objects.filter(
+		Q(classteacher__primary_teacher__id=teacherID) | 
+		Q(classteacher__secondary_teacher__id=teacherID)) 
+	
+	# class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:
@@ -135,9 +141,23 @@ def reportcard_adm(request, student_id=None):
 @login_required
 def studentphone(request, class_id=None):
 	request = process_user_info(request)
-	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
-	context_dictionary = { 'class_list': class_list }
+	if request.user_role == 'TEACHER':
+		teacherID = request.user_profile.teachers.first().id
+		# class_teacher = ClassTeacher.objects.filter(
+		# 	Q(primary_teacher__id=teacherID) | Q(secondary_teacher__id=teacherID))
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		class_list = Class.objects.filter(
+			Q(classteacher__primary_teacher__id=teacherID) | 
+			Q(classteacher__secondary_teacher__id=teacherID))
+	else:
+		class_list = Class.objects.filter(
+			school = request.user_school, 
+			period = request.user_period
+		).order_by('course')
 
+	context_dictionary = { 'class_list': class_list }
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
@@ -147,7 +167,17 @@ def studentphone(request, class_id=None):
 @login_required
 def attendancelist(request, class_id=None):
 	request = process_user_info(request)
-	class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
+	if request.user_role == 'TEACHER':
+		teacherID = request.user_profile.teachers.first().id
+		class_list = Class.objects.filter(
+			Q(classteacher__primary_teacher__id=teacherID) | 
+			Q(classteacher__secondary_teacher__id=teacherID))
+	else:
+		class_list = Class.objects.filter(
+			school = request.user_school, 
+			period = request.user_period
+		).order_by('course')
+
 	context_dictionary = { 'class_list': class_list }
 
 	if class_id:

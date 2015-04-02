@@ -1,8 +1,7 @@
 from django.views import generic
-from school_components.models import Student, Parent, School, Period, ClassTeacher
+from school_components.models import *
 from accounts.models import TeacherUser
 from accounts.utils import *
-from school_components.models.courses_model import *
 from school_components.forms.students_form import *
 from school_components.utils import SchoolUtils
 from django.shortcuts import render_to_response, redirect
@@ -29,16 +28,21 @@ def student_list(request, student_id=None):
 	student_list = None
 
 	if request.user_role == 'TEACHER':
-		teacher_user = TeacherUser.objects.get(user= request.user)
-		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
-		class_list = []
-		for c in class_teacher:
-			class_list.append(c.taught_class)
-		student_list=[]
-		for cl in class_list:
-			class_reg_list = ClassRegistration.objects.filter(reg_class=cl).order_by('student__last_name')
-			for item in class_reg_list:
-				student_list.append(item.student)
+		teacherID = request.user_profile.teachers.first().id
+		student_list = Student.objects.filter(
+			Q(enrolled_student__reg_class__classteacher__primary_teacher_id=teacherID) |
+			Q(enrolled_student__reg_class__classteacher__secondary_teacher_id=teacherID))
+		# teacher_user = TeacherUser.objects.get(user= request.user)
+		# class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		# student_list=[]
+		# for cl in class_list:
+		# 	class_reg_list = ClassRegistration.objects.filter(reg_class=cl).order_by('student__last_name')
+		# 	for item in class_reg_list:
+		# 		student_list.append(item.student)
+		form = StudentFilter()
 
 	else:
 		form, student_list = student_list_helper(request)

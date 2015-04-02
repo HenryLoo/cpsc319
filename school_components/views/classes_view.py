@@ -29,11 +29,15 @@ def class_list(request, class_id=None):
 	request = process_user_info(request)
         
 	if request.user_role == 'TEACHER':
-		teacher_user = TeacherUser.objects.get(user= request.user)
-		class_teacher = ClassTeacher.objects.filter(Q(primary_teacher=teacher_user) | Q(secondary_teacher=teacher_user))
-		class_list = []
-		for c in class_teacher:
-			class_list.append(c.taught_class)
+		teacherID = request.user_profile.teachers.first().id
+		# class_teacher = ClassTeacher.objects.filter(
+		# 	Q(primary_teacher__id=teacherID) | Q(secondary_teacher__id=teacherID))
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		class_list = Class.objects.filter(
+			Q(classteacher__primary_teacher__id=teacherID) | 
+			Q(classteacher__secondary_teacher__id=teacherID)) 
 	else:
 
 		class_list = Class.objects.filter(
@@ -339,11 +343,15 @@ def class_attendance(request, class_id=None):
 	request = process_user_info(request)
         
 	if request.user_role == 'TEACHER':
-		teacher_user = TeacherUser.objects.get(user= request.user)
-		class_teacher = ClassTeacher.objects.filter(Q(primary_teacher=teacher_user) | Q(secondary_teacher=teacher_user))
-		class_list = []
-		for c in class_teacher:
-			class_list.append(c.taught_class)
+		teacherID = request.user_profile.teachers.first().id
+		# class_teacher = ClassTeacher.objects.filter(
+		# 	Q(primary_teacher__id=teacherID) | Q(secondary_teacher__id=teacherID))
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		class_list = Class.objects.filter(
+			Q(classteacher__primary_teacher__id=teacherID) | 
+			Q(classteacher__secondary_teacher__id=teacherID)) 
 	else:
 
 		class_list = Class.objects.filter(
@@ -496,11 +504,15 @@ def class_performance(request, class_id=None, assignment_id=None):
 	request = process_user_info(request)
 
 	if request.user_role == 'TEACHER':
-		teacher_user = TeacherUser.objects.get(user= request.user)
-		class_teacher = ClassTeacher.objects.filter(Q(primary_teacher=teacher_user) | Q(secondary_teacher=teacher_user))
-		class_list = []
-		for c in class_teacher:
-			class_list.append(c.taught_class)
+		teacherID = request.user_profile.teachers.first().id
+		# class_teacher = ClassTeacher.objects.filter(
+		# 	Q(primary_teacher__id=teacherID) | Q(secondary_teacher__id=teacherID))
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		class_list = Class.objects.filter(
+			Q(classteacher__primary_teacher__id=teacherID) | 
+			Q(classteacher__secondary_teacher__id=teacherID)) 
 	else:
 
 		class_list = Class.objects.filter(
@@ -589,8 +601,7 @@ def create_performance_notifications(request, c):
 		)
 
 		#  might return None if no assignments yet
-		if per and per < min_performance and len(notif_list) == 0:
-			print ("Created notification for", student, per)
+		if per is not None and per < min_performance and len(notif_list) == 0:
 			notif = Notification(
 				notification_type = performance_notification,
 				student = student,
@@ -642,11 +653,15 @@ def class_assignment(request, class_id=None):
 	request = process_user_info(request)
 	
 	if request.user_role == 'TEACHER':
-		teacher_user = TeacherUser.objects.get(user= request.user)
-		class_teacher = ClassTeacher.objects.filter(Q(primary_teacher=teacher_user) | Q(secondary_teacher=teacher_user))
-		class_list = []
-		for c in class_teacher:
-			class_list.append(c.taught_class)
+		teacherID = request.user_profile.teachers.first().id
+		# class_teacher = ClassTeacher.objects.filter(
+		# 	Q(primary_teacher__id=teacherID) | Q(secondary_teacher__id=teacherID))
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		class_list = Class.objects.filter(
+			Q(classteacher__primary_teacher__id=teacherID) | 
+			Q(classteacher__secondary_teacher__id=teacherID)) 
 	else:
 
 		class_list = Class.objects.filter(
@@ -689,11 +704,15 @@ def class_reportcard(request, class_id=None, student_id=None):
 	request = process_user_info(request)
         
 	if request.user_role == 'TEACHER':
-		teacher_user = TeacherUser.objects.get(user= request.user)
-		class_teacher = ClassTeacher.objects.filter(Q(primary_teacher=teacher_user) | Q(secondary_teacher=teacher_user))
-		class_list = []
-		for c in class_teacher:
-			class_list.append(c.taught_class)
+		teacherID = request.user_profile.teachers.first().id
+		# class_teacher = ClassTeacher.objects.filter(
+		# 	Q(primary_teacher__id=teacherID) | Q(secondary_teacher__id=teacherID))
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		class_list = Class.objects.filter(
+			Q(classteacher__primary_teacher__id=teacherID) | 
+			Q(classteacher__secondary_teacher__id=teacherID)) 
 	else:
 
 		class_list = Class.objects.filter(

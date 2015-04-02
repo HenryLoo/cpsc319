@@ -38,7 +38,7 @@ def period_create(request):
 							 'period_form': PeriodForm(), 'period_transfer_form': PeriodTransferForm(cur_school=request.user_school,
                                                                                                                           cur_period=request.user_period)}
 	if request.method == 'POST':
-		cf = PeriodForm(request.POST)
+		cf = PeriodForm(request.POST, user_school = request.user_school)
 		tf = PeriodTransferForm(request.POST, cur_school=request.user_school,cur_period=request.user_period)
 
 		context_dictionary['period_form'] = cf

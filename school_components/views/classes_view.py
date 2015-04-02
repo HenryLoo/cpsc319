@@ -164,11 +164,11 @@ Delete Class
 @login_required
 def class_delete(request, class_id):
     sc_class = Class.objects.get(pk=class_id)
-    #ClassSchedule.objects.filter(sch_class=sc_class).delete()
-    #ClassRegistration.objects.filter(reg_class=sc_class).delete()
-    #ClassAttendance.objects.filter(reg_class=sc_class).delete()
-    #Grading.objects.filter(reg_class=sc_class).delete()
-    #Assignment.objects.filter(reg_class=sc_class).delete()
+    ClassSchedule.objects.filter(sch_class=sc_class).delete()
+    ClassRegistration.objects.filter(reg_class=sc_class).delete()
+    ClassAttendance.objects.filter(reg_class=sc_class).delete()
+    Grading.objects.filter(reg_class=sc_class).delete()
+    Assignment.objects.filter(reg_class=sc_class).delete()
     sc_class.delete()
     messages.success(request, "Class has been deleted!")
     return redirect('school:classlist')

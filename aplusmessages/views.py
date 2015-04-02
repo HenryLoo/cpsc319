@@ -24,9 +24,10 @@ def clear_messages(request):
 Stores email in database
 '''
 def save_email(request, to_type, to_emails, cc_emails, bcc_emails, from_email, subject, body, html_body, status, status_message):
+    request = process_user_info(request)
     return SentMessage.objects.create(recipient_type=to_type, to_list=to_emails, cc_list=cc_emails, bcc_list=bcc_emails,
                                       from_email=from_email, subject=subject, body=body, html_body=html_body,
-                                      status=status, status_message=status_message)
+                                      status=status, status_message=status_message, sender=request.user_role)
 
 
 
@@ -54,7 +55,7 @@ def get_send_choices(request):
     '''
 
     for sc_class in Class.objects.filter(school = request.user_school,  period = request.user_period).order_by('course'):
-        sc_class = ("CLASS#"+str(sc_class.id), sc_class.section, )
+        sc_class = ("CLASS#"+str(sc_class.id), (sc_class.course.name + " " + sc_class.section), )
         user_choices = user_choices + (sc_class,)
 
     return user_choices
@@ -100,6 +101,7 @@ def send_email(request):
                     '''
                     admins are selected
                     '''
+                    email_lists = []
                     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").values_list('user__email', flat=True)
                     school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).values_list('user__email', flat=True)
 
@@ -213,9 +215,7 @@ def send_email(request):
 def sent_mail(request):
     request = process_user_info(request)
     #getting sent mail for logged in user
-    #Once authentication is implemented, you can use below instead getting all
-    #sent_messages = SentMessage.objects.filter(sender=UserProfile.objects.get(user=request.user))
-    sent_messages = SentMessage.objects.all().order_by('-created')
+    sent_messages = SentMessage.objects.filter(sender=request.user_role, status=SentMessage.STATUS_SENT).order_by('-created')
 
     paginator = Paginator(sent_messages, 10) # Show 10 contacts per page
     page = request.GET.get('page')

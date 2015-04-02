@@ -35,19 +35,6 @@ $('#edit-course-btn').click(function() {
 
 <div class="col-md-3 school-list">
 
-	<div class="filters-holder">
-		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
-		aria-expanded="false" aria-controls="collapseExample">
-	  	Filters
-		</a>
-		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>Title</label> <input>
-		  </div>
-		</div>
-	</div>
-<br><br>
-
 	{% if school_list %}
 	<ul class="list-unstyled school-list">
 		{% for school in school_list %}

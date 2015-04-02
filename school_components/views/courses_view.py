@@ -192,13 +192,9 @@ def dept_create(request):
 def dept_list(request, dept_id = None):
 	request = process_user_info(request)
 	dept_list = Department.objects.filter(school = request.user_school).order_by('name')
-
-	search_dept = request.GET.get('department_name', None)  
+	filters, dept_list = dept_list_helper(request, dept_list)
 	
-	if search_dept:
-		dept_list = dept_list.filter(name__icontains=search_dept)
-
-	context_dictionary = {'dept_list': dept_list, 'dept_filter': DepartmentFilter() }
+	context_dictionary = {'dept_list': dept_list, 'dept_filter': filters }
 
 	if dept_id:
 				try:
@@ -213,11 +209,22 @@ def dept_list(request, dept_id = None):
 		context_dictionary,
 		RequestContext(request))
 
+def dept_list_helper(request, dept_list):
+	search_dept = request.GET.get('department_name', None)  
+	if search_dept:
+		dept_list = dept_list.filter(name__icontains=search_dept)
+
+	filters = DepartmentFilter({'department_name': search_dept})
+
+	return filters, dept_list
+
+
 @login_required
 def dept_edit(request, dept_id):
 	request = process_user_info(request)
 	dept_list = Department.objects.filter(school = request.user_school).order_by('name')
-	context_dictionary = {'dept_list': dept_list}
+	filters, dept_list = dept_list_helper(request, dept_list)
+	context_dictionary = {'dept_list': dept_list, 'dept_filter': filters}
 
 	try:
 				d = Department.objects.get(pk=dept_id)

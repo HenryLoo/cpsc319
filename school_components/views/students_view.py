@@ -42,10 +42,11 @@ def student_list(request, student_id=None):
 		# 	class_reg_list = ClassRegistration.objects.filter(reg_class=cl).order_by('student__last_name')
 		# 	for item in class_reg_list:
 		# 		student_list.append(item.student)
-		form = StudentFilter()
+		form, student_list = student_list_helper(request, student_list)
 
 	else:
-		form, student_list = student_list_helper(request)
+		student_list = Student.objects.all()
+		form, student_list = student_list_helper(request, student_list)
 		
 
 	context_dictionary = {
@@ -67,12 +68,11 @@ def student_list(request, student_id=None):
 
 # returns student list according to filters/period or total view
 # also returns the form with fields populated with last filter
-def student_list_helper(request):
-	student_list = None
+def student_list_helper(request, student_list):
 	view = request.GET.get('view', None)
 
 	if view is None or view == 'period':
-		student_list = Student.objects.filter(
+		student_list = student_list.filter(
 			school = request.user_school,
 			enrolled_student__reg_class__period = request.user_period
 		).annotate().order_by('last_name')
@@ -113,24 +113,24 @@ def delete_student_view (request, student_id):
 @login_required
 def student_edit(request, student_id):
 	request = process_user_info(request)
-	student_list = None
+	student_list = Student.objects.all()
 
-	if request.user_role == 'TEACHER':
-		teacher_user = TeacherUser.objects.get(user= request.user)
-		class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
-		class_list = []
-		for c in class_teacher:
-			class_list.append(c.taught_class)
-		student_list=[]
-		for cl in class_list:
-			class_reg_list = ClassRegistration.objects.filter(reg_class=cl).order_by('student__last_name')
-			for item in class_reg_list:
-				student_list.append(item.student)
+	# if request.user_role == 'TEACHER':
+		# teacher_user = TeacherUser.objects.get(user= request.user)
+		# class_teacher = ClassTeacher.objects.filter(teacher=teacher_user)
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		# student_list=[]
+		# for cl in class_list:
+		# 	class_reg_list = ClassRegistration.objects.filter(reg_class=cl).order_by('student__last_name')
+		# 	for item in class_reg_list:
+		# 		student_list.append(item.student)
 
-	else:
-		form, student_list = student_list_helper(request)
+	# else:
+	
+	form, student_list = student_list_helper(request, student_list)
 		
-
 	context_dictionary = {
 		'student_list': student_list,
 		'student_filter': form,

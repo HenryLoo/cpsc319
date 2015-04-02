@@ -45,6 +45,26 @@ def class_list(request, class_id=None):
 			period = request.user_period
 		).order_by('course')
 
+	filters, class_list = class_list_helper(request, class_list)
+
+	context_dictionary = { 
+		'class_list': class_list, 
+		'class_filter': filters }
+
+	if class_id:
+		try:
+			c = Class.objects.get(pk=class_id)
+			if c.school != request.user_school or c.period != request.user_period:
+				raise ObjectDoesNotExist
+			context_dictionary['class'] = c
+		except ObjectDoesNotExist:
+				context_dictionary['error'] = 'There is no class in this school and period with that id.'
+	 
+	return render_to_response("classes/class_list.html",
+		context_dictionary,
+		RequestContext(request))
+
+def class_list_helper(request, class_list):
 	search_course = request.GET.get('course', None)
 	search_section = request.GET.get('section', None)  
 	search_dept = request.GET.get('department', None)  
@@ -61,20 +81,11 @@ def class_list(request, class_id=None):
 		class_list = class_list.filter(
 			course__department__name__icontains=search_dept)
 
-	context_dictionary = { 'class_list': class_list, 'class_filter': ClassFilter() }
+	filters = ClassFilter(
+			{'course': search_course, 'section': search_section, 'department': search_dept})
 
-	if class_id:
-		try:
-			c = Class.objects.get(pk=class_id)
-			if c.school != request.user_school or c.period != request.user_period:
-				raise ObjectDoesNotExist
-			context_dictionary['class'] = c
-		except ObjectDoesNotExist:
-				context_dictionary['error'] = 'There is no class in this school and period with that id.'
-	 
-	return render_to_response("classes/class_list.html",
-		context_dictionary,
-		RequestContext(request))
+	return filters, class_list
+
 
 @login_required
 def class_create(request):
@@ -191,7 +202,9 @@ def class_edit(request, class_id):
 		school = request.user_school, 
 		period = request.user_period).order_by('course')
 
-		context_dictionary = {'class_list': class_list}
+		filters, class_list = class_list_helper(request, class_list)
+
+		context_dictionary = {'class_list': class_list, 'class_filter': filters}
 
 		try:
 				c = Class.objects.get(pk=class_id)

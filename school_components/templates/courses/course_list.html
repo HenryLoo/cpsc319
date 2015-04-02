@@ -52,7 +52,7 @@
 	<ul class="list-unstyled school-list">
 		{% for course in course_list %}
 	  		<li>
-	  		<a href="{% url 'school:courselist' course.id %}">
+	  		<a href="{% url 'school:courselist' course.id %}?{{request.GET.urlencode}}">
 	  			 {{ course.name }} 
 	  		</a>
 	  		</li>
@@ -82,7 +82,7 @@
 	<span>
 		<h3> Course Info </h3>
         <a href="" target-url="{% url 'school:coursedelete' course.id %}" id="btn-delete" class="pull-right text-danger delete-link" data-toggle="modal" data-target="#delete-modal"> Delete </a>
-		<a href="{%url 'school:courseedit' course.id %}" id="edit-course-btn" class="pull-right"> Edit </a>
+		<a href="{%url 'school:courseedit' course.id %}?{{request.GET.urlencode}}" id="edit-course-btn" class="pull-right"> Edit </a>
 	</span>
 	<table class="table table-hover">
 		<tr> 

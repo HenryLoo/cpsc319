@@ -16,24 +16,8 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def course_list(request, course_id=None):
 	request = process_user_info(request)
-	course_list = Course.objects.filter(
-		school = request.user_school, 
-		period = request.user_period
-	).order_by('name')
-
-	search_course = request.GET.get('course', None) 
-	search_dept = request.GET.get('department', None)  
-	
-	if search_course:
-		course_list = course_list.filter(
-			name__icontains=search_course)
-
-	if search_dept:
-		course_list = course_list.filter(
-			department__name__icontains=search_dept)
-
-
-	context_dictionary = {'course_list': course_list, 'course_filter' : CourseFilter() }
+	filters, course_list = course_list_helper(request, Course.objects.all())
+	context_dictionary = {'course_list': course_list, 'course_filter' : filters }
 
 	if course_id:
 		try:
@@ -51,6 +35,27 @@ def course_list(request, course_id=None):
 	return render_to_response("courses/course_list.html",
 		context_dictionary,
 		RequestContext(request))
+
+def course_list_helper(request, course_list):
+	course_list = Course.objects.filter(
+		school = request.user_school, 
+		period = request.user_period
+	).order_by('name')
+
+	search_course = request.GET.get('course', None) 
+	search_dept = request.GET.get('department', None)  
+	
+	if search_course:
+		course_list = course_list.filter(
+			name__icontains=search_course)
+
+	if search_dept:
+		course_list = course_list.filter(
+			department__name__icontains=search_dept)
+	filters = CourseFilter({'course': search_course, 'department':search_dept})
+
+	return filters, course_list
+
 
 @login_required
 def course_create(request):
@@ -110,8 +115,11 @@ def course_delete(request, course_id):
 @login_required
 def course_edit(request, course_id):
 		request = process_user_info(request)
-		course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name')
-		context_dictionary = {'course_list': course_list}
+		# course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name')
+		# context_dictionary = {'course_list': course_list}
+
+		filters, course_list = course_list_helper(request, Course.objects.all())
+		context_dictionary = {'course_list': course_list, 'course_filter' : filters }
 
 		try:
 				c = Course.objects.get(pk=course_id)

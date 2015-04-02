@@ -32,6 +32,13 @@ class ClassTeacherForm(ModelForm):
 		model = ClassTeacher
 		fields = ['primary_teacher', 'secondary_teacher']
 
+        def clean(self):
+                cleaned_data = super(ClassTeacherForm, self).clean()
+                pt = cleaned_data.get("primary_teacher")
+                st = cleaned_data.get("secondary_teacher")
+
+                if pt == st:
+                        raise forms.ValidationError("Please choose different primary and secondary teachers.")
 
 class ClassRegistrationForm(Form):
 	class Meta:

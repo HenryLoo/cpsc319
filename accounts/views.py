@@ -11,7 +11,8 @@ from django.contrib.auth import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.forms import ChoiceField
-
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 
@@ -470,6 +471,7 @@ Delete Admin
 '''
 @login_required
 def delete_admin_view (request, admin_id):
+    #deleting user profile
     admin = UserProfile.objects.get(pk=admin_id)
     admin.user.delete()
     admin.delete()

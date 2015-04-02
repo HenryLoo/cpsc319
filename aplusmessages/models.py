@@ -24,8 +24,8 @@ class SentMessage(models.Model):
         (SEND_ADMINS, 'Admins'),
     )
 
-    sender = models.ForeignKey('accounts.UserProfile', null=True, blank=True)
-    from_email = models.CharField(max_length=512) #either this or sender, we don't need both. For now no auth implemented so putting it
+    sender = models.CharField(max_length = 12, null=True, blank=True)
+    from_email = models.CharField(max_length=512)
 
     recipient_type = models.CharField(max_length = 12, choices = SEND_CHOICES)
     to_list = models.TextField(blank=True, null=True)

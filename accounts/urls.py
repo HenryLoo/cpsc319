@@ -16,6 +16,7 @@ urlpatterns = patterns('',
 	url(r'^teachers/create/$', 'accounts.views.create_teacher_view', name='create_teacher'),
     
     url(r'^teachers/view/$', 'accounts.views.view_teachers_view', name='view_teachers'),
+    url(r'^teachers/transfer/$', 'accounts.views.transfer_teachers_view', name='transfer_teachers'),
 	
 	url(r'^teachers/view/(?P<teacher_id>\d+)/$', 'accounts.views.view_teachers_view', name='view_teachers'),
         url(r'^teachers/view/(?P<teacher_id>\d+)/edit/$', 'accounts.views.edit_teacher_view', name='edit_teacher'),

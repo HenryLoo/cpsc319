@@ -1,0 +1,56 @@
+{% extends "teachers/base_teacher.html" %}
+
+
+{% block teacher_content %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><a href="{% url 'account:view_teachers' %}">View Teachers</a></li>
+    <li role="presentation"><a href="{% url 'account:create_teacher' %}">Add Teacher</a></li>
+	<li role="presentation" class="active"><a href="{% url 'account:transfer_teachers' %}">Transfer Teachers</a></li>
+    <li role="presentation"><a href="{% url 'account:upload_teachers' %}">Upload CSV</a></li>
+</ul>
+
+				<div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Teachers<small> Transfer</small>
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-sitemap"></i> <a> Teachers > Transfer</a>
+                            </li>
+                        </ol>
+
+                    </div>
+                </div>
+
+	
+	<!--{% if errors %}
+		<div class="panel panel-danger">
+			{{ errors }}
+		</div>
+	{% endif %}-->
+
+	{% if count or count == 0 %}
+		<div class="alert alert-info" role="alert"> {{count}} teachers transferred successfully! </div>
+	{% endif %}
+	
+	<form role="form" action="{%url 'account:transfer_teachers' %}" method="post">
+		{% csrf_token %}
+		<!--{% if error %} {{error}} {%endif%}-->
+		{% regroup teachers|dictsort:"period.end_date" by period as sorted_teachers %}
+		{% for teacher_list in sorted_teachers %}
+			<h4>{{ teacher_list.grouper }}</h4>
+			<ul>
+			{% for teacher in teacher_list.list %}
+				<li>
+				<input type="checkbox" name="{{teacher.userprofile.id}}"> {{teacher.userprofile.user.first_name}} {{teacher.userprofile.user.last_name}}   ({{teacher.userprofile.user.email}})<br>
+				</li>
+			{% endfor %}
+			</ul>
+		{% endfor %}
+
+	    <input type="submit" class="btn btn-primary center-block" value="Transfer" />
+	</form> 
+
+	<br>
+{% endblock teacher_content %}

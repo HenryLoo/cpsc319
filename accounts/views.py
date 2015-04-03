@@ -15,10 +15,74 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-
-from datetime import datetime
+from school_components.models.period_model import *
+from school_components.utils import *
+from datetime import date
 
 #===================                  ======================= TEACHER
+
+def ttd(user_teachers, user_school, user_period):
+    #teachers_to_display: list of teachers' userprofiles who are not in the current period, including only 1 profile (most recent period) for each user
+    teachers_to_display = []
+    for user in user_teachers:
+        profiles = user.userprofiles.all()
+        
+        most_recent = Period(description='Fake', start_date=date(1000, 1, 1), end_date=date(1000,1,2), school=user_school, comments='Fake')
+        tea_to_include = None
+        
+        for profile in profiles:
+            if profile.period == user_period:
+                tea_to_include = None
+                break
+            if profile.period.end_date > most_recent.end_date:
+                most_recent = profile.period
+                tea_to_include = profile#.teachers.all()[0]
+
+        if tea_to_include != None:
+            teachers_to_display.append(tea_to_include)
+
+    return teachers_to_display
+    
+@login_required
+def transfer_teachers_view(request):
+    
+    request = process_user_info(request)
+    
+    users = User.objects.all()
+    #user_teachers: list of users who are teachers in the current school
+    user_teachers = [user for user in users if (user.userprofiles.all()[0].role == 'TEACHER' and
+                                                user.userprofiles.all()[0].school == request.user_school)]
+    teachers_to_display = ttd(user_teachers, request.user_school, request.user_period)
+
+    cd = {}
+    
+    if request.method == 'POST':
+        count = 0
+        
+        for up in teachers_to_display:
+            t = up.teachers.all()[0]
+            dic = request.POST.dict()
+            checkbox = None
+            try:
+                checkbox = dic[unicode(up.id)]
+            except KeyError:
+                pass
+            if checkbox != None and checkbox == u'on':
+                SchoolUtils.duplicate_teacher(t, request.user_period)
+                count += 1
+                
+        cd['count'] = count
+        teachers_to_display = ttd(user_teachers, request.user_school, request.user_period) #update to exclude transferred teachers
+
+    teachers = []
+    for up in teachers_to_display:
+        teachers.append({'period': up.period, 'userprofile': up})
+
+    cd['teachers'] = teachers
+        
+    return render(request, 'teachers/transfer_teachers.html', cd)
+    
+    
 @login_required
 def create_teacher_view(request):
     

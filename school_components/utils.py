@@ -6,7 +6,23 @@ from school_components.models.courses_model import *
 
 
 class SchoolUtils:
-	
+
+	@staticmethod
+	def duplicate_teacher(ot, new_period):
+                user = ot.user.user
+                op = ot.user
+                np = UserProfile(user=user, school=op.school, period=new_period, phone=op.phone, role='TEACHER')
+                np.save()
+                oa = ot.teaching_availability
+                na = TeachingAvailability(monday=oa.monday, monday_times=oa.monday_times,
+                                              tuesday=oa.tuesday, tuesday_times=oa.tuesday_times,
+                                              wednesday=oa.wednesday, wednesday_times=oa.wednesday_times,
+                                              thursday=oa.thursday, thursday_times=oa.thursday_times,
+                                              friday=oa.friday, friday_times=oa.friday_times)
+                na.save()
+                nt = TeacherUser(user=np, teaching_availability=na, comments=ot.comments)
+                nt.save()
+                
 	@staticmethod
 	def duplicate_teachers(school, old_period, new_period):
                 old_teachers = TeacherUser.objects.filter(user__school=school, user__period=old_period)

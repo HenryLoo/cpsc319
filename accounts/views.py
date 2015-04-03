@@ -21,6 +21,7 @@ from datetime import date
 
 #===================                  ======================= TEACHER
 
+#helper function to get a list of transfer-eligible teachers to display
 def ttd(user_teachers, user_school, user_period):
     #teachers_to_display: list of teachers' userprofiles who are not in the current period, including only 1 profile (most recent period) for each user
     teachers_to_display = []
@@ -42,7 +43,8 @@ def ttd(user_teachers, user_school, user_period):
             teachers_to_display.append(tea_to_include)
 
     return teachers_to_display
-    
+
+#processes request data for the transfer teachers page
 @login_required
 def transfer_teachers_view(request):
     
@@ -82,7 +84,7 @@ def transfer_teachers_view(request):
         
     return render(request, 'teachers/transfer_teachers.html', cd)
     
-    
+#processes request data for the create teachers page
 @login_required
 def create_teacher_view(request):
     
@@ -161,6 +163,7 @@ def create_teacher_view(request):
     }
     return render(request, 'teachers/create_teacher.html', return_dict)
 
+#processes request data for the view teachers page
 @login_required
 def view_teachers_view (request, teacher_id=None):
     request = process_user_info(request)
@@ -219,6 +222,7 @@ def view_teachers_view (request, teacher_id=None):
     return render(request, "teachers/teacher_list.html",
         context_dictionary)
 
+#processes request data for the edit teachers page
 @login_required
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
         request = process_user_info(request)
@@ -305,6 +309,7 @@ def delete_teacher_view (request, teacher_id):
     return redirect('account:view_teachers')
 
 
+#processes request data for the upload teachers page
 @login_required
 def upload_teachers_view(request):
     request = process_user_info(request)
@@ -354,6 +359,7 @@ def export_teachers_view (request):
 
 #==============================================================    ADMIN
 
+#processes request data for the create admin page
 @login_required
 def create_admin_view(request):
     request = process_user_info(request)
@@ -425,6 +431,7 @@ def create_admin_view(request):
         'user_ret' : user_ret
     })
 
+#processes request data for the view admins page
 @login_required
 def view_admins_view (request, admin_id=None):
     request = process_user_info(request)
@@ -449,6 +456,7 @@ def view_admins_view (request, admin_id=None):
     return render(request, "admins/admin_list.html",
         context_dictionary)
 
+#processes request data for the edit admin page
 @login_required
 def edit_admin_view (request, admin_id): #there should always be an admin_id here
     #!!! probably block off this view entirely for teachers !!!
@@ -543,7 +551,8 @@ def delete_admin_view (request, admin_id):
     return redirect('account:view_admins')
 
 ##============================================================  LOGIN
-        
+
+#processes request data for the login page
 def login_view(request):
     
     if request.method == 'POST':

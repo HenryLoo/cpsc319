@@ -72,21 +72,27 @@
     {% endfor %}
   </ul>
 </div>
+</div>
 {%else%}
+{%if assignment_list|length != 0 %}
 <div class="dropdown">
   <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
     Assignment
     <span class="caret"></span>
   </button>
   <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+
     {% for a in assignment_list %}
     <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url 'school:classperformance' class.id a.id %}">{{a.title}}</a></li>
     {% endfor %}
   </ul>
 </div>
-{% endif %}
-
 </div>
+{%else%}
+</div>
+  <div class="alert alert-info" role="alert"> No assignments to list. Add Assignments for grading. </div>
+{%endif%}
+{% endif %}
 
 {% if assignment %}
 <div class="col-md-12">

@@ -136,7 +136,7 @@
 		</tr>
 	</table>
 
-	{% regroup taught_classes|dictsort:"period" by period as sorted_taught_classes %}
+	{% regroup taught_classes|dictsort:"period.end_date" by period as sorted_taught_classes %}
 	{% for class_list in sorted_taught_classes %}
 		<h4>{{ class_list.grouper }}</h4>
 		<ul>

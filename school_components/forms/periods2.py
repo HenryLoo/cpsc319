@@ -17,7 +17,6 @@ class PeriodForm(forms.ModelForm):
 		}
 
         def clean(self):
-                raise KeyError("YOYOYOYYO")
                 cleaned_data = super(PeriodForm, self).clean() 
                 sd = cleaned_data.get('start_date')
                 ed = cleaned_data.get('end_date')
@@ -46,16 +45,3 @@ class PeriodForm(forms.ModelForm):
         def __init__(self, *args, **kwargs):
                     super(PeriodForm, self).__init__(*args, **kwargs)
                     self.user_school = args[1]#kwargs.get('user_school')
-                    
-class PeriodTransferForm(forms.Form):
-
-        transfer_teachers = BooleanField(initial=True, required=False, label='Copy Teachers to New Period')
-
-        def __init__(self, *args, **kwargs):
-            super(PeriodTransferForm, self).__init__(*args)
-            cur_school = kwargs.pop('cur_school')
-            cur_period = kwargs.pop('cur_period')
-            qs=Course.objects.filter(school=cur_school, period=cur_period)
-
-            self.fields['courses'] = ModelMultipleChoiceField(queryset=qs, widget=forms.CheckboxSelectMultiple(), required=False, label='Copy Courses to New Period')
-            

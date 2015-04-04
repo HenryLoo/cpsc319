@@ -558,10 +558,6 @@ def class_performance(request, class_id=None, assignment_id=None):
 
 		if assignment_id:
 			a = Assignment.objects.get(pk=assignment_id)
-			for cl in class_reg_list:
-				verify = Grading.objects.filter(student=cl.student, reg_class=c, assignment=a)
-				if len(verify) == 0:
-					Grading.objects.create(student =cl.student, reg_class=c, assignment=a)
 			context_dictionary['assignment'] = a
 
 			GradingFormSetFactory = inlineformset_factory(Assignment, Grading, extra=0, can_delete=True)
@@ -702,21 +698,33 @@ def class_assignment(request, class_id=None):
 		assigments_list = Assignment.objects.filter(reg_class=c).order_by('-date')
 		context_dictionary['assignments'] = assigments_list
 	
-	if request.method == 'POST':
-		form = ClassAssignmentForm(request.POST, request.FILES)
-		if form.is_valid():
-			new = form.save(commit=False)
-			c = Class.objects.get(pk=class_id)
-			new.reg_class = c
-			new.content = request.FILES['content']
-			new.save()
-			# Redirect to the document list after POST
-			return HttpResponseRedirect(
-				reverse('school:classassignment', args=(class_id,)))
-	else:
-		form = ClassAssignmentForm()
+		if request.method == 'POST':
+			form = ClassAssignmentForm(request.POST, request.FILES)
+			if form.is_valid():
+				new = form.save(commit=False)
+				c = Class.objects.get(pk=class_id)
+				new.reg_class = c
+				new.content = request.FILES['content']
+				new.save()
 
-	context_dictionary['form'] = form
+				#create grades for assignments				
+				class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).order_by('student__first_name')
+
+				a = Assignment.objects.get(pk=new.id)
+				for cl in class_reg_list:
+					verify = Grading.objects.filter(student=cl.student, reg_class=c, assignment=a)
+					if len(verify) == 0:
+						Grading.objects.create(student =cl.student, reg_class=c, assignment=a, performance=0)
+
+
+
+				# Redirect to the document list after POST
+				return HttpResponseRedirect(
+					reverse('school:classassignment', args=(class_id,)))
+		else:
+			form = ClassAssignmentForm()
+
+		context_dictionary['form'] = form
 
 
 	return render_to_response('classes/class_assignment.html', context_dictionary,

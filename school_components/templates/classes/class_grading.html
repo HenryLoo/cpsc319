@@ -110,9 +110,9 @@
                    <thead>
                   
                    <th>Name</th>
-                   <th>Total</th>
                    <th>Weight</th>
-                     <th>Grade</th>
+                   <th>Grade</th>
+                   <th>Total points</th>
                      <th>Comments</th>
                    </thead>
               <tbody>
@@ -131,13 +131,13 @@
     {%endif%}
     {%endfor%}
     </td>
-    <td>{{assignment.total_weight}}</td>
-    <td>{{assignment.grade_weight}}</td>
+    <td>{{assignment.grade_weight}}%</td>
     <td>
     <div class="input-group" style="width: 50px;">
     {{ form.grade }}
     </div>
     </td>
+     <td>/{{assignment.total_weight}}</td>
     <td>
     <div class="input-group" style="width: 100px;">
     {{ form.comments }}

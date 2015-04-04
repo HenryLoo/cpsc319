@@ -704,7 +704,7 @@ def class_assignment(request, class_id=None):
 				new = form.save(commit=False)
 				c = Class.objects.get(pk=class_id)
 				new.reg_class = c
-				new.content = request.FILES['content']
+				#new.content = request.FILES['content']
 				new.save()
 
 				#create grades for assignments				

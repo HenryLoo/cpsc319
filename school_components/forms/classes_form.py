@@ -63,7 +63,7 @@ class RemoveClassRegistrationForm(Form):
 
 
 class ClassAssignmentForm(ModelForm):
-	content  = forms.FileField()
+	content = forms.FileField(required=False)
 	grade_weight = forms.IntegerField(label='Assignment Weight (%)', max_value=100, min_value=0)
 	total_weight = forms.IntegerField(label='Assignment Total')
 

@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from reportlab.pdfgen import canvas
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from reports.models import Reports
@@ -258,14 +257,6 @@ def attendancelist(request, class_id=None):
 @login_required
 def create_new_report_page(request):
     return render(request, "reports/create_new_report_page.html")
-
-@login_required
-def student_pdf(c):
-    c.drawString(100, 100, "Hello World")
-    c = canvas.Canvas("student.pdf")
-    student_pdf(c)
-    c.showPage()
-    c.save()
 
 @login_required
 def export_data(request):

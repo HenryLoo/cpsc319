@@ -4,14 +4,13 @@ from school_components.models import Period, School, Department, Class, Course
 from accounts.models import TeacherUser
 
 class PeriodForm(forms.ModelForm):
+    user_school = None
 
-        user_school = None
-        
-	class Meta:
-		model = Period
-		school = forms.CharField(widget=forms.HiddenInput())
-		fields = ['description','start_date', 'end_date', 'comments']
-		widgets = {
+    class Meta:
+        model = Period
+        school = forms.CharField(widget=forms.HiddenInput())
+        fields = ['description','start_date', 'end_date', 'comments']
+        widgets = {
 			'comments': forms.Textarea(attrs={'rows': 5}),
 			'start_date': DateInput(attrs={'class':'datepicker'}),
 			'end_date': DateInput(attrs={'class':'datepicker'}),

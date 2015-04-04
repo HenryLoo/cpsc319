@@ -53,7 +53,7 @@ INSTALLED_APPS = (
     'dashboard',
     'graphos',
     'reports',
-    #'sendgrid',
+    'sendgrid',
 
 )
 AUTHENTICATION_BACKENDS = ( 'accounts.backend.NoHashBackend', )
@@ -125,7 +125,7 @@ STATICFILES_DIRS = (
     STATIC_PATH,
 )
 
-MEDIA_ROOT = '/opt/bitnami/apps/django/django_projects/Aplus/aplus/media/'
+MEDIA_ROOT = 'Aplus/aplus/media/'
 MEDIA_URL = '/media/'
 
 # Templates
@@ -143,4 +143,4 @@ SENDGRID_EMAIL_USERNAME = "sashaseifollahi"
 SENDGRID_EMAIL_PASSWORD = "cpsc31911"
 
 # Sample CSV file
-SAMPLE_CSV_PATH = "/opt/bitnami/apps/django/django_projects/Aplus/school_components/static/SAMPLE.CSV"
+SAMPLE_CSV_PATH = "Aplus/school_components/static/SAMPLE.CSV"

@@ -3,6 +3,7 @@ from django import forms
 from school_components.models import *
 from accounts.models import TeacherUser
 from django.forms.models import BaseModelFormSet
+from datetime import datetime
 
 class ClassForm(ModelForm):
 	class Meta:
@@ -32,15 +33,14 @@ class ClassTeacherForm(ModelForm):
 		model = ClassTeacher
 		fields = ['primary_teacher', 'secondary_teacher']
 
-        def clean(self):
-                cleaned_data = super(ClassTeacherForm, self).clean()
-                pt = cleaned_data.get('primary_teacher')
-                st = cleaned_data.get('secondary_teacher', None)
-                
-                if st != None and pt == st:
-                        raise forms.ValidationError("Please choose different primary and secondary teachers.")
+		def clean(self):
+			cleaned_data = super(ClassTeacherForm, self).clean()
+			pt = cleaned_data.get('primary_teacher')
+			st = cleaned_data.get('secondary_teacher', None)
 
-                return cleaned_data
+			if st != None and pt == st:
+				raise forms.ValidationError("Please choose different primary and secondary teachers.")
+			return cleaned_data
 
         
 class ClassRegistrationForm(Form):
@@ -84,13 +84,13 @@ class ClassGradingForm(ModelForm):
 		fields = ['student', 'grade', 'comments', 'reg_class']
 
 class ClassAttendanceDateForm(ModelForm):
-    
+    date = forms.DateField(widget=DateInput(attrs={'class':'datepicker'}), required=True)
     class Meta:
         model = ClassAttendance
         fields = ['date']
-        widgets = {
-        	'date': DateInput(attrs={'class':'datepicker'}),
-        }
+        # widgets = {
+        # 	'date': DateInput(attrs={'class':'datepicker'}),
+        # }
 
 class ClassAttendanceForm(ModelForm):
     attendance = ChoiceField(label='Attendance', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)

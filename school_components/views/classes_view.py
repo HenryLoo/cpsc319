@@ -382,7 +382,7 @@ def class_attendance(request, class_id=None):
 		context_dictionary['classregistration'] = class_reg_list
 
 		AttendanceFormSetFactory = modelformset_factory(ClassAttendance, extra=0, can_delete=True)
-		date_form = ClassAttendanceDateForm(initial={'date': datetime.now()})
+		date_form = ClassAttendanceDateForm()
 		context_dictionary['dateform'] = date_form
 
 		if request.method == "POST":
@@ -390,25 +390,29 @@ def class_attendance(request, class_id=None):
 				if '_date' in request.POST:
 
 					date_form = ClassAttendanceDateForm(request.POST)
-					inter = date_form['date'].value()
-					if '/' in inter:
-						x,y,z = inter.split('/')
-						date_value = z + "-" + x + "-" + y
+
+					if date_form.is_valid():
+						inter = date_form['date'].value()
+						if '/' in inter:
+							x,y,z = inter.split('/')
+							date_value = z + "-" + x + "-" + y
+						else:
+							date_value = inter	
+
+						context_dictionary['date_value'] = date_value
+
+						for cl in class_reg_list:
+							verify = ClassAttendance.objects.filter(student=cl.student, reg_class=c, date=date_value)
+							if len(verify) == 0:
+								ClassAttendance.objects.create(student =cl.student, reg_class=c, date=date_value)
+
+						formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+						context_dictionary['formset'] = formset
+
+						date_form = ClassAttendanceDateForm(initial={'date': date_value})
+						context_dictionary['dateform'] = date_form
 					else:
-						date_value = inter	
-
-					context_dictionary['date_value'] = date_value
-
-					for cl in class_reg_list:
-						verify = ClassAttendance.objects.filter(student=cl.student, reg_class=c, date=date_value)
-						if len(verify) == 0:
-							ClassAttendance.objects.create(student =cl.student, reg_class=c, date=date_value)
-
-					formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
-					context_dictionary['formset'] = formset
-
-					date_form = ClassAttendanceDateForm(initial={'date': date_value})
-					context_dictionary['dateform'] = date_form
+						context_dictionary['date_errors'] = date_form.errors
 
 					return render_to_response('classes/class_attendance.html', context_dictionary,
 						RequestContext(request))

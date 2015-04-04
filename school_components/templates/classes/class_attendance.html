@@ -65,6 +65,10 @@
   <div class="alert alert-danger" role="alert"> {{ errors }} </div>
 {% endif %}
 
+{% if date_errors %}
+  <div class="alert alert-danger" role="alert"> Select a date </div>
+{% endif %}
+
 <form role="form" action="{%url 'school:classattendance' class.id %}" method="post" enctype="multipart/form-data">
 
             <!-- Tab panes -->

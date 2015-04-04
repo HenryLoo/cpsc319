@@ -67,6 +67,13 @@
                 <a class="navbar-brand" href="{% url 'dashboard:statistics_page' %}"> <i class="fa fa-graduation-cap"></i> A<SUP>plus</SUP> </a>
             </div>
 
+            <script type="text/javascript">
+            var periodmessage = {{ periodmessage }};
+            if (periodmessage == 1){
+                alert('Create a period for the school');
+            }
+            </script>
+
             <!-- Top Menu Items -->
            <ul class="nav navbar-top-links navbar-right">
 

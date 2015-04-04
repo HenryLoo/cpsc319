@@ -54,6 +54,8 @@ def period_create(request):
 			selected_courses = tf.cleaned_data['courses']  
 			SchoolUtils.duplicate_courses(selected_courses, new)
 
+			period_change(request, new.id)
+
 			return HttpResponseRedirect(
 				reverse('school:periodlist', args=(new.id,)))
 		else:

@@ -117,7 +117,14 @@
     <tr>
     {{form.id}}
 
-    <td> {{ form.student }}</td>
+    <td>
+       {{ form.student.as_hidden }}
+    {% for q in classregistration %}
+    {%if q.student.id == form.student.value %}
+    {{q.student.first_name}} {{q.student.last_name}}
+    {%endif%}
+    {%endfor%}
+    </td>
     <td>{{assignment.total_weight}}</td>
     <td>{{assignment.grade_weight}}</td>
     <td>

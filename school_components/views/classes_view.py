@@ -381,7 +381,7 @@ def class_attendance(request, class_id=None):
 		class_reg_list = ClassRegistration.objects.filter(reg_class__id = class_id).order_by('student__first_name')
 		context_dictionary['classregistration'] = class_reg_list
 
-		AttendanceFormSetFactory = modelformset_factory(ClassAttendance, extra=0, can_delete=True)
+		AttendanceFormSetFactory = modelformset_factory(ClassAttendance,extra=0, can_delete=True)
 		date_form = ClassAttendanceDateForm()
 		context_dictionary['dateform'] = date_form
 
@@ -406,8 +406,10 @@ def class_attendance(request, class_id=None):
 							if len(verify) == 0:
 								ClassAttendance.objects.create(student =cl.student, reg_class=c, date=date_value)
 
-						formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+						query_list = ClassAttendance.objects.filter(date=date_value)
+						formset = AttendanceFormSetFactory(queryset=query_list)
 						context_dictionary['formset'] = formset
+						context_dictionary['querylist'] = query_list
 
 						date_form = ClassAttendanceDateForm(initial={'date': date_value})
 						context_dictionary['dateform'] = date_form
@@ -440,8 +442,10 @@ def class_attendance(request, class_id=None):
 
 					context_dictionary['date_value'] = date_value
 
-					formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+					query_list = ClassAttendance.objects.filter(date=date_value)
+					formset = AttendanceFormSetFactory(queryset=query_list)
 					context_dictionary['formset'] = formset
+					context_dictionary['querylist'] = query_list
 
 					date_form = ClassAttendanceDateForm(initial={'date': date_value})
 					context_dictionary['dateform'] = date_form
@@ -457,7 +461,10 @@ def class_attendance(request, class_id=None):
 					date_value = z + "-" + x + "-" + y
 				else:
 					date_value = inter	
-				formset = AttendanceFormSetFactory(queryset=ClassAttendance.objects.filter(date=date_value))
+
+				query_list = ClassAttendance.objects.filter(date=date_value)
+				context_dictionary['querylist'] = query_list
+				formset = AttendanceFormSetFactory(queryset=query_list)
 		
 		context_dictionary['dateform'] = date_form
 		context_dictionary['formset'] = formset

@@ -94,10 +94,24 @@ class ClassAttendanceDateForm(ModelForm):
 
 class ClassAttendanceForm(ModelForm):
     attendance = ChoiceField(label='Attendance', choices=(('A', 'A'), ('P', 'P'), ('L', 'L')), required=False)
+    student = forms.ModelChoiceField(queryset=Student.objects.all())
 
     class Meta:
         model = ClassAttendance
-        fields = ['comments', 'attendance']
+        fields = ['comments']
+        widgets = {
+        'comments': forms.Textarea(attrs={'rows': 5}),
+        'student': forms.widgets.Select(attrs={'readonly': True,
+                                                          'disabled': True}),
+        }
+
+def get_student_name(self):
+	try:
+		return 'uhu'
+	    #return Student.objects.get(pk=self.value['student'])
+	except:
+	    return 'error'
+   
 
 class ClassFilter(Form):
 	course = CharField(required=False)

@@ -106,10 +106,19 @@
 
     <tr>
     {{form.id}}
-    <td> {{ form.student }}</td>
+    <td> 
+      
+    {{ form.student.as_hidden }}
+    {% for q in querylist %}
+    {%if q.student.id == form.student.value %}
+    {{q.student.first_name}} {{q.student.last_name}}
+    {%endif%}
+    {%endfor%}
+    </td>
     <td>
     <div class="input-group" style="width: 50px;">
     {{ form.attendance }}
+
     </div>
     </td>
     <td>

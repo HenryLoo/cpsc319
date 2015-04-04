@@ -69,7 +69,7 @@ class ClassAssignmentForm(ModelForm):
 
 	class Meta:
 		model = Assignment
-		fields = ['title', 'date', 'grade_weight', 'total_weight', 'comments']
+		fields = ['title', 'date', 'grade_weight', 'total_weight', 'content','comments']
 		widgets = {
 			'comments': forms.Textarea(attrs={'rows': 5}),
 			'date': DateInput(attrs={'class':'datepicker'}),

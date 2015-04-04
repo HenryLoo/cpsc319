@@ -49,6 +49,7 @@ def school_change(request, school_id=None):
 	if school_id:
 
 		new_school = School.objects.get(pk = school_id)
+		#last_period = Period.objects.filter(school=new_school).order_by('-end_date')
 		profile = request.user.userprofiles.all()[0]
 		profile.school = new_school
 		profile.period = None

@@ -17,7 +17,6 @@ class PeriodForm(forms.ModelForm):
 		}
 
         def clean(self):
-                raise KeyError("YOYOYOYYO")
                 cleaned_data = super(PeriodForm, self).clean() 
                 sd = cleaned_data.get('start_date')
                 ed = cleaned_data.get('end_date')

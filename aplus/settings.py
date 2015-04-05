@@ -143,4 +143,4 @@ SENDGRID_EMAIL_USERNAME = "sashaseifollahi"
 SENDGRID_EMAIL_PASSWORD = "cpsc31911"
 
 # Sample CSV file
-SAMPLE_CSV_PATH = "Aplus/school_components/static/SAMPLE.CSV"
+SAMPLE_CSV_PATH = "/opt/bitnami/apps/django/django_projects/Aplus/school_components/static/SAMPLE.CSV"

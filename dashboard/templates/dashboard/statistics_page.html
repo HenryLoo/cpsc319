@@ -164,13 +164,18 @@
                                 <h3 class="panel-title"><i class="fa fa-bars"></i> Student Registration</h3>
                                 <div class="text-right">
                                     <div class="row" style="margin-right: 1px;">
-                                        <a href="#">View &nbsp</a>
                                         <a href="#">Edit</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="panel-body">
-                                <div id="reg_chart_div" style="width: 299px; height: 299px;">{{ registrationChart.as_html }}</div>
+                                <div id="reg_chart_div" style="width: 299px; height: 299px;">
+                                    {% if registrationChart != '' %}
+                                        {{ registrationChart.as_html }}
+                                    {% else %}
+                                        <div class="alert alert-info" role="alert" style="width: 284px;">No data found.</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -181,13 +186,18 @@
                                 <h3 class="panel-title"><i class="fa fa-bars"></i> Student Performance</h3>
                                 <div class="text-right">
                                      <div class="row" style="margin-right: 1px;">
-                                        <a href="#">View &nbsp</a>
                                         <a href="#">Edit</a>
                                     </div>
                                 </div>
                             </div>
                             <div class="panel-body" style="max-height: 2; min-height: 2;" >
-                                <div id="performance_chart_div" style="width: 299px; height: 299px;">{{ performanceChart.as_html }}</div>
+                                <div id="performance_chart_div" style="width: 299px; height: 299px;">
+                                    {% if performanceChart != '' %}
+                                        {{ performanceChart.as_html }}
+                                    {% else %}
+                                        <div class="alert alert-info" role="alert" style="width: 284px;">No data found.</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -199,13 +209,18 @@
                                 <h3 class="panel-title"><i class="fa fa-bars"></i> Passing/Failing Students</h3>
                                 <div class="text-right">
                                      <div class="row" style="margin-right: 1px;">
-                                        <a href="#">View &nbsp</a>
                                         <a href="#">Edit</a>
                                     </div>
                                 </div>
                             </div> 
                             <div class="panel-body" >
-                                <div id="passFail_chart_div" style="width: 299px; height: 299px;">{{ passFailChart.as_html }}</div>
+                                <div id="passFail_chart_div" style="width: 299px; height: 299px;">
+                                    {% if passFailChart != '' %}
+                                        {{ passFailChart.as_html }}
+                                    {% else %}
+                                        <div class="alert alert-info" role="alert" style="width: 284px;">No data found.</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -223,13 +238,18 @@
                                     <h3 class="panel-title"><i class="fa fa-bars"></i> {{ chart.0.title }}</h3>
                                     <div class="text-right">
                                         <div class="row" style="margin-right: 1px;">
-                                            <a href="#">View &nbsp</a>
                                             <a href="{% url 'dashboard:statistics_edit_page' %}?chart={{ chart.0.id }}">Edit</a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                                    <div id="{{forloop.counter}}_chart_div" style="width: 299px; height: 299px;">{{ chart.1.as_html }}</div>
+                                    <div id="{{forloop.counter}}_chart_div" style="width: 299px; height: 299px;">
+                                        {% if chart.1 != '' %}
+                                            {{ chart.1.as_html }}
+                                        {% else %}
+                                            <div class="alert alert-info" role="alert" style="width: 284px;">No data found.</div>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

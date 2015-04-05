@@ -126,6 +126,7 @@ STATICFILES_DIRS = (
 )
 
 MEDIA_ROOT = '/opt/bitnami/apps/django/django_projects/Aplus/aplus/'
+#MEDIA_ROOT = 'Aplus/aplus/'
 MEDIA_URL = '/media/'
 
 # Templates

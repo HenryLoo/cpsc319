@@ -98,6 +98,10 @@ class CourseRegisterWizard(SessionWizardView):
 
 	def create_parent(self, form):
 		request = process_user_info(self.request)
+
+		if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+
 		school = request.user_school
 		period = request.user_period
 
@@ -129,6 +133,10 @@ class CourseRegisterWizard(SessionWizardView):
 
 	def create_student(self, parent, forms):
 		request = process_user_info(self.request)
+
+		if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+
 		school = request.user_school
 		period = request.user_period
 
@@ -221,6 +229,10 @@ class CourseRegisterWizard(SessionWizardView):
 @login_required
 def payment_create(request, parent_id):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+
 	message = {}
 	if request.method == 'POST':
 		pay = Payment(parent=Parent.objects.get(pk=parent_id))
@@ -238,6 +250,10 @@ def payment_create(request, parent_id):
 @login_required
 def lkccourse_register(request, page_no=None):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+			
 	if page_no is None or page_no == "1" :
 		html = "registration/lkc_course_registration_parent.html"
 	elif page_no == "2":

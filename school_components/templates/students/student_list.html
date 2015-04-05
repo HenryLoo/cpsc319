@@ -127,11 +127,16 @@
 			</td>
 		</tr>
 		<tr>
-			<td> Parent </td>
-			<td> <a href="{% url 'school:parentlist' student.parent.id %}">
-			{{ student.parent.first_name }} {{ student.parent.last_name }}</a>
-			</td>
-		</tr>
+		<td> Parent </td>
+{% if user_role == 'TEACHER' %}	
+<td> {{ student.parent.first_name }} {{ student.parent.last_name }}</td>	
+{%else%}
+		<td> <a href="{% url 'school:parentlist' student.parent.id %}">
+		{{ student.parent.first_name }} {{ student.parent.last_name }}</a>
+		</td>
+{%endif%}
+	</tr>
+
 		<tr>
 			<td> Comments: </td>
 			{% if student.comments %}

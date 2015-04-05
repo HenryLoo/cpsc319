@@ -81,6 +81,10 @@ def reportcard_teacher(request, class_id=None, student_id=None):
 @login_required
 def reportcard_adm(request, student_id=None):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'):
+		return render_to_response('404.html',RequestContext(request))
+
 	#add filter after
 	perf_list = []
 	over=0
@@ -244,6 +248,10 @@ def create_new_report_page(request):
 @login_required
 def export_data(request):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'):
+		return render_to_response('404.html',RequestContext(request))
+
 	dataset = request.GET.get('dataset', None)
 	response = HttpResponse(content_type='text/csv')
 	writer = csv.writer(response)

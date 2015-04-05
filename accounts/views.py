@@ -18,6 +18,8 @@ from django.contrib.auth.decorators import login_required
 from school_components.models.period_model import *
 from school_components.utils import *
 from datetime import date
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 #===================                  ======================= TEACHER
 
@@ -48,7 +50,11 @@ def ttd(user_teachers, user_school, user_period):
 @login_required
 def transfer_teachers_view(request):
     
+
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
     
     users = User.objects.all()
     #user_teachers: list of users who are teachers in the current school
@@ -89,6 +95,10 @@ def transfer_teachers_view(request):
 def create_teacher_view(request):
     
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
+
     user_ret = None
     if request.method == 'POST':
 
@@ -167,6 +177,10 @@ def create_teacher_view(request):
 @login_required
 def view_teachers_view (request, teacher_id=None):
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
+
     teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
     #teacher_list = TeacherUser.objects.all()
     
@@ -226,6 +240,10 @@ def view_teachers_view (request, teacher_id=None):
 @login_required
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
         request = process_user_info(request)
+
+        if (request.user_role == 'TEACHER'):
+            return render_to_response('404.html',RequestContext(request))
+
         teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
         context_dictionary = {'teacher_list': teacher_list}
 
@@ -299,6 +317,10 @@ Delete Teacher
 @login_required
 def delete_teacher_view (request, teacher_id):
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
+
     teacher = TeacherUser.objects.get(pk=teacher_id)
     #deleting user profile
     profile = UserProfile.objects.get(id=teacher.user.id)
@@ -313,6 +335,9 @@ def delete_teacher_view (request, teacher_id):
 @login_required
 def upload_teachers_view(request):
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
 
     condict = {'upload_form' : TeacherCSVForm()}
 
@@ -355,6 +380,10 @@ def upload_teachers_view(request):
 
 @login_required
 def export_teachers_view (request):
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
+
     return render(request, "teachers/teacher_export.html")
 
 #==============================================================    ADMIN
@@ -363,6 +392,9 @@ def export_teachers_view (request):
 @login_required
 def create_admin_view(request):
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
     
     user_ret = None
     
@@ -434,7 +466,12 @@ def create_admin_view(request):
 #processes request data for the view admins page
 @login_required
 def view_admins_view (request, admin_id=None):
+
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
+
     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
     school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
     context_dictionary = {'system_admin_list': system_admin_list,
@@ -461,6 +498,10 @@ def view_admins_view (request, admin_id=None):
 def edit_admin_view (request, admin_id): #there should always be an admin_id here
     #!!! probably block off this view entirely for teachers !!!
         request = process_user_info(request)
+
+        if (request.user_role == 'TEACHER'):
+            return render_to_response('404.html',RequestContext(request))
+
         system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
         school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
         context_dictionary = {'system_admin_list': system_admin_list,
@@ -544,6 +585,11 @@ Delete Admin
 @login_required
 def delete_admin_view (request, admin_id):
     #deleting user profile
+    request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
+
     admin = UserProfile.objects.get(pk=admin_id)
     admin.user.delete()
     admin.delete()

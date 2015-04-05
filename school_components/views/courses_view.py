@@ -16,6 +16,10 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def course_list(request, course_id=None):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
 	filters, course_list = course_list_helper(request, Course.objects.all())
 	context_dictionary = {'course_list': course_list, 'course_filter' : filters }
 
@@ -60,6 +64,10 @@ def course_list_helper(request, course_list):
 @login_required
 def course_create(request):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
 	course_form = CourseForm()
 	course_form.fields['department'].queryset = Department.objects.filter(
 		school = request.user_school
@@ -105,6 +113,10 @@ Delete Course
 @login_required
 def course_delete(request, course_id):
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
     course = Course.objects.get(pk=course_id)
     Prerequisite.objects.filter(Q(course=course) | Q(prereq=course)).delete()
     course.delete()
@@ -115,6 +127,10 @@ def course_delete(request, course_id):
 @login_required
 def course_edit(request, course_id):
 		request = process_user_info(request)
+
+		if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+
 		# course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name')
 		# context_dictionary = {'course_list': course_list}
 
@@ -172,6 +188,10 @@ def course_edit(request, course_id):
 @login_required
 def dept_create(request):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
 	context_dictionary = {'dept_form': DepartmentForm()}
 	if request.method == 'POST':
 		d = DepartmentForm(request.POST)
@@ -191,6 +211,10 @@ def dept_create(request):
 @login_required
 def dept_list(request, dept_id = None):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
 	dept_list = Department.objects.filter(school = request.user_school).order_by('name')
 	filters, dept_list = dept_list_helper(request, dept_list)
 	
@@ -222,6 +246,10 @@ def dept_list_helper(request, dept_list):
 @login_required
 def dept_edit(request, dept_id):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
 	dept_list = Department.objects.filter(school = request.user_school).order_by('name')
 	filters, dept_list = dept_list_helper(request, dept_list)
 	context_dictionary = {'dept_list': dept_list, 'dept_filter': filters}
@@ -252,18 +280,23 @@ Delete Department
 '''
 @login_required
 def dept_delete(request, dept_id):
-    dep = Department.objects.get(pk=dept_id)
-    #courses = Course.objects.filter(department=dep)
-    #Prerequisite.objects.filter(Q(course__in=courses) | Q(prereq__in=courses)).delete()
-    #courses.delete()
+	request = process_user_info(request)
 
-    dep.delete()
-    messages.success(request, "Department has been deleted!")
-    return redirect('school:deptlist')
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
+	dep = Department.objects.get(pk=dept_id)
+
+	dep.delete()
+	messages.success(request, "Department has been deleted!")
+	return redirect('school:deptlist')
 
 @login_required
 def course_assignment(request, course_id=None):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
 
 	course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('-id')
 	context_dictionary = { 'course_list': course_list }

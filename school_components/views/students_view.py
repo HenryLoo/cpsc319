@@ -100,6 +100,10 @@ Delete Student
 @login_required
 def delete_student_view (request, student_id):
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+
     student = Student.objects.get(pk=student_id)
     #deleting its parent info if not parent of other student
     if Student.objects.filter(parent=student.parent).count() == 1:
@@ -113,6 +117,9 @@ def delete_student_view (request, student_id):
 @login_required
 def student_edit(request, student_id):
 	request = process_user_info(request)
+	if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+
 	student_list = Student.objects.all()
 
 	# if request.user_role == 'TEACHER':
@@ -198,6 +205,9 @@ def student_get(request):
 @login_required
 def student_create(request):
 	request = process_user_info(request)
+	if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+
 	s = StudentForm(request.POST)
 	context_dictionary = { 'student_form': StudentForm() }
 
@@ -232,6 +242,9 @@ def student_form(request):
 @login_required
 def student_upload(request):
 	request = process_user_info(request)
+	if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+
 	context_dictionary = {'form': StudentCSVForm()}
 	form = StudentCSVForm(request.POST, request.FILES)
 	
@@ -254,6 +267,9 @@ def student_upload(request):
 @login_required
 def student_export(request):
 	request = process_user_info(request)
+	if (request.user_role == 'TEACHER'): 
+			return render_to_response('404.html',RequestContext(request))
+			
 	context_dictionary = {}
 
 	if request.method == 'POST':

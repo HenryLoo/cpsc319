@@ -15,6 +15,10 @@ from django.shortcuts import redirect
 @login_required
 def school_list(request, school_id=None):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER') or (request.user_role  == 'SCHOOL_ADMIN'):
+		return render_to_response('404.html',RequestContext(request))
+
 	school_list = School.objects.all().order_by('title')
 	context_dictionary = {'school_list': school_list}
 
@@ -27,7 +31,12 @@ def school_list(request, school_id=None):
 
 @login_required
 def school_create(request):
+	
 	request = process_user_info(request)
+        
+	if (request.user_role == 'TEACHER') or (request.user_role  == 'SCHOOL_ADMIN'):
+		return render_to_response('404.html',RequestContext(request))
+
 	school_list = School.objects.all()
 	context_dictionary = {'school_list': school_list,
 							 'school_form': SchoolForm()}
@@ -49,6 +58,10 @@ def school_create(request):
 def school_change(request, school_id=None):
 	context_dictionary = {}
 	request = process_user_info(request)
+        
+	if (request.user_role == 'TEACHER') or (request.user_role  == 'SCHOOL_ADMIN'):
+		return render_to_response('404.html',RequestContext(request))
+
 	if school_id:
 
 		new_school = School.objects.get(pk = school_id)
@@ -80,7 +93,11 @@ def school_change(request, school_id=None):
 @login_required
 def school_edit(request, school_id): #there should always be an school_id here
     #!!! probably block off this view entirely for anybody but system admin !!!
-        request = process_user_info(request)    
+        request = process_user_info(request)  
+
+        if (request.user_role == 'TEACHER') or (request.user_role  == 'SCHOOL_ADMIN'):
+			return render_to_response('404.html',RequestContext(request))
+
         school_list = School.objects.all().order_by('title')
         context_dictionary = {'school_list': school_list}
         
@@ -109,6 +126,10 @@ Delete School
 '''
 @login_required
 def school_delete(request, school_id):
-    School.objects.get(pk=school_id).delete()
-    messages.success(request, "School has been deleted!")
-    return redirect('school:schoollist')
+	request = process_user_info(request)  
+	if (request.user_role == 'TEACHER') or (request.user_role  == 'SCHOOL_ADMIN'):
+		return render_to_response('404.html',RequestContext(request))
+
+	School.objects.get(pk=school_id).delete()
+	messages.success(request, "School has been deleted!")
+	return redirect('school:schoollist')

@@ -23,6 +23,10 @@ from accounts.utils import *
 @login_required
 def parent_list(request, parent_id=None):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
 	filters_form, parent_list = parent_list_helper(request) 
 	context_dictionary = {
 		'parent_list': parent_list,
@@ -102,6 +106,10 @@ def parent_list_helper(request):
 @login_required
 def payment_edit(request, parent_id, payment_id):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
 	if request.method == 'POST':
 		pay = Payment.objects.get(pk=payment_id)
 		pf = PaymentForm(request.POST, instance=pay)
@@ -126,6 +134,9 @@ def payment_edit(request, parent_id, payment_id):
 def parent_edit(request, parent_id):
 
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
 
 	form, parent_list = parent_list_helper(request)
 	context_dictionary = {'parent_list': parent_list}
@@ -175,6 +186,10 @@ def parent_get(request):
 @login_required
 def parent_create(request):
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+
 	p = ParentForm(request.POST)
 	context_dictionary = { 'parent_form': ParentForm() }
 	if request.method == 'POST':
@@ -207,6 +222,9 @@ def parent_form(request):
 @login_required
 def payment_create(request, parent_id):
 	request = process_user_info(request)
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
+		
 	if request.method == 'POST':
 		pay = Payment(parent=Parent.objects.get(pk=parent_id))
 		pf = PaymentForm(request.POST, instance=pay)

@@ -91,7 +91,10 @@ def class_list_helper(request, class_list):
 def class_create(request):
 
 	request = process_user_info(request)
-        
+
+	if (request.user_role == 'TEACHER'):
+		return render_to_response('404.html',RequestContext(request))
+
 	class_form = ClassForm(prefix='info')
 	courses = Course.objects.filter(
 		school = request.user_school, 
@@ -163,17 +166,28 @@ Delete Class
 '''
 @login_required
 def class_delete(request, class_id):
-    sc_class = Class.objects.get(pk=class_id)
-    ClassSchedule.objects.filter(sch_class=sc_class).delete()
-    ClassRegistration.objects.filter(reg_class=sc_class).delete()
-    ClassAttendance.objects.filter(reg_class=sc_class).delete()
-    Grading.objects.filter(reg_class=sc_class).delete()
-    Assignment.objects.filter(reg_class=sc_class).delete()
-    sc_class.delete()
-    messages.success(request, "Class has been deleted!")
-    return redirect('school:classlist')
+
+	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'):
+		return render_to_response('404.html',RequestContext(request))
+
+	sc_class = Class.objects.get(pk=class_id)
+	ClassSchedule.objects.filter(sch_class=sc_class).delete()
+	ClassRegistration.objects.filter(reg_class=sc_class).delete()
+	ClassAttendance.objects.filter(reg_class=sc_class).delete()
+	Grading.objects.filter(reg_class=sc_class).delete()
+	Assignment.objects.filter(reg_class=sc_class).delete()
+	sc_class.delete()
+	messages.success(request, "Class has been deleted!")
+	return redirect('school:classlist')
 
 def class_registration(request, class_id=None):
+	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'):
+		return render_to_response('404.html',RequestContext(request))
+
 	if request.POST:
 		return class_registration_helper(request, class_id)
 
@@ -197,6 +211,9 @@ def class_registration(request, class_id=None):
 @login_required
 def class_edit(request, class_id):
 		request = process_user_info(request)
+
+		if (request.user_role == 'TEACHER'):
+			return render_to_response('404.html',RequestContext(request))
                 
 		class_list = Class.objects.filter(
 		school = request.user_school, 
@@ -263,7 +280,11 @@ def class_edit(request, class_id):
 def class_registration(request, class_id=None):
         
 	request = process_user_info(request)
+
+	if (request.user_role == 'TEACHER'): 
+		return render_to_response('404.html',RequestContext(request))
         
+
 	if request.POST:
 		return class_registration_helper(request, class_id)
 

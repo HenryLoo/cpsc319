@@ -37,6 +37,9 @@ from graphos.renderers import gchart
 @login_required
 def statistics_page(request):
     request = process_user_info(request)
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
+
     context_dictionary = {}
 
     currentSchool = request.user_school
@@ -191,6 +194,10 @@ def statistics_page(request):
 @login_required
 def statistics_edit_page(request):
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
+
     context_dictionary = {}
 
     currentSchool = request.user_school
@@ -266,6 +273,9 @@ def notifications_page(request):
 @login_required
 def notifications_settings_page(request):
     request = process_user_info(request)
+
+    if (request.user_role == 'TEACHER'):
+        return render_to_response('404.html',RequestContext(request))
     
     context_dictionary = {}
 

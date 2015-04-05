@@ -184,26 +184,10 @@ def view_teachers_view (request, teacher_id=None):
     teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
     #teacher_list = TeacherUser.objects.all()
     
-     # check if searching 
-    search_name = request.GET.get('name', None)
-    search_section = request.GET.get('class_section', None)
-    search_course = request.GET.get('course', None)
-
-    if search_name:
-        teacher_list = teacher_list.filter(
-            Q(user__user__first_name__icontains=search_name) |
-            Q(user__user__last_name__icontains=search_name))
-    if search_course:
-        teacher_list = teacher_list.filter(
-            teacher__taught_class__course__name__icontains=search_course
-        )
-    if search_section:
-        teacher_list = teacher_list.filter(
-            teacher__taught_class__section__icontains=search_section
-        )
+    form, teacher_list = teacher_list_helper(request, teacher_list)
 
     context_dictionary = {'teacher_list': teacher_list,
-                        'teacher_filter': TeacherFilterForm() }
+                        'teacher_filter': form }
 
     if teacher_id:
         try:
@@ -245,7 +229,9 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
             return render_to_response('404.html',RequestContext(request))
 
         teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
-        context_dictionary = {'teacher_list': teacher_list}
+
+        form, teacher_list = teacher_list_helper(request, teacher_list)
+        context_dictionary = {'teacher_list': teacher_list, 'teacher_filter': form}
 
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
@@ -386,6 +372,32 @@ def export_teachers_view (request):
 
     return render(request, "teachers/teacher_export.html")
 
+def teacher_list_helper(request, teacher_list):
+    search_name = request.GET.get('name', None)
+    search_section = request.GET.get('class_section', None)
+    search_course = request.GET.get('course', None)
+
+    form = TeacherFilterForm(
+        {'name': search_name, 'course': search_course, 'class_section': search_section}) 
+
+    if search_name:
+        teacher_list = teacher_list.filter(
+            Q(user__user__first_name__icontains=search_name) |
+            Q(user__user__last_name__icontains=search_name))
+    if search_course:
+        teacher_list = teacher_list.filter(
+            Q(primary_classteacher__taught_class__course__name__icontains=search_course) |
+            Q(secondary_classteacher__taught_class__course__name__icontains=search_course)
+        )
+    if search_section:
+        teacher_list = teacher_list.filter(
+            Q(primary_classteacher__taught_class__section__icontains=search_section) |
+            Q(secondary_classteacher__taught_class__section__icontains=search_section)
+        )
+
+    return form, teacher_list
+
+
 #==============================================================    ADMIN
 
 #processes request data for the create admin page
@@ -474,8 +486,14 @@ def view_admins_view (request, admin_id=None):
 
     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
     school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
+
+    form, system_admin_list = admin_list_helper(request, system_admin_list)
+    form, school_admin_list = admin_list_helper(request, school_admin_list)
+
+
     context_dictionary = {'system_admin_list': system_admin_list,
-                              'school_admin_list': school_admin_list}
+                            'school_admin_list': school_admin_list,
+                            'admin_filter': form }
 
     if admin_id:
         try:
@@ -493,6 +511,7 @@ def view_admins_view (request, admin_id=None):
     return render(request, "admins/admin_list.html",
         context_dictionary)
 
+
 #processes request data for the edit admin page
 @login_required
 def edit_admin_view (request, admin_id): #there should always be an admin_id here
@@ -504,8 +523,14 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
 
         system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
         school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
+
+        form, system_admin_list = admin_list_helper(request, system_admin_list)
+        form, school_admin_list = admin_list_helper(request, school_admin_list)
+
         context_dictionary = {'system_admin_list': system_admin_list,
-                              'school_admin_list': school_admin_list}
+                              'school_admin_list': school_admin_list,
+                              'admin_filter': form}
+
 
         try:
             context_dictionary['error']='There is no admin with that id.'
@@ -576,7 +601,17 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
         return render(request, "admins/edit_admin.html",
                    context_dictionary)
 
+def admin_list_helper(request, admin_list):
+    search_name = request.GET.get('name', None)
+    search_school = request.GET.get('school', None)   
+    form = AdminFilterForm({'name': search_name}) 
 
+    if search_name:
+        admin_list = admin_list.filter(
+            Q(user__first_name__icontains=search_name) | 
+            Q(user__last_name__icontains=search_name))
+
+    return form, admin_list
 
 
 '''

@@ -86,7 +86,9 @@ def parent_list_helper(request):
 			student__enrolled_student__period = request.user_period
 		).annotate().order_by('last_name')
 	elif view == 'all':
-		parent_list = Parent.objects.all().order_by('last_name')
+		parent_list = Parent.objects.filter(
+			school = request.user_school
+		).order_by('last_name')
 
 	search_name = request.GET.get('name', None)
 	search_receipt = request.GET.get('receipt_no', None)  

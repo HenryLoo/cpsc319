@@ -38,7 +38,7 @@
 	<ul class="list-unstyled teacher-list">
 		{% for teacher in teacher_list %}
 	  		<li>
-	  		<a href="{% url 'account:view_teachers' teacher.id %}">
+	  		<a href="{% url 'account:view_teachers' teacher.id %}?{{request.GET.urlencode}}">
 	  			{{ teacher.user.user.first_name }} {{ teacher.user.user.last_name }}
 	  		</a>
 	  		</li>
@@ -65,7 +65,7 @@
 	<span>
 		<h3> Teacher Info </h3>
         <a href="" target-url="{% url 'account:delete_teacher' teacher.id %}" id="btn-delete" class="pull-right text-danger delete-link" data-toggle="modal" data-target="#delete-modal"> Delete </a>
-		<a href="{% url 'account:edit_teacher' teacher.id %}" id="edit-teacher-btn" class="pull-right"> Edit </a>
+		<a href="{% url 'account:edit_teacher' teacher.id %}?{{request.GET.urlencode}}" id="edit-teacher-btn" class="pull-right"> Edit </a>
 	</span>
 	<table class="table table-hover">
 		<tr> 

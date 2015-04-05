@@ -74,6 +74,9 @@ class AdminProfileForm(ModelForm):
         model = UserProfile
         fields = ['phone', 'role']
 
+class AdminFilterForm(forms.Form):
+    name = forms.CharField(required=False)
+
 class TeacherProfileForm(ModelForm):
     
     class Meta():

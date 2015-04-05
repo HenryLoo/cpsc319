@@ -437,8 +437,14 @@ def view_admins_view (request, admin_id=None):
     request = process_user_info(request)
     system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
     school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
+
+    form, system_admin_list = admin_list_helper(request, system_admin_list)
+    form, school_admin_list = admin_list_helper(request, school_admin_list)
+
+
     context_dictionary = {'system_admin_list': system_admin_list,
-                              'school_admin_list': school_admin_list}
+                            'school_admin_list': school_admin_list,
+                            'admin_filter': form }
 
     if admin_id:
         try:
@@ -456,6 +462,7 @@ def view_admins_view (request, admin_id=None):
     return render(request, "admins/admin_list.html",
         context_dictionary)
 
+
 #processes request data for the edit admin page
 @login_required
 def edit_admin_view (request, admin_id): #there should always be an admin_id here
@@ -463,8 +470,14 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
         request = process_user_info(request)
         system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
         school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
+
+        form, system_admin_list = admin_list_helper(request, system_admin_list)
+        form, school_admin_list = admin_list_helper(request, school_admin_list)
+
         context_dictionary = {'system_admin_list': system_admin_list,
-                              'school_admin_list': school_admin_list}
+                              'school_admin_list': school_admin_list,
+                              'admin_filter': form}
+
 
         try:
             context_dictionary['error']='There is no admin with that id.'
@@ -535,7 +548,17 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
         return render(request, "admins/edit_admin.html",
                    context_dictionary)
 
+def admin_list_helper(request, admin_list):
+    search_name = request.GET.get('name', None)
+    search_school = request.GET.get('school', None)   
+    form = AdminFilterForm({'name': search_name}) 
 
+    if search_name:
+        admin_list = admin_list.filter(
+            Q(user__first_name__icontains=search_name) | 
+            Q(user__last_name__icontains=search_name))
+
+    return form, admin_list
 
 
 '''

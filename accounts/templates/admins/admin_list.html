@@ -35,22 +35,16 @@ $('#edit-admin-btn').click(function() {
                     </div>
 
 <div class="col-md-3 admin-list">
-
+	<form class='form-inline' action="" method="get">
 	<div class="filters-holder">
-		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
-		aria-expanded="false" aria-controls="collapseExample">
-	  	Filters
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" aria-expanded="false">
+		Filters
 		</a>
 		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Role</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Branch</label> <input>
-		    <br>
-		  </div>
-		</div>
+        	{{ admin_filter.as_p }}
+        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
+    	</form>
+    	</div>    
 	</div>
 <br><br>
 
@@ -60,7 +54,7 @@ $('#edit-admin-btn').click(function() {
 		{% for admin in system_admin_list %}
 
 	  		<li>
-	  		<a href="{% url 'account:view_admins' admin.id %}">
+	  		<a href="{% url 'account:view_admins' admin.id %}?{{request.GET.urlencode}}">
 	  			 {{ admin.user.first_name }} {{ admin.user.last_name }}
 	  		</a>
 	  		</li>
@@ -76,7 +70,7 @@ $('#edit-admin-btn').click(function() {
 	<ul class="list-unstyled admin-list">
 		{% for admin in school_admin_list %}
 	  		<li>
-	  		<a href="{% url 'account:view_admins' admin.id %}">
+	  		<a href="{% url 'account:view_admins' admin.id %}?{{request.GET.urlencode}}">
 	  			 {{ admin.user.first_name }} {{ admin.user.last_name }}
 	  		</a>
 	  		</li>
@@ -105,7 +99,7 @@ $('#edit-admin-btn').click(function() {
 		{% if admin.role == 'SYSTEM_ADMIN' and user_role == 'SCHOOL_ADMIN' %} 
 		{%else%}
 		<a href="" target-url="{% url 'account:delete_admin' admin.id %}" id="btn-delete" class="pull-right text-danger delete-link" data-toggle="modal" data-target="#delete-modal"> Delete </a>
-		<a href="{% url 'account:edit_admin' admin.id %}" id="edit-admin-btn" class="pull-right"> Edit </a>
+		<a href="{% url 'account:edit_admin' admin.id %}?{{request.GET.urlencode}}" id="edit-admin-btn" class="pull-right"> Edit </a>
 		{%endif%}
 	</span>
 	<table class="table table-hover">

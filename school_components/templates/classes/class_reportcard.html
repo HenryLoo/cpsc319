@@ -93,9 +93,9 @@
                    <thead>
                    
                    <th>Assignment</th>
-                   <th>Maximum</th>
                     <th>Weight</th>
                    <th>Grade</th>
+                   <th>Maximum</th>
                    <th>Performance</th>
                    <th>Comments</th>
                    </thead>
@@ -104,9 +104,9 @@
     {% for grading in gradinglist%}
     <tr>
     <td>{{grading.assignment.title}}</td>
-    <td>{{grading.assignment.total_weight}}</td>
     <td>{{grading.assignment.grade_weight}}%</td>
     <td>{{grading.grade}}</td>
+       <td>/{{grading.assignment.total_weight}}</td>
   {% if grading.performance != None%}
     <td>{{grading.performance}}%</td>
   {%else%}

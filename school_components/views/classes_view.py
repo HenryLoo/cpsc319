@@ -764,6 +764,84 @@ def class_assignment(request, class_id=None):
 		RequestContext(request))
 
 @login_required
+def assignment_edit(request, class_id=None, assignment_id=None): #there should always be a period_id here
+    #!!! probably block off this view entirely for anybody but system admin !!!
+	request = process_user_info(request)
+	
+	if request.user_role == 'TEACHER':
+		teacherID = request.user_profile.teachers.first().id
+		# class_teacher = ClassTeacher.objects.filter(
+		# 	Q(primary_teacher__id=teacherID) | Q(secondary_teacher__id=teacherID))
+		# class_list = []
+		# for c in class_teacher:
+		# 	class_list.append(c.taught_class)
+		class_list = Class.objects.filter(
+			Q(classteacher__primary_teacher__id=teacherID) | 
+			Q(classteacher__secondary_teacher__id=teacherID)) 
+	else:
+
+		class_list = Class.objects.filter(
+			school = request.user_school, 
+			period = request.user_period
+		).order_by('course')
+
+	context_dictionary = { 'class_list': class_list }
+
+	if class_id and assignment_id:
+
+		try:
+
+				a = Assignment.objects.get(pk=assignment_id)
+				c = Class.objects.get(pk=class_id)
+
+                #make sure that school admins can only access by url the periods in their school
+				if request.user_role == 'SCHOOL_ADMIN' and c.school != request.user_school:
+					raise ObjectDoesNotExist
+                
+				context_dictionary['assignment_id']=assignment_id
+				context_dictionary['class_id']=class_id
+				
+				if request.method == 'POST':
+					assignment_form = ClassAssignmentForm(request.POST, request.FILES, instance = a)
+					if assignment_form.is_valid():
+						assignment_form.save()
+						context_dictionary['success']=True
+
+						#also update performance
+						a = Assignment.objects.get(pk = assignment_id)
+						grading_list = Grading.objects.filter(reg_class=c, assignment=a)
+
+						for current in grading_list:
+							grade = current.grade
+
+							if grade == None:
+								current.performance = None
+								current.save()
+
+							else:
+								total = a.total_weight
+								current.performance = (grade/total) * 100
+								current.save()
+
+						#also create new notifications
+						create_performance_notifications(request, c)
+
+						return HttpResponseRedirect(reverse('school:classassignment', args=(class_id,)))
+
+				else:
+					assignment_form = ClassAssignmentForm(instance = a)
+                        
+				context_dictionary['assignment_form'] = assignment_form
+
+		except ObjectDoesNotExist:
+				context_dictionary['error'] = 'No assignment with this id.'
+
+		return render_to_response("classes/class_assignment_edit.html",
+                        context_dictionary,
+                        RequestContext(request))
+
+
+@login_required
 def class_reportcard(request, class_id=None, student_id=None):
 
 	request = process_user_info(request)

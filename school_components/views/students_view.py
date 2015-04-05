@@ -177,6 +177,7 @@ def class_history_helper(class_reg):
 	m['period'] = class_reg.reg_class.period.description
 	m['id'] = class_reg.reg_class.id
 	m['class_name'] = class_reg.reg_class
+	m['status'] = class_reg.registration_status
 	return m
 
 # returns student info, used on the registration page
@@ -189,8 +190,8 @@ def student_get(request):
 		student_json = serializers.serialize("json", [student])
 
 		# get class history for student
-		class_list = [class_reg.reg_class for class_reg in 
-			student.enrolled_student.all().order_by('reg_class')]
+		class_list = [class_reg for class_reg in 
+			student.enrolled_student.all().order_by('reg_class__course')]
 		context_dictionary = {'class_list': class_list }
 
 		render_string = render_to_string(

@@ -157,6 +157,9 @@
 				<a href="{% url 'school:classlist' class.id %}">
 				{{ class.class_name }} 
 				</a>
+				{% if class.status == False %}
+					(Waiting List)
+				{% endif %}
 			</li>		
 		{% endfor %}
 		</ul>

@@ -1,6 +1,6 @@
 from school_components.models.courses_model import Course, Prerequisite, Department
 from school_components.forms.courses_form import *
-from school_components.models.classes_model import Assignment, Class
+from school_components.models.classes_model import Assignment, Class, ClassRegistration, Grading
 from school_components.forms.classes_form import ClassAssignmentForm
 
 from accounts.utils import *
@@ -318,10 +318,20 @@ def course_assignment(request, course_id=None):
 				new = form.save(commit=False)
 				this_class = Class.objects.get(pk=cl.id)
 				new.reg_class = this_class
-				new.content = request.FILES['content']
+				#new.content = request.FILES['content']
 				new.save()
 				# Redirect to the document list after POST
-		
+
+				class_reg_list = ClassRegistration.objects.filter(reg_class = cl).order_by('student__first_name')
+
+				a = Assignment.objects.get(pk=new.id)
+				for cla in class_reg_list:
+					verify = Grading.objects.filter(student=cla.student, reg_class=cl, assignment=a)
+					if len(verify) == 0:
+						Grading.objects.create(student =cla.student, reg_class=cl, assignment=a, performance=None, grade=None)
+
+
+
 		return HttpResponseRedirect(
 			reverse('school:courseassignment', args=(course_id,)))
 

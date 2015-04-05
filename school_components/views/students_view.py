@@ -77,7 +77,9 @@ def student_list_helper(request, student_list):
 			enrolled_student__reg_class__period = request.user_period
 		).annotate().order_by('last_name')
 	elif view == 'all':
-		student_list = Student.objects.all().order_by('last_name')
+		student_list = Student.objects.filter(
+			school = request.user_school
+		).order_by('last_name')
 
 	search_name = request.GET.get('name', None)
 	search_phone = request.GET.get('phone_number', None)   
@@ -145,6 +147,7 @@ def student_edit(request, student_id):
                 
 		context_dictionary['student_id'] = student_id
 		s = StudentForm(instance=student)
+		s.fields['parent'].queryset = Parent.objects.filter(school=request.user_school)
 		
 		if request.method == 'POST':
                         s = StudentForm(request.POST, instance=student)
@@ -198,10 +201,14 @@ def student_get(request):
 @login_required
 def student_create(request):
 	request = process_user_info(request)
-	s = StudentForm(request.POST)
-	context_dictionary = { 'student_form': StudentForm() }
+	s = StudentForm()
+	s.fields['parent'].queryset = Parent.objects.filter(school=request.user_school)
+
+	context_dictionary = { 'student_form': s }
 
 	if request.method == 'POST':
+		s = StudentForm(request.POST)
+
 		if s.is_valid():
 			student = s.save(commit=False)
 			student.school = request.user_school

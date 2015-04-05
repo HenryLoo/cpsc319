@@ -35,21 +35,15 @@ $('#edit-teacher-btn').click(function() {
                     </div>
 
 <div class="col-md-3 school-list">
-
 	<div class="filters-holder">
-		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" 
-		aria-expanded="false" aria-controls="collapseExample">
-	  	Filters
+		<a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filters" aria-expanded="false">
+		Filters
 		</a>
 		<div class="collapse" id="filters">
-		  <div>
-		    <input type="checkbox"> <label>Name</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Class</label> <input>
-		    <br>
-		    <input type="checkbox"> <label>Year</label> <input>
-		    <br>
-		  </div>
+		 <form action="{%url 'account:view_teachers' %}" method="get">
+        	{{ teacher_filter.as_p }}
+        	<button class="btn btn-xs btn-default" type="submit" value="submit">Submit</button>
+    	</form>
 		</div>
 	</div>
 <br><br>
@@ -57,7 +51,7 @@ $('#edit-teacher-btn').click(function() {
 	<ul class="list-unstyled teacher-list">
 		{% for teacher in teacher_list %}
 	  		<li>
-	  		<a href="{% url 'account:view_teachers' teacher.id %}">
+	  		<a href="{% url 'account:view_teachers' teacher.id %}?{{request.GET.urlencode}}">
 	  			{{ teacher.user.user.first_name }} {{ teacher.user.user.last_name }}
 	  		</a>
 	  		</li>
@@ -80,7 +74,7 @@ $('#edit-teacher-btn').click(function() {
 		</div>
 	{% endif %}
 	
-	<form role="form" action="{%url 'account:edit_teacher' teacher.id %}" method="post">
+	<form role="form" action="{%url 'account:edit_teacher' teacher.id %}?{{request.GET.urlencode}}" method="post">
 		{% csrf_token %}
 		{% if error %} {{error}} {%endif%}
 		<table class="table table-hover teacher-form">

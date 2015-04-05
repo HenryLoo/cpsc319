@@ -170,26 +170,10 @@ def view_teachers_view (request, teacher_id=None):
     teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
     #teacher_list = TeacherUser.objects.all()
     
-     # check if searching 
-    search_name = request.GET.get('name', None)
-    search_section = request.GET.get('class_section', None)
-    search_course = request.GET.get('course', None)
-
-    if search_name:
-        teacher_list = teacher_list.filter(
-            Q(user__user__first_name__icontains=search_name) |
-            Q(user__user__last_name__icontains=search_name))
-    if search_course:
-        teacher_list = teacher_list.filter(
-            teacher__taught_class__course__name__icontains=search_course
-        )
-    if search_section:
-        teacher_list = teacher_list.filter(
-            teacher__taught_class__section__icontains=search_section
-        )
+    form, teacher_list = teacher_list_helper(request, teacher_list)
 
     context_dictionary = {'teacher_list': teacher_list,
-                        'teacher_filter': TeacherFilterForm() }
+                        'teacher_filter': form }
 
     if teacher_id:
         try:
@@ -227,7 +211,9 @@ def view_teachers_view (request, teacher_id=None):
 def edit_teacher_view (request, teacher_id): #there should always be a teacher_id here
         request = process_user_info(request)
         teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
-        context_dictionary = {'teacher_list': teacher_list}
+
+        form, teacher_list = teacher_list_helper(request, teacher_list)
+        context_dictionary = {'teacher_list': teacher_list, 'teacher_filter': form}
 
         try:
             teacher = TeacherUser.objects.get(pk=teacher_id)
@@ -356,6 +342,32 @@ def upload_teachers_view(request):
 @login_required
 def export_teachers_view (request):
     return render(request, "teachers/teacher_export.html")
+
+def teacher_list_helper(request, teacher_list):
+    search_name = request.GET.get('name', None)
+    search_section = request.GET.get('class_section', None)
+    search_course = request.GET.get('course', None)
+
+    form = TeacherFilterForm(
+        {'name': search_name, 'course': search_course, 'class_section': search_section}) 
+
+    if search_name:
+        teacher_list = teacher_list.filter(
+            Q(user__user__first_name__icontains=search_name) |
+            Q(user__user__last_name__icontains=search_name))
+    if search_course:
+        teacher_list = teacher_list.filter(
+            Q(primary_classteacher__taught_class__course__name__icontains=search_course) |
+            Q(secondary_classteacher__taught_class__course__name__icontains=search_course)
+        )
+    if search_section:
+        teacher_list = teacher_list.filter(
+            Q(primary_classteacher__taught_class__section__icontains=search_section) |
+            Q(secondary_classteacher__taught_class__section__icontains=search_section)
+        )
+
+    return form, teacher_list
+
 
 #==============================================================    ADMIN
 

@@ -86,33 +86,36 @@
                                 {% endif %}
                                     <a href="?weekday=Sat">Sat</a></li>
                             </ul>
-                                            
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Class Name</th>
-                                        <th>Students</th>
-                                        <th>Teachers</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for class in schedule %}
+                            {% if schedule %}
+                                <table class="table">
+                                    <thead>
                                         <tr>
-                                            <th scope="row" style="width: 175px;">{{ class.0 }} - {{ class.1 }}</th>
-                                            <td><a href="{% url 'school:classlist' class.5 %}">{{ class.2 }}</a></td>
-                                            <td>{{ class.3 }}</td>
-                                            <td>{{ class.4 }}</td>
+                                            <th>Time</th>
+                                            <th>Class Name</th>
+                                            <th>Students</th>
+                                            <th>Teachers</th>
                                         </tr>
-                                    {% endfor %}
-<!--                                     <tr>
-                                        <th scope="row" style="width: 175px;">11:00 - 12:00 <span class="label label-info">Now</span></th>
-                                        <td><a href="#">Class 3</a></td>
-                                        <td>20</td>
-                                        <td>2</td>
-                                    </tr> -->
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {% for class in schedule %}
+                                            <tr>
+                                                <th scope="row" style="width: 175px;">{{ class.0 }} - {{ class.1 }}</th>
+                                                <td><a href="{% url 'school:classlist' class.5 %}">{{ class.2 }}</a></td>
+                                                <td>{{ class.3 }}</td>
+                                                <td>{{ class.4 }}</td>
+                                            </tr>
+                                        {% endfor %}
+    <!--                                     <tr>
+                                            <th scope="row" style="width: 175px;">11:00 - 12:00 <span class="label label-info">Now</span></th>
+                                            <td><a href="#">Class 3</a></td>
+                                            <td>20</td>
+                                            <td>2</td>
+                                        </tr> -->
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <div class="alert alert-info" role="alert">No classes today.</div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

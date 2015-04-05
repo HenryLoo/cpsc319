@@ -309,7 +309,7 @@ def class_registration_helper(request, class_id):
 
 	
 	# check if on waiting list
-	reg = student.enrolled_student.filter(reg_class__id=class_id)
+	reg = student.enrolled_student.filter(reg_class__id=class_id, registration_status=False)
 	if len(reg) > 0:
 		class_reg = reg[0]
 		class_reg.registration_status = True
@@ -337,7 +337,7 @@ def class_registration_helper(request, class_id):
 
 		return HttpResponse("Successfully registered.")
 	except IntegrityError:
-		return HttpResponse("This student is already registered.")
+		return HttpResponseBadRequest("This student is already registered.")
 	
 	except Exception as e:
 		return HttpResponseBadRequest(e)

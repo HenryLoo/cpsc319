@@ -22,40 +22,6 @@ from datetime import date, timedelta
 
 from django.contrib.auth.decorators import login_required
 
-# import weasyprint
-# from weasyprint import HTML
-# from django.template.loader import get_template
-
-# try:
-#     from StringIO import StringIO
-# except ImportError:
-#     from io import StringIO
-
-# def pdf_view(request, class_id=None):
-
-	#render_to_string(self.template_name, context, context_instance=RequestContext(self.request))
-
-	# html = HTML(string="reports/mytemplate.html")
-	# main_doc = html.render()
-	# pdf = main_doc.write_pdf()
-	# return HttpResponse(pdf, content_type='application/pdf')
-
-    # class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
-    # context_dictionary = { 'class_list': class_list }
-
-    # if class_id:
-    #     c = Class.objects.get(pk=class_id)
-    #     context_dictionary['class'] = c
-
-    # render_to_string("reports/mytemplate.html", context, context_instance=RequestContext(self.request))
-
-    # template = get_template("reports/mytemplate.html")
-    # context = {"title": "A PDF"}
-    # html = template.render(RequestContext(request, context))
-    # response = HttpResponse(mimetype="application/pdf")
-    # weasyprint.HTML(string=html).write_pdf(response)
-    # return response
-
 @login_required
 def view_reports(request):
     return render(request, "reports/view_reports.html")
@@ -71,6 +37,8 @@ def reportcard_teacher(request, class_id=None, student_id=None):
 	# class_list = Class.objects.filter(school = request.user_school, period = request.user_period).order_by('course')
 	context_dictionary = { 'class_list': class_list }
 
+	context_dictionary = { 'class_list': class_list }
+
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
@@ -82,16 +50,31 @@ def reportcard_teacher(request, class_id=None, student_id=None):
 		grading_list = Grading.objects.filter(student=s, reg_class=c).order_by('-assignment__date').reverse()
 		context_dictionary['gradinglist'] = grading_list
 
-		cont=0
-		for g in grading_list:
-			cont = cont + g.performance
-		total = len(grading_list)
-		if total!= 0:
-			average = cont/total
+
+		if len(grading_list) == 0:
+			context_dictionary['performancemessage'] = '*No assignments available to grade the student in this class.'
+			
 		else:
-			average = 0
+			#cont none for grades
+			cont_none = 0
+			for g in grading_list:
+				if g.grade == None:
+					cont_none = cont_none + 1
+			
+			if cont_none == 0: #has all grades
+				context_dictionary['performancemessage'] = ''
+
+			if cont_none > 0: #missing some grades
+				context_dictionary['performancemessage'] = '*Performance do not consider missing grades. Insert missing grades for an accurate performance.'
+
+			total = len(grading_list)
+			if total == cont_none: #missing all grades
+				context_dictionary['performancemessage'] = '*No grades available.'
+				
+	
 		# context_dictionary['overall'] = average
-		context_dictionary['overall'] = find_class_performance(student_id, class_id)
+		context_dictionary['overall'] = find_class_performance(student_id, c.id)
+
 
 	return render_to_response('reports/reportcard_teacher.html', context_dictionary, RequestContext(request))
 

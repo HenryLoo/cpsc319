@@ -79,10 +79,13 @@ def statistics_page(request):
     regXAxis = Period.objects.filter(school_id=currentSchool).all().order_by('start_date').values_list('description', flat=True)
     regYAxis = ClassRegistration.objects.filter(school_id=currentSchool).values_list('student_id', 'period_id').distinct().values('period_id').annotate(num_students=Count('period')).values_list('num_students', flat=True)
     regData = [['School', 'Students']]
-    for x in zip(regXAxis, regYAxis):
-        regData.append([x[0], x[1]])
-    regDataSource = SimpleDataSource(regData)
-    context_dictionary['registrationChart'] = gchart.LineChart(regDataSource, options={'title': "Student Registration", 'width': 299, 'height': 299})
+    if (len(regXAxis) > 0 and len(regYAxis) > 0):
+        for x in zip(regXAxis, regYAxis):
+            regData.append([x[0], x[1]])
+        regDataSource = SimpleDataSource(regData)
+        context_dictionary['registrationChart'] = gchart.LineChart(regDataSource, options={'title': "Student Registration", 'width': 299, 'height': 299})
+    else:
+        context_dictionary['registrationChart'] = ''
 
     
     performance = Grading.objects.filter(reg_class__school=currentSchool, reg_class__period=currentPeriod).values('student_id').annotate(avg_grades=Avg('performance'))
@@ -90,15 +93,21 @@ def statistics_page(request):
     performXAxis = list(set(gradeList))
     performYAxis = [len(list(group)) for key, group in groupby(gradeList)]
     performData = [['Grades', 'Students']]
-    for x in zip(performXAxis, performYAxis):
-        performData.append([x[0], x[1]])
-    performDataSource = SimpleDataSource(performData)
-    context_dictionary['performanceChart'] = gchart.LineChart(performDataSource, options={'title': "Student Performance", 'width': 299, 'height': 299})
+    if (len(performXAxis) > 0 and len(performYAxis) > 0):
+        for x in zip(performXAxis, performYAxis):
+            performData.append([x[0], x[1]])
+        performDataSource = SimpleDataSource(performData)
+        context_dictionary['performanceChart'] = gchart.LineChart(performDataSource, options={'title': "Student Performance", 'width': 299, 'height': 299})
 
-    numPass = sum(grade >= 50 for grade in gradeList)
-    numFail = sum(grade < 50 for grade in gradeList)
-    passFailDataSource = SimpleDataSource([['Status', 'Students'], ['Pass', numPass], ['Fail', numFail]])
-    context_dictionary['passFailChart'] = gchart.PieChart(passFailDataSource, options={'title': "Passing/Failing Students", 'width': 299, 'height': 299})
+        numPass = sum(grade >= 50 for grade in gradeList)
+        numFail = sum(grade < 50 for grade in gradeList)
+        passFailDataSource = SimpleDataSource([['Status', 'Students'], ['Pass', numPass], ['Fail', numFail]])
+        context_dictionary['passFailChart'] = gchart.PieChart(passFailDataSource, options={'title': "Passing/Failing Students", 'width': 299, 'height': 299})
+    else:
+        context_dictionary['performanceChart'] = ''
+        context_dictionary['passFailChart'] = ''
+
+    
 
     charts = Chart.objects.filter(school_id=currentSchool, period_id=currentPeriod)
     if request.user_role == 'TEACHER':

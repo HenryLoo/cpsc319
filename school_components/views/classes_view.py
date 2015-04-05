@@ -325,6 +325,16 @@ def class_registration_helper(request, class_id):
 			period=period, registration_status=True)
 
 		cr.save()
+
+		#add none grades for student for all existent assignments in the class
+		existent_assignments_list = Assignment.objects.filter(reg_class=reg_class)
+		if len(existent_assignments_list)!=0:
+			for a in existent_assignments_list:
+				verify = Grading.objects.filter(student=student, reg_class=reg_class, assignment=a)
+				if len(verify) == 0:
+					Grading.objects.create(student =student, reg_class=reg_class, assignment=a, performance=0)
+
+
 		return HttpResponse("Successfully registered.")
 	except IntegrityError:
 		return HttpResponse("This student is already registered.")

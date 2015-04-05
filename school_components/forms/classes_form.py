@@ -29,9 +29,9 @@ class ClassScheduleForm(ModelForm):
 		}
 
 class ClassTeacherForm(ModelForm):
-	class Meta:
-		model = ClassTeacher
-		fields = ['primary_teacher', 'secondary_teacher']
+                class Meta:
+                        model = ClassTeacher
+                        fields = ['primary_teacher', 'secondary_teacher']
 
 		def clean(self):
 			cleaned_data = super(ClassTeacherForm, self).clean()

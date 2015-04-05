@@ -51,7 +51,11 @@
     
     <tr>
     {% for p in performance_list%}
+    {%if p != None %}
     <td>{{p|floatformat}}%</td>
+    {%else%}
+    <td> - </td>
+    {%endif%}
     {%endfor%}
     </tr>
 
@@ -59,7 +63,12 @@
         
 </table>
 
-<h4>Overall Performance: {{overall|floatformat}}% </h4>            
+{%if overall %}
+<h4>Overall Performance: {{overall|floatformat}}%</h4>  
+{%else%}
+<h4>Overall Performance:  None</h4>  
+<h5>* No grades available for student</h5>  
+{%endif%}
 
 </div>
 

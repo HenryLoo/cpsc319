@@ -105,10 +105,18 @@
     <tr>
     <td>{{grading.assignment.title}}</td>
     <td>{{grading.assignment.total_weight}}</td>
-    <td>{{grading.assignment.grade_weight}}</td>
+    <td>{{grading.assignment.grade_weight}}%</td>
     <td>{{grading.grade}}</td>
+  {% if grading.performance != None%}
     <td>{{grading.performance}}%</td>
+  {%else%}
+    <td> None </td>
+  {%endif%}
+  {%if grading.comments != None%}
     <td>{{grading.comments}}</td>
+    {%else%}
+    <td> </td>
+    {%endif%}
     </tr>
     {%endfor%}
 
@@ -116,7 +124,12 @@
         
 </table>
 
-<h4>Overall Performance: {{overall|floatformat}}%</h4>            
+{%if overall %}
+<h4>Overall Performance: {{overall|floatformat}}%</h4>  
+{%else%}
+<h4>Overall Performance:  None</h4>  
+{%endif%}
+<h5>{{performancemessage}}</h5>          
 
 </div>
 </div>

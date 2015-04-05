@@ -332,7 +332,7 @@ def class_registration_helper(request, class_id):
 			for a in existent_assignments_list:
 				verify = Grading.objects.filter(student=student, reg_class=reg_class, assignment=a)
 				if len(verify) == 0:
-					Grading.objects.create(student =student, reg_class=reg_class, assignment=a, performance=0)
+					Grading.objects.create(student =student, reg_class=reg_class, assignment=a, performance=None, grade=None)
 
 
 		return HttpResponse("Successfully registered.")
@@ -591,10 +591,12 @@ def class_performance(request, class_id=None, assignment_id=None):
 						grade = current.grade
 
 						if grade == None:
-							grade = 0.0
-						total = a.total_weight
-						current.performance = (grade/total) * 100
-						current.save()
+							current.performance = None
+							current.save()
+						else:
+							total = a.total_weight
+							current.performance = (grade/total) * 100
+							current.save()
 
 					create_performance_notifications(request, c)
 
@@ -656,25 +658,25 @@ def find_overall_performance(student_id):
 
 #  returns a percent
 def find_class_performance(student_id, class_id):
-	student = Student.objects.get(pk=student_id)
-	c = Class.objects.get(pk=class_id)
-	performances = Grading.objects.filter(student=student, reg_class=c)
-	total_performance = 0 # in percent, weighted by assignment weight
+		
+		student = Student.objects.get(pk=student_id)
+		c = Class.objects.get(pk=class_id)
+		performances = Grading.objects.filter(student=student, reg_class=c)
+		total_performance = 0 # in percent, weighted by assignment weight
+		total_weight = 0
 
-	# for each performance, multiply by each weight 
-	for per in performances:
-		weight = per.assignment.grade_weight
-		total_performance += per.performance * weight
+		# for each performance, multiply by each weight 
+		for per in performances:
+			if per.performance != None:
+				weight = per.assignment.grade_weight
+				total_weight = total_weight + weight
+				total_performance += per.performance * weight	
 
-	# at the end divide by total of all assignments for this class
-	total_weight = sum(Assignment.objects.filter(
-		reg_class=c).values_list('grade_weight', flat=True))
 
-	if (total_weight == 0):
-		return None
+		if (total_weight == 0):
+			return None
 
-	return total_performance/total_weight
-
+		return total_performance/total_weight
 
 
 @login_required
@@ -724,7 +726,7 @@ def class_assignment(request, class_id=None):
 				for cl in class_reg_list:
 					verify = Grading.objects.filter(student=cl.student, reg_class=c, assignment=a)
 					if len(verify) == 0:
-						Grading.objects.create(student =cl.student, reg_class=c, assignment=a, performance=0)
+						Grading.objects.create(student =cl.student, reg_class=c, assignment=a, performance=None, grade=None)
 
 
 
@@ -775,14 +777,29 @@ def class_reportcard(request, class_id=None, student_id=None):
 		grading_list = Grading.objects.filter(student=s, reg_class=c).order_by('-assignment__date').reverse()
 		context_dictionary['gradinglist'] = grading_list
 
-		cont=0
-		for g in grading_list:
-			cont = cont + g.performance
-		total = len(grading_list)
-		if total!= 0:
-			average = cont/total
+
+		if len(grading_list) == 0:
+			context_dictionary['performancemessage'] = '*No assignments available to grade the student in this class.'
+			
 		else:
-			average = 0
+			#cont none for grades
+			cont_none = 0
+			for g in grading_list:
+				if g.grade == None:
+					cont_none = cont_none + 1
+			
+			if cont_none == 0: #has all grades
+				context_dictionary['performancemessage'] = ''
+
+			if cont_none > 0: #missing some grades
+				context_dictionary['performancemessage'] = '*Performance do not consider missing grades. Insert missing grades for an accurate performance.'
+
+			total = len(grading_list)
+			if total == cont_none: #missing all grades
+				context_dictionary['performancemessage'] = '*No grades available.'
+				
+
+	
 		# context_dictionary['overall'] = average
 		context_dictionary['overall'] = find_class_performance(student_id, c.id)
 

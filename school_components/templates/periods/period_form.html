@@ -30,13 +30,13 @@
 			{{ errors }}
 		</div>
 	{% endif %}
-
+	<br>
 	<form role="form" action="{%url 'school:periodcreate' %}" method="post">
 		{% csrf_token %}
-		<table class="table table-hover school-form">
-	    {{ period_form.as_table }}
-		{{ period_transfer_form.as_table }}
-	    </table>
+		
+	    {{ period_form.as_p }}
+		{{ period_transfer_form.as_p }}
+	    
 	    <input class="btn btn-primary center-block" type="submit" value="Submit" />
 	</form> 
 

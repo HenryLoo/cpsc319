@@ -54,13 +54,15 @@ def class_list(request, class_id=None):
 	if class_id:
 		try:
 			c = Class.objects.get(pk=class_id)
-			if c.school != request.user_school or c.period != request.user_period:
+			if c.school != request.user_school:
 				raise ObjectDoesNotExist
+			if c.period != request.user_period:
+                                context_dictionary['diff_period'] = c.period
 			context_dictionary['class'] = c
 			context_dictionary['enrolled'] = c.enrolled_class.filter(registration_status=True).count()
 			context_dictionary['waiting'] = c.enrolled_class.filter(registration_status=False).count()
 		except ObjectDoesNotExist:
-				context_dictionary['error'] = 'There is no class in this school and period with that id.'
+				context_dictionary['error'] = 'There is no class in this school with that id.'
 	 
 	return render_to_response("classes/class_list.html",
 		context_dictionary,

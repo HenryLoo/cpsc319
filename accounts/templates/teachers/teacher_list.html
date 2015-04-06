@@ -142,13 +142,11 @@
 		<ul>
 		{% for class in class_list.list %}
 			<li>
-			{% if user_period == class.period %}
+			
 			<a href="{% url 'school:classlist' class.id %}">
 			{{ class }} 
 			</a>
-			{% else %}
-			{{class}}
-			{% endif %}
+			
 			</li>
 		{% endfor %}
 		</ul>

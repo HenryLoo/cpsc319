@@ -86,8 +86,11 @@
 	<span>
 		<h3> Class Info </h3>
 		{% if user_role != 'TEACHER' %}
-        <a href="" target-url="{% url 'school:classdelete' class.id %}" id="btn-delete" class="pull-right text-danger delete-link" data-toggle="modal" data-target="#delete-modal"> Delete </a>
-		 <a href="{%url 'school:classedit' class.id%}?{{request.GET.urlencode}}" id="edit-class-btn" class="pull-right"> Edit </a>
+			{%if not diff_period %} 
+			<a href="" target-url="{% url 'school:classdelete' class.id %}" id="btn-delete" class="pull-right text-danger delete-link" data-toggle="modal" data-target="#delete-modal"> Delete </a>
+			<a href="{%url 'school:classedit' class.id%}?{{request.GET.urlencode}}" id="edit-class-btn" class="pull-right"> Edit </a>
+			{%else%} <h4>This class is from the period {{diff_period}}. Please go to that period if you wish to edit it.</h4>
+			{%endif%}
 		{% endif %}
 	</span>
 	<table class="table table-hover">

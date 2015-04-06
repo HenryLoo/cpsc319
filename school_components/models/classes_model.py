@@ -8,7 +8,6 @@ class Class(models.Model):
 	section = models.CharField(max_length=50, blank=True)
 	description = models.CharField(max_length=250, blank=True)
 	class_size = models.IntegerField(null=True, blank=True)
-	waiting_list_size = models.IntegerField(null=True, blank=True)
 	room = models.CharField(max_length=50, blank=True)
 
 	# used in displaying class history

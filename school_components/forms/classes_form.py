@@ -8,7 +8,7 @@ from datetime import datetime
 class ClassForm(ModelForm):
 	class Meta:
 		model = Class
-		fields = ['course', 'section', 'description', 'class_size', 'waiting_list_size', 'room']
+		fields = ['course', 'section', 'description', 'class_size', 'room']
 
 
 class ClassScheduleForm(ModelForm):

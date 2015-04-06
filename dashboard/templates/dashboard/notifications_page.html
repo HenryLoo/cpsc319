@@ -65,6 +65,7 @@
 
 										</div>
 										<!-- /.row -->
+										
 									
 
 
@@ -78,7 +79,9 @@
 													    <h4 class="list-group-item-heading">
 													    	<div class="row">
 													    		<div class="col-lg-4" style="width:410px;word-wrap:break-word;">
-													    			<span class="label label-primary">{{ notification.1.notification_type }}</span> {{ notification.2.first_name }} {{ notification.2.last_name }}
+													    			<span class="label label-primary">{{ notification.1.notification_type }}</span> 
+													    			{{ notification.0.classs }}:
+													    			{{ notification.2.first_name }} {{ notification.2.last_name }}
 													    		</div>
 													    		<div class="row">
 														    		<select class="btn btn-default dropdown-toggle" name="{{ notification.0.id }}" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 120px; height: 30px">

@@ -10,6 +10,7 @@ class Notification(models.Model):
     notification_type = models.ForeignKey(NotificationType)
     #change for student foreign key
     student = models.ForeignKey('school_components.Student')
+    classs = models.ForeignKey('school_components.Class')
     school = models.ForeignKey('school_components.School')
     period = models.ForeignKey('school_components.Period')
     date = models.DateTimeField(default=datetime.now())

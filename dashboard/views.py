@@ -92,7 +92,7 @@ def statistics_page(request):
 
     
     performance = Grading.objects.filter(reg_class__school=currentSchool, reg_class__period=currentPeriod).values('student_id').annotate(avg_grades=Avg('performance'))
-    gradeList = [round(grade) for grade in performance.order_by('avg_grades').values_list('avg_grades', flat=True)]
+    gradeList = [round(grade) if grade is not None else None for grade in performance.order_by('avg_grades').values_list('avg_grades', flat=True)]
     performXAxis = list(set(gradeList))
     performYAxis = [len(list(group)) for key, group in groupby(gradeList)]
     performData = [['Grades', 'Students']]
@@ -245,6 +245,7 @@ def notifications_page(request):
 
     currentSchool = request.user_school
     currentPeriod = request.user_period
+    currentTeacher = request.user_profile.teachers.get()
 
     if request.method == 'POST':
         for key in request.POST:
@@ -255,7 +256,10 @@ def notifications_page(request):
                 elif request.POST.get(key) == 'Called':
                     notif.update(status=True)
 
-    allNotifications = Notification.objects.filter(school_id=currentSchool, period_id=currentPeriod).all().order_by('-date')
+    allNotifications = Notification.objects.filter(
+        Q(school_id=currentSchool) & Q(period_id=currentPeriod) & 
+        (Q(classs__classteacher__primary_teacher=currentTeacher) |
+        Q(classs__classteacher__secondary_teacher=currentTeacher))).all().order_by('-date')
     notifications = allNotifications
     context_dictionary['filter'] = request.GET.get("filter")
     if context_dictionary['filter'] == '1':

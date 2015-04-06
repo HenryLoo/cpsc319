@@ -541,6 +541,7 @@ def create_attendance_notifications(request, class_):
 			# creates another notification only if start of absence is different
 			notif_list = Notification.objects.filter(
 				notification_type=attendance_notification,
+				classs=class_,
 				student=curr_student,
 				date=first_absence
 				)
@@ -548,6 +549,7 @@ def create_attendance_notifications(request, class_):
 				notification = Notification(
 					notification_type=attendance_notification, 
 					student=curr_student,
+					classs=class_,
 					school=request.user_school,
 					period=request.user_period,
 					date=first_absence,
@@ -649,11 +651,12 @@ def create_performance_notifications(request, c):
 	# go over each student in the class
 	students = [x.student for x in c.enrolled_class.all()]
 	for student in students:
-		per = find_overall_performance(student.id)
+		per = find_class_performance(student.id, c.id)
 
 		# check if unread notification already exists
 		notif_list = Notification.objects.filter(
 			notification_type=performance_notification,
+			classs=c,
 			student=student,
 			status=False
 		)
@@ -663,6 +666,7 @@ def create_performance_notifications(request, c):
 			notif = Notification(
 				notification_type = performance_notification,
 				student = student,
+				classs=c,
 				school = request.user_school, 
 				period = request.user_period,
 				status=False)

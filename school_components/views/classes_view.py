@@ -57,6 +57,8 @@ def class_list(request, class_id=None):
 			if c.school != request.user_school or c.period != request.user_period:
 				raise ObjectDoesNotExist
 			context_dictionary['class'] = c
+			context_dictionary['enrolled'] = c.enrolled_class.filter(registration_status=True).count()
+			context_dictionary['waiting'] = c.enrolled_class.filter(registration_status=False).count()
 		except ObjectDoesNotExist:
 				context_dictionary['error'] = 'There is no class in this school and period with that id.'
 	 
@@ -182,31 +184,32 @@ def class_delete(request, class_id):
 	messages.success(request, "Class has been deleted!")
 	return redirect('school:classlist')
 
-def class_registration(request, class_id=None):
-	request = process_user_info(request)
+# why do we have 2??
+# def class_registration(request, class_id=None):
+# 	request = process_user_info(request)
 
-	if (request.user_role == 'TEACHER'):
-		return render_to_response('404.html',RequestContext(request))
+# 	if (request.user_role == 'TEACHER'):
+# 		return render_to_response('404.html',RequestContext(request))
 
-	if request.POST:
-		return class_registration_helper(request, class_id)
+# 	if request.POST:
+# 		return class_registration_helper(request, class_id)
 
-	else:
-		class_list = Class.objects.filter(
-			school = request.user_school, 
-			period = request.user_period).order_by('course')
-		context_dictionary = {'class_list': class_list }
+# 	else:
+# 		class_list = Class.objects.filter(
+# 			school = request.user_school, 
+# 			period = request.user_period).order_by('course')
+# 		context_dictionary = {'class_list': class_list }
 
-		if class_id:
-			cl = Class.objects.get(pk=class_id)
-			context_dictionary['class'] = cl 
-			context_dictionary['student_list'] = Student.objects.all()
-			context_dictionary['form'] = ClassRegistrationForm()
-			context_dictionary['remove_form'] = RemoveClassRegistrationForm()
+# 		if class_id:
+# 			cl = Class.objects.get(pk=class_id)
+# 			context_dictionary['class'] = cl 
+# 			context_dictionary['student_list'] = Student.objects.all()
+# 			context_dictionary['form'] = ClassRegistrationForm()
+# 			context_dictionary['remove_form'] = RemoveClassRegistrationForm()
 		
-		return render_to_response("classes/class_registration.html",
-			context_dictionary,
-			RequestContext(request))
+# 		return render_to_response("classes/class_registration.html",
+# 			context_dictionary,
+# 			RequestContext(request))
 
 @login_required
 def class_edit(request, class_id):
@@ -302,6 +305,8 @@ def class_registration(request, class_id=None):
 			)
 			context_dictionary['form'] = ClassRegistrationForm()
 			context_dictionary['remove_form'] = RemoveClassRegistrationForm()
+			context_dictionary['enrolled'] = cl.enrolled_class.filter(registration_status=True).count()
+			context_dictionary['waiting'] = cl.enrolled_class.filter(registration_status=False).count()
 		
 		return render_to_response("classes/class_registration.html",
 			context_dictionary,

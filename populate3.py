@@ -35,8 +35,8 @@ def populate():
     teacher_userprofile2 = UserProfile.objects.create(user= teacher_user2, phone='778-666-000', role='TEACHER', period=period2, school=school2)
     teacher2 = TeacherUser.objects.create(user=teacher_userprofile2, teaching_availability= teaching2, comments='comments here')
    
-    class1 = Class.objects.create(course=course1,school=school1, period=period1, section='1', description='description here', class_size=20, waiting_list_size=10, room='X')
-    class2 = Class.objects.create(course=course2,school=school2, period=period2, section='1', description='description here', class_size=20, waiting_list_size=10, room='X')
+    class1 = Class.objects.create(course=course1,school=school1, period=period1, section='1', description='description here', class_size=20, room='X')
+    class2 = Class.objects.create(course=course2,school=school2, period=period2, section='1', description='description here', class_size=20, room='X')
 
     class_teacher = ClassTeacher.objects.create(primary_teacher=teacher1, secondary_teacher=None, taught_class=class1)
     class_teacher2 = ClassTeacher.objects.create(primary_teacher=teacher2, secondary_teacher=None, taught_class=class2)

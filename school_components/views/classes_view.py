@@ -446,7 +446,7 @@ def class_attendance(request, class_id=None):
 							if len(verify) == 0:
 								ClassAttendance.objects.create(student =cl.student, reg_class=c, date=date_value)
 
-						query_list = ClassAttendance.objects.filter(date=date_value)
+						query_list = ClassAttendance.objects.filter(date=date_value, reg_class=c)
 						formset = AttendanceFormSetFactory(queryset=query_list)
 						context_dictionary['formset'] = formset
 						context_dictionary['querylist'] = query_list
@@ -482,7 +482,7 @@ def class_attendance(request, class_id=None):
 
 					context_dictionary['date_value'] = date_value
 
-					query_list = ClassAttendance.objects.filter(date=date_value)
+					query_list = ClassAttendance.objects.filter(date=date_value, reg_class=c)
 					formset = AttendanceFormSetFactory(queryset=query_list)
 					context_dictionary['formset'] = formset
 					context_dictionary['querylist'] = query_list
@@ -502,7 +502,7 @@ def class_attendance(request, class_id=None):
 				else:
 					date_value = inter	
 
-				query_list = ClassAttendance.objects.filter(date=date_value)
+				query_list = ClassAttendance.objects.filter(date=date_value, reg_class=c)
 				context_dictionary['querylist'] = query_list
 				formset = AttendanceFormSetFactory(queryset=query_list)
 		

@@ -56,6 +56,13 @@
 </div>
 
 <div class="col-md-8">
+	{% if add_succ %}
+		<div class="alert alert-success" role="alert"/> Assignment added successfully. </div>
+	{%endif%}
+	
+	{% if edit_succ %}
+		<div class="alert alert-success" role="alert"/> Assignment edited successfully. </div>
+	{%endif%}
     {% if class %}
         <h4>Add Assignment</h4>
         <br><br>   

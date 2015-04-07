@@ -775,6 +775,10 @@ def class_assignment(request, class_id=None):
 
 
 				# Redirect to the document list after POST
+				context_dictionary['form'] = ClassAssignmentForm()
+				context_dictionary['add_succ'] = True
+				return render_to_response('classes/class_assignment.html', context_dictionary,
+                                        RequestContext(request))
 				return HttpResponseRedirect(
 					reverse('school:classassignment', args=(class_id,)))
 		else:
@@ -787,8 +791,7 @@ def class_assignment(request, class_id=None):
 		RequestContext(request))
 
 @login_required
-def assignment_edit(request, class_id=None, assignment_id=None): #there should always be a period_id here
-    #!!! probably block off this view entirely for anybody but system admin !!!
+def assignment_edit(request, class_id=None, assignment_id=None): 
 	request = process_user_info(request)
 	
 	if request.user_role == 'TEACHER':

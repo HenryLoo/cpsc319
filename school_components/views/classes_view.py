@@ -128,38 +128,42 @@ def class_create(request):
 		te.fields['primary_teacher'].queryset = teachers
 		te.fields['secondary_teacher'].queryset = teachers
 	
-		if cf.is_valid() and sf.is_valid() and te.is_valid():
-			# save class
-			new = cf.save(commit=False)
-			new.school = request.user_school
-			new.period = request.user_period
-			new.save()
+		try:
+			if cf.is_valid() and sf.is_valid() and te.is_valid():
+				# save class
+				new = cf.save(commit=False)
+				new.school = request.user_school
+				new.period = request.user_period
+				new.save()
 
-			# save class schedule
-			schedule = sf.save(commit=False)
-			schedule.sch_class = new
-			schedule.save()
+				# save class schedule
+				schedule = sf.save(commit=False)
+				schedule.sch_class = new
+				schedule.save()
 
-			# save class teacher
-			#try:
-			
-			teacher = te.save(commit=False)
-			teacher.taught_class = new
-			teacher.save()
-			#except Exception as e:
-				# no teacher in request, don't create ClassTeacher object
-			#	pass
+				# save class teacher
+				#try:
+				
+				teacher = te.save(commit=False)
+				teacher.taught_class = new
+				teacher.save()
+				#except Exception as e:
+					# no teacher in request, don't create ClassTeacher object
+				#	pass
 
-			return HttpResponseRedirect(
-				reverse('school:classlist', args=(new.id,)))
-		else:
-			context_dictionary['class_errors'] = cf.errors
-			context_dictionary['schedule_errors'] = sf.errors
-			context_dictionary['teacher_errors'] = te.errors
+				return HttpResponseRedirect(
+					reverse('school:classlist', args=(new.id,)))
+			else:
+				context_dictionary['class_errors'] = cf.errors
+				context_dictionary['schedule_errors'] = sf.errors
+				context_dictionary['teacher_errors'] = te.errors
 
-			context_dictionary['class_form']=cf
-			context_dictionary['classday_form']=sf
-			context_dictionary['classteacher_form']=te
+				context_dictionary['class_form']=cf
+				context_dictionary['classday_form']=sf
+				context_dictionary['classteacher_form']=te
+		
+		except IntegrityError:
+			context_dictionary['class_errors'] = "A class with this course and section already exists."
                         
 	return render_to_response('classes/class_form.html',
 		context_dictionary,
@@ -278,6 +282,8 @@ def class_edit(request, class_id):
 				
 		except ObjectDoesNotExist:
 				context_dictionary['error'] = 'There is no class in this school and period with that id.'
+		except IntegrityError:
+			context_dictionary['error'] = "A class with this course and section already exists."
 						
 		return render_to_response("classes/class_edit.html",context_dictionary,RequestContext(request))
 

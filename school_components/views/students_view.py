@@ -174,6 +174,7 @@ def student_edit(request, student_id):
 # turn into a dict to help with sorting in UI
 def class_history_helper(class_reg):
 	m = model_to_dict(class_reg)
+	print class_reg.reg_class
 	m['period'] = class_reg.reg_class.period.description
 	m['id'] = class_reg.reg_class.id
 	m['class_name'] = class_reg.reg_class

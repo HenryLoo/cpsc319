@@ -43,19 +43,25 @@
 <div class="col-md-3">
 {% if class_list %}
 <div class="list-group">
-    {% for class in class_list %}
-        <a href="{% url 'school:classperformance' class.id %}" class="list-group-item">
-           {{ class.course }} {{ class.section }}
+    {% for class_ in class_list %}
+      {% if class_ = class %}
+        <a href="{% url 'school:classperformance' class_.id %}" class="list-group-item active">
+           {{ class_.course }} {{ class_.section }}
         </a>
-      {% endfor %}
+      {% else %}
+        <a href="{% url 'school:classperformance' class_.id %}" class="list-group-item">
+           {{ class_.course }} {{ class_.section }}
+        </a>
+      {% endif %}
+    {% endfor %}
 </div>
 {% else %}
     <div class="alert alert-info" role="alert">No classes have been added.</div>
 {% endif %}
 </div>
 
-{% if class %}
 <div class="col-md-8">
+{% if class %}
   <div class='col-md-4'>
 
 {% if assignment %}
@@ -87,17 +93,16 @@
     {% endfor %}
   </ul>
 </div>
-</div>
 {%else%}
 </div>
   <div class="alert alert-info" role="alert"> No assignments to list. Add Assignments for grading. </div>
-{%endif%}
+{% endif %} <!-- assignment list -->
 {% endif %}
 
 {% if assignment %}
 <div class="col-md-12">
-        <h4>Assignment Grades</h4>
-        <div class="table-responsive">
+  <h4>Assignment Grades</h4>
+  <div class="table-responsive">
 
 
 <form role="form" action="{%url 'school:classperformance' class.id assignment.id %}" method="post" enctype="multipart/form-data">
@@ -105,20 +110,18 @@
     {% csrf_token %}
     {{ formset.management_form }}
                 
-              <table id="mytable" class="table table-bordred table-striped">
-                   
-                   <thead>
-                  
-                   <th>Name</th>
-                   <th>Weight</th>
-                   <th>Grade</th>
-                   <th>Total points</th>
-                     <th>Comments</th>
-                   </thead>
-              <tbody>
-    
-
-     {% for form in formset.forms %}
+    <table id="mytable" class="table table-bordred table-striped">
+         
+         <thead>
+        
+         <th>Name</th>
+         <th>Weight</th>
+         <th>Grade</th>
+         <th>Total points</th>
+           <th>Comments</th>
+         </thead>
+    <tbody>
+      {% for form in formset.forms %}
 
     <tr>
     {{form.id}}
@@ -147,7 +150,7 @@
     </tr>
        
     {% endfor %}
-
+    </tbody>
 </table>
 
     <input type="submit" class="btn btn-primary pull-right" value="Save" />
@@ -160,11 +163,15 @@
     </div>
 
 {% endif %}
+{% else %}
+  {% if class_list %}
+        <div class="alert alert-info" role="alert">
+            Select a class to view grades.
+        </div>
+    {% endif %}
 {% endif %}
-    
-    
-    
 
+</div>
 
 
 {% endblock class_content %}

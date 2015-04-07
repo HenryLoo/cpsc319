@@ -37,21 +37,25 @@
 <div class="col-md-3">
 {% if class_list %}
 <div class="list-group">
-    {% for class in class_list %}
-        <a href="{% url 'school:classreportcard' class.id %}" class="list-group-item">
-           {{ class.course }} {{ class.section }}
+    {% for class_ in class_list %}
+      {% if class = class_ %}
+        <a href="{% url 'school:classreportcard' class_.id %}" class="list-group-item active">
+           {{ class_.course }} {{ class_.section }}
         </a>
-      {% endfor %}
+      {% else %}
+        <a href="{% url 'school:classreportcard' class_.id %}" class="list-group-item">
+           {{ class_.course }} {{ class_.section }}
+        </a>
+      {% endif %}
+    {% endfor %}
 </div>
 {% else %}
     <div class="alert alert-info" role="alert">No classes have been added.</div>
 {% endif %}
 </div>
 
-{% if class %}
-
 <div class="col-md-8">
-
+{% if class %}
   <div class='col-md-4'>
 
 {% if student %}
@@ -88,41 +92,40 @@
         <div class="table-responsive">
 
                 
-              <table id="mytable" class="table table-bordred table-striped">
-                   
-                   <thead>
-                   
-                   <th>Assignment</th>
-                    <th>Weight</th>
-                   <th>Grade</th>
-                   <th>Maximum</th>
-                   <th>Performance</th>
-                   <th>Comments</th>
-                   </thead>
-    <tbody>
+    <table id="mytable" class="table table-bordred table-striped">
+         
+       <thead>
+       
+       <th>Assignment</th>
+        <th>Weight</th>
+       <th>Grade</th>
+       <th>Maximum</th>
+       <th>Performance</th>
+       <th>Comments</th>
+       </thead>
+      <tbody>
     
-    {% for grading in gradinglist%}
-    <tr>
-    <td>{{grading.assignment.title}}</td>
-    <td>{{grading.assignment.grade_weight}}%</td>
-    <td>{{grading.grade}}</td>
-       <td>/{{grading.assignment.total_weight}}</td>
-  {% if grading.performance != None%}
-    <td>{{grading.performance}}%</td>
-  {%else%}
-    <td> None </td>
-  {%endif%}
-  {%if grading.comments != None%}
-    <td>{{grading.comments}}</td>
-    {%else%}
-    <td> </td>
-    {%endif%}
-    </tr>
-    {%endfor%}
+        {% for grading in gradinglist%}
+        <tr>
+        <td>{{grading.assignment.title}}</td>
+        <td>{{grading.assignment.grade_weight}}%</td>
+        <td>{{grading.grade}}</td>
+           <td>/{{grading.assignment.total_weight}}</td>
+      {% if grading.performance != None%}
+        <td>{{grading.performance}}%</td>
+      {%else%}
+        <td> None </td>
+      {%endif%}
+      {%if grading.comments != None%}
+        <td>{{grading.comments}}</td>
+        {%else%}
+        <td> </td>
+        {%endif%}
+        </tr>
+        {%endfor%}
 
-    </tbody>
-        
-</table>
+        </tbody>        
+    </table>
 
 {%if overall %}
 <h4>Overall Performance: {{overall|floatformat}}%</h4>  
@@ -135,7 +138,14 @@
 </div>
 
 {% endif %}
+{% else %}
+  {% if class_list %}
+        <div class="alert alert-info" role="alert">
+            Select a class to view student performance.
+        </div>
+    {% endif %}
 {% endif %}
+</div>
 
 
 {% endblock class_content %}

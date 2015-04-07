@@ -166,6 +166,7 @@ def attendancelist(request, class_id=None):
 
 	context_dictionary = { 'class_list': class_list }
 
+
 	if class_id:
 		c = Class.objects.get(pk=class_id)
 		context_dictionary['class'] = c
@@ -174,16 +175,18 @@ def attendancelist(request, class_id=None):
 		context_dictionary['dateform'] = date_form
 
 		if request.method == "POST":
+
+				print('post')
 				mon= -1
 				tue= -1
 				wed= -1
 				thu= -1
-				fri= -1
+				fri= -1					
 				sat= -1
 				sun= -1
 
 				schedule = ClassSchedule.objects.get(sch_class=c, sch_class__school = request.user_school, sch_class__period = request.user_period)
-				
+					
 				if schedule.monday == True:
 					mon = 0
 				if schedule.tuesday == True:
@@ -197,46 +200,48 @@ def attendancelist(request, class_id=None):
 				if schedule.saturday == True:
 					sat = 5
 				if schedule.sunday == True:
-					sun = 6
+					sun = 6				
 
 				date_form = AttendanceDateForm(request.POST)
-				inter_start = date_form['start_date'].value()
-				inter_end = date_form['end_date'].value()
 
-				context_dictionary['start_date_value'] = inter_start
-				context_dictionary['end_date_value'] = inter_end
+				if date_form.is_valid():
+					print('valid')
+					inter_start = date_form['start_date'].value()
+					inter_end = date_form['end_date'].value()
 
-				date_form = AttendanceDateForm(initial={'start_date': inter_start, 'end_date': inter_end})
-				context_dictionary['dateform'] = date_form
+					context_dictionary['start_date_value'] = inter_start
+					context_dictionary['end_date_value'] = inter_end
+
+					date_form = AttendanceDateForm(initial={'start_date': inter_start, 'end_date': inter_end})
+					context_dictionary['dateform'] = date_form
+					
+					start_date = datetime.datetime.strptime(inter_start, "%m/%d/%Y").date()
+					end_date = datetime.datetime.strptime(inter_end, "%m/%d/%Y").date()
+
+					delta = end_date - start_date
+					print(delta)
+					
+					date_list = []
+					week_list = []
+					for i in range(delta.days + 1):
+						day = start_date + timedelta(days=i)
+						if (day.weekday() == mon) or (day.weekday() == tue) or (day.weekday() == wed) or (day.weekday() == thu) or (day.weekday() == fri) or (day.weekday() == sat) or (day.weekday() == sun):
+	   						print (day)
+	   						date_list.append(day)
+	   						week_list.append(day.weekday())
+
+					days_list = zip(date_list, week_list)
+					context_dictionary['dayslist'] = days_list
+					print(days_list)
+
+				else:
+					print('error')
+					context_dictionary['date_errors'] = date_form.errors
 				
-				start_date = datetime.datetime.strptime(inter_start, "%m/%d/%Y").date()
-				end_date = datetime.datetime.strptime(inter_end, "%m/%d/%Y").date()
-
-				delta = end_date - start_date
-
-				date_list = []
-				week_list = []
-				for i in range(delta.days + 1):
-					day = start_date + timedelta(days=i)
-					if (day.weekday() == mon) or (day.weekday() == tue) or (day.weekday() == wed) or (day.weekday() == thu) or (day.weekday() == fri) or (day.weekday() == sat) or (day.weekday() == sun):
-   						print (day)
-   						date_list.append(day)
-   						week_list.append(day.weekday())
-
-				days_list = zip(date_list, week_list)
-				context_dictionary['dayslist'] = days_list
-
 				return render_to_response('reports/attendance.html', context_dictionary, RequestContext(request))
 
 		else:
 				date_form = AttendanceDateForm()
-				# inter = date_form['date'].value()
-				# if inter and '/' in inter:
-				# 	x,y,z = inter.split('/')
-				# 	date_value = z + "-" + x + "-" + y
-				# else:
-				# 	date_value = inter	
-				
 				context_dictionary['dateform'] = date_form
 
 	return render_to_response('reports/attendance.html', context_dictionary, RequestContext(request))

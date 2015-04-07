@@ -614,7 +614,8 @@ def class_performance(request, class_id=None, assignment_id=None):
 				formset = GradingFormSetFactory(request.POST, instance=assignment)
 
 				if formset.is_valid():
-
+                                        context_dictionary['succ'] = True
+                                        
 					instances = formset.save(commit=False)
 					for instance in instances:
 						instance.assignment = a
@@ -636,13 +637,18 @@ def class_performance(request, class_id=None, assignment_id=None):
 
 					create_performance_notifications(request, c)
 
+					
+
 				else:
 					print('Error')
 					context_dictionary['errors'] = formset.errors
 					print(formset.errors)
 
-				return HttpResponseRedirect(
-						reverse('school:classperformance', args=(class_id, assignment_id)))
+                                formset = GradingFormSetFactory(instance=assignment)
+                                context_dictionary['formset'] = formset
+                                
+                                return render_to_response('classes/class_grading.html', context_dictionary,
+                                        RequestContext(request))
 
 			else:
 				formset = GradingFormSetFactory(instance=assignment)

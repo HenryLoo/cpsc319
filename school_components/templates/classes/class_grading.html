@@ -34,12 +34,6 @@
 
                     </div>
 
-  {% if errors %}
-    <div class="panel panel-danger">
-      {{ errors }}
-    </div>
-  {% endif %}
-
 <div class="col-md-3">
 {% if class_list %}
 <div class="list-group">
@@ -62,6 +56,21 @@
 
 <div class="col-md-8">
 {% if class %}
+
+{% if succ %}
+  <div class="alert alert-success" role="alert"> Grades were edited successfully. </div>
+  {% endif %}
+  
+    {% if errors %}
+    <div class="panel panel-danger">
+      {%for dict in errors%}
+		{%for error in dict.values %}
+			{{error}}
+		{%endfor%}
+	  {%endfor%}
+    </div>
+  {% endif %}
+  
   <div class='col-md-4'>
 
 {% if assignment %}
@@ -102,6 +111,7 @@
 {% if assignment %}
 <div class="col-md-12">
   <h4>Assignment Grades</h4>
+
   <div class="table-responsive">
 
 

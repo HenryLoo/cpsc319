@@ -205,7 +205,7 @@ def parent_create(request):
 			return HttpResponseRedirect(
 				reverse('school:parentlist', args=(new.id,)))
 		else:
-			context_dictionary['errors'] = p.errors 
+			context_dictionary['parent_form'] = p
 
 	return render_to_response('parents/parent_form.html',
 		context_dictionary,

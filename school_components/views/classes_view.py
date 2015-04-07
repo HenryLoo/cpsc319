@@ -154,10 +154,6 @@ def class_create(request):
 				return HttpResponseRedirect(
 					reverse('school:classlist', args=(new.id,)))
 			else:
-				context_dictionary['class_errors'] = cf.errors
-				context_dictionary['schedule_errors'] = sf.errors
-				context_dictionary['teacher_errors'] = te.errors
-
 				context_dictionary['class_form']=cf
 				context_dictionary['classday_form']=sf
 				context_dictionary['classteacher_form']=te

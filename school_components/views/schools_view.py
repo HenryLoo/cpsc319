@@ -48,7 +48,7 @@ def school_create(request):
 			return HttpResponseRedirect(
 				reverse('school:schoollist', args=(new.id,)))
 		else:
-			context_dictionary['errors'] = cf.errors 
+			context_dictionary['school_form'] = cf 
 
 	return render_to_response('schools/school_form.html',
 		context_dictionary,

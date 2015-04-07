@@ -24,7 +24,9 @@ def settings_edit(request):
                 settings_form = SettingsForm(request.POST, instance=request.user)
                 if settings_form.is_valid():
                         settings_form.save()
+                        cd['succ'] = True
                 cd['settings_form'] = settings_form
+                
                         
 
         return render_to_response("settings_edit.html",cd,RequestContext(request))

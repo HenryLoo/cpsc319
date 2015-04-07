@@ -37,6 +37,7 @@
 
 <div class="col-md-3">
 	<div class="list-group">
+	{% if class_list %}
 		{% for classinlist in class_list %}
 			{% if class = classinlist %}
 				<a href="{% url 'school:classregistration' classinlist.id %}" class="list-group-item active">
@@ -47,6 +48,9 @@
 	    	{{ classinlist }}
 	  			</a>
 	  	{% endfor %}
+	{% else %}
+    	<div class="alert alert-info" role="alert">No classes have been added.</div>
+	{% endif %}
 	</div>
 </div>
 
@@ -143,9 +147,11 @@
 
 	</div>
 	{% else %}
-	<div class="alert alert-info" role="alert">
-		Select a class to view registration details.
-	</div>
+		{% if class_list %}
+			<div class="alert alert-info" role="alert">
+				Select a class to view registration details.
+			</div>
+		{% endif %}
 	{% endif %}
 </div> <!--  content div -->
 

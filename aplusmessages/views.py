@@ -31,36 +31,101 @@ def save_email(request, to_type, to_emails, cc_emails, bcc_emails, from_email, s
 
 
 
-def get_send_choices(request):
-    request = process_user_info(request)
-    user_choices = SentMessage.SEND_CHOICES
-
-    '''
-    adding departments
-    '''
-    for dep in Department.objects.filter(school = request.user_school).order_by('name'):
-        dep = ("DEP#"+str(dep.id), dep.name, )
-        user_choices = user_choices + (dep,)
-
-    '''
-    adding courses
-    '''
-
-    for course in Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name'):
-        course = ("COURSE#"+str(course.id), course.name, )
-        user_choices = user_choices + (course,)
-
-    '''
-    adding classes
-    '''
-
+def get_classes(request):
+    user_choices = ()
     for sc_class in Class.objects.filter(school = request.user_school,  period = request.user_period).order_by('course'):
         sc_class = ("CLASS#"+str(sc_class.id), (sc_class.course.name + " " + sc_class.section), )
         user_choices = user_choices + (sc_class,)
 
     return user_choices
 
+def get_send_choices(request):
+    request = process_user_info(request)
 
+    profile = request.user.userprofiles.all()[0]
+    user_role = profile.role
+
+    user_choices = ()
+    '''
+    Based on roles adding sending choices
+    '''
+    if user_role == 'SYSTEM_ADMIN' or user_role == 'SCHOOL_ADMIN':
+        user_choices = user_choices + SentMessage.SEND_CHOICES
+
+        '''
+        adding departments
+        '''
+        for dep in Department.objects.filter(school = request.user_school).order_by('name'):
+            dep = ("DEP#"+str(dep.id), dep.name, )
+            user_choices = user_choices + (dep,)
+
+        '''
+        adding courses
+        '''
+
+        for course in Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name'):
+            course = ("COURSE#"+str(course.id), course.name, )
+            user_choices = user_choices + (course,)
+
+        user_choices = user_choices + get_classes(request)
+
+    if user_role == 'TEACHER':
+        # only classes
+        user_choices = user_choices + get_classes(request)
+
+    return user_choices
+
+
+
+'''
+returns students
+'''
+def get_students(request):
+    profile = request.user.userprofiles.all()[0]
+    user_role = profile.role
+
+    if user_role == 'SYSTEM_ADMIN':
+        email_lists = Student.objects.all().order_by('last_name').values_list('email', flat=True)
+    else:
+        email_lists = Student.objects.filter(school = request.user_school, period = request.user_period).order_by('last_name').values_list('email', flat=True)
+
+    return email_lists
+
+'''
+returns teachers
+'''
+def get_teachers(request):
+    profile = request.user.userprofiles.all()[0]
+    user_role = profile.role
+    if user_role == 'SYSTEM_ADMIN':
+        email_lists = TeacherUser.objects.all().values_list('user__user__email', flat=True)
+    else:
+        email_lists = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).values_list('user__user__email', flat=True)
+
+    return email_lists
+
+
+def get_admins(request):
+    profile = request.user.userprofiles.all()[0]
+    user_role = profile.role
+    email_lists = []
+    # if school admin then skipping system admin
+    if user_role == 'SYSTEM_ADMIN':
+        system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").values_list('user__email', flat=True)
+        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN").values_list('user__email', flat=True)
+    elif user_role == 'SCHOOL_ADMIN':
+        system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN", school=request.user_school).values_list(
+            'user__email', flat=True)
+        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).values_list(
+            'user__email', flat=True)
+
+    for sysemail in system_admin_list:
+        email_lists.append(sysemail)
+
+    for scemail in school_admin_list:
+        email_lists.append(scemail)
+
+    return email_lists
 
 '''
 sends email to selected group of people or to individual
@@ -91,44 +156,24 @@ def send_email(request):
                     '''
                     students are selected
                     '''
-                    email_lists = Student.objects.filter(school = request.user_school, period = request.user_period).order_by('last_name').values_list('email', flat=True)
+                    email_lists = get_students(request)
                 elif to_group == SentMessage.SEND_TEACHERS:
                     '''
                     teachers are selected
                     '''
-                    email_lists = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).values_list('user__user__email', flat=True)
+                    email_lists = get_teachers(request)
                 elif to_group == SentMessage.SEND_ADMINS:
                     '''
                     admins are selected
                     '''
-                    email_lists = []
-                    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").values_list('user__email', flat=True)
-                    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).values_list('user__email', flat=True)
-
-                    for sysemail in system_admin_list:
-                        email_lists.append(sysemail)
-
-                    for scemail in school_admin_list:
-                        email_lists.append(scemail)
+                    email_lists = get_admins(request)
 
                 elif to_group == SentMessage.SEND_EVERYONE:
-                    #TODO Add additional filters here if required
+                    #Add additional filters here if required
                     email_lists = []
-
-                    for semail in Student.objects.filter(school = request.user_school, period = request.user_period).order_by('last_name').values_list('email', flat=True):
-                        email_lists.append(semail)
-
-                    for temail in TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).values_list('user__user__email', flat=True):
-                        email_lists.append(temail)
-
-                    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").values_list('user__email', flat=True)
-                    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).values_list('user__email', flat=True)
-
-                    for sysemail in system_admin_list:
-                        email_lists.append(sysemail)
-
-                    for scemail in school_admin_list:
-                        email_lists.append(scemail)
+                    email_lists.extend(get_students(request))
+                    email_lists.extend(get_teachers(request))
+                    email_lists.extend(get_admins(request))
 
                 #if departement
                 elif to_group.startswith('DEP'):

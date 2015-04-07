@@ -853,6 +853,16 @@ def assignment_edit(request, class_id=None, assignment_id=None): #there should a
                         context_dictionary,
                         RequestContext(request))
 
+'''
+Delete Class Assignment
+'''
+@login_required
+def class_assignment_delete(request, class_id, assignment_id):
+    request = process_user_info(request)
+    Assignment.objects.get(pk=assignment_id).delete()
+
+    messages.success(request, "Class Assignment has been deleted!")
+    return redirect(reverse('school:classassignment', args=(class_id,)))
 
 @login_required
 def class_reportcard(request, class_id=None, student_id=None):

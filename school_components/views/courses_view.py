@@ -298,7 +298,7 @@ def course_assignment(request, course_id=None):
 	if (request.user_role == 'TEACHER'): 
 		return render_to_response('404.html',RequestContext(request))
 
-	course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('-id')
+	course_list = Course.objects.filter(school = request.user_school, period = request.user_period).order_by('name')
 	context_dictionary = { 'course_list': course_list }
 
 	if course_id:

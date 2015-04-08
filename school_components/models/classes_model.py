@@ -91,7 +91,7 @@ class ClassRegistration(models.Model):
 
 
 class ClassAttendance(models.Model):
-	reg_class = models.ForeignKey('Class')
+	reg_class = models.ForeignKey('Class', related_name='class_attendance_class')
 	student = models.ForeignKey('Student')
 	attendance = models.CharField(max_length = 12, blank=True, null=True, choices =
                             (
@@ -102,6 +102,9 @@ class ClassAttendance(models.Model):
 
 	date = models.DateField(null=True, blank=True)
 	comments = models.CharField(max_length=500,blank=True, null=True)
+
+	def __unicode__(self):
+		return ', '.join([str(self.reg_class), str(self.student), str(self.date), str(self.attendance)])
 
 	class Meta:
 		app_label = 'school_components'

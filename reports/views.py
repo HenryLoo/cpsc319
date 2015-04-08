@@ -353,6 +353,44 @@ def export_data(request):
 			row.append(teacher.teaching_availability.monday_times)
 
 			writer.writerow(row)
+
+	elif dataset == 'class-attendance':
+		dates = ClassAttendance.objects.values_list('date', flat=True).distinct().order_by('date')
+		date_header = [''] + list(dates)
+		writer.writerow(date_header)
+
+		classes = ClassAttendance.objects.filter(
+			reg_class__period=period, reg_class__school=school
+		).values_list('reg_class', flat=True).distinct().order_by('reg_class__course')
+
+		for cl in classes:
+			present_per_date = [Class.objects.get(pk=cl)]
+			for date in dates:
+				present = ClassAttendance.objects.filter(
+						(Q(attendance ='L') | Q(attendance ='P')) & Q(date=date) & Q(reg_class=cl))
+				present_per_date.append(len(present))
+		
+			writer.writerow(present_per_date)
+
+	elif dataset == 'student-class-performance':
+		classes = Grading.objects.filter(
+			reg_class__period=period, reg_class__school=school		
+		).values_list('reg_class', flat=True).distinct()
+		class_header = [''] + map(lambda x: Class.objects.get(pk=x), classes)
+		writer.writerow(class_header)
+
+		students = Student.objects.filter(
+			school = school,
+			enrolled_student__reg_class__period = period).annotate().order_by('last_name')
+
+		for student in students:
+			grade_per_student = [student]
+
+			for cl in classes:
+				grade = find_class_performance(student.id, cl)
+				grade_per_student.append(grade)
+
+			writer.writerow(grade_per_student)
 			
 	response['Content-Disposition'] = 'attachment; filename="' + dataset + '.csv"'
 	return response

@@ -59,7 +59,8 @@ def period_create(request):
 			return HttpResponseRedirect(
 				reverse('school:periodlist', args=(new.id,)))
 		else:
-			context_dictionary['errors'] = cf.errors 
+			context_dictionary['period_form'] = cf
+			context_dictionary['period_transfer_form'] = tf
 
 	return render_to_response('periods/period_form.html',
 		context_dictionary,

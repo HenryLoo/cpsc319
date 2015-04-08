@@ -232,7 +232,7 @@ def student_create(request):
 			return HttpResponseRedirect(
 					reverse('school:studentlist', args=(student.id,)))
 		else:
-			context_dictionary['errors'] = s.errors 
+			context_dictionary['student_form'] = s
 
 	return render_to_response('students/student_form.html',
 		context_dictionary,

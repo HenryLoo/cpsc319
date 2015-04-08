@@ -33,6 +33,10 @@
 
 {% if class %}
 
+{% if date_errors %}
+  <div class="alert alert-danger" role="alert"> Select both date in the range </div>
+{% endif %}
+
 <form role="form" action="{%url 'reports:attendancelist' class.id %}" method="post" enctype="multipart/form-data">
 
             <!-- Tab panes -->

@@ -101,7 +101,7 @@ def course_create(request):
 			return HttpResponseRedirect(
 				reverse('school:courselist', args=(new.id,)))
 		else:
-			context_dictionary['errors'] = cf.errors 
+			context_dictionary['course_form'] = cf 
 
 	return render_to_response('courses/course_form.html',
 		context_dictionary,
@@ -201,7 +201,7 @@ def dept_create(request):
 			new.save()
 			return HttpResponseRedirect(reverse('school:courselist'))
 		else:
-			context_dictionary['errors'] = d.errors 
+			context_dictionary['dept_form'] = d
 
 	return render_to_response('courses/dept_form.html',
 		context_dictionary,
@@ -344,4 +344,13 @@ def course_assignment(request, course_id=None):
 	return render_to_response('courses/course_assignment.html', context_dictionary,
 		RequestContext(request))
 
+'''
+Delete Course Assignment
+'''
+@login_required
+def course_assignment_delete(request, course_id, assignment_id):
+    request = process_user_info(request)
+    Assignment.objects.get(pk=assignment_id).delete()
 
+    messages.success(request, "Course Assignment has been deleted!")
+    return redirect(reverse('school:courseassignment', args=(course_id,)))

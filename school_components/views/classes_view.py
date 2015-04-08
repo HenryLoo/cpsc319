@@ -724,7 +724,7 @@ def find_class_performance(student_id, class_id):
 
 
 @login_required
-def class_assignment(request, class_id=None):
+def class_assignment(request, class_id=None, status=None):
 
 	request = process_user_info(request)
 	
@@ -746,6 +746,8 @@ def class_assignment(request, class_id=None):
 		).order_by('course')
 
 	context_dictionary = { 'class_list': class_list }
+	if status == 'edited':
+                context_dictionary['edit_succ']=True
 
 	if class_id:
 		c = Class.objects.get(pk=class_id)
@@ -779,8 +781,8 @@ def class_assignment(request, class_id=None):
 				context_dictionary['add_succ'] = True
 				return render_to_response('classes/class_assignment.html', context_dictionary,
                                         RequestContext(request))
-				return HttpResponseRedirect(
-					reverse('school:classassignment', args=(class_id,)))
+				#return HttpResponseRedirect(
+				#	reverse('school:classassignment', args=(class_id,)))
 		else:
 			form = ClassAssignmentForm()
 
@@ -851,8 +853,8 @@ def assignment_edit(request, class_id=None, assignment_id=None):
 
 						#also create new notifications
 						create_performance_notifications(request, c)
-
-						return HttpResponseRedirect(reverse('school:classassignment', args=(class_id,)))
+                                                edit_succ='edited'
+						return HttpResponseRedirect(reverse('school:classassignment', args=(class_id, edit_succ,)))
 
 				else:
 					assignment_form = ClassAssignmentForm(instance = a)

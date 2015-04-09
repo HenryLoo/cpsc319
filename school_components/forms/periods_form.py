@@ -7,7 +7,7 @@ class PeriodForm(forms.ModelForm):
     user_school = None
 
     def __init__(self, *args, **kwargs):
-            super(PeriodForm, self).__init__(*args)
+            super(PeriodForm, self).__init__(*args, **kwargs)
             self.user_school = kwargs.get('user_school')
                     
     def clean(self):

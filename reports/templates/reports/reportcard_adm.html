@@ -18,7 +18,7 @@
 
         <div class="col-md-3">
         {% if student_list %}
-            <ul class="list-unstyled student-list">
+            <ul class="list-unstyled school-list">
                   {% for s in student_list %}
                   <li>
                   <a href="{% url 'reports:reportcardadm' s.id %}">

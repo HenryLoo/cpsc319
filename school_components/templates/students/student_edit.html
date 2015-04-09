@@ -1,10 +1,5 @@
 {% extends "students/base_student.html" %}
 
-{% block current_tab %}
-	"View"
-{% endblock %}
-
-
 {% block student_content %}
 {% if user_role == 'TEACHER'%}
 <ul class="nav nav-tabs nav-justified">
@@ -32,7 +27,7 @@
     </div>
 
 
-<div class="col-md-3 student-list">
+<div class="col-md-3 school-list">
 	<form id='student-view-input' class='form-inline' action="" method="get">
 			{% if user_role != 'TEACHER'%}
 	    		<span>View Students:</span>
@@ -55,7 +50,7 @@
 <br><br>
 
 	{% if student_list %}
-	<ul class="list-unstyled student-list">
+	<ul class="list-unstyled school-list">
 		{% for student in student_list %}
 	  		<li>
 	  		<a href="{% url 'school:studentlist' student.id %}?{{request.GET.urlencode}}">

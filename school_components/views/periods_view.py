@@ -118,6 +118,22 @@ Delete Period
 '''
 @login_required
 def period_delete(request, period_id):
-    Period.objects.get(pk=period_id).delete()
+    p = Period.objects.get(pk=period_id)
+    ups = p.userprofile_set.all()
+    for up in ups:
+        #don't delete admin profiles
+        if up.role == 'SCHOOL_ADMIN' or up.role == 'SYSTEM_ADMIN':
+                up.period = None
+                up.save()
+
+        if up.role == 'TEACHER':
+                up.teachers.all()[0].teaching_availability.delete() #will delete the TeacherUser also
+                user = up.user 
+                if user.userprofiles.count() == 1:
+                        user.delete() #will delete up also
+                        
+
+    p.delete() #will delete the teacher's up
+    
     messages.success(request, "Period has been deleted!")
     return redirect('school:periodlist')

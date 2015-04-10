@@ -5,10 +5,13 @@ from accounts.models import TeacherUser
 
 class PeriodForm(forms.ModelForm):
     user_school = None
+    period_instance = None
 
     def __init__(self, *args, **kwargs):
+            self.user_school = kwargs.pop('user_school')
+            self.period_instance = kwargs.get('instance', None)
             super(PeriodForm, self).__init__(*args, **kwargs)
-            self.user_school = kwargs.get('user_school')
+            
                     
     def clean(self):
             cleaned_data = super(PeriodForm, self).clean() 
@@ -26,6 +29,8 @@ class PeriodForm(forms.ModelForm):
             if self.user_school != None:
                     periods = Period.objects.filter(school=self.user_school)
                     for p in periods:
+                            if p == self.period_instance:
+                                continue
                             psd = p.start_date
                             ped = p.end_date
 

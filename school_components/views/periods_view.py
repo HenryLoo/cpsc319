@@ -35,7 +35,7 @@ def period_create(request):
 	request = process_user_info(request)
 	period_list = Period.objects.filter(school = request.user_school).order_by('description')
 	context_dictionary = {'period_list': period_list,
-							 'period_form': PeriodForm(), 'period_transfer_form': PeriodTransferForm(cur_school=request.user_school,
+							 'period_form': PeriodForm(user_school=request.user_school), 'period_transfer_form': PeriodTransferForm(cur_school=request.user_school,
                                                                                                                           cur_period=request.user_period)}
 	if request.method == 'POST':
 		cf = PeriodForm(request.POST, user_school=request.user_school)
@@ -96,12 +96,12 @@ def period_edit(request, period_id): #there should always be a period_id here
                 
 				context_dictionary['period_id']=period_id
 				if request.method == 'POST':
-					period_form = PeriodForm(request.POST, instance = c)
+					period_form = PeriodForm(request.POST, instance = c, user_school=request.user_school)
 					if period_form.is_valid():
 						period_form.save()
 						context_dictionary['success']=True
 				else:
-					period_form = PeriodForm(instance = c)
+					period_form = PeriodForm(instance = c, user_school=request.user_school)
                         
 				context_dictionary['period_form'] = period_form
 

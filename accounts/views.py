@@ -484,8 +484,8 @@ def view_admins_view (request, admin_id=None):
     if (request.user_role == 'TEACHER'):
         return render_to_response('404.html',RequestContext(request))
 
-    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
+    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").order_by('user__last_name')
+    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).order_by('user__last_name')
 
     form, system_admin_list = admin_list_helper(request, system_admin_list)
     form, school_admin_list = admin_list_helper(request, school_admin_list)
@@ -521,8 +521,8 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
         if (request.user_role == 'TEACHER'):
             return render_to_response('404.html',RequestContext(request))
 
-        system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
+        system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").order_by('user__last_name')
+        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).order_by('user__last_name')
 
         form, system_admin_list = admin_list_helper(request, system_admin_list)
         form, school_admin_list = admin_list_helper(request, school_admin_list)

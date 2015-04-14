@@ -216,7 +216,7 @@ def student_create(request):
 
 
 	s = StudentForm()
-	s.fields['parent'].queryset = Parent.objects.filter(school=request.user_school).order_by('first_name')
+	s.fields['parent'].queryset = Parent.objects.filter(school=request.user_school).order_by('last_name')
 
 	context_dictionary = { 'student_form': s }
 

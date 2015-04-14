@@ -110,7 +110,7 @@ def class_create(request):
 	teachers = TeacherUser.objects.filter(
 		user__period = request.user_period, 
 		user__school = request.user_school
-	).order_by('user__user__first_name');
+	).order_by('user__user__last_name');
 	teacher_form.fields['primary_teacher'].queryset = teachers
 	teacher_form.fields['secondary_teacher'].queryset = teachers
    
@@ -254,7 +254,7 @@ def class_edit(request, class_id):
 				class_form.fields['course'].queryset = courses
 				classday_form = ClassScheduleForm(prefix='sch', instance = s)
 				classteacher_form = ClassTeacherForm(prefix='te', instance = t)
-				teachers = TeacherUser.objects.filter(user__school=request.user_school, user__period=request.user_period).order_by('user__user__first_name');
+				teachers = TeacherUser.objects.filter(user__school=request.user_school, user__period=request.user_period).order_by('user__user__last_name');
 				classteacher_form.fields['primary_teacher'].queryset = teachers
 				classteacher_form.fields['secondary_teacher'].queryset = teachers
 	

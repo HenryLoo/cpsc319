@@ -181,7 +181,7 @@ def view_teachers_view (request, teacher_id=None):
     if (request.user_role == 'TEACHER'):
         return render_to_response('404.html',RequestContext(request))
 
-    teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
+    teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).order_by('user__user__last_name');
     #teacher_list = TeacherUser.objects.all()
     
     form, teacher_list = teacher_list_helper(request, teacher_list)
@@ -228,7 +228,7 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
         if (request.user_role == 'TEACHER'):
             return render_to_response('404.html',RequestContext(request))
 
-        teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
+        teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).order_by('user__user__last_name');
 
         form, teacher_list = teacher_list_helper(request, teacher_list)
         context_dictionary = {'teacher_list': teacher_list, 'teacher_filter': form}

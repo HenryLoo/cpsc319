@@ -240,9 +240,11 @@ def class_edit(request, class_id):
 				s = c.schedule #all classes created normally (through the form) should have this...
                          
                                         #context_dictionary['here'] = 'here' #for testing
-
-				t = c.classteacher #class can only have one classteacher
+                                try:
+                                        t = c.classteacher #class can only have one classteacher
                                        # context_dictionary['ha'] = 'ha'# for testing
+                                except Exception:
+                                        t = None
 
 				class_form = ClassForm(prefix='info', instance = c)
 				courses = Course.objects.filter(
@@ -276,8 +278,8 @@ def class_edit(request, class_id):
 				context_dictionary['classday_form'] = classday_form
 				context_dictionary['classteacher_form'] = classteacher_form
 				
-		except ObjectDoesNotExist:
-				context_dictionary['error'] = 'There is no class in this school and period with that id.'
+		#except ObjectDoesNotExist:
+				#context_dictionary['error'] = 'There is no class in this school and period with that id.'
 		except IntegrityError:
 			context_dictionary['error'] = "A class with this course and section already exists."
 						

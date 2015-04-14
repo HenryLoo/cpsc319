@@ -304,17 +304,21 @@ def notifications_settings_page(request):
     	performance = NotificationType(notification_type='Performance', condition=50, content='Student is scoring lower than 50%% average.')
     	performance.save()
 
-    try:
-    	assignment = NotificationType.objects.get(notification_type='Assignment')
-    except ObjectDoesNotExist:
-    	assignment = NotificationType(notification_type='Assignment', condition=3, content='Student missed 3 assignments.')
-    	assignment.save()
+    # try:
+    # 	assignment = NotificationType.objects.get(notification_type='Assignment')
+    # except ObjectDoesNotExist:
+    # 	assignment = NotificationType(notification_type='Assignment', condition=3, content='Student missed 3 assignments.')
+    # 	assignment.save()
     
     NotifFormSet = modelformset_factory(NotificationType, form=NotificationsSettingsForm)
+  #   queryset = NotificationType.objects.extra(
+  #   	select={'ordering': "CASE WHEN notification_type='Attendance' THEN 1 WHEN notification_type='Performance' THEN 2 WHEN notification_type='Assignment' THEN 3 END"},
+  #   	order_by=['ordering']
+		# )
     queryset = NotificationType.objects.extra(
-    	select={'ordering': "CASE WHEN notification_type='Attendance' THEN 1 WHEN notification_type='Performance' THEN 2 WHEN notification_type='Assignment' THEN 3 END"},
-    	order_by=['ordering']
-		)
+        select={'ordering': "CASE WHEN notification_type='Attendance' THEN 1 WHEN notification_type='Performance' THEN 2 END"},
+        order_by=['ordering']
+    )
     formset = NotifFormSet(queryset = queryset)
     if request.method == 'POST':
       formset = NotifFormSet(request.POST)

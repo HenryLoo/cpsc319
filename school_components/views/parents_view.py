@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.core import serializers
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
+from django.db import IntegrityError
 
 # from urllib import urlencode
 try:
@@ -196,16 +197,21 @@ def parent_create(request):
 	context_dictionary = { 'parent_form': ParentForm() }
 	if request.method == 'POST':
 
-		if p.is_valid():
-			new = p.save(commit=False)
-			new.school = request.user_school
-			new.period = request.user_period
-			new.save()
+		try:
+			if p.is_valid():
+				new = p.save(commit=False)
+				new.school = request.user_school
+				new.period = request.user_period
+				new.save()
 
-			return HttpResponseRedirect(
-				reverse('school:parentlist', args=(new.id,)))
-		else:
+				return HttpResponseRedirect(
+					reverse('school:parentlist', args=(new.id,)))
+			else:
+				context_dictionary['parent_form'] = p
+
+		except IntegrityError:
 			context_dictionary['parent_form'] = p
+			context_dictionary['errors'] = "A parent with this name already exists."
 
 	return render_to_response('parents/parent_form.html',
 		context_dictionary,

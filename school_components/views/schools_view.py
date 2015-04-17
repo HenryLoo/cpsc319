@@ -82,7 +82,7 @@ def school_change(request, school_id=None):
 			request = process_user_info(request)
 			period_list = Period.objects.filter(school = request.user_school).order_by('description')
 			context_dictionary = {'periodmessage':1, 'period_list': period_list,
-							 'period_form': PeriodForm(), 'period_transfer_form': PeriodTransferForm(cur_school=request.user_school,cur_period=request.user_period)}
+							 'period_form': PeriodForm(user_school=request.user_school), 'period_transfer_form': PeriodTransferForm(cur_school=request.user_school,cur_period=request.user_period)}
                                                                  
 			return render_to_response('periods/period_form.html', context_dictionary,
 		RequestContext(request))
@@ -130,6 +130,27 @@ def school_delete(request, school_id):
 	if (request.user_role == 'TEACHER') or (request.user_role  == 'SCHOOL_ADMIN'):
 		return render_to_response('404.html',RequestContext(request))
 
-	School.objects.get(pk=school_id).delete()
+        s = School.objects.get(pk=school_id)
+
+        ups = s.userprofile_set.all()
+        for up in ups:
+                if up.role == 'TEACHER':
+                        teachers = up.teachers.all()
+                        t = TeacherUser.objects.get(user=up)
+                        up.teachers.all()[0].teaching_availability.delete() #will delete the TeacherUser also
+                        u = up.user
+                        u.delete() #make sure dont end up with users with no profiles
+
+                #don't delete system admins
+                if up.role == 'SYSTEM_ADMIN':
+                        up.school = None
+                        up.save()
+
+                #delete all school admins in the school
+                if up.role == 'SCHOOL_ADMIN':
+                        up.user.delete()
+                        
+                
+        s.delete()
 	messages.success(request, "School has been deleted!")
 	return redirect('school:schoollist')

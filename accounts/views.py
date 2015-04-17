@@ -58,7 +58,7 @@ def transfer_teachers_view(request):
     
     users = User.objects.all()
     #user_teachers: list of users who are teachers in the current school
-    user_teachers = [user for user in users if (user.userprofiles.all()[0].role == 'TEACHER' and
+    user_teachers = [user for user in users if ((not user.is_superuser) and user.userprofiles.all()[0].role == 'TEACHER' and
                                                 user.userprofiles.all()[0].school == request.user_school)]
     teachers_to_display = ttd(user_teachers, request.user_school, request.user_period)
 

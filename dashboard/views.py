@@ -154,9 +154,10 @@ def statistics_page(request):
                 yAxis.append(len(filteredClassIDs))
                 yLabel = 'Classes'
             elif chart.y_axis == 'NTEACHERS':
-                primaryTeachers = ClassTeacher.objects.filter(primary_teacher_id__in=filteredClassIDs).all().values('primary_teacher_id').distinct()
-                secondaryTeachers = ClassTeacher.objects.filter(secondary_teacher_id__in=filteredClassIDs).all().values('secondary_teacher_id').distinct()
+                primaryTeachers = ClassTeacher.objects.filter(id__in=filteredClassIDs).all().values_list('primary_teacher_id', flat=True).distinct()
+                secondaryTeachers = ClassTeacher.objects.filter(id__in=filteredClassIDs).all().values_list('secondary_teacher_id', flat=True).distinct()
                 numTeachers = len(list(set(list(chain(primaryTeachers, secondaryTeachers)))))
+                context_dictionary['numTeachers'] = numTeachers
                 yAxis.append(numTeachers)
                 yLabel = 'Teachers'
             elif chart.y_axis == 'ATTENDANCE':

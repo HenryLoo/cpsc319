@@ -18,6 +18,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.db import IntegrityError
 import json
 import csv
 from django.contrib.auth.decorators import login_required
@@ -216,23 +217,27 @@ def student_create(request):
 
 
 	s = StudentForm()
-	s.fields['parent'].queryset = Parent.objects.filter(school=request.user_school)
+	s.fields['parent'].queryset = Parent.objects.filter(school=request.user_school).order_by('last_name')
 
 	context_dictionary = { 'student_form': s }
-
 
 	if request.method == 'POST':
 		s = StudentForm(request.POST)
 
-		if s.is_valid():
-			student = s.save(commit=False)
-			student.school = request.user_school
-			student.period = request.user_period
-			student.save()
-			return HttpResponseRedirect(
-					reverse('school:studentlist', args=(student.id,)))
-		else:
+		try:
+			if s.is_valid():
+				student = s.save(commit=False)
+				student.school = request.user_school
+				student.period = request.user_period
+				student.save()
+				return HttpResponseRedirect(
+						reverse('school:studentlist', args=(student.id,)))
+			else:
+				context_dictionary['student_form'] = s
+		
+		except IntegrityError:
 			context_dictionary['student_form'] = s
+			context_dictionary['errors'] = 'A student with that name already exists.'
 
 	return render_to_response('students/student_form.html',
 		context_dictionary,

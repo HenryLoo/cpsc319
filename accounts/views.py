@@ -58,7 +58,7 @@ def transfer_teachers_view(request):
     
     users = User.objects.all()
     #user_teachers: list of users who are teachers in the current school
-    user_teachers = [user for user in users if (user.userprofiles.all()[0].role == 'TEACHER' and
+    user_teachers = [user for user in users if ((not user.is_superuser) and user.userprofiles.all()[0].role == 'TEACHER' and
                                                 user.userprofiles.all()[0].school == request.user_school)]
     teachers_to_display = ttd(user_teachers, request.user_school, request.user_period)
 
@@ -181,7 +181,7 @@ def view_teachers_view (request, teacher_id=None):
     if (request.user_role == 'TEACHER'):
         return render_to_response('404.html',RequestContext(request))
 
-    teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
+    teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).order_by('user__user__last_name');
     #teacher_list = TeacherUser.objects.all()
     
     form, teacher_list = teacher_list_helper(request, teacher_list)
@@ -228,7 +228,7 @@ def edit_teacher_view (request, teacher_id): #there should always be a teacher_i
         if (request.user_role == 'TEACHER'):
             return render_to_response('404.html',RequestContext(request))
 
-        teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school)
+        teacher_list = TeacherUser.objects.filter(user__period=request.user_period, user__school=request.user_school).order_by('user__user__last_name');
 
         form, teacher_list = teacher_list_helper(request, teacher_list)
         context_dictionary = {'teacher_list': teacher_list, 'teacher_filter': form}
@@ -484,8 +484,8 @@ def view_admins_view (request, admin_id=None):
     if (request.user_role == 'TEACHER'):
         return render_to_response('404.html',RequestContext(request))
 
-    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
+    system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").order_by('user__last_name')
+    school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).order_by('user__last_name')
 
     form, system_admin_list = admin_list_helper(request, system_admin_list)
     form, school_admin_list = admin_list_helper(request, school_admin_list)
@@ -521,8 +521,8 @@ def edit_admin_view (request, admin_id): #there should always be an admin_id her
         if (request.user_role == 'TEACHER'):
             return render_to_response('404.html',RequestContext(request))
 
-        system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN")
-        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school)
+        system_admin_list = UserProfile.objects.filter(role="SYSTEM_ADMIN").order_by('user__last_name')
+        school_admin_list = UserProfile.objects.filter(role="SCHOOL_ADMIN", school=request.user_school).order_by('user__last_name')
 
         form, system_admin_list = admin_list_helper(request, system_admin_list)
         form, school_admin_list = admin_list_helper(request, school_admin_list)
